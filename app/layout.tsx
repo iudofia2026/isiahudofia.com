@@ -12,16 +12,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     template: '%s | Isiah Udofia',
-    default: 'Isiah Udofia | Product-Minded Builder',
+    default: 'Isiah Udofia | Product Builder',
   },
-  description:
-    'Product-minded builder with a cognitive science foundation. Shipping thoughtful AI-powered experiences and go-to-market playbooks.',
+  description: 'Product builder pairing translation, ops, and research rigor.',
   openGraph: {
     type: 'website',
     url: siteUrl,
-    title: 'Isiah Udofia | Product-Minded Builder',
-    description:
-      'Product-minded builder with a cognitive science foundation. Shipping thoughtful AI-powered experiences and go-to-market playbooks.',
+    title: 'Isiah Udofia | Product Builder',
+    description: 'Product builder pairing translation, ops, and research rigor.',
     siteName: 'Isiah Udofia',
     images: [
       {
@@ -34,9 +32,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Isiah Udofia | Product-Minded Builder',
-    description:
-      'Product-minded builder with a cognitive science foundation. Shipping thoughtful AI-powered experiences and go-to-market playbooks.',
+    title: 'Isiah Udofia | Product Builder',
+    description: 'Product builder pairing translation, ops, and research rigor.',
     images: [`${siteUrl}/og-image.png`],
   },
   alternates: {

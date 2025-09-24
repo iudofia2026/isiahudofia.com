@@ -1,107 +1,64 @@
-import Script from 'next/script';
-import CaseStudyLayout from '../../../../components/case';
-import Section from '../../../../components/section';
+import Image from 'next/image';
 import RouteSeo from '../../../../components/route-seo';
+import CaseStudyLayout from '../../../../components/case';
 import { projects } from '../../../../data/projects';
 
 const project = projects.find((item) => item.slug === 'thesis-abcd-sleep-ml');
 
 if (!project) {
-  throw new Error('Thesis project data missing');
+  throw new Error('ABCD Sleep Thesis project data missing');
 }
+
+const highlights = [
+  '120 wearable + survey features',
+  'Ridge + XGBoost stack with calibration',
+  'Clinician review loops kept bias in check',
+];
 
 export default function ThesisCaseStudy() {
-  const projectSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'ResearchProject',
-    name: project.title,
-    description: project.tagline,
-    url: `https://www.isiahudofia.com/projects/${project.slug}`,
-    creator: {
-      '@type': 'Person',
-      name: 'Isiah Udofia',
-    },
-    keywords: project.stack,
-    additionalProperty: project.metrics?.map((metric) => ({
-      '@type': 'PropertyValue',
-      name: metric.label,
-      value: metric.value,
-    })),
-  };
-
   return (
     <>
-      <RouteSeo
-        title="Thesis — ABCD Sleep + ML"
-        description="Predicting adolescent sleep risk from the ABCD dataset using Ridge and XGBoost ensembles."
-      />
-      <Script id="thesis-schema" type="application/ld+json">
-        {JSON.stringify(projectSchema)}
-      </Script>
-      <Section eyebrow="Thesis" title="Modeling adolescent sleep risk from multi-modal signals.">
-        <p className="text-lg text-foreground/75">
-          For my Yale cognitive science thesis, I explored how multi-modal ABCD cohort data could power an early warning
-          system for adolescent sleep issues. I led research design, feature engineering, modeling, and ethical reviews.
-        </p>
-      </Section>
-      <CaseStudyLayout project={project}>
-        <CaseSection title="Problem">
-          Clinicians manage sleep disorders reactively even though the ABCD dataset captures longitudinal behavioral,
-          physiological, and psychological signals. We needed a risk model that could be trusted and explained.
-        </CaseSection>
-        <CaseSection title="Approach">
-          <ul className="space-y-3">
-            <li>
-              Engineered 120+ features spanning actigraphy, cortisol assays, screen-time diaries, and NIH Toolbox tasks;
-              applied missingness-aware preprocessing.
-            </li>
-            <li>
-              Trained Ridge Regression and XGBoost ensembles with nested cross-validation, then calibrated probability
-              buckets using isotonic regression to protect interpretability.
-            </li>
-            <li>
-              Used SHAP + counterfactual analysis to surface which behaviors and biomarkers drove risk scores.
-            </li>
+      <RouteSeo title="ABCD Sleep Thesis" />
+      <CaseStudyLayout>
+        <header className="flex flex-col gap-5">
+          <p className="text-sm uppercase tracking-[0.28em] text-accent/80">Research</p>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+              {project.title}
+            </h1>
+            <p className="text-base text-foreground/60">{project.tagline}</p>
+          </div>
+        </header>
+        <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr),minmax(0,1.1fr)]">
+          <ul className="space-y-3 text-base text-foreground/75">
+            {highlights.map((item) => (
+              <li key={item} className="flex items-center gap-3">
+                <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
           </ul>
-        </CaseSection>
-        <CaseSection title="Result">
-          <ul className="space-y-3">
-            <li>
-              Achieved <strong>0.82 AUC</strong> with &lt;3% calibration error across deciles.
-            </li>
-            <li>Identified evening screen time variance and cortisol volatility as leading indicators clinicians could act on earlier.</li>
-            <li>Packaged findings into an interactive dashboard and policy memo for the Yale Sleep Lab steering group.</li>
-          </ul>
-        </CaseSection>
-        <CaseSection title="Limitations & Ethics">
-          <ul className="space-y-3">
-            <li>Model performance varies by demographic subgroup; further fairness auditing and data augmentation required.</li>
-            <li>Consent pathways for using biometric data in proactive alerts need institutional review board approval.</li>
-            <li>Clinician-in-the-loop UX must prevent overreliance on automated scores.</li>
-          </ul>
-        </CaseSection>
-        <CaseSection title="Next Steps">
-          <ul className="space-y-3">
-            <li>Prototype a clinician dashboard with scenario planning and counterfactual recommendations.</li>
-            <li>Explore semi-supervised learning to leverage unlabeled longitudinal visits.</li>
-            <li>Partner with the ABCD ethics board to define data minimization requirements.</li>
-          </ul>
-        </CaseSection>
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/40 bg-surface/70 p-6 shadow-subtle">
+            <Image
+              src={project.thumbnail}
+              alt="ABCD thesis chart"
+              width={960}
+              height={640}
+              className="relative z-10 w-full rounded-[1.5rem] border border-border/40 bg-background/70 object-cover"
+            />
+          </div>
+        </section>
+        <section className="flex flex-wrap gap-2">
+          {project.chips.map((chip) => (
+            <span
+              key={chip}
+              className="rounded-full border border-border/50 bg-surface/80 px-4 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
+            >
+              {chip}
+            </span>
+          ))}
+        </section>
       </CaseStudyLayout>
     </>
-  );
-}
-
-type CaseSectionProps = {
-  title: string;
-  children: React.ReactNode;
-};
-
-function CaseSection({ title, children }: CaseSectionProps) {
-  return (
-    <section className="space-y-4">
-      <h3 className="text-xl font-semibold text-foreground">{title}</h3>
-      <div className="text-base leading-relaxed text-foreground/75">{children}</div>
-    </section>
   );
 }

@@ -1,74 +1,116 @@
-import Image from 'next/image';
-import RouteSeo from '../../../../components/route-seo';
-import CaseStudyLayout from '../../../../components/case';
-import { projects } from '../../../../data/projects';
+import { notFound } from "next/navigation";
+import type { Project } from "@/data/projects";
+import { projects } from "@/data/projects";
 
-const project = projects.find((item) => item.slug === 'zen-video-agency');
+export const metadata = {
+  title: "Zen Video Agency",
+  description:
+    "Editing ops and creative delivery for DTC and creator clients. Premiere + After Effects, standardized intake → editing → QA.",
+};
 
-if (!project) {
-  throw new Error('Zen Video Agency project data missing');
+function getProject(): Project | undefined {
+  return projects.find((p) => p.slug === "zen-video-agency");
 }
 
-const highlights = [
-  'Async briefs lock scope fast',
-  'Editors run a shared Kanban',
-  'QA pass before client review',
-];
+function deriveChips(p: Project): string[] {
+  if (Array.isArray(p.stack) && p.stack.length) return p.stack.slice(0, 5);
+  if (Array.isArray(p.metrics) && p.metrics.length) return p.metrics.map((m) => m.label).slice(0, 5);
+  if (Array.isArray(p.highlights) && p.highlights.length) {
+    return p.highlights
+      .slice(0, 4)
+      .map((h) =>
+        h
+          .split(/[—–-]/)[0]
+          .trim()
+          .split(" ")
+          .slice(0, 2)
+          .join(" ")
+      );
+  }
+  return [];
+}
 
-export default function ZenVideoAgencyCaseStudy() {
+export default function Page() {
+  const project = getProject();
+  if (!project) return notFound();
+
+  const chips = deriveChips(project);
+
   return (
-    <>
-      <RouteSeo title="Zen Video Agency" />
-      <CaseStudyLayout>
-        <header className="flex flex-col gap-5">
-          <p className="text-sm uppercase tracking-[0.28em] text-accent/80">Studio Ops</p>
-          <div className="flex flex-col gap-3">
-            <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              {project.title}
-            </h1>
-            <p className="text-base text-foreground/60">{project.tagline}</p>
+    <article className="container py-14">
+      <header className="mb-10">
+        <p className="text-xs tracking-[0.22em] text-neutral-400">AGENCY</p>
+        <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">{project.title}</h1>
+        <p className="mt-3 max-w-2xl text-neutral-400">{project.tagline}</p>
+      </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <section className="lg:col-span-2 space-y-6">
+          <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
+            <h2 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Overview</h2>
+            <ul className="list-disc pl-5 text-neutral-300 leading-relaxed">
+              {(project.highlights ?? []).map((h, i) => (
+                <li key={i} className="mt-1">
+                  {h}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {['MRR ~$2k', '5 retainers', '2 editors'].map((metric) => (
-              <span
-                key={metric}
-                className="rounded-full border border-border/60 bg-background/80 px-4 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
-              >
-                {metric}
-              </span>
-            ))}
-          </div>
-        </header>
-        <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr),minmax(0,1.1fr)]">
-          <ul className="space-y-3 text-base text-foreground/75">
-            {highlights.map((item) => (
-              <li key={item} className="flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="relative overflow-hidden rounded-[2rem] border border-border/40 bg-surface/70 p-6 shadow-subtle">
-            <Image
-              src={project.thumbnail}
-              alt="Zen Video board"
-              width={960}
-              height={640}
-              className="relative z-10 w-full rounded-[1.5rem] border border-border/40 bg-background/70 object-cover"
-            />
-          </div>
+
+          {(project.links ?? []).length > 0 && (
+            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
+              <h3 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Links</h3>
+              <div className="flex flex-wrap gap-2 text-sm">
+                {project.links!.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full border border-neutral-800 px-3 py-1 text-neutral-300 hover:border-neutral-700"
+                  >
+                    {l.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
-        <section className="flex flex-wrap gap-2">
-          {project.chips.map((chip) => (
-            <span
-              key={chip}
-              className="rounded-full border border-border/50 bg-surface/80 px-4 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
-            >
-              {chip}
-            </span>
-          ))}
-        </section>
-      </CaseStudyLayout>
-    </>
+
+        <aside className="space-y-6">
+          <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
+            <h3 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Stack</h3>
+            <div className="flex flex-wrap gap-2">
+              {chips.length > 0 ? (
+                chips.map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-neutral-800/60 bg-neutral-950 px-3 py-1 text-xs uppercase tracking-[0.18em] text-neutral-400"
+                  >
+                    {chip}
+                  </span>
+                ))
+              ) : (
+                <span className="text-xs text-neutral-500">No tags available</span>
+              )}
+            </div>
+          </div>
+
+          {(project.metrics ?? []).length > 0 && (
+            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
+              <h3 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Notes</h3>
+              <ul className="space-y-1 text-sm text-neutral-300">
+                {project.metrics!.map((m) => (
+                  <li key={m.label}>
+                    <span className="text-neutral-400">{m.label}</span>
+                    {m.value ? ` · ${m.value}` : ""}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </aside>
+      </div>
+    </article>
   );
 }

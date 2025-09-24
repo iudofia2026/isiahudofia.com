@@ -53,7 +53,7 @@ export const projects: Project[] = [
 
   {
     slug: "thesis-abcd-sleep-ml",
-    title: "B.S. Thesis — ML for Actionable Sleep Feedback",
+    title: "B.S. Thesis — ML for Sleep Data",
     tagline: "Making wearable sleep data transparent, calibrated, and actionable.",
     dates: "2025 — 2026 (ongoing)",
     stack: ["Ridge", "XGBoost", "Calibration", "Wearables"],

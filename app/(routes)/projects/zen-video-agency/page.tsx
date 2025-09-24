@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
-import type { Project } from "@/data/projects";
-import { projects } from "@/data/projects";
+import type { Project } from "../../../data/projects";
+import { projects } from "../../../data/projects";
 
 export const metadata = {
   title: "Zen Video Agency",
   description:
-    "Editing ops and creative delivery for DTC and creator clients. Premiere + After Effects, standardized intake → editing → QA.",
+    "Editing ops and creative delivery for DTC and creator clients. Premiere + After Effects, standardized intake → editing → QA."
 };
 
 function getProject(): Project | undefined {
@@ -50,9 +50,7 @@ export default function Page() {
             <h2 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Overview</h2>
             <ul className="list-disc pl-5 text-neutral-300 leading-relaxed">
               {(project.highlights ?? []).map((h, i) => (
-                <li key={i} className="mt-1">
-                  {h}
-                </li>
+                <li key={i} className="mt-1">{h}</li>
               ))}
             </ul>
           </div>

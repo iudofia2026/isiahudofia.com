@@ -17,7 +17,7 @@ export const projects: Project[] = [
     title: "Live Translator for Discord",
     tagline: "Real-time translation built natively for Discord voice calls.",
     dates: "2025 — Present",
-    stack: ["Discord API", "Deepgram STT", "TypeScript", "WebSocket"],
+    stack: ["Discord API", "Deepgram STT", "WebSocket"],
     highlights: [
       "Low-latency interim + final translations",
       "Inline bot messages and per-user language preferences",
@@ -38,7 +38,7 @@ export const projects: Project[] = [
     title: "Zen Video Agency",
     tagline: "Streamlined editing workflows for creators and brands.",
     dates: "2022 — Present",
-    stack: ["Premiere Pro", "After Effects", "Editor handoff", "Review loops"],
+    stack: ["Premiere Pro", "After Effects", "Editor handoff"],
     highlights: [
       "Daily production loop: client inputs → direction rough by Isiah → editor handoff → rapid iteration → Isiah acceptance → client final pass → publish",
       "Two-editor model enables parallel cuts and faster experiments on hooks, pacing, and retention",

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Project } from "../../../../data/projects";
 import { projects } from "../../../../data/projects";
-import { motion } from "framer-motion";
+import Reveal from "../../../../components/thesis/reveal";
 
 export const metadata = {
   title: "B.S. Thesis — Making Sleep Data Actionable with ML",
@@ -103,13 +103,8 @@ export default function Page() {
 
       <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
         <section className="lg:col-span-2 space-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.28 }}
-            className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
-          >
+          <Reveal>
+            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Project approach</h2>
             <ul className="list-disc pl-5 leading-relaxed text-neutral-300">
               {bullets.map((b) => (
@@ -118,15 +113,11 @@ export default function Page() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+            </div>
+          </Reveal>
 
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.28, delay: 0.05 }}
-            className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
-          >
+          <Reveal delay={0.05}>
+            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Milestones (in progress)</h2>
             <ol className="grid gap-3 sm:grid-cols-2">
               {milestones.map((m, i) => (
@@ -146,15 +137,11 @@ export default function Page() {
                 </li>
               ))}
             </ol>
-          </motion.div>
+            </div>
+          </Reveal>
 
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.28, delay: 0.08 }}
-            className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6"
-          >
+          <Reveal delay={0.08}>
+            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6">
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">What success looks like</h2>
             <ul className="list-disc pl-5 leading-relaxed text-neutral-300">
               {success.map((s) => (
@@ -163,7 +150,8 @@ export default function Page() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+            </div>
+          </Reveal>
         </section>
 
         <aside>

@@ -15,7 +15,7 @@ export const projects: Project[] = [
   {
     slug: "discord-voice-translator",
     title: "Live Translator for Discord",
-    tagline: "Live translation inside Discord voice channels.",
+    tagline: "Real-time translation built natively for Discord voice calls.",
     dates: "2025 — Present",
     stack: ["Discord API", "Deepgram STT", "TypeScript", "WebSocket"],
     highlights: [
@@ -36,7 +36,7 @@ export const projects: Project[] = [
   {
     slug: "zen-video-agency",
     title: "Zen Video Agency",
-    tagline: "Editing ops and creative delivery for DTC and creator clients.",
+    tagline: "Streamlined editing workflows for creators and brands.",
     dates: "2022 — Present",
     stack: ["Premiere Pro", "After Effects", "Editor handoff", "Review loops"],
     highlights: [
@@ -54,7 +54,7 @@ export const projects: Project[] = [
   {
     slug: "thesis-abcd-sleep-ml",
     title: "B.S. Thesis — ML for Actionable Sleep Feedback",
-    tagline: "Calibrated models and an evidence-constrained explainer for wearable sleep data.",
+    tagline: "Making wearable sleep data transparent, calibrated, and actionable.",
     dates: "2025 — 2026 (ongoing)",
     stack: ["Ridge", "XGBoost", "Calibration", "Wearables"],
     highlights: [

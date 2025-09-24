@@ -1,51 +1,55 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import type { Project } from '../data/projects';
+import { LogoBadge } from './logo-badge';
 
-export default function ProjectCard({ project }: { project: Project }) {
-  const prefersReducedMotion = useReducedMotion();
+export function ProjectCard({ project }: { project: Project }) {
+  const from = project.gradient?.from ?? '#3B82F6';
+  const to = project.gradient?.to ?? '#8B5CF6';
 
   return (
-    <motion.article
-      whileHover={prefersReducedMotion ? undefined : { y: -8 }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-border/50 bg-surface/80 p-6 shadow-subtle backdrop-blur"
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.35 }}
     >
-      <div className="relative overflow-hidden rounded-[1.35rem] bg-muted/60">
-        <Image
-          src={project.thumbnail}
-          alt={`${project.title} preview`}
-          width={640}
-          height={420}
-          className="h-40 w-full object-cover transition duration-300 group-hover:scale-105"
-        />
-      </div>
-      <div className="mt-6 flex items-start justify-between gap-4">
-        <div>
-          <h3 className="text-2xl font-semibold tracking-tight text-foreground">{project.title}</h3>
-          <p className="mt-2 text-sm text-foreground/60">{project.tagline}</p>
-        </div>
-        <ArrowUpRight className="mt-1 h-5 w-5 text-foreground/40 transition group-hover:text-accent" aria-hidden />
-      </div>
-      <div className="mt-5 flex flex-wrap gap-2">
-        {project.chips.map((chip) => (
-          <span
-            key={chip}
-            className="rounded-full border border-border/60 bg-background/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
-          >
-            {chip}
-          </span>
-        ))}
-      </div>
       <Link
-        href={`/projects/${project.slug}`}
-        className="absolute inset-0"
-        aria-label={`View ${project.title} case study`}
-      />
-    </motion.article>
+        href={`/projects/${p.slug}`}
+        className="group block rounded-3xl border border-neutral-900 bg-neutral-950/60 p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] transition will-change-transform hover:-translate-y-0.5 hover:border-neutral-700"
+      >
+        <LogoBadge src={project.logo} alt={project.title} from={from} to={to} />
+        <div className="mt-4 flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold tracking-tight">{project.title}</h3>
+            <p className="mt-1 text-sm text-neutral-400">{project.tagline}</p>
+          </div>
+          <ArrowUpRight className="opacity-0 transition group-hover:opacity-100" />
+        </div>
+        {project.metrics && project.metrics.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-neutral-300">
+            {project.metrics.map((m) => (
+              <span key={m.label} className="rounded-full border border-neutral-800/80 px-2 py-0.5">
+                {m.label.toUpperCase()} {m.value ? `· ${m.value}` : ''}
+              </span>
+            ))}
+          </div>
+        )}
+        {project.stack?.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-neutral-400">
+            {project.stack.slice(0, 5).map((s) => (
+              <span key={s} className="rounded-full border border-neutral-800 px-2 py-0.5">
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
+      </Link>
+    </motion.div>
   );
 }
+
+export default ProjectCard;

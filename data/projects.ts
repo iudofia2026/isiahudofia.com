@@ -1,5 +1,3 @@
-export type Swatch = { from: string; to: string };
-
 export type Project = {
   slug: string;
   title: string;
@@ -8,81 +6,66 @@ export type Project = {
   stack: string[];
   highlights: string[];
   links?: { label: string; href: string }[];
-  metrics?: { label: string; value: string }[];
-  thumbnail: string;
-  logo: string;
-  gradient?: Swatch;
-  chips: string[];
+  metrics?: { label: string; value?: string }[];
+  logo?: string;
+  gradient?: { from: string; to: string };
 };
 
 export const projects: Project[] = [
   {
-    slug: 'discord-voice-translator',
-    title: 'Live Translator for Discord',
-    tagline: 'Live translation inside Discord voice channels.',
-    dates: '2025',
-    stack: ['Discord API', 'Deepgram STT', 'OpenAI Translation', 'TypeScript', 'WebSocket'],
+    slug: "discord-voice-translator",
+    title: "Live Translator for Discord",
+    tagline: "Live translation inside Discord voice channels.",
+    dates: "2025 — Present",
+    stack: ["Discord API", "Deepgram STT", "TypeScript", "WebSocket"],
     highlights: [
-      'Live transcription + interim/final translations',
-      'Per-user language prefs; inline bot translations',
-      'Optional overlay; reliability focus',
+      "Low-latency interim + final translations",
+      "Inline bot messages and per-user language preferences",
+      "Optional overlay for live captions"
     ],
     links: [
-      { label: 'Case Study', href: '/projects/discord-voice-translator' },
-      { label: 'Demo', href: 'https://livecalltranslator.netlify.app/' },
+      { label: "Demo", href: "https://livecalltranslator.netlify.app/" },
+      { label: "GitHub", href: "https://github.com/iudofia2026" }
     ],
-    metrics: [
-      { label: '<250ms interim', value: '' },
-      { label: 'sub-second final', value: '' },
-    ],
-    thumbnail: '/thumbnails/discord.svg',
-    logo: '/brands/discorder.png',
-    gradient: { from: '#60A5FA', to: '#8B5CF6' },
-    chips: ['<250ms interim', 'Sub-second final', 'Inline bot', 'Per-user language', 'Overlay'],
+    // No speculative metrics included
+    metrics: [],
+    logo: "/brands/discorder.png",
+    gradient: { from: "#60A5FA", to: "#8B5CF6" }
   },
+
   {
-    slug: 'zen-video-agency',
-    title: 'Zen Video Agency',
-    tagline: 'Editing ops that lift retention for creators.',
-    dates: '2025',
-    stack: ['Premiere/AE', 'Frame.io', 'Notion', 'Zapier'],
+    slug: "zen-video-agency",
+    title: "Zen Video Agency",
+    tagline: "Editing ops and creative delivery for DTC and creator clients.",
+    dates: "2022 — Present",
+    stack: ["Premiere", "After Effects", "Client QA workflows"],
     highlights: [
-      'Ops pipeline + QA checklists',
-      'Team management across editors',
-      'CTR/retention gains from stronger hooks',
+      "Standardized intake → editing → QA pipeline",
+      "Managed remote editors and client review flows",
+      "Focused on storytelling and retention through stronger creative hooks"
     ],
-    links: [
-      { label: 'Case Study', href: '/projects/zen-video-agency' },
-      { label: 'Playbook Highlights', href: '#' },
-    ],
-    metrics: [
-      { label: 'MRR', value: '~$2k' },
-      { label: 'Retainers', value: '5' },
-      { label: 'Editors', value: '2' },
-    ],
-    thumbnail: '/thumbnails/zen.svg',
-    logo: '/brands/zen.png',
-    gradient: { from: '#FB923C', to: '#F472B6' },
-    chips: ['MRR ~$2k', '5 retainers', '2 editors', 'Async reviews'],
+    links: [{ label: "Agency playbook", href: "#" }],
+    // Keep metrics empty (no MRR or fabricated numbers)
+    metrics: [],
+    logo: "/brands/zen.png",
+    gradient: { from: "#FB923C", to: "#F472B6" }
   },
+
   {
-    slug: 'thesis-abcd-sleep-ml',
-    title: 'B.S. Thesis — ML for Actionable Sleep Feedback',
-    tagline: 'Calibrated models + evidence-constrained explainer.',
-    dates: '2025–26',
-    stack: ['Ridge', 'XGBoost', 'Calibration', 'Wearables'],
+    slug: "thesis-abcd-sleep-ml",
+    title: "B.S. Thesis — ML for Actionable Sleep Feedback",
+    tagline: "Calibrated models and an evidence-constrained explainer for wearable sleep data.",
+    dates: "2025 — 2026 (ongoing)",
+    stack: ["Ridge", "XGBoost", "Calibration", "Wearables"],
     highlights: [
-      'Bridge wearable signals and lived experience',
-      'Two-layer system: models + peer-reviewed LLM explainer',
-      'Validated on self-reports and tasks',
+      "Building a clean nightly feature table from wearable + survey data",
+      "Baseline Ridge + XGBoost models with calibration to avoid overconfidence",
+      "Planned evidence-constrained explainer (peer-reviewed sources only)",
+      "Validation against self-reports and cognitive task outcomes planned"
     ],
-    links: [
-      { label: 'Case Study', href: '/projects/thesis-abcd-sleep-ml' },
-      { label: 'Overview', href: '#' },
-    ],
-    thumbnail: '/thumbnails/thesis.svg',
-    logo: '/brands/thesis.png',
-    gradient: { from: '#22D3EE', to: '#3B82F6' },
-    chips: ['Ridge', 'XGBoost', 'Calibration', 'Wearables', 'Evidence-backed'],
-  },
+    links: [{ label: "Overview", href: "#" }],
+    metrics: [],
+    logo: "/brands/thesis.png",
+    gradient: { from: "#22D3EE", to: "#3B82F6" }
+  }
 ];

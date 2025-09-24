@@ -38,11 +38,11 @@ export const projects: Project[] = [
     title: "Zen Video Agency",
     tagline: "Editing ops and creative delivery for DTC and creator clients.",
     dates: "2022 — Present",
-    stack: ["Premiere", "After Effects", "Client QA workflows"],
+    stack: ["Premiere Pro", "After Effects", "Editor handoff", "Review loops"],
     highlights: [
-      "Standardized intake → editing → QA pipeline",
-      "Managed remote editors and client review flows",
-      "Focused on storytelling and retention through stronger creative hooks"
+      "Daily production loop: client inputs → direction rough by Isiah → editor handoff → rapid iteration → Isiah acceptance → client final pass → ship",
+      "Two-editor model enables parallel cuts and faster experiments on hooks, pacing, and retention",
+      "Lightweight templates and versioning keep deliverables consistent across brands"
     ],
     links: [{ label: "Agency playbook", href: "#" }],
     // Keep metrics empty (no MRR or fabricated numbers)

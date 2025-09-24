@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import RouteSeo from "../../../components/route-seo";
-import CaseStudyLayout from "../../../components/case";
-import type { Project } from "../../../data/projects";
-import { projects } from "../../../data/projects";
-import PipelineDiagram from "../../../components/discord/PipelineDiagram";
-import Timeline, { TimelineStep } from "../../../components/ui/Timeline";
+import RouteSeo from "../../../../components/route-seo";
+import CaseStudyLayout from "../../../../components/case";
+import type { Project } from "../../../../data/projects";
+import { projects } from "../../../../data/projects";
+import PipelineDiagram from "../../../../components/discord/PipelineDiagram";
+import Timeline, { TimelineStep } from "../../../../components/ui/Timeline";
 
 const theme = {
   glowFrom: "#7C3AED",

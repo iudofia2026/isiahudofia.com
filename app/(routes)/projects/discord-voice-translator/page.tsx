@@ -5,15 +5,29 @@ import CaseStudyLayout from '../../../../components/case';
 import type { Project } from '../../../../data/projects';
 import { projects } from '../../../../data/projects';
 
-const bullets = [
-  'Low-latency interim + final',
-  'Inline bot translations',
-  'Per-user language',
-  'Optional overlay',
-  'Reliability focus',
+const accent = { from: '#5865F2', to: '#99A7FF' };
+
+const BUILD_POINTS = [
+  'Problem → cross-language voice chats stall momentum.',
+  'Constraints → low-latency, Discord-native, readable in chat.',
+  'Architecture → Discord voice → streaming STT (Deepgram) → translation → inline bot messages; overlay for captions.',
+  'Reliability → reconnection guards, backoff on rate limits, message dedupe for interim/final.',
+  'Privacy/UI → per-user language prefs; opt-in overlay.',
 ];
 
-const metrics = ['Interim <250ms', 'Sub-second final'];
+const WHAT_IT_DOES = [
+  'Low-latency interim + final translations',
+  'Inline bot messages for translated snippets',
+  'Per-user language preferences',
+  'Optional overlay for live captions',
+  'Reliability focus and graceful fallback states',
+];
+
+const STATUS_NEXT = [
+  'Hardening reconnect paths and error surfaces',
+  'Tuning translation consistency and prompts',
+  'Lightweight admin console for room health'
+];
 
 function getProject(): Project | undefined {
   return projects.find((item) => item.slug === 'discord-voice-translator');
@@ -51,27 +65,15 @@ export default function DiscorderCaseStudy() {
 
   return (
     <>
-      <RouteSeo title="Live Translator for Discord" />
+      <RouteSeo title="Live Translator for Discord" description="Live translation inside Discord voice channels." />
       <CaseStudyLayout>
         <header className="flex flex-col gap-6">
           <p className="text-sm uppercase tracking-[0.28em] text-accent/80">Flagship</p>
           <div className="flex flex-col gap-4">
-            <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              {project.title}
-            </h1>
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">{project.title}</h1>
             <p className="text-base text-foreground/60">{project.tagline}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {metrics.map((metric) => (
-              <span
-                key={metric}
-                className="rounded-full border border-border/60 bg-background/80 px-4 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
-              >
-                {metric}
-              </span>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
             <a
               href="https://livecalltranslator.netlify.app/"
               className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition duration-300 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
@@ -88,17 +90,44 @@ export default function DiscorderCaseStudy() {
             </a>
           </div>
         </header>
+
         <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr),minmax(0,1.1fr)]">
-          <ul className="space-y-3 text-base text-foreground/75">
-            {bullets.map((item) => (
-              <li key={item} className="flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="space-y-6 text-base text-foreground/75">
+            <div>
+              <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-neutral-400">Build journey</h2>
+              <ul className="mt-3 space-y-2">
+                {BUILD_POINTS.map((point) => (
+                  <li key={point} className="leading-relaxed">{point}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-neutral-400">What it does</h2>
+              <ul className="mt-3 space-y-2">
+                {WHAT_IT_DOES.map((item) => (
+                  <li key={item} className="leading-relaxed">{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-neutral-400">Status / Next</h2>
+              <ul className="mt-3 space-y-2">
+                {STATUS_NEXT.map((item) => (
+                  <li key={item} className="leading-relaxed">{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
           <div className="relative overflow-hidden rounded-[2rem] border border-border/40 bg-surface/70 p-6 shadow-subtle">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-foreground/5" aria-hidden />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background: `radial-gradient(120% 120% at 50% 0%, ${accent.from}22 0%, ${accent.to}11 35%, transparent 70%)`,
+                filter: 'blur(18px)',
+              }}
+            />
             <Image
               src={project.thumbnail}
               alt="Live Translator diagram"
@@ -108,6 +137,7 @@ export default function DiscorderCaseStudy() {
             />
           </div>
         </section>
+
         <section className="flex flex-wrap gap-2">
           {chips.length > 0 ? (
             chips.map((chip) => (

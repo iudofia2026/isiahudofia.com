@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import RouteSeo from "../../../components/route-seo";
-import type { Project } from "../../../data/projects";
-import { projects } from "../../../data/projects";
-import Timeline, { TimelineStep } from "../../../components/ui/Timeline";
+import RouteSeo from "../../../../components/route-seo";
+import type { Project } from "../../../../data/projects";
+import { projects } from "../../../../data/projects";
+import Timeline, { TimelineStep } from "../../../../components/ui/Timeline";
 
 export const metadata = {
   title: "Live Translator for Discord",

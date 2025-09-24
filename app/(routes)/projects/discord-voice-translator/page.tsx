@@ -1,17 +1,20 @@
 import { notFound } from "next/navigation";
-import RouteSeo from "../../../../components/route-seo";
-import CaseStudyLayout from "../../../../components/case";
-import type { Project } from "../../../../data/projects";
-import { projects } from "../../../../data/projects";
-import PipelineDiagram from "../../../../components/discord/PipelineDiagram";
-import Timeline, { TimelineStep } from "../../../../components/ui/Timeline";
+import RouteSeo from "../../../components/route-seo";
+import type { Project } from "../../../data/projects";
+import { projects } from "../../../data/projects";
+import Timeline, { TimelineStep } from "../../../components/ui/Timeline";
 
-const theme = {
+export const metadata = {
+  title: "Live Translator for Discord",
+  description: "Live translation inside Discord voice channels with low-latency interim and final outputs.",
+};
+
+const HERO_THEME = {
   glowFrom: "#7C3AED",
   glowTo: "#A78BFA",
 };
 
-const timelineSteps: TimelineStep[] = [
+const steps: TimelineStep[] = [
   { title: "Problem", body: "Cross-language voice chats lose momentum when translation lags." },
   { title: "Constraints", body: "Low-latency, Discord-native, readable directly in chat." },
   {
@@ -19,38 +22,19 @@ const timelineSteps: TimelineStep[] = [
     body: "Discord voice → streaming STT (Deepgram) → translation → inline bot; optional overlay.",
   },
   { title: "Reliability", body: "Reconnection guards, rate-limit backoff, interim/final dedupe." },
-  { title: "Privacy & UI", body: "Per-user language prefs; opt-in overlay." },
-  {
-    title: "Status / Next",
-    body: "Hardening reconnect paths, tuning translation consistency, room-health console.",
-  },
-];
-
-const statusNext = [
-  "Hardening reconnect and error surfaces",
-  "Tuning translation consistency",
-  "Lightweight room health console",
-];
-
-const featureHighlights = [
-  "Low-latency interim and final translations",
-  "Inline bot messages surfaced in-channel",
-  "Per-user language preferences",
-  "Optional overlay for live captions",
-  "Reliability focus with graceful fallbacks",
+  { title: "Privacy & UI", body: "Per-user language preferences; opt-in overlay." },
+  { title: "Status / Next", body: "Hardening reconnect paths, tuning translation consistency, room-health console." },
 ];
 
 function getProject(): Project | undefined {
   return projects.find((p) => p.slug === "discord-voice-translator");
 }
 
-function deriveChips(project: Project): string[] {
-  if (Array.isArray(project.stack) && project.stack.length) return project.stack.slice(0, 6);
-  if (Array.isArray(project.metrics) && project.metrics.length) return project.metrics.map((m) => m.label).slice(0, 6);
-  if (Array.isArray(project.highlights) && project.highlights.length) {
-    return project.highlights
-      .slice(0, 4)
-      .map((h) => h.split(/[—–-]/)[0].trim().split(" ").slice(0, 2).join(" "));
+function deriveChips(p: Project): string[] {
+  if (Array.isArray(p.stack) && p.stack.length) return p.stack.slice(0, 6);
+  if (Array.isArray(p.metrics) && p.metrics.length) return p.metrics.map((m) => m.label).slice(0, 6);
+  if (Array.isArray(p.highlights) && p.highlights.length) {
+    return p.highlights.slice(0, 4).map((h) => h.split(/[—–-]/)[0].trim().split(" ").slice(0, 2).join(" "));
   }
   return [];
 }
@@ -80,7 +64,7 @@ export default function Page() {
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 opacity-15"
           style={{
-            background: `radial-gradient(120% 120% at 50% 0%, ${theme.glowFrom}, ${theme.glowTo})`,
+            background: `radial-gradient(120% 120% at 50% 0%, ${HERO_THEME.glowFrom}, ${HERO_THEME.glowTo})`,
             maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,1) 70%)",
           }}
         />
@@ -124,59 +108,30 @@ export default function Page() {
         </div>
       </section>
 
-      <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-3">
+      <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
         <section className="space-y-6 lg:col-span-2">
-          <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-neutral-300">
-              Build Journey
-            </h2>
-            <Timeline steps={timelineSteps} />
-          </div>
-
-          <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6">
-            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">
-              What it does
-            </h3>
-            <ul className="list-disc pl-5 text-neutral-300 leading-relaxed">
-              {featureHighlights.map((item) => (
-                <li key={item} className="mt-1">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6">
-            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">
-              Status / Next
-            </h3>
-            <ul className="list-disc pl-5 text-neutral-300 leading-relaxed">
-              {statusNext.map((item) => (
-                <li key={item} className="mt-1">
-                  {item}
-                </li>
-              ))}
-            </ul>
+          <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
+            <h2 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Build Journey</h2>
+            <Timeline steps={steps} />
           </div>
         </section>
 
         <aside className="space-y-6">
-          <PipelineDiagram />
-
-          <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6">
-            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Stack</h3>
-            <div className="flex flex-wrap gap-2">
-              {chips.map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded-full border border-neutral-800/60 bg-neutral-950 px-3 py-1 text-xs uppercase tracking-[0.18em] text-neutral-400"
-                >
-                  {chip}
-                </span>
-              ))}
-              {chips.length === 0 && <span className="text-xs text-neutral-500">No tags available</span>}
+          {(chips ?? []).length > 0 && (
+            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
+              <h3 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Stack</h3>
+              <div className="flex flex-wrap gap-2">
+                {chips.map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-neutral-800/60 bg-neutral-950 px-3 py-1 text-xs uppercase tracking-[0.18em] text-neutral-400"
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </aside>
       </div>
     </article>

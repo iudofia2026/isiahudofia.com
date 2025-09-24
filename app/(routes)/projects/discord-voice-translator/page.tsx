@@ -1,13 +1,9 @@
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import RouteSeo from '../../../../components/route-seo';
 import CaseStudyLayout from '../../../../components/case';
+import type { Project } from '../../../../data/projects';
 import { projects } from '../../../../data/projects';
-
-const project = projects.find((item) => item.slug === 'discord-voice-translator');
-
-if (!project) {
-  throw new Error('Live Translator for Discord project data missing');
-}
 
 const bullets = [
   'Low-latency interim + final',
@@ -19,7 +15,40 @@ const bullets = [
 
 const metrics = ['Interim <250ms', 'Sub-second final'];
 
+function getProject(): Project | undefined {
+  return projects.find((item) => item.slug === 'discord-voice-translator');
+}
+
+function deriveChips(project: Project): string[] {
+  if (Array.isArray(project.stack) && project.stack.length) {
+    return project.stack.slice(0, 5);
+  }
+  if (Array.isArray(project.metrics) && project.metrics.length) {
+    return project.metrics.map((m) => m.label).slice(0, 5);
+  }
+  if (Array.isArray(project.highlights) && project.highlights.length) {
+    return project.highlights
+      .slice(0, 4)
+      .map((h) =>
+        h
+          .split(/[—–-]/)[0]
+          .trim()
+          .split(' ')
+          .slice(0, 2)
+          .join(' ')
+      );
+  }
+  return [];
+}
+
 export default function DiscorderCaseStudy() {
+  const project = getProject();
+  if (!project) {
+    return notFound();
+  }
+
+  const chips = deriveChips(project);
+
   return (
     <>
       <RouteSeo title="Live Translator for Discord" />
@@ -80,14 +109,18 @@ export default function DiscorderCaseStudy() {
           </div>
         </section>
         <section className="flex flex-wrap gap-2">
-          {project.chips.map((chip) => (
-            <span
-              key={chip}
-              className="rounded-full border border-border/50 bg-surface/80 px-4 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
-            >
-              {chip}
-            </span>
-          ))}
+          {chips.length > 0 ? (
+            chips.map((chip) => (
+              <span
+                key={chip}
+                className="rounded-full border border-border/50 bg-surface/80 px-4 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
+              >
+                {chip}
+              </span>
+            ))
+          ) : (
+            <span className="text-xs text-foreground/50">No tags available</span>
+          )}
         </section>
       </CaseStudyLayout>
     </>

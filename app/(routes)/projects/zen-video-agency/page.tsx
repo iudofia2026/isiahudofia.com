@@ -5,36 +5,28 @@ import { projects } from "../../../../data/projects";
 export const metadata = {
   title: "Zen Video Agency",
   description:
-    "Editing ops and creative delivery for DTC and creator clients. Premiere + After Effects, standardized intake → editing → QA."
+    "Editing ops and creative delivery for DTC and creator clients. Premiere + After Effects, standardized intake → editing → QA.",
 };
+
+const OVERVIEW_POINTS = [
+  "Launched Aug 2025; managing 5 creator/brand clients with ongoing deliverables.",
+  "Standardized intake → editing → QA pipeline ensures predictable delivery.",
+  "Playbooks for client communication and retention.",
+  "Delegated editing workflows to 2 remote editors, with async review flows.",
+];
+
+const STACK = ["Premiere Pro", "After Effects", "Client QA Workflows"];
 
 function getProject(): Project | undefined {
   return projects.find((p) => p.slug === "zen-video-agency");
-}
-
-function deriveChips(p: Project): string[] {
-  if (Array.isArray(p.stack) && p.stack.length) return p.stack.slice(0, 5);
-  if (Array.isArray(p.metrics) && p.metrics.length) return p.metrics.map((m) => m.label).slice(0, 5);
-  if (Array.isArray(p.highlights) && p.highlights.length) {
-    return p.highlights
-      .slice(0, 4)
-      .map((h) =>
-        h
-          .split(/[—–-]/)[0]
-          .trim()
-          .split(" ")
-          .slice(0, 2)
-          .join(" ")
-      );
-  }
-  return [];
 }
 
 export default function Page() {
   const project = getProject();
   if (!project) return notFound();
 
-  const chips = deriveChips(project);
+  const stack = STACK;
+  const links = project.links ?? [];
 
   return (
     <article className="container py-14">
@@ -44,30 +36,32 @@ export default function Page() {
         <p className="mt-3 max-w-2xl text-neutral-400">{project.tagline}</p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <section className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+        <section className="space-y-6 lg:col-span-2">
           <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
-            <h2 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Overview</h2>
+            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Overview</h2>
             <ul className="list-disc pl-5 text-neutral-300 leading-relaxed">
-              {(project.highlights ?? []).map((h, i) => (
-                <li key={i} className="mt-1">{h}</li>
+              {OVERVIEW_POINTS.map((point) => (
+                <li key={point} className="mt-1">
+                  {point}
+                </li>
               ))}
             </ul>
           </div>
 
-          {(project.links ?? []).length > 0 && (
+          {links.length > 0 && (
             <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
-              <h3 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Links</h3>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Links</h3>
               <div className="flex flex-wrap gap-2 text-sm">
-                {project.links!.map((l) => (
+                {links.map((link) => (
                   <a
-                    key={l.href}
-                    href={l.href}
+                    key={link.href}
+                    href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="rounded-full border border-neutral-800 px-3 py-1 text-neutral-300 hover:border-neutral-700"
                   >
-                    {l.label}
+                    {link.label}
                   </a>
                 ))}
               </div>
@@ -77,10 +71,10 @@ export default function Page() {
 
         <aside className="space-y-6">
           <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
-            <h3 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Stack</h3>
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Stack</h3>
             <div className="flex flex-wrap gap-2">
-              {chips.length > 0 ? (
-                chips.map((chip) => (
+              {stack.length > 0 ? (
+                stack.map((chip) => (
                   <span
                     key={chip}
                     className="rounded-full border border-neutral-800/60 bg-neutral-950 px-3 py-1 text-xs uppercase tracking-[0.18em] text-neutral-400"
@@ -96,12 +90,12 @@ export default function Page() {
 
           {(project.metrics ?? []).length > 0 && (
             <div className="rounded-2xl border border-neutral-900 bg-neutral-950/50 p-6">
-              <h3 className="mb-2 text-sm font-semibold tracking-wide text-neutral-300 uppercase">Notes</h3>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Notes</h3>
               <ul className="space-y-1 text-sm text-neutral-300">
                 {project.metrics!.map((m) => (
                   <li key={m.label}>
                     <span className="text-neutral-400">{m.label}</span>
-                    {m.value ? ` · ${m.value}` : ""}
+                    {m.value ? ` · ${m.value}` : ''}
                   </li>
                 ))}
               </ul>

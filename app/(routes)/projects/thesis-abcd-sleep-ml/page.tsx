@@ -54,7 +54,7 @@ export default function Page() {
     "No safety violations or off-source claims in the explainer.",
   ];
 
-  const advisor = "Prof. [Advisor Name]";
+  const advisor = "Prof. Arielle Baskin-Sommers (Dept. of Psychology, Yale)";
 
   return (
     <article className="container py-14">

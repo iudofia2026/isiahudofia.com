@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { notFound } from "next/navigation";
 import type { Project } from "../../../../data/projects";
 import { projects } from "../../../../data/projects";
@@ -5,7 +9,7 @@ import { projects } from "../../../../data/projects";
 export const metadata = {
   title: "Zen Video Agency",
   description:
-    "Editing ops and creative delivery for DTC and creator clients. Premiere Pro + After Effects with a standardized intake → edit → review loop.",
+    "Editing ops and creative delivery for DTC and creator clients. Premiere Pro + After Effects with a repeatable intake → edit → review loop.",
 };
 
 function getProject(): Project | undefined {
@@ -30,16 +34,33 @@ export default function Page() {
   const accentFrom = "#0EA5E9";
   const accentTo = "#22D3EE";
 
-  const throughput = ["5 retainers", "~4 short/day", "~2 long/week"];
+  const cadence = [
+    { label: "Retainer clients", value: "5" },
+    { label: "Short-form / day", value: "~4" },
+    { label: "Long-form / week", value: "~2" },
+  ];
 
-  const processSteps = [
-    { n: 1, t: "Client inputs", d: "Briefs, references, and weekly themes land in shared inbox." },
-    { n: 2, t: "Direction rough", d: "Isiah sketches hooks/pacing, sets cut goals and naming." },
-    { n: 3, t: "Editor handoff", d: "Two editors take parallel passes for speed and variance." },
-    { n: 4, t: "Daily iteration", d: "Notes → new cuts → quick checks; keep what lifts retention." },
-    { n: 5, t: "Acceptance", d: "Isiah approves a version and frames it for client review." },
-    { n: 6, t: "Client pass", d: "Final changes come back; editors apply and prep deliverables." },
-    { n: 7, t: "Ship", d: "Exports, thumbnails, and versioning recorded to template set." },
+  const steps: { title: string; body: string }[] = [
+    {
+      title: "Weekly kickoff (client call)",
+      body:
+        "One call sets themes, priorities, and references for the week. We agree on the target outputs and what success looks like.",
+    },
+    {
+      title: "Daily production loop",
+      body:
+        "Isiah roughs direction and naming, then hands off to two editors for parallel passes. Notes → revisions → quick checks until a review-ready cut emerges.",
+    },
+    {
+      title: "Mid-week checkpoint",
+      body:
+        "Asynchronous review to course-correct: swap hooks, adjust pacing, or re-prioritize clips to maximize retention.",
+    },
+    {
+      title: "Ship & reset",
+      body:
+        "End-of-week deliverables (exports, thumbs, captions) with versioning templates. Close the loop and prep inputs for next week’s kickoff.",
+    },
   ];
 
   return (
@@ -57,8 +78,7 @@ export default function Page() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 rounded-3xl"
           style={{
-            boxShadow:
-              "0 0 0 1px rgba(255,255,255,0.05) inset, 0 10px 40px -10px rgba(34,211,238,0.15)",
+            boxShadow: "0 0 0 1px rgba(255,255,255,0.05) inset, 0 10px 40px -10px rgba(34,211,238,0.15)",
           }}
         />
 
@@ -66,14 +86,12 @@ export default function Page() {
         <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">{project.title}</h1>
         <p className="mt-2 max-w-2xl text-neutral-400">{project.tagline}</p>
         <p className="mt-3 max-w-2xl text-neutral-300">
-          Built in August 2025 as a lightweight studio for creators and small brands. I’m running a
-          repeatable intake → edit → review loop with two remote editors and weekly rhythm so
-          delivery quality improves every cycle.
+          Built in August 2025 as a lightweight studio for creators and small brands. I run a repeatable intake → edit → review loop with two remote editors and a weekly rhythm so delivery quality improves every cycle.
         </p>
 
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <a
-            href="https://zeneditingagency.netlify.app/"
+            href="https://heroic-puppy-1a67b8.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full bg-neutral-200 px-4 py-1.5 text-sm font-medium text-neutral-900 transition hover:bg-white hover:shadow-[0_6px_24px_-8px_rgba(255,255,255,0.4)]"
@@ -82,24 +100,10 @@ export default function Page() {
           </a>
           <span className="text-xs text-neutral-500">
             or email{" "}
-            <a
-              className="underline underline-offset-2 hover:text-neutral-300"
-              href="mailto:isiah.udofia@yale.edu"
-            >
+            <a className="underline underline-offset-2 hover:text-neutral-300" href="mailto:isiah.udofia@yale.edu">
               isiah.udofia@yale.edu
             </a>
           </span>
-
-          <div className="ml-auto flex flex-wrap gap-2">
-            {throughput.map((pill) => (
-              <span
-                key={pill}
-                className="rounded-full border border-neutral-800/70 bg-neutral-950 px-3 py-1 text-xs text-neutral-400"
-              >
-                {pill}
-              </span>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -116,54 +120,92 @@ export default function Page() {
             </ul>
 
             <div className="mt-6">
-              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">
-                Process
-              </h3>
-              <ol className="grid gap-3 sm:grid-cols-2">
-                {processSteps.map((s) => (
-                  <li
-                    key={s.n}
-                    className="group relative rounded-xl border border-neutral-900 bg-neutral-950/60 p-4 transition hover:border-neutral-700"
-                  >
-                    <div className="mb-1 text-xs font-medium tracking-wider text-neutral-400">
-                      {String(s.n).padStart(2, "0")}
-                    </div>
-                    <div className="text-sm font-semibold text-neutral-200">{s.t}</div>
-                    <p className="mt-1 text-sm text-neutral-400">{s.d}</p>
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition group-hover:opacity-100"
-                      style={{
-                        boxShadow:
-                          "inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 30px -12px rgba(34,211,238,0.18)",
-                      }}
-                    />
-                  </li>
-                ))}
-              </ol>
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-neutral-300">Weekly → Daily loop</h3>
+              <AnimatedTimeline steps={steps} />
             </div>
           </div>
         </section>
 
-        <aside>
+        <aside className="space-y-6">
           <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Stack</h3>
-            <div className="flex flex-wrap gap-2">
-              {(chips ?? []).map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded-full border border-neutral-800/60 bg-neutral-950 px-3 py-1 text-xs uppercase tracking-[0.18em] text-neutral-400"
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Delivery cadence</h3>
+            <ul className="space-y-2">
+              {cadence.map((row) => (
+                <li
+                  key={row.label}
+                  className="flex items-center justify-between rounded-xl border border-neutral-900 bg-neutral-950/70 px-3 py-2"
                 >
-                  {chip}
-                </span>
+                  <span className="text-xs text-neutral-400">{row.label}</span>
+                  <span className="rounded-full border border-neutral-800 bg-neutral-900 px-2.5 py-0.5 text-xs font-medium text-neutral-200">
+                    {row.value}
+                  </span>
+                </li>
               ))}
-              {(chips ?? []).length === 0 && (
-                <span className="text-xs text-neutral-500">No tags available</span>
-              )}
-            </div>
+            </ul>
           </div>
+
+          {(chips ?? []).length > 0 && (
+            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Stack</h3>
+              <div className="flex flex-wrap gap-2">
+                {chips.map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-neutral-800/60 bg-neutral-950 px-3 py-1 text-xs uppercase tracking-[0.18em] text-neutral-400"
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </aside>
       </div>
     </article>
+  );
+}
+
+function AnimatedTimeline({ steps }: { steps: { title: string; body: string }[] }) {
+  const items = Array.isArray(steps) ? steps : [];
+  if (items.length === 0) return null;
+
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 15%", "end 70%"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 20, mass: 0.2 });
+  const height = useTransform(progress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <div ref={ref} className="relative">
+      <div className="absolute left-3 top-0 h-full w-px bg-neutral-800 md:left-4" aria-hidden />
+      <motion.div
+        style={{ height }}
+        className="absolute left-3 top-0 w-px bg-gradient-to-b from-cyan-400/80 to-sky-400/70 md:left-4 motion-safe:opacity-100"
+        aria-hidden
+      />
+      <ol className="space-y-5">
+        {items.map((s, i) => (
+          <li key={s.title} className="relative pl-10">
+            <motion.span
+              aria-hidden
+              className="absolute left-3 top-2 h-2.5 w-2.5 -translate-x-1 rounded-full border border-neutral-400 bg-neutral-100 md:left-4"
+              initial={{ scale: 0.85, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true, margin: "-10% 0% -10% 0%" }}
+              transition={{ duration: 0.22, delay: i * 0.04 }}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10% 0% -10% 0%" }}
+              transition={{ duration: 0.26, delay: i * 0.05 }}
+              className="rounded-xl border border-neutral-900 bg-neutral-950/70 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+            >
+              <h4 className="text-sm font-semibold text-neutral-200">{s.title}</h4>
+              <p className="mt-1 text-sm text-neutral-400">{s.body}</p>
+            </motion.div>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }

@@ -111,6 +111,12 @@ export default function ResumePage() {
   return (
     <>
       <RouteSeo title="Resume" />
+      <style>
+        {`@page { size: Letter; margin: 0.5in; }
+          @media print {
+            body { transform: scale(0.98); transform-origin: top left; }
+          }`}
+      </style>
       <a
         href="#resume-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-6 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-black"
@@ -119,10 +125,10 @@ export default function ResumePage() {
       </a>
       <main
         id="resume-content"
-        className="mx-auto my-10 w-full max-w-4xl font-serif text-[15px] leading-[1.65] text-black print:my-0 print:w-[8.27in] print:max-w-none print:bg-white"
+        className="mx-auto my-10 w-full max-w-4xl font-serif text-[15px] leading-[1.65] text-black print:my-0 print:w-[8.27in] print:max-w-none print:bg-white print:text-[13px] print:leading-tight print:tracking-tight"
       >
         <article className="rounded-3xl border border-border/40 bg-white p-8 shadow-2xl print:border-0 print:p-0 print:shadow-none print:bg-white">
-          <header className="border-b border-black/40 pb-6 print:border-black/80">
+          <header className="border-b border-black/40 pb-6 print:border-black/80 print:pb-4">
             <h1 className="text-3xl font-extrabold tracking-[0.04em] text-black">ISIAH UDOFIA</h1>
             <address className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-medium text-black/80 not-italic">
               <span>New Haven, Connecticut</span>
@@ -172,8 +178,8 @@ export default function ResumePage() {
             </div>
           </header>
 
-          <div className="mt-8 space-y-10 lg:grid lg:grid-cols-12 lg:gap-8 lg:space-y-0 print:grid print:grid-cols-1 print:gap-0">
-            <div className="space-y-10 lg:col-span-7 print:col-span-1">
+          <div className="mt-8 space-y-10 lg:grid lg:grid-cols-12 lg:gap-8 lg:space-y-0 print:grid print:grid-cols-1 print:gap-0 print:space-y-6">
+            <div className="space-y-10 lg:col-span-7 print:col-span-1 print:space-y-6">
               <ResumeSection title="EDUCATION">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <h3 className="text-[15px] font-semibold uppercase tracking-[0.02em] text-black">
@@ -182,8 +188,8 @@ export default function ResumePage() {
                   <p className="text-[15px] font-semibold text-black">{education.graduation}</p>
                 </div>
                 <p className="mt-2 text-[15px] italic text-black">{education.degree}</p>
-                <p className="mt-1 text-[15px] text-black/80">{education.coursework}</p>
-                <p className="mt-1 text-[15px] text-black/80">{education.gpa}</p>
+                <p className="mt-1 text-[15px] text-black/80 print:mt-0.5">{education.coursework}</p>
+                <p className="mt-1 text-[15px] text-black/80 print:mt-0.5">{education.gpa}</p>
               </ResumeSection>
 
               <ResumeSection title="WORK EXPERIENCE">
@@ -193,7 +199,7 @@ export default function ResumePage() {
               </ResumeSection>
             </div>
 
-            <div className="mt-10 space-y-10 lg:col-span-5 lg:mt-0 print:col-span-1">
+            <div className="mt-10 space-y-10 lg:col-span-5 lg:mt-0 print:col-span-1 print:mt-6 print:space-y-6">
               <ResumeSection title="EXTRACURRICULAR ACTIVITIES (LEADERSHIP EXPERIENCE)">
                 {extracurriculars.map((experience) => (
                   <ResumeEntry key={`${experience.organization}-${experience.timeframe}`} experience={experience} />
@@ -209,23 +215,23 @@ export default function ResumePage() {
 
 function ResumeSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="break-inside-avoid border-t border-black/30 pt-4 print:border-black/80">
-      <h2 className="text-xs font-semibold uppercase tracking-[0.25em] text-black">{title}</h2>
-      <div className="mt-4 space-y-6 text-[15px] text-black/85">{children}</div>
+    <section className="break-inside-avoid border-t border-black/30 pt-4 print:border-black/80 print:pt-3">
+      <h2 className="break-after-avoid text-xs font-semibold uppercase tracking-[0.25em] text-black print:text-[11px]">{title}</h2>
+      <div className="mt-4 space-y-6 text-[15px] text-black/85 print:mt-2 print:space-y-2 print:text-[13px] print:text-black">{children}</div>
     </section>
   );
 }
 
 function ResumeEntry({ experience }: { experience: Experience }) {
   return (
-    <article className="break-inside-avoid">
+    <article className="break-inside-avoid print:space-y-1">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-[15px] font-semibold text-black">
           {experience.organization}, <span className="font-normal italic">{experience.role}</span>, {experience.location}
         </h3>
         <p className="text-[15px] font-semibold text-black">{experience.timeframe}</p>
       </div>
-      <ul className="mt-2 space-y-2 pl-5 text-[15px] text-black/80 md:pl-6 list-disc">
+      <ul className="mt-2 list-disc space-y-2 pl-5 text-[15px] text-black/80 md:pl-6 print:mt-1 print:space-y-1 print:pl-5 print:text-[13px]">
         {experience.bullets.map((bullet) => (
           <li key={bullet} className="leading-relaxed marker:text-black">
             {bullet}

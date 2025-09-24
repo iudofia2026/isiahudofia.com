@@ -54,9 +54,9 @@ export default function Page() {
         "Asynchronous review to course-correct: swap hooks, adjust pacing, or re-prioritize clips to maximize retention.",
     },
     {
-      title: "Ship & reset",
+      title: "Publish & reset",
       body:
-        "End-of-week deliverables (exports, thumbs, captions) with versioning templates. Close the loop and prep inputs for next week’s kickoff.",
+        "End-of-week assets (exports, thumbnails, captions) are versioned to templates and queued for posting. Close the loop and prep inputs for next week’s kickoff.",
     },
   ];
 

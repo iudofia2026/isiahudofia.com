@@ -1,78 +1,68 @@
 "use client";
 
-import { Mic, Waveform, Languages, MessageSquare, MonitorCheck, ArrowRight } from "lucide-react";
+import type { ElementType } from "react";
+import { memo } from "react";
+import { Mic, AudioLines, Languages, MessageSquare, Monitor, BadgeCheck, ArrowRight } from "lucide-react";
 
-const nodes = [
-  { label: "Discord Voice", icon: Mic },
-  { label: "Streaming STT (Deepgram)", icon: Waveform },
-  { label: "Translation", icon: Languages },
-  { label: "Inline Bot Messages", icon: MessageSquare },
+type Node = { icon: ElementType; label: string };
+
+const NODES_ROW1: Node[] = [
+  { icon: Mic, label: "Discord Voice" },
+  { icon: AudioLines, label: "Streaming STT (Deepgram)" },
+  { icon: Languages, label: "Translation" },
+  { icon: MessageSquare, label: "Inline Bot Messages" },
 ];
 
-const bottomNode = { label: "Optional Overlay for Captions", icon: MonitorCheck };
+const NODE_ROW2: Node = { icon: Monitor, label: "Optional Overlay for Captions" };
 
-export default function PipelineDiagram({ className }: { className?: string }) {
-  const containerClass = `relative rounded-3xl border border-[rgba(140,148,255,0.25)] bg-neutral-950/70 p-6 shadow-[0_20px_80px_-40px_rgba(124,58,237,0.6)] ${
-    className ?? ""
-  }`;
+function PipelineDiagram({ className = "" }: { className?: string }) {
   return (
-    <section className={containerClass.trim()}>
-      <h2 className="sr-only">Translator pipeline</h2>
-      <div className="grid gap-6">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          {nodes.map((node, index) => {
-            const Icon = node.icon;
-            return (
-              <div key={node.label} className="relative flex flex-1 items-center gap-3">
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white">
-                    <Icon className="h-5 w-5" aria-hidden />
-                  </div>
-                  <p className="text-sm font-medium text-neutral-100">{node.label}</p>
-                </div>
-                {index < nodes.length - 1 && <Arrow className="hidden lg:block" />}
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex items-center justify-center lg:justify-start">
-          <OverlayCard />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function OverlayCard() {
-  const Icon = bottomNode.icon;
-  return (
-    <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white">
-        <Icon className="h-5 w-5" aria-hidden />
-      </div>
-      <p className="text-sm font-medium text-neutral-100">{bottomNode.label}</p>
-    </div>
-  );
-}
-
-function Arrow({ className }: { className?: string }) {
-  const classes = `relative h-px flex-1 overflow-hidden ${className ?? ""}`.trim();
-  return (
-    <div className={classes}>
+    <div
+      className={`relative w-full rounded-2xl border border-neutral-800 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] ${className}`.trim()}
+      aria-label="Translator pipeline"
+    >
       <div
-        className="motion-safe:animate-[dash_2s_linear_infinite] absolute inset-0"
-        style={{ borderBottom: "1px dashed rgba(167,139,250,0.6)" }}
-      />
-      <ArrowRight
-        className="absolute -right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[rgba(167,139,250,0.9)]"
         aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 rounded-2xl opacity-10"
+        style={{
+          background: "radial-gradient(120% 120% at 50% 0%, #7C3AED 0%, #A78BFA 45%, transparent 75%)",
+        }}
       />
-      <style>{`
-        @keyframes dash {
-          from { transform: translateX(0); }
-          to { transform: translateX(10px); }
-        }
-      `}</style>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+        {NODES_ROW1.map(({ icon: Icon, label }, index) => (
+          <div
+            key={label}
+            className="relative flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-white">
+              <Icon aria-hidden className="h-5 w-5" />
+            </div>
+            <p className="text-sm font-medium text-neutral-100">{label}</p>
+            {index < NODES_ROW1.length - 1 && (
+              <ArrowRight
+                aria-hidden
+                className="absolute -right-5 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-purple-200 motion-safe:animate-pulse lg:block"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex justify-center lg:justify-start">
+        <div className="relative flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-white">
+            <NODE_ROW2.icon aria-hidden className="h-5 w-5" />
+            <BadgeCheck
+              aria-hidden
+              className="absolute -right-1 -top-1 h-3.5 w-3.5 text-emerald-300"
+            />
+          </div>
+          <p className="text-sm font-medium text-neutral-100">{NODE_ROW2.label}</p>
+        </div>
+      </div>
     </div>
   );
 }
+
+export default memo(PipelineDiagram);

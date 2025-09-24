@@ -56,7 +56,7 @@ export default function Navbar() {
             <Github className="h-4 w-4" aria-hidden />
           </Link>
           <Link
-            href="https://www.linkedin.com/in/REPLACE_WITH_YOUR_SLUG"
+            href="https://www.linkedin.com/in/isiah-udofia/"
             aria-label="LinkedIn profile"
             className="rounded-full border border-border/60 bg-surface/40 p-2 transition hover:border-accent/60 hover:text-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
           >

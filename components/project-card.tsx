@@ -1,39 +1,43 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import type { Project } from '../data/projects';
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.article
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-surface/80 p-6 shadow-subtle backdrop-blur"
+      whileHover={prefersReducedMotion ? undefined : { y: -8 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-border/50 bg-surface/80 p-6 shadow-subtle backdrop-blur"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs uppercase tracking-[0.28em] text-accent/80">{project.tagline}</p>
-          <h3 className="mt-2 text-xl font-semibold text-foreground">{project.title}</h3>
-          {project.dates && <p className="mt-1 text-sm text-foreground/60">{project.dates}</p>}
-        </div>
-        <ArrowUpRight className="h-5 w-5 text-foreground/30 transition group-hover:text-accent" aria-hidden />
+      <div className="relative overflow-hidden rounded-[1.35rem] bg-muted/60">
+        <Image
+          src={project.thumbnail}
+          alt={`${project.title} preview`}
+          width={640}
+          height={420}
+          className="h-40 w-full object-cover transition duration-300 group-hover:scale-105"
+        />
       </div>
-      <ul className="mt-4 space-y-2 text-sm text-foreground/70">
-        {project.highlights.slice(0, 3).map((highlight) => (
-          <li key={highlight} className="leading-relaxed">
-            {highlight}
-          </li>
-        ))}
-      </ul>
+      <div className="mt-6 flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">{project.title}</h3>
+          <p className="mt-2 text-sm text-foreground/60">{project.tagline}</p>
+        </div>
+        <ArrowUpRight className="mt-1 h-5 w-5 text-foreground/40 transition group-hover:text-accent" aria-hidden />
+      </div>
       <div className="mt-5 flex flex-wrap gap-2">
-        {project.stack.map((tech) => (
+        {project.chips.map((chip) => (
           <span
-            key={tech}
-            className="rounded-full border border-border/60 bg-background/80 px-3 py-1 text-xs uppercase tracking-wide text-foreground/60"
+            key={chip}
+            className="rounded-full border border-border/60 bg-background/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
           >
-            {tech}
+            {chip}
           </span>
         ))}
       </div>

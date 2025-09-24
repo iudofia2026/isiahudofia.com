@@ -3,9 +3,8 @@ import type { DefaultSeoProps } from 'next-seo';
 const siteUrl = 'https://www.isiahudofia.com';
 
 const config: DefaultSeoProps = {
-  title: 'Isiah Udofia | Product-Minded Builder',
-  description:
-    'Product-minded builder with a cognitive science foundation. Shipping thoughtful AI-powered experiences and go-to-market playbooks.',
+  title: 'Isiah Udofia | Product Builder',
+  description: 'Product builder pairing translation, ops, and research rigor.',
   canonical: siteUrl,
   openGraph: {
     type: 'website',

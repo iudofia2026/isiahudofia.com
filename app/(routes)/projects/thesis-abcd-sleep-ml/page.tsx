@@ -1,80 +1,197 @@
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import RouteSeo from '../../../../components/route-seo';
-import CaseStudyLayout from '../../../../components/case';
-import { projects } from '../../../../data/projects';
+import { notFound } from "next/navigation";
+import type { Project } from "../../../../data/projects";
+import { projects } from "../../../../data/projects";
+import { motion } from "framer-motion";
 
-export const metadata: Metadata = {
-  title: 'B.S. Thesis — Making Sleep Data Actionable with Machine Learning',
-  description: 'Bridging wearable signals and lived experience with calibrated ML and an evidence-constrained explainer.',
+export const metadata = {
+  title: "B.S. Thesis — Making Sleep Data Actionable with ML",
+  description:
+    "Starting now: calibrated ML on wearable + survey signals with an evidence-constrained explainer. Transparent features, validated against self-reports and tasks.",
 };
 
-const project = projects.find((item) => item.slug === 'thesis-abcd-sleep-ml');
-
-if (!project) {
-  throw new Error('ABCD Sleep Thesis project data missing');
+function getProject(): Project | undefined {
+  return projects.find((p) => p.slug === "thesis-abcd-sleep-ml");
 }
 
-const title = 'B.S. Thesis — Making Sleep Data Actionable with Machine Learning';
-const subtitle =
-  'Bridging wearable signals and lived experience to produce evidence-backed insights people can actually use.';
+function deriveChips(p: Project): string[] {
+  if (Array.isArray(p.stack) && p.stack.length) return p.stack.slice(0, 6);
+  if (Array.isArray(p.metrics) && p.metrics.length) return p.metrics.map((m) => m.label).slice(0, 6);
+  if (Array.isArray(p.highlights) && p.highlights.length) {
+    return p.highlights.slice(0, 5).map((h) => h.split(/[—–-]/)[0].trim());
+  }
+  return ["Ridge", "XGBoost", "Calibration", "Wearables", "Evidence-backed"];
+}
 
-const highlights = [
-  'Trained Ridge + XGBoost with calibration on thousands of nights of wearable + survey data',
-  'Two-layer system: models for accuracy, LLM explainer constrained to peer-reviewed sleep science',
-  'Validates against self-reports and cognitive task outcomes to check real-world relevance',
-  'Focuses on transparent features and reliable feedback loops instead of black-box scores',
-];
+export default function Page() {
+  const project = getProject();
+  if (!project) return notFound();
 
-const chips = ['Ridge', 'XGBoost', 'Calibration', 'Wearables', 'Evidence-backed'];
+  const chips = deriveChips(project);
 
-export default function ThesisCaseStudy() {
+  const sunsetFrom = "#EA580C";
+  const sunsetTo = "#DC2626";
+  const tile = "#7C2D12";
+
+  const bullets = [
+    "Train calibrated Ridge + XGBoost on multi-night wearable + survey features; prefer reliability over raw score chasing.",
+    "Two-layer design: models for accuracy + an explainer constrained to peer-reviewed sleep science (guardrails over style).",
+    "Validate against self-reports and cognitive tasks to check real-world relevance, not just dev metrics.",
+    "Emphasize transparent features and feedback loops so people understand why a suggestion was made.",
+  ];
+
+  const milestones = [
+    { k: "M1", t: "Data ready", d: "Clean/align nights, engineer ~100–120 features, audit leakage.", w: "Weeks 1–3" },
+    { k: "M2", t: "Baselines + calibration", d: "Ridge + XGBoost; reliability curves (ECE/Brier), thresholds.", w: "Weeks 4–6" },
+    { k: "M3", t: "Validation", d: "Compare to self-reports & task outcomes; error analysis on subgroups.", w: "Weeks 7–9" },
+    { k: "M4", t: "Constrained explainer", d: "LLM explanations bound to vetted sleep sources; safety checks.", w: "Weeks 10–12" },
+    { k: "M5", t: "Pilot feedback", d: "Transparent features + next-best actions; small user tests.", w: "Weeks 13–15" },
+  ];
+
+  const success = [
+    "Well-calibrated predictions (e.g., ECE < 0.05) with clear calibration plots.",
+    "Advisor-reviewed feature attributions that align with sleep science.",
+    "Users can accurately restate ‘why’ behind a suggestion in brief tests.",
+    "No safety violations or off-source claims in the explainer.",
+  ];
+
+  const advisor = "Prof. [Advisor Name]";
+
   return (
-    <>
-      <RouteSeo
-        title="B.S. Thesis — Making Sleep Data Actionable with Machine Learning"
-        description="Bridging wearable signals and lived experience with calibrated ML and an evidence-constrained explainer."
-      />
-      <CaseStudyLayout>
-        <header className="flex flex-col gap-5">
-          <p className="text-sm uppercase tracking-[0.28em] text-accent/80">Research</p>
-          <div className="flex flex-col gap-3">
-            <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              {title}
-            </h1>
-            <p className="text-base text-foreground/60">{subtitle}</p>
-          </div>
-        </header>
-        <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr),minmax(0,1.1fr)]">
-          <ul className="space-y-3 text-base text-foreground/75">
-            {highlights.map((item) => (
-              <li key={item} className="flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-                <span>{item}</span>
-              </li>
+    <article className="container py-14">
+      <section className="relative overflow-hidden rounded-3xl border border-neutral-900 bg-neutral-950/60 px-6 py-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 opacity-15"
+          style={{
+            background: `radial-gradient(120% 120% at 50% 0%, ${sunsetFrom}, ${sunsetTo})`,
+            maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,1) 68%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-3xl"
+          style={{
+            boxShadow: "0 0 0 1px rgba(255,255,255,0.05) inset, 0 14px 60px -20px rgba(220,38,38,0.25)",
+          }}
+        />
+
+        <p className="text-xs tracking-[0.22em] text-neutral-400">RESEARCH</p>
+        <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">
+          B.S. Thesis — Making Sleep Data Actionable with Machine Learning
+        </h1>
+        <p className="mt-2 max-w-2xl text-neutral-300">
+          Starting this year: bridge wearable signals and lived experience to produce evidence-backed guidance people can actually use.
+        </p>
+        <p className="mt-2 text-sm text-neutral-400">Advisor: {advisor}</p>
+        <p className="mt-3 text-xs font-medium uppercase tracking-[0.24em] text-orange-300/80">
+          Current status: data cleaning + feature audits
+        </p>
+
+        {(chips ?? []).length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {chips.map((chip) => (
+              <span
+                key={chip}
+                className="rounded-full border border-neutral-800/60 bg-neutral-950 px-3 py-1 text-xs uppercase tracking-[0.18em] text-neutral-300"
+              >
+                {chip}
+              </span>
             ))}
-          </ul>
-          <div className="relative overflow-hidden rounded-[2rem] border border-border/40 bg-surface/70 p-6 shadow-subtle">
-            <Image
-              src={project.thumbnail}
-              alt="ABCD thesis chart"
-              width={960}
-              height={640}
-              className="relative z-10 w-full rounded-[1.5rem] border border-border/40 bg-background/70 object-cover"
-            />
           </div>
+        )}
+      </section>
+
+      <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <section className="lg:col-span-2 space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.28 }}
+            className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+          >
+            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Project approach</h2>
+            <ul className="list-disc pl-5 leading-relaxed text-neutral-300">
+              {bullets.map((b) => (
+                <li key={b} className="mt-1">
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.28, delay: 0.05 }}
+            className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+          >
+            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Milestones (in progress)</h2>
+            <ol className="grid gap-3 sm:grid-cols-2">
+              {milestones.map((m, i) => (
+                <li key={m.k} className="relative rounded-xl border border-neutral-900 bg-neutral-950/70 p-4">
+                  <div className="mb-1 text-xs font-medium tracking-wider text-neutral-400">
+                    {m.k} • {m.w}
+                  </div>
+                  <div className="text-sm font-semibold text-neutral-200">{m.t}</div>
+                  <p className="mt-1 text-sm text-neutral-400">{m.d}</p>
+                  {i === 0 && (
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 rounded-xl"
+                      style={{ boxShadow: `inset 0 0 0 1px ${sunsetFrom}22, 0 10px 30px -12px ${sunsetTo}33` }}
+                    />
+                  )}
+                </li>
+              ))}
+            </ol>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.28, delay: 0.08 }}
+            className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6"
+          >
+            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">What success looks like</h2>
+            <ul className="list-disc pl-5 leading-relaxed text-neutral-300">
+              {success.map((s) => (
+                <li key={s} className="mt-1">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
         </section>
-        <section className="flex flex-wrap gap-2">
-          {chips.map((chip) => (
-            <span
-              key={chip}
-              className="rounded-full border border-border/50 bg-surface/80 px-4 py-1 text-xs uppercase tracking-[0.18em] text-foreground/60"
+
+        <aside>
+          <div className="relative overflow-hidden rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-neutral-300">Calibration preview</h3>
+            <div
+              className="relative h-52 w-full rounded-xl"
+              style={{ background: `linear-gradient(180deg, ${tile} 0%, rgba(124,45,18,0.6) 100%)` }}
             >
-              {chip}
-            </span>
-          ))}
-        </section>
-      </CaseStudyLayout>
-    </>
+              <div className="absolute left-4 right-4 top-1/3 h-px bg-neutral-300/30" />
+              <div className="absolute bottom-4 left-6 right-6 flex items-end gap-3">
+                <div className="h-16 w-6 rounded-md bg-orange-600/70" />
+                <div className="h-24 w-6 rounded-md bg-red-500/70" />
+                <div className="h-12 w-6 rounded-md bg-orange-500/70" />
+                <div className="h-28 w-6 rounded-md bg-red-600/70" />
+              </div>
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-xl"
+                style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }}
+              />
+            </div>
+            <p className="mt-2 text-xs text-neutral-400">
+              Stylized mock to match theme—real plots will replace this after M2.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </article>
   );
 }

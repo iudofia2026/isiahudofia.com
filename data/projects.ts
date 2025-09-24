@@ -40,9 +40,9 @@ export const projects: Project[] = [
     dates: "2022 — Present",
     stack: ["Premiere Pro", "After Effects", "Editor handoff", "Review loops"],
     highlights: [
-      "Daily production loop: client inputs → direction rough by Isiah → editor handoff → rapid iteration → Isiah acceptance → client final pass → ship",
+      "Daily production loop: client inputs → direction rough by Isiah → editor handoff → rapid iteration → Isiah acceptance → client final pass → publish",
       "Two-editor model enables parallel cuts and faster experiments on hooks, pacing, and retention",
-      "Lightweight templates and versioning keep deliverables consistent across brands"
+      "Lightweight templates and versioning keep assets consistent across brands"
     ],
     links: [{ label: "Agency playbook", href: "#" }],
     // Keep metrics empty (no MRR or fabricated numbers)

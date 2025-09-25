@@ -267,9 +267,7 @@ main {
 }
 
 .project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 26px 70px -58px rgba(99, 102, 241, 0.9);
-  border-color: rgba(99, 102, 241, 0.38);
+  border-color: rgba(99, 102, 241, 0.28);
 }
 
 .project-logo {
@@ -303,15 +301,12 @@ main {
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.3rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid var(--chip-border);
-  backdrop-filter: blur(6px);
-  letter-spacing: 0.04em;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
   font-size: 0.78rem;
-  text-transform: uppercase;
-  color: rgba(236, 241, 247, 0.78);
+  color: rgba(236, 241, 247, 0.85);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -344,13 +339,13 @@ main {
 
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transform: translateY(8px);
 }
 
 .reveal-on-scroll.is-visible {
   opacity: 1;
   transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .metric-chips {
@@ -1596,5 +1591,159 @@ main {
   }
   .cta-buttons .btn{
     width:100%;
+  }
+}
+
+/* --- Projects hero (distinct theme) --- */
+:root {
+  --projHueA: 205;
+  --projHueB: 330;
+}
+
+.projects-hero {
+  position: relative;
+  overflow: clip;
+  border-radius: 22px;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 3vw, 2rem);
+  margin: 2rem auto 1rem;
+  background: radial-gradient(
+      120% 100% at 10% 0%,
+      hsl(var(--projHueA) 70% 16% / 0.45) 0%,
+      hsl(var(--projHueB) 70% 12% / 0.3) 50%,
+      transparent 80%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35) inset, 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+.projects-hero__inner {
+  position: relative;
+  z-index: 1;
+}
+.projects-hero .eyebrow {
+  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+.projects-hero h1 {
+  margin: 0 0 0.5rem;
+}
+.projects-hero .subtle {
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+#projects-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* --- Grid & cards --- */
+.projects-grid {
+  --gap: clamp(1rem, 2.5vw, 1.5rem);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+  margin: 1.25rem auto 3rem;
+}
+.projects-grid > .project-card {
+  grid-column: span 4;
+  background: var(--panelElevated);
+  border: 1px solid var(--panelBorder);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: var(--cardShadowSm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+@media (max-width: 1000px) {
+  .projects-grid > .project-card {
+    grid-column: span 6;
+  }
+}
+@media (max-width: 680px) {
+  .projects-grid > .project-card {
+    grid-column: span 12;
+  }
+}
+
+.project-card:hover,
+.project-card:focus-visible {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+
+.project-card .cover {
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  margin-bottom: 1rem;
+}
+
+.project-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.project-card__body h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.project-card__body p {
+  margin: 0;
+}
+
+.project-card h3 a {
+  text-decoration: none;
+  color: inherit;
+}
+.project-card h3 a:hover {
+  text-decoration: underline;
+}
+
+.project-logo--tile {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3D tilt subtle glare */
+.project-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 120% at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.1), transparent 40%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.project-card:hover::after,
+.project-card:focus-visible::after {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .chips.cadence .chip {
+    font-size: 0.78rem;
+  }
+  .cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cta-buttons .btn {
+    width: 100%;
   }
 }

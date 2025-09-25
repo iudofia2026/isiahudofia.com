@@ -32,12 +32,12 @@ body {
 }
 
 ::selection {
-  background: #0bffe0;
+  background: #444c56;
   color: #ffffff;
 }
 
 ::-moz-selection {
-  background: #0bffe0;
+  background: #444c56;
   color: #ffffff;
 }
 

@@ -209,6 +209,224 @@
       items.forEach((item) => accordionObserver.observe(item));
     }
 
+    /* ===== Projects Page Enhancements ===== */
+    const projectsHero = document.querySelector(".projects-hero");
+    if (projectsHero) {
+      const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      let prefersReduced = motionMq.matches;
+
+      const canvas = document.getElementById("projects-bg");
+      const ctx = canvas ? canvas.getContext("2d") : null;
+      const nodes = [];
+      const NODE_COUNT = 56;
+      let width = 0;
+      let height = 0;
+      let dpr = window.devicePixelRatio || 1;
+      let rafId;
+
+      const rootStyles = getComputedStyle(document.documentElement);
+      const parseHue = (value, fallback) => {
+        const parsed = parseFloat(value.trim());
+        return Number.isFinite(parsed) ? parsed : fallback;
+      };
+      const hueA = parseHue(rootStyles.getPropertyValue("--projHueA") || "", 205);
+      const hueB = parseHue(rootStyles.getPropertyValue("--projHueB") || "", 330);
+
+      const clampNodes = () => {
+        nodes.forEach((node) => {
+          if (node.x < 0) node.x = 0;
+          if (node.x > width) node.x = width;
+          if (node.y < 0) node.y = 0;
+          if (node.y > height) node.y = height;
+        });
+      };
+
+      const resize = () => {
+        if (!canvas || !ctx) return;
+        const rect = canvas.getBoundingClientRect();
+        dpr = window.devicePixelRatio || 1;
+        width = rect.width;
+        height = rect.height;
+        canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+        canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        clampNodes();
+      };
+
+      const seed = () => {
+        nodes.length = 0;
+        for (let i = 0; i < NODE_COUNT; i += 1) {
+          nodes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            r: 1 + Math.random() * 1.6,
+          });
+        }
+      };
+
+      const tick = () => {
+        if (!ctx || !canvas) return;
+        ctx.clearRect(0, 0, width, height);
+
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, `hsla(${hueA} 80% 60% / 0.06)`);
+        gradient.addColorStop(1, `hsla(${hueB} 80% 60% / 0.06)`);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        for (const node of nodes) {
+          node.x += node.vx;
+          node.y += node.vy;
+
+          if (node.x < 0 || node.x > width) node.vx *= -1;
+          if (node.y < 0 || node.y > height) node.vy *= -1;
+
+          ctx.beginPath();
+          ctx.fillStyle = "rgba(255,255,255,0.18)";
+          ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        for (let i = 0; i < nodes.length; i += 1) {
+          for (let j = i + 1; j < nodes.length; j += 1) {
+            const a = nodes[i];
+            const b = nodes[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 120) {
+              ctx.strokeStyle = `rgba(200,200,255,${((1 - dist / 120) * 0.18).toFixed(3)})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        rafId = requestAnimationFrame(tick);
+      };
+
+      const stop = () => cancelAnimationFrame(rafId);
+
+      const start = () => {
+        if (!canvas || !ctx || prefersReduced) return;
+        resize();
+        if (!nodes.length) seed();
+        stop();
+        tick();
+      };
+
+      if (canvas && ctx && !prefersReduced) {
+        start();
+      }
+
+      window.addEventListener(
+        "resize",
+        () => {
+          if (!canvas || !ctx || prefersReduced) return;
+          resize();
+        },
+        { passive: true }
+      );
+
+      document.addEventListener("visibilitychange", () => {
+        if (prefersReduced || !canvas || !ctx) return;
+        if (document.hidden) stop();
+        else start();
+      });
+
+      motionMq.addEventListener("change", (event) => {
+        prefersReduced = event.matches;
+        if (prefersReduced) {
+          stop();
+        } else {
+          start();
+        }
+      });
+
+      const grid = document.querySelector("[data-grid]");
+      if (grid) {
+        const cards = Array.from(grid.querySelectorAll('[data-animate="fade"]'));
+        if (prefersReduced) {
+          cards.forEach((card) => card.classList.add("reveal-on-scroll", "is-visible"));
+        } else {
+          const cardObserver = new IntersectionObserver(
+            (entries, observer) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  const idx = cards.indexOf(entry.target);
+                  setTimeout(() => entry.target.classList.add("is-visible"), idx * 120);
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.25 }
+          );
+          cards.forEach((card) => {
+            card.classList.add("reveal-on-scroll");
+            cardObserver.observe(card);
+          });
+        }
+      }
+
+      const tilts = document.querySelectorAll('[data-tilt]');
+      tilts.forEach((card) => {
+        const href = card.dataset.href;
+        const link = card.querySelector(".project-link");
+
+        if (!prefersReduced) {
+          let bounds;
+          const update = (mx, my) => {
+            if (!bounds) return;
+            card.style.setProperty("--mx", `${mx}px`);
+            card.style.setProperty("--my", `${my}px`);
+            const rx = ((my / bounds.height) - 0.5) * -6;
+            const ry = ((mx / bounds.width) - 0.5) * 6;
+            card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+          };
+          const reset = () => {
+            card.style.transform = "none";
+            card.style.removeProperty("--mx");
+            card.style.removeProperty("--my");
+            bounds = undefined;
+          };
+
+          card.addEventListener("mousemove", (event) => {
+            bounds = bounds || card.getBoundingClientRect();
+            update(event.clientX - bounds.left, event.clientY - bounds.top);
+          });
+          card.addEventListener("mouseleave", () => {
+            bounds = undefined;
+            reset();
+          });
+          card.addEventListener("focus", () => {
+            bounds = card.getBoundingClientRect();
+            update(bounds.width / 2, bounds.height / 2);
+          });
+          card.addEventListener("blur", reset);
+        }
+
+        card.addEventListener("click", (event) => {
+          if (event.defaultPrevented) return;
+          if (link && event.target instanceof HTMLElement && !event.target.closest("a")) {
+            link.click();
+          }
+        });
+
+        card.addEventListener("keydown", (event) => {
+          if (!link) return;
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            link.click();
+          }
+        });
+      });
+    }
+
     /* Typing indicator */
     const typingEl = document.querySelector("[data-typing]");
     if (typingEl) {

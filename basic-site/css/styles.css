@@ -41,6 +41,13 @@ body {
   color: #ffffff;
 }
 
+a.is-disabled {
+  pointer-events: none;
+  opacity: 0.55;
+  filter: saturate(0.7);
+  cursor: not-allowed;
+}
+
 .container {
   max-width: 1224px;
   margin: 0 auto;

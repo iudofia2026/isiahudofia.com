@@ -17,6 +17,52 @@
       });
     }
 
+    // ----- Resume PDF link normalizer -----
+    (function normalizeResumeLinks() {
+      const url = new URL(window.location.href);
+      const parts = url.pathname.split("/").filter(Boolean);
+      const rootIdx = parts.indexOf("basic-site");
+      let basePath;
+      if (rootIdx !== -1) {
+        basePath = "/" + parts.slice(0, rootIdx + 1).join("/");
+      } else {
+        const match = url.pathname.match(/\/basic-site(\/|$)/);
+        basePath = match ? url.pathname.slice(0, match.index + "/basic-site".length) : ".";
+      }
+
+      const pdfPath = `${basePath}/assets/Udofia_Isiah_Resume.pdf`;
+
+      document.querySelectorAll("[data-resume]").forEach((a) => {
+        a.setAttribute("href", pdfPath);
+        a.setAttribute("download", "Udofia_Isiah_Resume.pdf");
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener");
+      });
+
+      try {
+        fetch(pdfPath, { method: "HEAD" })
+          .then((response) => {
+            if (!response.ok) throw new Error("Resume PDF missing");
+          })
+          .catch(() => {
+            document.querySelectorAll("[data-resume]").forEach((a) => {
+              a.removeAttribute("href");
+              a.removeAttribute("download");
+              a.classList.add("is-disabled");
+              a.textContent = "Resume PDF unavailable";
+            });
+          });
+      } catch (error) {
+        document.querySelectorAll("[data-resume]").forEach((a) => {
+          a.removeAttribute("href");
+          a.removeAttribute("download");
+          a.classList.add("is-disabled");
+          a.textContent = "Resume PDF unavailable";
+        });
+      }
+    })();
+    // --------------------------------------
+
     const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
     let prefersReduced = motionMq.matches;
     motionMq.addEventListener("change", (evt) => {

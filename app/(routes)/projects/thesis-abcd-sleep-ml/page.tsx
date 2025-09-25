@@ -30,7 +30,6 @@ export default function Page() {
 
   const sunsetFrom = "#EA580C";
   const sunsetTo = "#DC2626";
-  const tile = "#7C2D12";
 
   const bullets = [
     "Train calibrated Ridge + XGBoost on multi-night wearable + survey features; prefer reliability over raw score chasing.",
@@ -101,8 +100,22 @@ export default function Page() {
         )}
       </section>
 
-      <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <section className="lg:col-span-2 space-y-8">
+      {/* MOTIVATION / WHY CARD */}
+      <section
+        className="mt-6 rounded-3xl border border-neutral-800/70 bg-gradient-to-b from-[#8a2c20]/15 via-[#c14b2a]/10 to-transparent p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+        aria-label="Why this thesis"
+      >
+        <p className="text-[15px] leading-7 text-neutral-200">
+          I’m building this thesis to <span className="font-semibold">turn sleep signals into guidance people can trust</span>.
+          Instead of chasing leaderboard scores, I’m focusing on <span className="font-semibold">calibrated models</span> and an
+          explainer that’s <span className="font-semibold">constrained to peer-reviewed sleep science</span>. The goal is
+          product-minded rigor: transparent features, reliable feedback, and recommendations that feel usable in real life.
+          Advised by <span className="font-medium">Prof. Arielle Baskin-Sommers</span>, I’m starting this year with data cleaning and feature audits, then moving toward baselines, calibration, validation, and a constrained explainer.
+        </p>
+      </section>
+
+      <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <section className="space-y-8">
           <Reveal>
             <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Project approach</h2>
@@ -154,31 +167,6 @@ export default function Page() {
           </Reveal>
         </section>
 
-        <aside>
-          <div className="relative overflow-hidden rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-neutral-300">Calibration preview</h3>
-            <div
-              className="relative h-52 w-full rounded-xl"
-              style={{ background: `linear-gradient(180deg, ${tile} 0%, rgba(124,45,18,0.6) 100%)` }}
-            >
-              <div className="absolute left-4 right-4 top-1/3 h-px bg-neutral-300/30" />
-              <div className="absolute bottom-4 left-6 right-6 flex items-end gap-3">
-                <div className="h-16 w-6 rounded-md bg-orange-600/70" />
-                <div className="h-24 w-6 rounded-md bg-red-500/70" />
-                <div className="h-12 w-6 rounded-md bg-orange-500/70" />
-                <div className="h-28 w-6 rounded-md bg-red-600/70" />
-              </div>
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-xl"
-                style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }}
-              />
-            </div>
-            <p className="mt-2 text-xs text-neutral-400">
-              Stylized mock to match theme—real plots will replace this after M2.
-            </p>
-          </div>
-        </aside>
       </div>
     </article>
   );

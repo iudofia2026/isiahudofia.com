@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Zen Video Agency | Isiah Udofia</title>
     <link rel="icon" type="image/png" href="../assets/favicon.png" />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body data-page="projects">
     <header class="site-header" data-animate="fade">
@@ -36,63 +36,57 @@
         </div>
       </section>
 
-      <section class="page-section project-columns">
-        <div class="stacked-cards">
-          <div class="detail-card" data-animate="fade">
-            <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Overview</p>
-            <ul class="project-blurb" style="margin: 0; padding-left: 1.1rem; color: rgba(226,232,240,0.78);">
-              <li>Daily production loop: client inputs → direction rough → editor handoff → rapid iteration → acceptance → client final pass → publish.</li>
-              <li>Two-editor model enables parallel cuts and faster experiments on hooks, pacing, and retention.</li>
-              <li>Lightweight templates and versioning keep assets consistent across brands.</li>
-            </ul>
-          </div>
-
-          <div class="detail-card" data-animate="fade">
-            <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Weekly → Daily loop</p>
-            <div class="timeline" data-timeline>
-              <ul>
-                <li>
-                  <h4>Weekly kickoff (client call)</h4>
-                  <p>Align themes, priorities, references, and target outputs for the week.</p>
-                </li>
-                <li>
-                  <h4>Daily production loop</h4>
-                  <p>Direction & naming → two editors in parallel passes → quick checks until a review-ready cut emerges.</p>
-                </li>
-                <li>
-                  <h4>Mid-week checkpoint</h4>
-                  <p>Async review to swap hooks, adjust pacing, and re-prioritize clips to maximize retention.</p>
-                </li>
-                <li>
-                  <h4>Publish & reset</h4>
-                  <p>Assets versioned to templates, queued for posting, and inputs readied for the next kickoff.</p>
-                </li>
-              </ul>
+      <section class="zen-grid" data-animate="fade">
+        <article class="zen-card col-span-7">
+          <header class="zen-card-head">
+            <p class="section-eyebrow">Overview</p>
+            <div class="metric-chips">
+              <span class="metric-chip">Retainers: 5</span>
+              <span class="metric-chip">Short-form/day: ~4</span>
+              <span class="metric-chip">Long-form/week: ~2</span>
             </div>
+          </header>
+          <ul class="zen-list">
+            <li>Daily production loop: client inputs → direction rough → editor handoff → rapid iteration → internal acceptance → client review → publish.</li>
+            <li>Two-editor model enables parallel cuts and faster experiments on hooks, pacing, and retention.</li>
+            <li>Lightweight templates and versioning keep assets consistent across brands.</li>
+          </ul>
+          <div class="chips stack-tight">
+            <span class="chip">Premiere Pro</span>
+            <span class="chip">After Effects</span>
+            <span class="chip">Editor handoff</span>
           </div>
-        </div>
+        </article>
 
-        <div class="stacked-cards">
-          <div class="detail-card" data-animate="fade">
-            <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Delivery cadence</p>
-            <div style="display: grid; gap: 0.9rem;">
-              <div class="chips" style="gap: 0.6rem;">
-                <span class="chip">Retainer clients: 5</span>
-                <span class="chip">Short-form/day: ~4</span>
-                <span class="chip">Long-form/week: ~2</span>
-              </div>
-            </div>
+        <article class="zen-card col-span-5">
+          <header class="zen-card-head">
+            <p class="section-eyebrow">Weekly → daily loop</p>
+          </header>
+          <div class="zen-timeline" data-zen-rail>
+            <ol>
+              <li>
+                <span class="node" aria-hidden="true"></span>
+                <h4>Weekly kickoff (client call)</h4>
+                <p>Align themes, priorities, references, and the week’s target outputs.</p>
+              </li>
+              <li>
+                <span class="node" aria-hidden="true"></span>
+                <h4>Daily production loop</h4>
+                <p>Direction &amp; naming → two editors in parallel passes → quick checks until publish-ready.</p>
+              </li>
+              <li>
+                <span class="node" aria-hidden="true"></span>
+                <h4>Mid-week checkpoint</h4>
+                <p>Async review to swap hooks, adjust pacing, and re-prioritize clips to maximize retention.</p>
+              </li>
+              <li>
+                <span class="node" aria-hidden="true"></span>
+                <h4>Publish &amp; reset</h4>
+                <p>Queue assets for posting, archive versions, and prep inputs for the next kickoff.</p>
+              </li>
+            </ol>
           </div>
-
-          <div class="detail-card" data-animate="fade">
-            <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Stack</p>
-            <div class="chips">
-              <span class="chip">Premiere Pro</span>
-              <span class="chip">After Effects</span>
-              <span class="chip">Editor handoff</span>
-            </div>
-          </div>
-        </div>
+        </article>
       </section>
     </main>
 
@@ -108,7 +102,7 @@
       </div>
     </footer>
 
-    <script src="../app.js" defer></script>
+    <script src="../js/main.js" defer></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>

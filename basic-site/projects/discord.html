@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Live Translator for Discord | Isiah Udofia</title>
     <link rel="icon" type="image/png" href="../assets/favicon.png" />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body data-page="projects">
     <header class="site-header" data-animate="fade">
@@ -34,48 +34,104 @@
         </div>
       </section>
 
-      <section class="page-section project-columns">
-        <div class="detail-card" data-animate="fade">
-          <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Build journey</p>
-          <div class="timeline" data-timeline>
-            <ul>
-              <li>
-                <h4>Problem</h4>
-                <p>Cross-language voice chats lose momentum when translation lags.</p>
-              </li>
-            <li>
-              <h4>Constraints</h4>
-              <p>Low-latency, Discord-native, readable directly in chat.</p>
-            </li>
-            <li>
-              <h4>Architecture</h4>
-              <p>Discord voice → streaming STT (Deepgram) → translation → inline bot messages; optional captions overlay.</p>
-            </li>
-            <li>
-              <h4>Reliability</h4>
-              <p>Reconnection guards, rate-limit backoff, interim/final dedupe.</p>
-            </li>
-            <li>
-              <h4>Privacy &amp; UI</h4>
-              <p>Per-user language prefs; opt-in overlay.</p>
-            </li>
-            <li>
-              <h4>Status / Next</h4>
-              <p>Hardening reconnect paths, tuning translation consistency, room-health console.</p>
-            </li>
-            </ul>
-          </div>
-        </div>
+      <section class="discord-grid" data-animate="fade">
+        <article class="accordion-timeline" data-discord-accordion>
+          <div class="timeline-rail" aria-hidden="true"></div>
 
-        <div class="detail-card" data-animate="fade">
-          <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Stack</p>
+          <div class="timeline-item is-open" data-key="problem">
+            <button type="button" class="timeline-trigger">
+              <span class="node" aria-hidden="true"></span>
+              <span>Problem</span>
+              <span class="caret" aria-hidden="true">›</span>
+            </button>
+            <div class="timeline-body">
+              <ul>
+                <li>Cross-language voice chats lose momentum when translation lags or lives outside Discord.</li>
+                <li>Goal: native feel, no context switching, clear in-channel visibility.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-key="constraints">
+            <button type="button" class="timeline-trigger">
+              <span class="node" aria-hidden="true"></span>
+              <span>Constraints</span>
+              <span class="caret" aria-hidden="true">›</span>
+            </button>
+            <div class="timeline-body">
+              <ul>
+                <li>&lt;250ms interim response, sub-second final translations.</li>
+                <li>Works inside Discord chat; keeps moderator controls intact.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-key="architecture">
+            <button type="button" class="timeline-trigger">
+              <span class="node" aria-hidden="true"></span>
+              <span>Architecture</span>
+              <span class="caret" aria-hidden="true">›</span>
+            </button>
+            <div class="timeline-body">
+              <p class="typing-indicator" data-typing></p>
+              <ul>
+                <li>Streaming STT (Deepgram) feeds a translation worker; inline bot posts interim + final lines.</li>
+                <li>Optional captions overlay mirrors chat feed for on-screen visibility.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-key="reliability">
+            <button type="button" class="timeline-trigger">
+              <span class="node" aria-hidden="true"></span>
+              <span>Reliability</span>
+              <span class="caret" aria-hidden="true">›</span>
+            </button>
+            <div class="timeline-body">
+              <ul>
+                <li>Reconnection guards + jitter buffers smooth dropouts.</li>
+                <li>Rate-limit backoff and interim/final dedupe reduce chat spam.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-key="privacy">
+            <button type="button" class="timeline-trigger">
+              <span class="node" aria-hidden="true"></span>
+              <span>Privacy &amp; UI</span>
+              <span class="caret" aria-hidden="true">›</span>
+            </button>
+            <div class="timeline-body">
+              <ul>
+                <li>Per-user language preferences; only opted-in voices get processed.</li>
+                <li>Overlay can be toggled per channel for high-visibility events.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-key="status">
+            <button type="button" class="timeline-trigger">
+              <span class="node" aria-hidden="true"></span>
+              <span>Status / Next</span>
+              <span class="caret" aria-hidden="true">›</span>
+            </button>
+            <div class="timeline-body">
+              <ul>
+                <li>Hardening reconnect paths, tuning translation consistency, building a room-health console.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <aside class="discord-stack detail-card" data-animate="fade">
+          <p class="section-eyebrow">Stack</p>
           <h3 class="project-title" style="margin: 0;">Built for live Discord contexts</h3>
           <div class="chips" style="margin-top: 1.25rem;">
             <span class="chip">Discord API</span>
             <span class="chip">Deepgram STT</span>
             <span class="chip">WebSocket</span>
           </div>
-        </div>
+        </aside>
       </section>
     </main>
 
@@ -91,7 +147,7 @@
       </div>
     </footer>
 
-    <script src="../app.js" defer></script>
+    <script src="../js/main.js" defer></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>

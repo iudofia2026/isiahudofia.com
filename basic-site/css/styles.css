@@ -1753,9 +1753,43 @@ main {
     flex-direction: column;
     align-items: stretch;
   }
-  .cta-buttons .btn {
+.cta-buttons .btn {
     width: 100%;
   }
+}
+
+/* HERO layout refinements */
+.hero-head { display: grid; gap: 0.75rem; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+.hero-metrics { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; opacity: 0.9; }
+.hero-metrics .metric strong { font-weight: 700; }
+.hero-metrics .dot { width: 4px; height: 4px; border-radius: 999px; background: var(--ink-3, #8aa1ff); opacity: 0.8; }
+
+/* Deliverable chips row */
+.chip-row.deliverables { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.chip-row.deliverables .chip {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  line-height: 1;
+  backdrop-filter: blur(6px);
+}
+.chip-row.deliverables .chip:hover { border-color: rgba(255,255,255,0.18); }
+
+/* Left column card tweaks */
+.key-points { margin: 0.75rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; }
+.key-points li { list-style: disc; opacity: 0.9; }
+
+/* Section title spacing */
+.section-title { margin-bottom: 0.5rem; }
+
+/* Slightly larger hero button */
+.btn-primary { padding: 0.7rem 1.0rem; }
+
+@media (max-width: 900px) {
+  .hero-metrics { width: 100%; order: 2; }
 }
 
 /* Hero adjustments */

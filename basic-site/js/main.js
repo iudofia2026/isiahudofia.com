@@ -112,10 +112,10 @@
 
       nodePositions.forEach(({ node, x, y }, idx) => {
         ctx.save();
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.shadowColor = gradColors[idx % gradColors.length];
         ctx.fillStyle = gradColors[idx % gradColors.length];
-        ctx.globalAlpha = 0.18 + node.pulse;
+        ctx.globalAlpha = 0.22 + node.pulse;
         ctx.beginPath();
         ctx.arc(x, y, node.radius * 3, 0, Math.PI * 2);
         ctx.fill();
@@ -132,9 +132,9 @@
           const maxDist = canvas.width * 0.16;
           if (dist < maxDist) {
             ctx.save();
-            ctx.strokeStyle = "rgba(112, 110, 255, 0.12)";
+            ctx.strokeStyle = "rgba(112,110,255,0.16)";
             ctx.lineWidth = 1;
-            ctx.shadowBlur = 8;
+            ctx.shadowBlur = 10;
             ctx.shadowColor = "rgba(112, 110, 255, 0.25)";
             ctx.globalAlpha = Math.max(0.05, 1 - dist / maxDist) * (0.7 + a.node.pulse);
             ctx.beginPath();

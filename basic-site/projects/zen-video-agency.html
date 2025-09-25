@@ -22,71 +22,82 @@
     </header>
 
     <main>
-      <section class="project-header" data-animate="fade">
-        <div>
-          <h1>Zen Video Agency</h1>
-          <p>Streamlined editing workflows for creators and brands.</p>
-          <p style="color: rgba(226, 232, 240, 0.76);">
-            Built Aug 2025; repeatable intake → edit → review loop with two remote editors and a weekly rhythm so quality improves every cycle.
-          </p>
-        </div>
-        <div class="project-actions">
-          <a class="btn btn-primary" href="https://heroic-puppy-1a67b8.netlify.app/" target="_blank" rel="noopener">Visit Agency Site</a>
-          <a class="btn btn-outline" href="mailto:isiah.udofia@yale.edu">Email</a>
+      <!-- ZEN: HERO -->
+      <section class="pane container zen-hero" data-parallax data-animate="fade">
+        <h1 class="zen-title">Zen Video Agency</h1>
+        <p class="zen-sub">
+          Streamlined editing workflows for creators and brands. Built Aug 2025; repeatable intake → edit → review loop with two editors and a weekly rhythm so quality improves every cycle.
+        </p>
+        <div class="zen-cta">
+          <a class="btn-solid" href="https://example.com" target="_blank" rel="noopener">Visit Agency Site</a>
+          <a class="btn-ghost" href="mailto:isiah.udofia@yale.edu">Email</a>
         </div>
       </section>
 
-      <section class="zen-grid" data-animate="fade">
-        <article class="zen-card col-span-7">
-          <header class="zen-card-head">
-            <p class="section-eyebrow">Overview</p>
-            <div class="metric-chips">
-              <span class="metric-chip">Retainers: 5</span>
-              <span class="metric-chip">Short-form/day: ~4</span>
-              <span class="metric-chip">Long-form/week: ~2</span>
-            </div>
-          </header>
-          <ul class="zen-list">
+      <!-- ZEN: STATS STRIP -->
+      <section class="container zen-stats" data-animate="fade">
+        <div class="chips">
+          <span class="chip">Retainers: 5</span>
+          <span class="chip">Short-form/day: ~4</span>
+          <span class="chip">Long-form/week: ~2</span>
+        </div>
+      </section>
+
+      <!-- ZEN: BODY -->
+      <section class="container grid grid-12 zen-body">
+        <!-- Overview -->
+        <div class="card zen-overview col-span-12 md:col-span-6" data-animate="fade">
+          <h2 class="overline">Overview</h2>
+          <ul class="zen-bullets">
             <li>Daily production loop: client inputs → direction rough → editor handoff → rapid iteration → internal acceptance → client review → publish.</li>
             <li>Two-editor model enables parallel cuts and faster experiments on hooks, pacing, and retention.</li>
             <li>Lightweight templates and versioning keep assets consistent across brands.</li>
           </ul>
-          <div class="chips stack-tight">
+          <div class="chips stack-chips">
             <span class="chip">Premiere Pro</span>
             <span class="chip">After Effects</span>
             <span class="chip">Editor handoff</span>
           </div>
-        </article>
+        </div>
 
-        <article class="zen-card col-span-5">
-          <header class="zen-card-head">
-            <p class="section-eyebrow">Weekly → daily loop</p>
-          </header>
-          <div class="zen-timeline" data-zen-rail>
-            <ol>
-              <li>
-                <span class="node" aria-hidden="true"></span>
-                <h4>Weekly kickoff (client call)</h4>
-                <p>Align themes, priorities, references, and the week’s target outputs.</p>
-              </li>
-              <li>
-                <span class="node" aria-hidden="true"></span>
-                <h4>Daily production loop</h4>
-                <p>Direction &amp; naming → two editors in parallel passes → quick checks until publish-ready.</p>
-              </li>
-              <li>
-                <span class="node" aria-hidden="true"></span>
-                <h4>Mid-week checkpoint</h4>
-                <p>Async review to swap hooks, adjust pacing, and re-prioritize clips to maximize retention.</p>
-              </li>
-              <li>
-                <span class="node" aria-hidden="true"></span>
-                <h4>Publish &amp; reset</h4>
-                <p>Queue assets for posting, archive versions, and prep inputs for the next kickoff.</p>
-              </li>
-            </ol>
-          </div>
-        </article>
+        <!-- Weekly → Daily loop -->
+        <div class="card zen-loop col-span-12 md:col-span-6" data-animate="fade">
+          <div class="zen-rail" data-rail-progress aria-hidden="true"></div>
+          <h2 class="overline">Weekly → Daily loop</h2>
+          <ol class="timeline" data-zen-rail>
+            <li class="timeline-item">
+              <div class="timeline-header">
+                <span class="ti ti-kickoff" aria-hidden="true"></span>
+                <h3>Weekly kickoff (client call)</h3>
+              </div>
+              <p class="timeline-copy">Align themes, priorities, references, and the week’s target outputs.</p>
+            </li>
+
+            <li class="timeline-item">
+              <div class="timeline-header">
+                <span class="ti ti-rough" aria-hidden="true"></span>
+                <h3>Daily production loop</h3>
+              </div>
+              <p class="timeline-copy">Direction & naming → two editors in parallel passes → quick checks until publish-ready.</p>
+            </li>
+
+            <li class="timeline-item">
+              <div class="timeline-header">
+                <span class="ti ti-checkpoint" aria-hidden="true"></span>
+                <h3>Mid-week checkpoint</h3>
+              </div>
+              <p class="timeline-copy">Async review to swap hooks, adjust pacing, and re-prioritize clips to maximize retention.</p>
+            </li>
+
+            <li class="timeline-item">
+              <div class="timeline-header">
+                <span class="ti ti-publish" aria-hidden="true"></span>
+                <h3>Publish &amp; reset</h3>
+              </div>
+              <p class="timeline-copy">Queue assets for posting, archive with templates, prep inputs for next week’s kickoff.</p>
+            </li>
+          </ol>
+        </div>
       </section>
     </main>
 

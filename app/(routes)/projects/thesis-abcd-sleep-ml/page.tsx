@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { motion } from "framer-motion";
+import Reveal from "../../../../components/thesis/reveal";
 import type { Project } from "../../../../data/projects";
 import { projects } from "../../../../data/projects";
 
@@ -25,18 +25,16 @@ function deriveChips(p: Project): string[] {
 
 function CardShell({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 8 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.35 }}
-      className={
-        "rounded-xl border border-neutral-800 bg-neutral-900/40 p-6 lg:p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] " +
-        className
-      }
-    >
-      {children}
-    </motion.section>
+    <Reveal>
+      <section
+        className={
+          "rounded-xl border border-neutral-800 bg-neutral-900/40 p-6 lg:p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] " +
+          className
+        }
+      >
+        {children}
+      </section>
+    </Reveal>
   );
 }
 

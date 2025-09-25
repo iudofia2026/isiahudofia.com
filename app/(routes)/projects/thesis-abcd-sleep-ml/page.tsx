@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
+import { motion } from "framer-motion";
 import type { Project } from "../../../../data/projects";
 import { projects } from "../../../../data/projects";
-import Reveal from "../../../../components/thesis/reveal";
 
 export const metadata = {
   title: "B.S. Thesis — Making Sleep Data Actionable with ML",
@@ -22,6 +23,31 @@ function deriveChips(p: Project): string[] {
   return ["Ridge", "XGBoost", "Calibration", "Wearables", "Evidence-backed"];
 }
 
+function CardShell({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.35 }}
+      className={
+        "rounded-xl border border-neutral-800 bg-neutral-900/40 p-6 lg:p-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] " +
+        className
+      }
+    >
+      {children}
+    </motion.section>
+  );
+}
+
+function Label({ children }: { children: ReactNode }) {
+  return <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-neutral-400">{children}</p>;
+}
+
+function H3({ children }: { children: ReactNode }) {
+  return <h3 className="mt-1 text-lg font-semibold tracking-tight">{children}</h3>;
+}
+
 export default function Page() {
   const project = getProject();
   if (!project) return notFound();
@@ -39,11 +65,10 @@ export default function Page() {
   ];
 
   const milestones = [
-    { k: "M1", t: "Data ready", d: "Clean/align nights, engineer ~100–120 features, audit leakage.", w: "Weeks 1–3" },
-    { k: "M2", t: "Baselines + calibration", d: "Ridge + XGBoost; reliability curves (ECE/Brier), thresholds.", w: "Weeks 4–6" },
-    { k: "M3", t: "Validation", d: "Compare to self-reports & task outcomes; error analysis on subgroups.", w: "Weeks 7–9" },
-    { k: "M4", t: "Constrained explainer", d: "LLM explanations bound to vetted sleep sources; safety checks.", w: "Weeks 10–12" },
-    { k: "M5", t: "Pilot feedback", d: "Transparent features + next-best actions; small user tests.", w: "Weeks 13–15" },
+    { k: "M1", w: "Weeks 1–3", title: "Data ready", desc: "Clean/align nights, engineer ~100–120 features, audit leakage." },
+    { k: "M2", w: "Weeks 4–6", title: "Baselines + calibration", desc: "Ridge + XGBoost; ECE/Brier; thresholds." },
+    { k: "M3", w: "Weeks 7–9", title: "Validation", desc: "Compare to self-reports & task outcomes; subgroup error analysis." },
+    { k: "M4", w: "Weeks 10–12", title: "Constrained explainer", desc: "LLM explanations bound to vetted sleep sources; safety checks." },
   ];
 
   const success = [
@@ -114,60 +139,45 @@ export default function Page() {
         </p>
       </section>
 
-      <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <section className="space-y-8">
-          <Reveal>
-            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Project approach</h2>
-            <ul className="list-disc pl-5 leading-relaxed text-neutral-300">
-              {bullets.map((b) => (
-                <li key={b} className="mt-1">
-                  {b}
-                </li>
-              ))}
-            </ul>
-            </div>
-          </Reveal>
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:mt-8 lg:grid-cols-2 lg:gap-8">
+        <CardShell>
+          <Label>Project approach</Label>
+          <H3>Evidence-constrained models with human-readable feedback</H3>
+          <ul className="mt-4 space-y-3 text-sm leading-relaxed text-neutral-300">
+            {bullets.map((b) => (
+              <li key={b} className="list-disc pl-4">
+                {b}
+              </li>
+            ))}
+          </ul>
+        </CardShell>
 
-          <Reveal delay={0.05}>
-            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">Milestones (in progress)</h2>
-            <ol className="grid gap-3 sm:grid-cols-2">
-              {milestones.map((m, i) => (
-                <li key={m.k} className="relative rounded-xl border border-neutral-900 bg-neutral-950/70 p-4">
-                  <div className="mb-1 text-xs font-medium tracking-wider text-neutral-400">
-                    {m.k} • {m.w}
-                  </div>
-                  <div className="text-sm font-semibold text-neutral-200">{m.t}</div>
-                  <p className="mt-1 text-sm text-neutral-400">{m.d}</p>
-                  {i === 0 && (
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-xl"
-                      style={{ boxShadow: `inset 0 0 0 1px ${sunsetFrom}22, 0 10px 30px -12px ${sunsetTo}33` }}
-                    />
-                  )}
-                </li>
-              ))}
-            </ol>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <div className="rounded-2xl border border-neutral-900 bg-neutral-950/60 p-6">
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-300">What success looks like</h2>
-            <ul className="list-disc pl-5 leading-relaxed text-neutral-300">
-              {success.map((s) => (
-                <li key={s} className="mt-1">
-                  {s}
-                </li>
-              ))}
-            </ul>
-            </div>
-          </Reveal>
-        </section>
-
+        <CardShell>
+          <Label>Milestones (in progress)</Label>
+          <H3>Q1 semester plan</H3>
+          <ol className="mt-4 grid grid-cols-1 gap-3">
+            {milestones.map((m) => (
+              <li key={m.k} className="rounded-lg border border-neutral-800/70 bg-neutral-900/30 p-4">
+                <p className="text-xs uppercase tracking-[0.16em] text-neutral-400">{m.k} · {m.w}</p>
+                <p className="mt-1 font-medium text-neutral-100">{m.title}</p>
+                <p className="mt-1 text-sm text-neutral-300">{m.desc}</p>
+              </li>
+            ))}
+          </ol>
+        </CardShell>
       </div>
+
+      <CardShell className="mt-6 lg:mt-8">
+        <Label>Success signals</Label>
+        <H3>Evidence that the thesis delivers value</H3>
+        <ul className="mt-4 space-y-3 text-sm leading-relaxed text-neutral-300">
+          {success.map((s) => (
+            <li key={s} className="list-disc pl-4">
+              {s}
+            </li>
+          ))}
+        </ul>
+      </CardShell>
     </article>
   );
 }

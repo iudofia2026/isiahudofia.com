@@ -22,62 +22,175 @@
     </header>
 
     <main>
-      <div class="resume-card" data-animate="fade">
-        <header>
-          <h1>Isiah Udofia</h1>
-          <p style="margin-top: 0.4rem; font-size: 0.95rem;">
-            New Haven, CT · <a href="tel:19733036883">(973) 303-6883</a> ·
-            <a href="mailto:isiah.udofia@yale.edu">isiah.udofia@yale.edu</a> ·
-            <a href="https://github.com/iudofia2026" target="_blank" rel="noopener">GitHub</a> ·
-            <a href="https://www.linkedin.com/in/isiah-udofia/" target="_blank" rel="noopener">LinkedIn</a>
-          </p>
+      <div class="resume-container" data-animate="fade">
+        <header class="resume-header">
+          <h1 class="resume-name">Isiah Udofia</h1>
+          <div class="resume-contact">
+            <a href="tel:19733036883">(973) 303-6883</a>
+            <a href="mailto:isiah.udofia@yale.edu">isiah.udofia@yale.edu</a>
+            <a href="https://github.com/iudofia2026" target="_blank" rel="noopener">github.com/iudofia2026</a>
+            <a href="https://www.linkedin.com/in/isiah-udofia/" target="_blank" rel="noopener">linkedin.com/in/isiah-udofia</a>
+          </div>
+          <div class="resume-actions">
+            <button data-print>Download PDF</button>
+          </div>
         </header>
 
-        <div class="resume-toolbar">
-          <button data-print>Download PDF</button>
-          <a href="mailto:isiah.udofia@yale.edu">Email</a>
-          <a href="https://www.linkedin.com/in/isiah-udofia/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/iudofia2026" target="_blank" rel="noopener">GitHub</a>
-        </div>
-
-        <section>
+        <section class="resume-section">
           <h2>Education</h2>
-          <p><strong>Yale University</strong> — B.S. Cognitive Science (Neurocognitive Computation), Expected May 2026</p>
-          <p>Relevant coursework: AI architecture, neuroanatomy, product design, statistics for data science.</p>
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Yale University</strong>
+                <span class="resume-role">B.S. Cognitive Science — Neurocognitive Computation</span>
+              </div>
+              <div class="resume-date">Expected May 2026</div>
+            </div>
+            <p>GPA 3.7 · Coursework: AI Architecture, Neuroanatomy, Product Design, Statistics for Data Science.</p>
+          </div>
         </section>
 
-        <section>
+        <section class="resume-section">
           <h2>Experience</h2>
-          <p><strong>Zen Video Agency — Founder</strong> (Aug 2025 – Present)</p>
-          <ul>
-            <li>Built a repeatable intake → edit → review workflow for five retainers across creator and DTC brands.</li>
-            <li>Manage two remote editors, codify QA rituals, and translate analytics into stronger storytelling.</li>
-            <li>Ship ~4 short-form edits per day and ~2 long-form pieces per week with consistent asset quality.</li>
-          </ul>
-          <p><strong>Live Translator for Discord — Builder</strong> (2024 – Present)</p>
-          <ul>
-            <li>Orchestrated Discord voice → Deepgram streaming STT → translation → inline bot responses.</li>
-            <li>Hit < 250ms interim latency with reconnection guards, rate-limit backoff, and per-user language prefs.</li>
-          </ul>
-          <p><strong>Product Internships & Research</strong></p>
-          <ul>
-            <li>Shaped roadmap for internal analytics tools; prototyped feature adoption dashboards for PMs.</li>
-            <li>Published cognitive science research on attention and sleep—used Python, R, and Mode for analysis.</li>
-          </ul>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Zen Video Agency</strong>
+                <span class="resume-role">Founder · New Haven, CT</span>
+              </div>
+              <div class="resume-date">Jul 2025 – Present</div>
+            </div>
+            <ul>
+              <li>Run a repeatable intake → edit → review loop for five retainer clients across creator and DTC brands.</li>
+              <li>Manage two remote editors, codify QA rituals, and translate analytics into stronger storytelling.</li>
+              <li>Deliver ~4 short-form edits per day and ~2 long-form pieces per week with consistent asset quality.</li>
+            </ul>
+          </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>UBS</strong>
+                <span class="resume-role">Summer Investment Banking Analyst · New York, NY</span>
+              </div>
+              <div class="resume-date">Jun 2025 – Aug 2025</div>
+            </div>
+            <ul>
+              <li>Modeled debt capital market scenarios and provided research support for origination teams.</li>
+              <li>Led an independent restructuring initiative to map synthetic risk transfer opportunities.</li>
+            </ul>
+          </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Bain &amp; Company</strong>
+                <span class="resume-role">Building Entrepreneurial Leaders Intern · New York, NY</span>
+              </div>
+              <div class="resume-date">May 2023 – May 2024</div>
+            </div>
+            <ul>
+              <li>Mapped processes across client sprint teams and created content rubrics for growth experiments.</li>
+            </ul>
+          </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Blinds To Go</strong>
+                <span class="resume-role">Supply Chain Intern · Lakewood, NJ</span>
+              </div>
+              <div class="resume-date">Jun 2022 – Aug 2022</div>
+            </div>
+            <ul>
+              <li>Audited bills of materials and improved accuracy from 95% to 99%, supporting a new plant launch.</li>
+            </ul>
+          </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Independent Private Math Tutor</strong>
+                <span class="resume-role">Founder · Montclair, NJ</span>
+              </div>
+              <div class="resume-date">Jun 2019 – Aug 2023</div>
+            </div>
+            <ul>
+              <li>Coached 10+ students on algebra and precalculus fundamentals; lifted test scores by 1–2 grade bands.</li>
+            </ul>
+          </div>
         </section>
 
-        <section>
-          <h2>Projects & Research</h2>
-          <ul>
-            <li><strong>Thesis — Making Sleep Data Actionable with ML:</strong> Calibrated Ridge/XGBoost + evidence constrained explainer.</li>
-            <li><strong>Agency knowledge base:</strong> Templates that keep assets consistent across five creator brands.</li>
-            <li><strong>Startup ops sprints:</strong> Built weekly cadences for early-stage teams shipping AI prototypes.</li>
-          </ul>
+        <section class="resume-section">
+          <h2>Projects</h2>
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Live Translator for Discord</strong>
+                <span class="resume-role">Builder</span>
+              </div>
+              <div class="resume-date">2024 – Present</div>
+            </div>
+            <ul>
+              <li>Built Discord voice → Deepgram streaming STT → translation → inline bot responses with &lt;250ms interim latency.</li>
+              <li>Added reconnection guards, rate-limit backoff, and per-user language preferences for reliability.</li>
+            </ul>
+          </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div><strong>B.S. Thesis — Making Sleep Data Actionable with ML</strong></div>
+              <div class="resume-date">2025 – Present</div>
+            </div>
+            <ul>
+              <li>Designing calibrated Ridge/XGBoost models with an explainer constrained to peer-reviewed sleep science.</li>
+              <li>Validating against self-reports and cognitive tasks to ensure real-world usefulness.</li>
+            </ul>
+          </div>
         </section>
 
-        <section>
+        <section class="resume-section">
           <h2>Skills</h2>
-          <p>Product discovery, roadmap planning, Framer, React, TypeScript, Python, Prompt engineering, Video editing.</p>
+          <div class="resume-skills">
+            <span>Product discovery</span>
+            <span>Roadmap planning</span>
+            <span>React / TypeScript</span>
+            <span>Python</span>
+            <span>Prompt design</span>
+            <span>Framer</span>
+            <span>Video editing</span>
+            <span>Notion systems</span>
+          </div>
+        </section>
+
+        <section class="resume-section">
+          <h2>Activities</h2>
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Yale Varsity Track &amp; Field</strong>
+                <span class="resume-role">Sprinter / Jumper</span>
+              </div>
+              <div class="resume-date">Aug 2022 – Jun 2025</div>
+            </div>
+            <ul>
+              <li>Led sprint squad analytics; created lift plans that improved jump-squad performance across Ivy meets.</li>
+            </ul>
+          </div>
+
+          <div class="resume-entry">
+            <div class="resume-entry-header">
+              <div>
+                <strong>Yale Afro-American Cultural Center</strong>
+                <span class="resume-role">Member</span>
+              </div>
+              <div class="resume-date">Aug 2022 – Present</div>
+            </div>
+            <ul>
+              <li>Host peer forums linking student builders with community initiatives and campus partners.</li>
+            </ul>
+          </div>
         </section>
       </div>
     </main>

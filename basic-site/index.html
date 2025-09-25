@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Isiah Udofia | Product Builder</title>
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <title>Isiah Udofia | Yale University</title>
+    <link rel="icon" type="image/svg+xml" href="assets/yale.svg" />
+    <meta name="theme-color" content="#00356B" />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body data-page="home">
@@ -22,21 +23,29 @@
     </header>
 
     <main>
-      <section class="pane container home-hero" data-parallax data-animate="fade">
+      <section class="pane container home-hero hero-card" data-parallax data-animate="fade">
         <!-- Background canvas (high-contrast variant) -->
         <canvas id="home-neural" aria-hidden="true"></canvas>
 
-        <div class="home-hero-inner">
-          <img class="hero-avatar" src="assets/pfp.jpg" alt="Isiah Udofia" width="112" height="112" loading="eager" />
-          <div class="hero-text">
-            <h1 class="hero-title">Isiah Udofia</h1>
-            <p class="hero-sub">
-              Product-minded builder blending AI, design, and storytelling.
-            </p>
-            <div class="hero-cta">
-              <a class="btn-solid" href="projects.html">View Projects</a>
-              <a class="btn-ghost" href="contact.html">Email Me</a>
+        <div class="home-hero-inner content">
+          <div class="stack">
+            <img
+              class="hero-pfp"
+              src="assets/pfp.jpg"
+              alt="Isiah Udofia"
+              width="88"
+              height="88"
+              loading="eager"
+              decoding="async"
+            />
+            <div class="hero-text">
+              <h1 class="hero-title">Isiah Udofia</h1>
+              <p class="hero-sub">Senior, Cognitive Science @ Yale</p>
             </div>
+          </div>
+          <div class="hero-cta">
+            <a class="btn-solid" href="projects.html">View Projects</a>
+            <a class="btn-ghost" href="contact.html">Email Me</a>
           </div>
         </div>
       </section>

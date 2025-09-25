@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Thesis — ML for Sleep Data | Isiah Udofia</title>
     <link rel="icon" type="image/png" href="../assets/favicon.png" />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body data-page="projects">
     <header class="site-header" data-animate="fade">
@@ -43,44 +43,40 @@
         </p>
       </section>
 
-      <section class="page-section project-columns">
-        <div class="detail-card" data-animate="fade">
-          <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Project approach</p>
-          <h3 class="project-title" style="margin: 0;">Evidence-constrained models with human-readable feedback</h3>
-          <ul class="project-blurb" style="margin: 1.2rem 0 0 1.2rem; color: rgba(255, 247, 237, 0.85);">
+      <section class="thesis-grid" data-animate="fade">
+        <article class="thesis-card">
+          <p class="section-eyebrow">Project approach</p>
+          <h3 class="project-title">Evidence-constrained models with human-readable feedback</h3>
+          <ul class="thesis-list">
             <li>Train calibrated Ridge + XGBoost on multi-night wearable + survey features; prefer reliability over raw scores.</li>
             <li>Two-layer design: models for accuracy + an explainer constrained to peer-reviewed sleep science.</li>
             <li>Validate against self-reports and cognitive tasks to check real-world relevance.</li>
             <li>Emphasize transparent features and feedback loops so people understand why a suggestion was made.</li>
           </ul>
-        </div>
+        </article>
 
-        <div class="detail-card" data-animate="fade">
-          <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Milestones (in progress)</p>
-          <h3 class="project-title" style="margin: 0;">Q1 semester plan</h3>
-          <ol style="margin: 1.2rem 0 0; padding: 0; list-style: none; display: grid; gap: 1rem;">
-            <li class="detail-card" style="background: rgba(234, 88, 12, 0.08); border-color: rgba(234, 88, 12, 0.28); box-shadow: none;">
-              <p class="chip" style="border-color: rgba(234, 88, 12, 0.35); background: rgba(234, 88, 12, 0.16); color: rgba(254, 215, 170, 0.95);">M1 · Weeks 1–3</p>
-              <p style="margin: 0.6rem 0 0; font-weight: 600;">Data ready</p>
-              <p style="margin: 0.3rem 0 0; color: rgba(255, 247, 237, 0.85);">Clean/align nights, engineer ~100–120 features, audit leakage.</p>
-            </li>
-            <li class="detail-card" style="background: rgba(234, 88, 12, 0.08); border-color: rgba(234, 88, 12, 0.28); box-shadow: none;">
-              <p class="chip" style="border-color: rgba(234, 88, 12, 0.35); background: rgba(234, 88, 12, 0.16); color: rgba(254, 215, 170, 0.95);">M2 · Weeks 4–6</p>
-              <p style="margin: 0.6rem 0 0; font-weight: 600;">Baselines + calibration</p>
-              <p style="margin: 0.3rem 0 0; color: rgba(255, 247, 237, 0.85);">Ridge + XGBoost; ECE/Brier; thresholds.</p>
-            </li>
-            <li class="detail-card" style="background: rgba(234, 88, 12, 0.08); border-color: rgba(234, 88, 12, 0.28); box-shadow: none;">
-              <p class="chip" style="border-color: rgba(234, 88, 12, 0.35); background: rgba(234, 88, 12, 0.16); color: rgba(254, 215, 170, 0.95);">M3 · Weeks 7–9</p>
-              <p style="margin: 0.6rem 0 0; font-weight: 600;">Validation</p>
-              <p style="margin: 0.3rem 0 0; color: rgba(255, 247, 237, 0.85);">Compare to self-reports &amp; task outcomes; subgroup analysis.</p>
-            </li>
-            <li class="detail-card" style="background: rgba(234, 88, 12, 0.08); border-color: rgba(234, 88, 12, 0.28); box-shadow: none;">
-              <p class="chip" style="border-color: rgba(234, 88, 12, 0.35); background: rgba(234, 88, 12, 0.16); color: rgba(254, 215, 170, 0.95);">M4 · Weeks 10–12</p>
-              <p style="margin: 0.6rem 0 0; font-weight: 600;">Constrained explainer</p>
-              <p style="margin: 0.3rem 0 0; color: rgba(255, 247, 237, 0.85);">LLM explanations bound to vetted sleep sources; safety checks.</p>
-            </li>
-          </ol>
-        </div>
+        <article class="thesis-card">
+          <p class="section-eyebrow">Semester plan</p>
+          <h3 class="project-title">Key milestones</h3>
+          <div class="milestone-grid">
+            <div class="milestone-chip">
+              <h4>Data ready</h4>
+              <p>Clean/align nights, engineer ~100–120 features, audit leakage.</p>
+            </div>
+            <div class="milestone-chip">
+              <h4>Baselines + calibration</h4>
+              <p>Ridge + XGBoost; reliability curves (ECE/Brier) and thresholds.</p>
+            </div>
+            <div class="milestone-chip">
+              <h4>Validation</h4>
+              <p>Compare to self-reports &amp; cognitive tasks; subgroup error analysis.</p>
+            </div>
+            <div class="milestone-chip">
+              <h4>Constrained explainer</h4>
+              <p>LLM narratives bound to vetted sleep sources with safety checks.</p>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section class="detail-card" data-animate="fade" style="margin-top: 2.5rem;">
@@ -106,7 +102,7 @@
       </div>
     </footer>
 
-    <script src="../app.js" defer></script>
+    <script src="../js/main.js" defer></script>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>

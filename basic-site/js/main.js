@@ -182,26 +182,6 @@
       }
     });
 
-    /* Zen timeline reveal */
-    document.querySelectorAll("[data-zen-rail]").forEach((timeline) => {
-      const items = Array.from(timeline.querySelectorAll("li"));
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              timeline.classList.add("active");
-              items.forEach((item, index) => {
-                setTimeout(() => item.classList.add("is-visible"), index * 140);
-              });
-              obs.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.3 }
-      );
-      observer.observe(timeline);
-    });
-
     /* Discord accordion */
     const accordion = document.querySelector("[data-discord-accordion]");
     if (accordion) {
@@ -265,37 +245,6 @@
   });
 })();
 
-// ZEN rail progress: fill as items reveal
-(() => {
-  const motionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const reduced = motionMq.matches;
-  const bodyIsZen = document.querySelector('.zen-loop');
-  if (!bodyIsZen || reduced) return;
-
-  const rail = document.querySelector('[data-rail-progress]');
-  const items = Array.from(document.querySelectorAll('.timeline-item'));
-  if (!rail || !items.length) return;
-
-  const update = () => {
-    const first = items[0].getBoundingClientRect();
-    const last  = items[items.length - 1].getBoundingClientRect();
-    const viewH = window.innerHeight;
-    // compute percent of list that has entered the viewport
-    let visibleCount = 0;
-    items.forEach(it => {
-      const r = it.getBoundingClientRect();
-      if (r.top < viewH * 0.8) visibleCount++;
-    });
-    const pct = Math.max(0, Math.min(1, visibleCount / items.length));
-    rail.style.background = `linear-gradient(var(--accent-1), var(--accent-2))`;
-    rail.style.mask = `linear-gradient(#000 ${pct*100}%, transparent ${pct*100}%)`;
-    rail.style.webkitMask = rail.style.mask;
-  };
-
-  update();
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-})();
 
 // Home neural network (higher contrast, distinct palette)
 (() => {

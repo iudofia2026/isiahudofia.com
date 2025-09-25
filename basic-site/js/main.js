@@ -296,3 +296,111 @@
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
 })();
+
+// Home neural network (higher contrast, distinct palette)
+(() => {
+  const canvas = document.getElementById('home-neural');
+  if (!canvas) return;
+
+  const motionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = motionMq.matches;
+  let ctx, nodes = [], raf, pulseTimer;
+  let w=0, h=0, dpr=1;
+
+  const COLORS = {
+    nodeA: 'rgba(25,180,168,0.9)',   // teal
+    nodeB: 'rgba(255,120,90,0.85)',  // coral
+    link:  'rgba(180,200,255,0.22)'
+  };
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    dpr = window.devicePixelRatio || 1;
+    w = Math.floor(rect.width * dpr);
+    h = Math.floor(rect.height * dpr);
+    canvas.width = w; canvas.height = h;
+    if (ctx) ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function init() {
+    ctx = canvas.getContext('2d');
+    resize(); window.addEventListener('resize', resize);
+    const count = Math.max(60, Math.floor((canvas.clientWidth*canvas.clientHeight)/18000));
+    nodes = Array.from({length:count}, () => {
+      const bx = Math.random(), by = Math.random();
+      return {
+        bx, by,
+        r: 1.3 + Math.random()*2.0,
+        t: Math.random()*Math.PI*2,
+        s: 0.4 + Math.random()*0.9,
+        pulse: 0
+      };
+    });
+    start();
+  }
+
+  function draw() {
+    if (!ctx) return;
+    ctx.clearRect(0,0,w,h);
+
+    // positions with subtle drift
+    const pos = nodes.map((n,i) => {
+      n.t += 0.003*n.s;
+      const dx = Math.sin(n.t)*0.02;
+      const dy = Math.cos(n.t)*0.018;
+      const x = (n.bx + dx) * (w/dpr);
+      const y = (n.by + dy) * (h/dpr);
+      return {n,x,y,i};
+    });
+
+    // nodes glow
+    for (const p of pos){
+      const fill = (p.i%2===0) ? COLORS.nodeA : COLORS.nodeB;
+      ctx.save();
+      ctx.globalAlpha = 0.18 + p.n.pulse;
+      ctx.shadowBlur = 16;
+      ctx.shadowColor = fill;
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.n.r*3, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // links (denser than before)
+    const maxDist = Math.min(w,h)/5.2;
+    ctx.lineWidth = 1;
+    for (let i=0;i<pos.length;i++){
+      for (let j=i+1;j<pos.length;j++){
+        const a = pos[i], b = pos[j];
+        const dx=a.x-b.x, dy=a.y-b.y, dist=Math.hypot(dx,dy);
+        if (dist < maxDist){
+          const aPulse = a.n.pulse, bPulse = b.n.pulse;
+          const alpha = Math.max(0.06, 1 - dist/maxDist) * (0.7 + (aPulse+bPulse)*0.5);
+          ctx.strokeStyle = COLORS.link.replace('0.22', String(alpha.toFixed(3)));
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+    }
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  function pulse(){
+    nodes.forEach(n => n.pulse = Math.random()<0.10 ? 0.35 : n.pulse*0.9);
+  }
+
+  function start(){
+    if (reduced) return;
+    cancelAnimationFrame(raf); clearInterval(pulseTimer);
+    draw(); pulseTimer = setInterval(pulse, 2000);
+  }
+  function stop(){ cancelAnimationFrame(raf); clearInterval(pulseTimer); }
+
+  if (!reduced){
+    init();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState==='hidden') stop(); else start();
+    });
+  }
+})();

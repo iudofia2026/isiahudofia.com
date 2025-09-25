@@ -1389,3 +1389,75 @@ main {
 @media (min-width: 960px){
   .md\:col-span-6{grid-column:span 6}
 }
+
+/* ===== HOME HERO (distinct palette) ===== */
+:root{
+  --home-bg-start:#0a0f1c;         /* deep navy */
+  --home-bg-end:#0f1f2b;           /* dusk blue */
+  --home-accent-1:#19b4a8;         /* teal */
+  --home-accent-2:#ff785a;         /* coral accent */
+  --home-ring:rgba(25,180,168,.25);
+}
+.home-hero{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(1200px 600px at 75% 10%, rgba(25,180,168,.18), transparent 60%),
+    radial-gradient(900px 500px at 20% 80%, rgba(255,120,90,.12), transparent 60%),
+    linear-gradient(180deg, var(--home-bg-start), var(--home-bg-end));
+  border:1px solid var(--border);
+  min-height: 360px;
+}
+.home-hero-inner{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:center;
+  gap:22px;
+  padding: clamp(28px, 5vw, 44px);
+  z-index: 1;
+}
+.hero-avatar{
+  width: clamp(72px, 9vw, 112px);
+  height: clamp(72px, 9vw, 112px);
+  border-radius:50%;
+  object-fit:cover;
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,.02),
+    0 0 0 8px var(--home-ring),
+    0 12px 40px rgba(25,180,168,.18);
+}
+.hero-text{min-width:0}
+.hero-title{
+  font-size:clamp(2rem, 1.4rem + 3vw, 3.4rem);
+  margin:0 0 .25rem;
+  letter-spacing:.2px;
+}
+.hero-sub{
+  margin:0;
+  color:var(--muted);
+  max-width:60ch;
+}
+.hero-cta{display:flex; gap:12px; margin-top:18px}
+.home-hero .btn-solid{
+  background: linear-gradient(90deg, var(--home-accent-1), #47d6cc);
+  box-shadow: 0 10px 28px rgba(25,180,168,.25);
+}
+.home-hero .btn-solid:hover{transform:translateY(-1px)}
+.home-hero .btn-ghost{
+  border-color: rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+}
+
+/* Canvas positioning */
+#home-neural{
+  position:absolute; inset:0; width:100%; height:100%;
+  z-index:0; pointer-events:none;
+  opacity:.55;  /* higher than before so it’s visible */
+}
+
+/* Small screens: stack vertically */
+@media (max-width:720px){
+  .home-hero-inner{grid-template-columns:1fr; justify-items:start}
+  .hero-cta{flex-wrap:wrap}
+}

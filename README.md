@@ -29,7 +29,7 @@ The site runs on Node 20 (see `.nvmrc`). All dependencies are already installed 
 - `app/` — App Router routes, layouts, loading/error states, and SEO files
 - `components/` — shared UI components (navigation, sections, cards, case study layout, analytics)
 - `data/projects.ts` — typed project metadata powering the portfolio and case studies
-- `public/Isiah_Udofia_Resume.pdf` — resume placeholder referenced by the Resume route
+- `basic-site/Udofia_Isiah_Resume.pdf` — resume placeholder referenced by the Resume route
 
 ## Content Overview
 - `/` — Hero, featured projects, PM storytelling, and contact CTA

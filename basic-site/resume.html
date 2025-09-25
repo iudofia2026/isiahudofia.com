@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume | Isiah Udofia</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="resume">
+    <header class="site-header" data-animate="fade">
+      <nav class="nav-shell">
+        <a class="nav-brand" href="index.html">Isiah Udofia</a>
+        <div class="nav-links">
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="projects.html" data-nav="projects">Projects</a>
+          <a href="about.html" data-nav="about">About</a>
+          <a href="contact.html" data-nav="contact">Contact</a>
+          <a href="resume.html" data-nav="resume">Resume</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="resume-card" data-animate="fade">
+        <header>
+          <h1>Isiah Udofia</h1>
+          <p style="margin-top: 0.4rem; font-size: 0.95rem;">
+            New Haven, CT · <a href="tel:19733036883">(973) 303-6883</a> ·
+            <a href="mailto:isiah.udofia@yale.edu">isiah.udofia@yale.edu</a> ·
+            <a href="https://github.com/iudofia2026" target="_blank" rel="noopener">GitHub</a> ·
+            <a href="https://www.linkedin.com/in/isiah-udofia/" target="_blank" rel="noopener">LinkedIn</a>
+          </p>
+        </header>
+
+        <div class="resume-toolbar">
+          <button data-print>Download PDF</button>
+          <a href="mailto:isiah.udofia@yale.edu">Email</a>
+          <a href="https://www.linkedin.com/in/isiah-udofia/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/iudofia2026" target="_blank" rel="noopener">GitHub</a>
+        </div>
+
+        <section>
+          <h2>Education</h2>
+          <p><strong>Yale University</strong> — B.S. Cognitive Science (Neurocognitive Computation), Expected May 2026</p>
+          <p>Relevant coursework: AI architecture, neuroanatomy, product design, statistics for data science.</p>
+        </section>
+
+        <section>
+          <h2>Experience</h2>
+          <p><strong>Zen Video Agency — Founder</strong> (Aug 2025 – Present)</p>
+          <ul>
+            <li>Built a repeatable intake → edit → review workflow for five retainers across creator and DTC brands.</li>
+            <li>Manage two remote editors, codify QA rituals, and translate analytics into stronger storytelling.</li>
+            <li>Ship ~4 short-form edits per day and ~2 long-form pieces per week with consistent asset quality.</li>
+          </ul>
+          <p><strong>Live Translator for Discord — Builder</strong> (2024 – Present)</p>
+          <ul>
+            <li>Orchestrated Discord voice → Deepgram streaming STT → translation → inline bot responses.</li>
+            <li>Hit < 250ms interim latency with reconnection guards, rate-limit backoff, and per-user language prefs.</li>
+          </ul>
+          <p><strong>Product Internships & Research</strong></p>
+          <ul>
+            <li>Shaped roadmap for internal analytics tools; prototyped feature adoption dashboards for PMs.</li>
+            <li>Published cognitive science research on attention and sleep—used Python, R, and Mode for analysis.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Projects & Research</h2>
+          <ul>
+            <li><strong>Thesis — Making Sleep Data Actionable with ML:</strong> Calibrated Ridge/XGBoost + evidence constrained explainer.</li>
+            <li><strong>Agency knowledge base:</strong> Templates that keep assets consistent across five creator brands.</li>
+            <li><strong>Startup ops sprints:</strong> Built weekly cadences for early-stage teams shipping AI prototypes.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Skills</h2>
+          <p>Product discovery, roadmap planning, Framer, React, TypeScript, Python, Prompt engineering, Video editing.</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>© <span id="year">2025</span> Isiah Udofia</div>
+        <div class="footer-links">
+          <a href="mailto:isiah.udofia@yale.edu">isiah.udofia@yale.edu</a>
+          <span>973-303-6883</span>
+          <a href="https://github.com/iudofia2026" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/isiah-udofia/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="app.js" defer></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

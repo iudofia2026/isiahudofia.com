@@ -473,6 +473,22 @@
       });
     }
 
+    document
+      .querySelectorAll('.chip-row.deliverables .chip')
+      .forEach((chip) => {
+        chip.addEventListener('pointerenter', () => {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          chip.animate(
+            [
+              { boxShadow: '0 0 0px rgba(138,161,255,0)' },
+              { boxShadow: '0 0 16px rgba(138,161,255,0.25)' },
+              { boxShadow: '0 0 0px rgba(138,161,255,0)' }
+            ],
+            { duration: 600, easing: 'ease-out' }
+          );
+        });
+      });
+
     /* Typing indicator */
     const typingEl = document.querySelector("[data-typing]");
     if (typingEl) {

@@ -3,6 +3,7 @@ import Script from 'next/script';
 import RouteSeo from '../components/route-seo';
 import Section from '../components/section';
 import ProjectCard from '../components/project-card';
+import HeroBg from '../components/hero-bg';
 import { projects } from '../data/projects';
 
 const featured = projects.slice(0, 3);
@@ -36,6 +37,7 @@ export default function HomePage() {
               'radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 55%), radial-gradient(circle at bottom right, rgba(99,102,241,0.22), transparent 60%), url(/noise.svg)',
           }}
         >
+          <HeroBg intensity={0.8} />
           <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
             <div className="pointer-events-none absolute -inset-40 bg-gradient-to-br from-cyan-400/25 via-purple-500/20 to-indigo-500/25 blur-[120px] motion-safe:animate-[gradientShift_28s_ease-in-out_infinite] motion-reduce:animate-none" />
           </div>

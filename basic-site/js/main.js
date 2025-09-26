@@ -501,11 +501,12 @@
   let ctx, nodes = [], raf, pulseTimer;
   let w=0, h=0, dpr=1;
 
-  const COLORS = {
-    nodeA: 'rgba(25,180,168,0.9)',   // teal
-    nodeB: 'rgba(255,120,90,0.85)',  // coral
-    link:  'rgba(180,200,255,0.22)'
-  };
+  const NODE_COLORS = [
+    'rgba(0, 53, 107, 0.82)',
+    'rgba(45, 107, 186, 0.78)',
+    'rgba(105, 168, 255, 0.76)'
+  ];
+  const LINK_COLOR = { r: 105, g: 168, b: 255 };
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
@@ -519,14 +520,14 @@
   function init() {
     ctx = canvas.getContext('2d');
     resize(); window.addEventListener('resize', resize);
-    const count = Math.max(60, Math.floor((canvas.clientWidth*canvas.clientHeight)/18000));
+    const count = Math.max(56, Math.floor((canvas.clientWidth*canvas.clientHeight)/19000));
     nodes = Array.from({length:count}, () => {
       const bx = Math.random(), by = Math.random();
       return {
         bx, by,
         r: 1.3 + Math.random()*2.0,
         t: Math.random()*Math.PI*2,
-        s: 0.4 + Math.random()*0.9,
+        s: 0.55 + Math.random()*1.1,
         pulse: 0
       };
     });
@@ -539,9 +540,9 @@
 
     // positions with subtle drift
     const pos = nodes.map((n,i) => {
-      n.t += 0.003*n.s;
-      const dx = Math.sin(n.t)*0.02;
-      const dy = Math.cos(n.t)*0.018;
+      n.t += 0.0045*n.s;
+      const dx = Math.sin(n.t)*0.03;
+      const dy = Math.cos(n.t)*0.028;
       const x = (n.bx + dx) * (w/dpr);
       const y = (n.by + dy) * (h/dpr);
       return {n,x,y,i};
@@ -549,10 +550,10 @@
 
     // nodes glow
     for (const p of pos){
-      const fill = (p.i%2===0) ? COLORS.nodeA : COLORS.nodeB;
+      const fill = NODE_COLORS[p.i % NODE_COLORS.length];
       ctx.save();
-      ctx.globalAlpha = 0.18 + p.n.pulse;
-      ctx.shadowBlur = 16;
+      ctx.globalAlpha = 0.2 + p.n.pulse;
+      ctx.shadowBlur = 18;
       ctx.shadowColor = fill;
       ctx.fillStyle = fill;
       ctx.beginPath();
@@ -562,7 +563,7 @@
     }
 
     // links (denser than before)
-    const maxDist = Math.min(w,h)/5.2;
+    const maxDist = Math.min(w,h)/4.8;
     ctx.lineWidth = 1;
     for (let i=0;i<pos.length;i++){
       for (let j=i+1;j<pos.length;j++){
@@ -571,7 +572,7 @@
         if (dist < maxDist){
           const aPulse = a.n.pulse, bPulse = b.n.pulse;
           const alpha = Math.max(0.06, 1 - dist/maxDist) * (0.7 + (aPulse+bPulse)*0.5);
-          ctx.strokeStyle = COLORS.link.replace('0.22', String(alpha.toFixed(3)));
+          ctx.strokeStyle = `rgba(${LINK_COLOR.r}, ${LINK_COLOR.g}, ${LINK_COLOR.b}, ${Math.min(alpha, 0.35).toFixed(3)})`;
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
       }
@@ -581,7 +582,7 @@
   }
 
   function pulse(){
-    nodes.forEach(n => n.pulse = Math.random()<0.10 ? 0.35 : n.pulse*0.9);
+    nodes.forEach(n => n.pulse = Math.random()<0.1 ? 0.38 : n.pulse*0.9);
   }
 
   function start(){

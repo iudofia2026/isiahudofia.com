@@ -158,6 +158,21 @@ a.is-disabled {
   backdrop-filter: blur(18px);
 }
 
+.about-hero {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.about-hero .section-eyebrow {
+  margin-bottom: 0.35rem;
+}
+
+.about-hero .section-title {
+  font-size: clamp(2.5rem, 5vw, 3.6rem);
+}
+
 .gradient-zen {
   background: linear-gradient(135deg, rgba(0, 53, 107, 0.92), rgba(16, 26, 53, 0.88));
   border: 1px solid var(--edge);
@@ -1741,13 +1756,11 @@ small {
 
 /* ==== Resume layout width & contact row ==== */
 .resume-shell{
-  /* expands the content region a bit wider than other panes */
   max-width: clamp(960px, 92vw, 1120px);
-  margin: clamp(2.2rem, 6vw, 3.5rem) auto 4rem;
+  margin: clamp(1.6rem, 5vw, 2.8rem) auto 3.4rem;
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 .resume-sheet{
-  /* ensure the card itself grows to show contact in one line on laptops */
   max-width: clamp(860px, 88vw, 1080px);
   margin-inline: auto;
 }
@@ -1944,8 +1957,8 @@ small {
   position: relative;
   overflow: clip;
   border-radius: 22px;
-  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 3vw, 2rem);
-  margin: 2rem auto 0.5rem;
+  padding: clamp(1.6rem, 4.5vw, 3.4rem) clamp(1.25rem, 3vw, 2rem);
+  margin: 1.6rem auto 0.35rem;
   background: radial-gradient(
       120% 100% at 10% 0%,
       hsl(var(--projHueA) 70% 16% / 0.45) 0%,
@@ -1966,7 +1979,7 @@ small {
   margin: 0 0 0.5rem;
 }
 .projects-hero h1 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.35rem;
 }
 .projects-hero .subtle {
   color: var(--muted);
@@ -1985,11 +1998,11 @@ small {
 
 /* --- Grid & cards --- */
 .projects-grid {
-  --gap: clamp(1rem, 2.5vw, 1.5rem);
+  --gap: clamp(1rem, 2.2vw, 1.4rem);
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gap);
-  margin: 0.75rem auto 3rem;
+  margin: 0.2rem auto 1.8rem;
 }
 .projects-grid > .project-card {
   grid-column: span 4;

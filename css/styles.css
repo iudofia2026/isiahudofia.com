@@ -1638,15 +1638,15 @@ small {
     radial-gradient(900px 500px at 20% 80%, rgba(45,107,186,.18), transparent 60%),
     linear-gradient(180deg, var(--home-bg-start), var(--home-bg-end));
   border:1px solid var(--border);
-  min-height: 360px;
+  min-height: clamp(520px, 78vh, 880px);
 }
 .home-hero-inner{
   position:relative;
   display:grid;
   grid-template-columns:auto 1fr;
   align-items:center;
-  gap:22px;
-  padding: clamp(28px, 5vw, 44px);
+  gap: clamp(26px, 6vw, 56px);
+  padding: clamp(40px, 8vw, 80px);
   z-index: 1;
 }
 .hero-text{min-width:0}
@@ -2123,7 +2123,7 @@ small {
 
 /* Hero adjustments */
 .hero-card {
-  margin-top: clamp(28px, 6vh, 64px);
+  margin-top: clamp(18px, 5vh, 48px);
 }
 .hero-card .content,
 .hero-card .stack {

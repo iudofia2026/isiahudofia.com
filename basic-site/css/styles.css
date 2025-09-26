@@ -2153,6 +2153,12 @@ h1 + .hero-sub {
   color: var(--text-2, #cfd6e6);
   letter-spacing: 0.2px;
 }
+.hero-sub__yale {
+  font-family: "Yale 2024 Roman", "Yale", "IM FELL English", Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: inherit;
+}
 @media (min-width: 900px) {
   .hero-card .stack {
     display: grid;

@@ -136,7 +136,7 @@ a.is-disabled {
 }
 
 .hero--slim {
-  margin-top: calc(var(--hero-mt) - var(--space-4));
+  margin-top: var(--hero-mt);
   margin-bottom: var(--space-8);
 }
 
@@ -163,6 +163,7 @@ a.is-disabled {
   border: none;
   box-shadow: none;
   padding: 0;
+  padding-top: var(--space-16);
 }
 
 .about-hero .section-eyebrow {

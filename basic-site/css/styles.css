@@ -1622,6 +1622,41 @@ small {
   letter-spacing:.2px;
 }
 .hero-cta{display:flex; gap:12px; margin-top:18px}
+.hero-cta .btn {
+  min-width: 152px;
+  justify-content: center;
+  padding: 0.78rem 1.65rem;
+  font-size: 0.95rem;
+  border-radius: 18px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.hero-cta .btn.btn-primary {
+  background: linear-gradient(90deg, rgba(105, 168, 255, 0.95), rgba(139, 188, 255, 1));
+  color: #041024;
+  box-shadow: 0 18px 36px -20px rgba(105, 168, 255, 0.55);
+}
+
+.hero-cta .btn.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 46px -22px rgba(105, 168, 255, 0.62);
+  filter: brightness(1.05);
+}
+
+.hero-cta .btn.btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--edge);
+  color: var(--text);
+  box-shadow: 0 14px 32px -24px rgba(4, 18, 40, 0.65);
+}
+
+.hero-cta .btn.btn-ghost:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 44px -26px rgba(4, 18, 40, 0.7);
+}
 .home-hero .btn-solid{
   background: linear-gradient(90deg, var(--home-accent-1), rgba(139, 188, 255, 0.95));
   color: #05142b;

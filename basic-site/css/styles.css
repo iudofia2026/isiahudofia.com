@@ -1621,7 +1621,18 @@ small {
   margin:0;
   letter-spacing:.2px;
 }
-.hero-cta{display:flex; gap:12px; margin-top:18px}
+.hero-cta{
+  display:flex;
+  gap:16px;
+  margin-top:18px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.hero-cta-buttons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
 .hero-cta .btn {
   min-width: 152px;
   justify-content: center;
@@ -1661,7 +1672,6 @@ small {
 .hero-socials {
   display: flex;
   gap: 0.65rem;
-  margin-top: 14px;
 }
 
 .hero-socials .social-btn {

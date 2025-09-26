@@ -121,8 +121,8 @@ a.is-disabled {
 }
 
 .section--tight {
-  padding-top: var(--space-12);
-  padding-bottom: var(--space-12);
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-10);
 }
 
 .section--loose {
@@ -1757,7 +1757,7 @@ small {
 /* ==== Resume layout width & contact row ==== */
 .resume-shell{
   max-width: clamp(960px, 92vw, 1120px);
-  margin: clamp(0.2rem, 2vw, 2.2rem) auto 3.4rem;
+  margin: clamp(-0.6rem, 1vw, 1.2rem) auto 3.4rem;
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 .resume-sheet{

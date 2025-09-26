@@ -1716,6 +1716,23 @@ small {
 }
 .resume-contact a:hover{ border-bottom-color: rgba(255,255,255,.38); }
 
+.resume-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem .8rem;
+  justify-content:center;
+  align-items:center;
+  color:var(--text-dim);
+  margin-bottom:0.45rem;
+}
+.resume-meta span{
+  color:inherit;
+}
+
+.resume-contact span{
+  opacity:0.7;
+}
+
 @media (min-width: 1024px){
   .resume-contact{ font-size: 0.975rem; }
 }

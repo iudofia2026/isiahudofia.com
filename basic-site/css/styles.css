@@ -1998,11 +1998,11 @@ small {
 
 /* --- Grid & cards --- */
 .projects-grid {
-  --gap: clamp(1rem, 2.2vw, 1.4rem);
+  --gap: clamp(1rem, 2.1vw, 1.3rem);
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gap);
-  margin: 0.2rem auto 1.8rem;
+  margin: -0.1rem auto 1.6rem;
 }
 .projects-grid > .project-card {
   grid-column: span 4;

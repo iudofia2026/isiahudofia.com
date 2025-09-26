@@ -136,7 +136,7 @@ a.is-disabled {
 }
 
 .hero--slim {
-  margin-top: calc(var(--hero-mt) - var(--space-5));
+  margin-top: calc(var(--hero-mt) - var(--space-4));
   margin-bottom: var(--space-8);
 }
 

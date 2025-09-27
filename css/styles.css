@@ -2190,7 +2190,7 @@ small {
 .approach-icon {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: var(--accent);
+  color: #ffffff;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -2275,7 +2275,7 @@ small {
 .skill-item h3 {
   margin: 0 0 0.75rem;
   font-size: 1.1rem;
-  color: var(--accent);
+  color: #ffffff;
 }
 
 .skill-item p {
@@ -2322,15 +2322,15 @@ small {
   text-align: center;
   padding: 1.5rem;
   border-radius: 16px;
-  background: rgba(124, 197, 255, 0.08);
-  border: 1px solid rgba(124, 197, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .result-number {
   display: block;
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--accent);
+  color: #ffffff;
   line-height: 1;
 }
 
@@ -2364,7 +2364,7 @@ small {
 .tech-category h3 {
   margin: 0 0 1rem;
   font-size: 1.1rem;
-  color: var(--text-strong);
+  color: #ffffff;
 }
 
 .tech-chips {

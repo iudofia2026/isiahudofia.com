@@ -141,8 +141,9 @@ a.is-disabled {
 }
 
 .section--tight {
-  padding-top: var(--space-4);
+  padding-top: var(--space-10);
   padding-bottom: var(--space-10);
+  margin-top: calc(-1 * var(--space-6));
 }
 
 .section--loose {

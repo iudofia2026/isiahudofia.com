@@ -1382,7 +1382,7 @@ small {
 }
 
 .resume-sheet {
-  margin-top: 3rem;
+  margin-top: 1rem;
   background: rgba(12, 20, 41, 0.9);
   border: 1px solid var(--edge);
   border-radius: var(--radius-xl);
@@ -3063,9 +3063,10 @@ small {
 .projects-hero {
   position: relative;
   overflow: clip;
-  border-radius: 22px;
-  padding: clamp(1.6rem, 4.5vw, 3.4rem) clamp(1.25rem, 3vw, 2rem);
-  margin: 1.6rem auto 2rem;
+  border-radius: var(--radius-xl);
+  padding: var(--space-12) var(--space-6) var(--space-8);
+  margin-top: var(--space-20);
+  margin-bottom: var(--space-6);
   background: radial-gradient(
       120% 100% at 10% 0%,
       hsl(var(--projHueA) 70% 16% / 0.45) 0%,
@@ -3109,7 +3110,7 @@ small {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gap);
-  margin: 0 auto 1.6rem;
+  margin: var(--space-6) auto var(--space-12);
 }
 .projects-grid > .project-card {
   grid-column: span 4;

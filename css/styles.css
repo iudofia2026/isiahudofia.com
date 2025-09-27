@@ -3404,17 +3404,17 @@ h1 + .hero-sub {
 }
 
 .hero-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 2rem;
 }
 
 .hero-text {
-  max-width: 500px;
+  max-width: 600px;
+  text-align: center;
 }
 
 .hero-badge {
@@ -3600,18 +3600,8 @@ h1 + .hero-sub {
 
 /* Responsive Design */
 @media (max-width: 968px) {
-  .hero-container {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    text-align: center;
-  }
-  
   .hero-features {
     align-items: center;
-  }
-  
-  .discord-mockup {
-    max-width: 350px;
   }
 }
 

@@ -1568,6 +1568,33 @@ small {
   color: var(--sunset-muted);
 }
 
+.thesis-page .lab-button-container {
+  margin: 1.5rem 0;
+}
+
+.thesis-page .btn-lab {
+  background: linear-gradient(135deg, 
+    var(--sunset-orange) 0%, 
+    var(--sunset-peach) 100%);
+  color: var(--sunset-bg);
+  border: 1px solid var(--sunset-orange);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.2);
+}
+
+.thesis-page .btn-lab:hover {
+  background: linear-gradient(135deg, 
+    var(--sunset-orange-600) 0%, 
+    var(--sunset-orange) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+}
+
 .not-found {
   min-height: 80vh;
   display: grid;

@@ -516,6 +516,25 @@
         window.print();
       });
     }
+
+    /* Discord Accordion */
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    accordionItems.forEach(item => {
+      const head = item.querySelector('.accordion-head');
+      head.addEventListener('click', () => {
+        const isOpen = item.classList.contains('is-open');
+        
+        // Close all items
+        accordionItems.forEach(otherItem => {
+          otherItem.classList.remove('is-open');
+        });
+        
+        // Open clicked item if it wasn't open
+        if (!isOpen) {
+          item.classList.add('is-open');
+        }
+      });
+    });
   });
 })();
 

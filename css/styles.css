@@ -141,7 +141,7 @@ a.is-disabled {
 }
 
 .section--tight {
-  padding-top: var(--space-10);
+  padding-top: var(--space-6);
   padding-bottom: var(--space-10);
 }
 

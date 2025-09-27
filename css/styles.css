@@ -19,17 +19,6 @@
   --edge-2: rgba(255, 255, 255, 0.06);
   --glow-cyan: rgba(105, 168, 255, 0.35);
 
-  /* Sunset/Orange theme colors */
-  --sunset-orange: #ff6b35;
-  --sunset-orange-600: #e55a2b;
-  --sunset-orange-700: #cc4a1f;
-  --sunset-peach: #ff8c69;
-  --sunset-coral: #ff7f50;
-  --sunset-bg: #2d1b0e;
-  --sunset-bg-light: #3d2415;
-  --sunset-text: #f4e6d7;
-  --sunset-muted: #d4b896;
-  --sunset-glow: rgba(255, 107, 53, 0.35);
 
   --text-strong: #ffffff;
   --text-dim: #aab7cf;
@@ -1505,111 +1494,27 @@ small {
   padding: clamp(1.8rem, 3vw, 2.4rem);
 }
 
-/* Sunset theme for thesis page */
-.thesis-page {
-  background: linear-gradient(135deg, 
-    var(--sunset-bg) 0%, 
-    var(--sunset-bg-light) 25%, 
-    rgba(255, 107, 53, 0.1) 50%, 
-    var(--sunset-bg-light) 75%, 
-    var(--sunset-bg) 100%);
-  color: var(--sunset-text);
-  min-height: 100vh;
-}
-
-body[data-page="projects"] .thesis-page {
-  background: linear-gradient(135deg, 
-    var(--sunset-bg) 0%, 
-    var(--sunset-bg-light) 25%, 
-    rgba(255, 107, 53, 0.1) 50%, 
-    var(--sunset-bg-light) 75%, 
-    var(--sunset-bg) 100%);
-}
-
-.thesis-page .hero {
-  background: linear-gradient(135deg, 
-    rgba(255, 107, 53, 0.6) 0%, 
-    rgba(255, 140, 105, 0.5) 25%, 
-    rgba(255, 127, 80, 0.55) 50%, 
-    rgba(204, 74, 31, 0.6) 75%, 
-    rgba(45, 27, 14, 0.7) 100%);
-  border: 1px solid rgba(255, 107, 53, 0.4);
-  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.25), 0 0 0 1px rgba(255, 107, 53, 0.2);
-  backdrop-filter: blur(15px);
-}
-
-.thesis-page .hero h1 {
-  color: var(--sunset-text);
-  text-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
-}
-
-.thesis-page .hero p {
-  color: var(--sunset-muted);
-}
-
-.thesis-page .status-chips span {
-  background: rgba(255, 107, 53, 0.2);
-  color: var(--sunset-orange);
-  border: 1px solid rgba(255, 107, 53, 0.3);
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
-}
-
-.thesis-page .card {
-  background: linear-gradient(160deg, 
-    rgba(255, 107, 53, 0.25) 0%, 
-    rgba(45, 27, 14, 0.6) 100%);
-  border: 1px solid rgba(255, 107, 53, 0.4);
-  color: var(--sunset-text);
-  box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
-  backdrop-filter: blur(10px);
-}
-
-.thesis-page .card h3 {
-  color: var(--sunset-orange);
-}
-
-.thesis-page .card ul li {
-  color: var(--sunset-muted);
-}
-
-.thesis-page .milestone-chip {
-  background: rgba(255, 107, 53, 0.1);
-  border: 1px solid rgba(255, 107, 53, 0.2);
-}
-
-.thesis-page .milestone-chip h4 {
-  color: var(--sunset-orange);
-}
-
-.thesis-page .milestone-chip p {
-  color: var(--sunset-muted);
-}
-
 .thesis-page .lab-button-container {
   margin: 1.5rem 0;
 }
 
 .thesis-page .btn-lab {
-  background: linear-gradient(135deg, 
-    var(--sunset-orange) 0%, 
-    var(--sunset-peach) 100%);
-  color: var(--sunset-bg);
-  border: 1px solid var(--sunset-orange);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 1px solid var(--accent);
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
   display: inline-block;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.2);
+  box-shadow: var(--shadow-soft);
 }
 
 .thesis-page .btn-lab:hover {
-  background: linear-gradient(135deg, 
-    var(--sunset-orange-600) 0%, 
-    var(--sunset-orange) 100%);
+  background: linear-gradient(180deg, var(--sky-400), var(--sky-500));
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 6px 20px rgba(105, 168, 255, 0.3);
 }
 
 .not-found {

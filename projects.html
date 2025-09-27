@@ -9,12 +9,9 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body data-page="projects">
-    <header class="navbar">
-      <div class="container nav-inner">
-        <a class="brand" href="index.html">
-          <img src="assets/yale.svg" alt="Yale" width="22" height="22">
-          Isiah Udofia
-        </a>
+    <header class="site-header" data-animate="fade">
+      <nav class="nav-shell">
+        <a class="nav-brand" href="index.html">Isiah Udofia</a>
         <div class="nav-links" id="site-menu">
           <a href="index.html" data-nav="home">Home</a>
           <a href="projects.html" data-nav="projects">Projects</a>
@@ -23,65 +20,85 @@
           <a href="resume.html" data-nav="resume">Resume</a>
         </div>
         <button class="nav-toggle" aria-expanded="false" aria-controls="site-menu">☰</button>
-      </div>
+      </nav>
     </header>
 
-    <main class="container">
-      <section class="section">
-        <div class="card hero reveal">
+    <main class="page-wrap">
+      <section class="projects-hero hero card pad-xl" data-animate="fade">
+        <canvas id="projects-bg" aria-hidden="true"></canvas>
+        <div class="projects-hero__inner">
+          <p class="eyebrow">INDEX</p>
           <h1>Projects</h1>
-          <p class="lead">Technical projects and research work</p>
         </div>
       </section>
 
-      <section class="section">
-        <div class="projects-grid reveal">
-          <article class="card project-card">
-            <div class="cover cover-discord">
-              <img src="assets/discord.png" alt="Live Translator for Discord" class="project-logo" loading="lazy" />
+      <section class="section card-grid projects-grid" data-grid data-animate="fade">
+        <article
+          class="card project-card"
+          data-tilt
+          data-animate="fade"
+          data-href="projects/discord.html"
+          aria-label="Live Translator for Discord project"
+          tabindex="0"
+        >
+          <div class="cover cover-discord">
+            <img src="assets/discord.png" alt="Live Translator for Discord" class="project-logo project-logo--tile" loading="lazy" />
+          </div>
+          <div class="project-card__body">
+            <h3><a class="project-link" href="projects/discord.html">Live Translator for Discord</a></h3>
+            <p class="project-blurb">Real-time translation built natively for Discord voice calls.</p>
+            <div class="chips">
+              <span class="chip">Discord API</span>
+              <span class="chip">Deepgram STT</span>
+              <span class="chip">WebSocket</span>
             </div>
-            <div class="project-card__body">
-              <h3><a href="projects/discord.html">Live Translator for Discord</a></h3>
-              <p class="project-blurb">Real-time translation built natively for Discord voice calls.</p>
-              <div class="chips">
-                <span class="kbd">Discord API</span>
-                <span class="kbd">Deepgram STT</span>
-                <span class="kbd">WebSocket</span>
-              </div>
-            </div>
-          </article>
+          </div>
+        </article>
 
-          <article class="card project-card">
-            <div class="cover cover-zen">
-              <img src="assets/zen.png" alt="Zen Video Agency" class="project-logo" loading="lazy" />
+        <article
+          class="card project-card"
+          data-tilt
+          data-animate="fade"
+          data-href="projects/zen-video-agency.html"
+          aria-label="Zen Video Agency project"
+          tabindex="0"
+        >
+          <div class="cover cover-zen">
+            <img src="assets/zen.png" alt="Zen Video Agency" class="project-logo project-logo--tile" loading="lazy" />
+          </div>
+          <div class="project-card__body">
+            <h3><a class="project-link" href="projects/zen-video-agency.html">Zen Video Agency</a></h3>
+            <p class="project-blurb">Streamlined editing workflows for creators and brands.</p>
+            <div class="chips">
+              <span class="chip">Premiere Pro</span>
+              <span class="chip">After Effects</span>
+              <span class="chip">Editor handoff</span>
             </div>
-            <div class="project-card__body">
-              <h3><a href="projects/zen-video-agency.html">Zen Video Agency</a></h3>
-              <p class="project-blurb">Streamlined editing workflows for creators and brands.</p>
-              <div class="chips">
-                <span class="kbd">Premiere Pro</span>
-                <span class="kbd">After Effects</span>
-                <span class="kbd">Editor handoff</span>
-              </div>
-            </div>
-          </article>
+          </div>
+        </article>
 
-          <article class="card project-card">
-            <div class="cover cover-thesis">
-              <img src="assets/thesis.png" alt="B.S. Thesis — ML for Sleep Data" class="project-logo" loading="lazy" />
+        <article
+          class="card project-card"
+          data-tilt
+          data-animate="fade"
+          data-href="projects/thesis-ml.html"
+          aria-label="B.S. Thesis — ML for Sleep Data project"
+          tabindex="0"
+        >
+          <div class="cover cover-thesis">
+            <img src="assets/thesis.png" alt="B.S. Thesis — ML for Sleep Data" class="project-logo project-logo--tile" loading="lazy" />
+          </div>
+          <div class="project-card__body">
+            <h3><a class="project-link" href="projects/thesis-ml.html">B.S. Thesis — ML for Sleep Data</a></h3>
+            <p class="project-blurb">Making wearable sleep data transparent, calibrated, and actionable.</p>
+            <div class="chips">
+              <span class="chip">Ridge</span>
+              <span class="chip">XGBoost</span>
+              <span class="chip">Calibration</span>
+              <span class="chip">Wearables</span>
             </div>
-            <div class="project-card__body">
-              <h3><a href="projects/thesis-ml.html">B.S. Thesis — ML for Sleep Data</a></h3>
-              <p class="project-blurb">Making wearable sleep data transparent, calibrated, and actionable.</p>
-              <div class="chips">
-                <span class="kbd">Ridge</span>
-                <span class="kbd">XGBoost</span>
-                <span class="kbd">Calibration</span>
-                <span class="kbd">Wearables</span>
-              </div>
-            </div>
-          </article>
-        </div>
+          </div>
+        </article>
       </section>
     </main>
 

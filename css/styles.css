@@ -81,12 +81,12 @@
   /* About page specific spacing */
   --about-hero-max-width: 1200px;
   --about-hero-padding-x: clamp(24px, 4vw, 48px);
-  --about-hero-padding-y: clamp(48px, 8vh, 72px);
+  --about-hero-padding-y: clamp(32px, 6vh, 56px);
   --about-hero-gap: clamp(24px, 4vw, 48px);
 
   --section-pt: var(--space-20);
   --section-pb: var(--space-20);
-  --hero-mt: var(--space-16);
+  --hero-mt: var(--space-6);
   --card-gap: var(--space-8);
   --grid-gap: var(--space-8);
   color-scheme: dark;
@@ -274,7 +274,7 @@ strong {
   :root {
     --section-pt: var(--space-16);
     --section-pb: var(--space-16);
-    --hero-mt: var(--space-12);
+    --hero-mt: var(--space-6);
   }
 }
 

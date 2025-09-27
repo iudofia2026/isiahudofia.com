@@ -3463,8 +3463,16 @@ h1 + .hero-sub {
 }
 
 .feature-icon {
-  font-size: 1.2rem;
-  width: 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: rgba(88, 101, 242, 0.15);
+  border: 1px solid rgba(88, 101, 242, 0.25);
+  color: #5865f2;
+  min-width: 60px;
   text-align: center;
 }
 

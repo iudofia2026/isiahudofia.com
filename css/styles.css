@@ -19,6 +19,18 @@
   --edge-2: rgba(255, 255, 255, 0.06);
   --glow-cyan: rgba(105, 168, 255, 0.35);
 
+  /* Sunset/Orange theme colors */
+  --sunset-orange: #ff6b35;
+  --sunset-orange-600: #e55a2b;
+  --sunset-orange-700: #cc4a1f;
+  --sunset-peach: #ff8c69;
+  --sunset-coral: #ff7f50;
+  --sunset-bg: #2d1b0e;
+  --sunset-bg-light: #3d2415;
+  --sunset-text: #f4e6d7;
+  --sunset-muted: #d4b896;
+  --sunset-glow: rgba(255, 107, 53, 0.35);
+
   --text-strong: #ffffff;
   --text-dim: #aab7cf;
 
@@ -1491,6 +1503,69 @@ small {
 .thesis-page .detail-card {
   margin: 0;
   padding: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+/* Sunset theme for thesis page */
+.thesis-page {
+  background: var(--sunset-bg);
+  color: var(--sunset-text);
+}
+
+.thesis-page .hero {
+  background: linear-gradient(135deg, 
+    rgba(255, 107, 53, 0.4) 0%, 
+    rgba(255, 140, 105, 0.3) 25%, 
+    rgba(255, 127, 80, 0.35) 50%, 
+    rgba(204, 74, 31, 0.4) 75%, 
+    rgba(45, 27, 14, 0.9) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.15), 0 0 0 1px rgba(255, 107, 53, 0.1);
+}
+
+.thesis-page .hero h1 {
+  color: var(--sunset-text);
+  text-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.thesis-page .hero p {
+  color: var(--sunset-muted);
+}
+
+.thesis-page .status-chips span {
+  background: rgba(255, 107, 53, 0.2);
+  color: var(--sunset-orange);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
+}
+
+.thesis-page .card {
+  background: linear-gradient(160deg, 
+    rgba(255, 107, 53, 0.15) 0%, 
+    rgba(45, 27, 14, 0.8) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  color: var(--sunset-text);
+  box-shadow: 0 8px 32px rgba(255, 107, 53, 0.1);
+}
+
+.thesis-page .card h3 {
+  color: var(--sunset-orange);
+}
+
+.thesis-page .card ul li {
+  color: var(--sunset-muted);
+}
+
+.thesis-page .milestone-chip {
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
+.thesis-page .milestone-chip h4 {
+  color: var(--sunset-orange);
+}
+
+.thesis-page .milestone-chip p {
+  color: var(--sunset-muted);
 }
 
 .not-found {

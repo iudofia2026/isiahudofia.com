@@ -3412,14 +3412,14 @@ h1 + .hero-sub {
 .discord-hero::before {
   content: "";
   position: absolute;
-  inset: -40%;
-  background: radial-gradient(circle at 30% 20%, rgba(88, 101, 242, 0.4), transparent 58%),
-    radial-gradient(circle at 70% 25%, rgba(114, 137, 218, 0.3), transparent 55%),
-    radial-gradient(circle at 50% 80%, rgba(88, 101, 242, 0.25), transparent 60%);
-  filter: blur(42px);
-  opacity: 0.6;
-  animation: discordGlow 25s ease-in-out infinite;
+  inset: -20%;
+  background: radial-gradient(circle at 30% 20%, rgba(88, 101, 242, 0.3), transparent 70%),
+    radial-gradient(circle at 70% 25%, rgba(114, 137, 218, 0.2), transparent 65%);
+  filter: blur(20px);
+  opacity: 0.5;
+  animation: discordGlow 30s ease-in-out infinite;
   transform: translateZ(0);
+  will-change: transform;
 }
 
 .discord-hero::after {
@@ -3529,8 +3529,8 @@ h1 + .hero-sub {
   border-radius: 24px;
   padding: clamp(1.5rem, 3vw, 2.5rem);
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
-  backdrop-filter: blur(12px) saturate(140%);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(6px) saturate(120%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -3973,13 +3973,13 @@ h1 + .hero-sub {
 /* Animation Keyframes */
 @keyframes discordGlow {
   0% {
-    transform: translate3d(-15px, -8px, 0) scale(1.02);
+    transform: translate3d(-8px, -4px, 0) scale(1.01);
   }
   50% {
-    transform: translate3d(12px, 10px, 0) scale(1.05);
+    transform: translate3d(6px, 5px, 0) scale(1.02);
   }
   100% {
-    transform: translate3d(-15px, -8px, 0) scale(1.02);
+    transform: translate3d(-8px, -4px, 0) scale(1.01);
   }
 }
 

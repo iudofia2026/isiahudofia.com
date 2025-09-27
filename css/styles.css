@@ -2745,6 +2745,13 @@ small {
     linear-gradient(180deg, var(--home-bg-start), var(--home-bg-end));
   border:1px solid var(--border);
   min-height: clamp(520px, 78vh, 880px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.home-hero:hover {
+  transform: translateY(-4px);
+  border-color: rgba(105, 168, 255, 0.35);
+  box-shadow: 0 20px 48px -32px rgba(105, 168, 255, 0.28), var(--shadow-soft);
 }
 .home-hero-inner{
   position:relative;
@@ -3075,6 +3082,13 @@ small {
     );
   border: 1px solid var(--edge);
   box-shadow: var(--shadow-soft);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.projects-hero:hover {
+  transform: translateY(-4px);
+  border-color: rgba(105, 168, 255, 0.35);
+  box-shadow: 0 20px 48px -32px rgba(105, 168, 255, 0.28), var(--shadow-soft);
 }
 .projects-hero__inner {
   position: relative;

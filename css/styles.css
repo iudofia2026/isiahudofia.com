@@ -369,6 +369,12 @@ strong {
   margin: 0 0 0.9rem;
   line-height: 1.55;
   color: var(--text);
+  font-size: clamp(16px, 2.2vw, 20px);
+}
+
+.about-hero__summary p:first-child {
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 500;
 }
 
 .about-hero .section-title {

@@ -35,125 +35,83 @@
         </div>
       </section>
 
-      <section class="section discord-grid" data-animate="fade">
-        <article class="accordion-timeline" data-discord-accordion>
-          <div class="timeline-rail" aria-hidden="true"></div>
+      <section class="container section">
+        <div class="project-overview">
+          <div class="card reveal-on-scroll">
+            <h2>Problem & Solution</h2>
+            <p>Cross-language voice chats lose momentum when translation lags or lives outside Discord. Live Translator provides real-time translation with native Discord integration, ensuring no context switching and clear in-channel visibility.</p>
+          </div>
 
-          <div class="timeline-item is-open" data-key="problem">
-            <button type="button" class="timeline-trigger">
-              <span class="node" aria-hidden="true"></span>
-              <span>Problem</span>
-              <span class="caret" aria-hidden="true">›</span>
-            </button>
-            <div class="timeline-body">
+          <div class="card reveal-on-scroll">
+            <h2>Technical Approach</h2>
+            <p>Streaming STT (Deepgram) feeds a translation worker; inline bot posts interim + final lines. Optional captions overlay mirrors chat feed for on-screen visibility.</p>
+            <div class="constraints">
+              <h3>Key Constraints</h3>
               <ul>
-                <li>Cross-language voice chats lose momentum when translation lags or lives outside Discord.</li>
-                <li>Goal: native feel, no context switching, clear in-channel visibility.</li>
+                <li>&lt;250ms interim response, sub-second final translations</li>
+                <li>Works inside Discord chat; keeps moderator controls intact</li>
+                <li>Reconnection guards + jitter buffers smooth dropouts</li>
+                <li>Rate-limit backoff and interim/final dedupe reduce chat spam</li>
               </ul>
             </div>
           </div>
 
-          <div class="timeline-item" data-key="constraints">
-            <button type="button" class="timeline-trigger">
-              <span class="node" aria-hidden="true"></span>
-              <span>Constraints</span>
-              <span class="caret" aria-hidden="true">›</span>
-            </button>
-            <div class="timeline-body">
-              <ul>
-                <li>&lt;250ms interim response, sub-second final translations.</li>
-                <li>Works inside Discord chat; keeps moderator controls intact.</li>
-              </ul>
+          <div class="card reveal-on-scroll">
+            <h2>Privacy & User Experience</h2>
+            <p>Per-user language preferences ensure only opted-in voices get processed. Overlay can be toggled per channel for high-visibility events.</p>
+          </div>
+
+          <div class="card reveal-on-scroll">
+            <h2>Current Status</h2>
+            <p>MVP complete and deployed at livecalltranslator.netlify.app. Focus shifted to marketing and adoption.</p>
+            <div class="status-details">
+              <h3>Target Audience</h3>
+              <p>Discord gaming communities, streamers, international teams</p>
+              
+              <h3>Goals</h3>
+              <p>Grow user base, test with real communities, gather feedback</p>
+              
+              <h3>Distribution</h3>
+              <p>Discord bot marketplaces, Reddit/Discord tech servers</p>
             </div>
           </div>
 
-          <div class="timeline-item" data-key="architecture">
-            <button type="button" class="timeline-trigger">
-              <span class="node" aria-hidden="true"></span>
-              <span>Architecture</span>
-              <span class="caret" aria-hidden="true">›</span>
-            </button>
-            <div class="timeline-body">
-              <p class="typing-indicator" data-typing></p>
-              <ul>
-                <li>Streaming STT (Deepgram) feeds a translation worker; inline bot posts interim + final lines.</li>
-                <li>Optional captions overlay mirrors chat feed for on-screen visibility.</li>
-              </ul>
+          <div class="card reveal-on-scroll">
+            <h2>Launch Plan</h2>
+            <div class="launch-details">
+              <div class="launch-item">
+                <h3>Target Users</h3>
+                <p>Streamers, multilingual gaming communities</p>
+              </div>
+              <div class="launch-item">
+                <h3>Channels</h3>
+                <p>Discord bot marketplace, social media demos</p>
+              </div>
+              <div class="launch-item">
+                <h3>Metrics</h3>
+                <p>Active server installs, translation latency feedback</p>
+              </div>
+              <div class="launch-item">
+                <h3>Iteration</h3>
+                <p>Refine UI and expand language support</p>
+              </div>
+              <div class="launch-item">
+                <h3>Growth</h3>
+                <p>Partner with Discord communities, create tutorials</p>
+              </div>
             </div>
           </div>
 
-          <div class="timeline-item" data-key="reliability">
-            <button type="button" class="timeline-trigger">
-              <span class="node" aria-hidden="true"></span>
-              <span>Reliability</span>
-              <span class="caret" aria-hidden="true">›</span>
-            </button>
-            <div class="timeline-body">
-              <ul>
-                <li>Reconnection guards + jitter buffers smooth dropouts.</li>
-                <li>Rate-limit backoff and interim/final dedupe reduce chat spam.</li>
-              </ul>
+          <div class="card reveal-on-scroll">
+            <h2>Technology Stack</h2>
+            <div class="chips">
+              <span class="chip">Discord API</span>
+              <span class="chip">Deepgram STT</span>
+              <span class="chip">WebSocket</span>
             </div>
+            <p class="stack-description">Built for live Discord contexts with real-time voice processing capabilities.</p>
           </div>
-
-          <div class="timeline-item" data-key="privacy">
-            <button type="button" class="timeline-trigger">
-              <span class="node" aria-hidden="true"></span>
-              <span>Privacy &amp; UI</span>
-              <span class="caret" aria-hidden="true">›</span>
-            </button>
-            <div class="timeline-body">
-              <ul>
-                <li>Per-user language preferences; only opted-in voices get processed.</li>
-                <li>Overlay can be toggled per channel for high-visibility events.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="timeline-item" data-key="status">
-            <button type="button" class="timeline-trigger">
-              <span class="node" aria-hidden="true"></span>
-              <span>Status / Next</span>
-              <span class="caret" aria-hidden="true">›</span>
-            </button>
-            <div class="timeline-body">
-              <ul>
-                <li>MVP complete and deployed at livecalltranslator.netlify.app</li>
-                <li>Focus shifted to marketing and adoption</li>
-                <li>Target: Discord gaming communities, streamers, international teams</li>
-                <li>Goals: grow user base, test with real communities, gather feedback</li>
-                <li>Distribution: Discord bot marketplaces, Reddit/Discord tech servers</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="timeline-item" data-key="launch">
-            <button type="button" class="timeline-trigger">
-              <span class="node" aria-hidden="true"></span>
-              <span>Launch Plan</span>
-              <span class="caret" aria-hidden="true">›</span>
-            </button>
-            <div class="timeline-body">
-              <ul>
-                <li>Target users: streamers, multilingual gaming communities</li>
-                <li>Channels: Discord bot marketplace, social media demos</li>
-                <li>Metrics: active server installs, translation latency feedback</li>
-                <li>Iteration: refine UI and expand language support</li>
-                <li>Growth: partner with Discord communities, create tutorials</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <aside class="discord-stack detail-card card" data-animate="fade">
-          <p class="section-eyebrow">Stack</p>
-          <h3 class="project-title" style="margin: 0;">Built for live Discord contexts</h3>
-          <div class="chips" style="margin-top: 1.25rem;">
-            <span class="chip">Discord API</span>
-            <span class="chip">Deepgram STT</span>
-            <span class="chip">WebSocket</span>
-          </div>
-        </aside>
+        </div>
       </section>
     </main>
 

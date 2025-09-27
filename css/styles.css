@@ -2228,7 +2228,7 @@ small {
 /* Approach Grid */
 .approach-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -2573,7 +2573,10 @@ small {
     font-size: 1.5rem;
   }
   
-  .approach-grid,
+  .approach-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .skills-grid,
   .features-showcase {
     grid-template-columns: 1fr;

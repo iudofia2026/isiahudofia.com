@@ -1902,6 +1902,237 @@ small {
   gap: var(--space-8);
 }
 
+/* Enhanced Zen Hero Section */
+.zen-hero-section {
+  margin-top: 40px;
+  padding: 60px 0;
+  background: linear-gradient(135deg, rgba(27, 58, 107, 0.8), rgba(11, 37, 69, 0.9));
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.zen-hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(124, 197, 255, 0.1), transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(182, 227, 255, 0.08), transparent 50%);
+  pointer-events: none;
+}
+
+.zen-hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.zen-hero-text {
+  max-width: 500px;
+}
+
+.zen-hero-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(124, 197, 255, 0.15);
+  border: 1px solid rgba(124, 197, 255, 0.3);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.zen-hero-title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 700;
+  margin: 0 0 1rem;
+  background: linear-gradient(135deg, #ffffff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.zen-hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--text);
+  margin: 0 0 2rem;
+  line-height: 1.5;
+}
+
+.zen-hero-metrics {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.zen-metric-item {
+  text-align: center;
+}
+
+.zen-metric-number {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.zen-metric-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.zen-hero-cta {
+  margin-top: 2rem;
+}
+
+.zen-cta-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Visual Card */
+.zen-hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zen-visual-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  min-width: 300px;
+}
+
+.zen-visual-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.zen-visual-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.zen-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.zen-visual-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zen-visual-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.zen-flow-item {
+  text-align: center;
+  flex: 1;
+}
+
+.zen-flow-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #0b2239;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0 auto 0.5rem;
+}
+
+.zen-flow-text {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.zen-flow-arrow {
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .zen-hero-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .zen-hero-metrics {
+    justify-content: center;
+  }
+  
+  .zen-visual-card {
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .zen-hero-section {
+    padding: 40px 0;
+    margin-top: 20px;
+  }
+  
+  .zen-hero-content {
+    padding: 0 1rem;
+  }
+  
+  .zen-hero-metrics {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .zen-visual-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .zen-flow-arrow {
+    transform: rotate(90deg);
+  }
+}
+
 /* Zen Hero Metrics */
 .hero-metrics {
   display: flex;

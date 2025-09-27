@@ -8,11 +8,16 @@
   };
 
   ready(() => {
-    // active link by data-page
-    const page = document.body.dataset.page;
-    if(page){ document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.dataset.nav===page) a.classList.add('active'); }); }
+    const navPage = document.body.dataset.page;
+    if (navPage) {
+      document.querySelectorAll("[data-nav]").forEach((link) => {
+        if (link.dataset.nav === navPage) {
+          link.classList.add("active");
+        }
+      });
+    }
 
-    // hamburger
+    // hamburger menu functionality
     const btn = document.querySelector('.nav-toggle');
     const links = document.querySelector('.nav-links');
     if(btn && links){

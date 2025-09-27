@@ -2443,8 +2443,8 @@ small {
     0 0 24px rgba(0,200,170,0.25);
   display: inline-block;
   vertical-align: middle;
-  width: clamp(72px, 9vw, 88px);
-  height: clamp(72px, 9vw, 88px);
+  width: clamp(96px, 12vw, 120px);
+  height: clamp(96px, 12vw, 120px);
   object-fit: cover;
 }
 .hero-card h1 {
@@ -2471,8 +2471,8 @@ h1 + .hero-sub {
     gap: 18px;
   }
   .hero-pfp {
-    width: 88px;
-    height: 88px;
+    width: 120px;
+    height: 120px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

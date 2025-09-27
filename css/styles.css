@@ -3403,19 +3403,19 @@ h1 + .hero-sub {
   padding: clamp(3rem, 6vw, 4.5rem) clamp(2rem, 4vw, 3.5rem);
   margin-top: clamp(3rem, 8vh, 4.5rem);
   margin-bottom: clamp(2rem, 5vh, 3rem);
-  background: linear-gradient(145deg, rgba(0, 53, 107, 0.85), rgba(16, 26, 53, 0.92));
-  border: 1px solid var(--edge);
+  background: linear-gradient(145deg, rgba(88, 101, 242, 0.2), rgba(114, 137, 218, 0.15), rgba(88, 101, 242, 0.1));
+  border: 1px solid rgba(88, 101, 242, 0.3);
   text-align: center;
-  box-shadow: 0 30px 80px -60px rgba(0, 53, 107, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  box-shadow: 0 30px 80px -60px rgba(88, 101, 242, 0.4), 0 0 0 1px rgba(88, 101, 242, 0.1) inset;
 }
 
 .discord-hero::before {
   content: "";
   position: absolute;
   inset: -40%;
-  background: radial-gradient(circle at 30% 20%, rgba(105, 168, 255, 0.4), transparent 58%),
-    radial-gradient(circle at 70% 25%, rgba(0, 53, 107, 0.3), transparent 55%),
-    radial-gradient(circle at 50% 80%, rgba(105, 168, 255, 0.25), transparent 60%);
+  background: radial-gradient(circle at 30% 20%, rgba(88, 101, 242, 0.4), transparent 58%),
+    radial-gradient(circle at 70% 25%, rgba(114, 137, 218, 0.3), transparent 55%),
+    radial-gradient(circle at 50% 80%, rgba(88, 101, 242, 0.25), transparent 60%);
   filter: blur(42px);
   opacity: 0.6;
   animation: discordGlow 25s ease-in-out infinite;
@@ -3437,20 +3437,25 @@ h1 + .hero-sub {
 
 .discord-hero .hero-title {
   font-size: clamp(2.8rem, 6vw, 4.2rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 900;
+  letter-spacing: -0.03em;
   margin: 0 0 clamp(1rem, 2vw, 1.5rem);
-  line-height: 1.1;
-  color: var(--text-strong);
+  line-height: 1.05;
+  background: linear-gradient(135deg, #ffffff, rgba(114, 137, 218, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .discord-hero .hero-subtitle {
   font-size: clamp(1rem, 2.2vw, 1.25rem);
   margin: 0 0 clamp(1.5rem, 3vw, 2rem);
-  color: rgba(255, 255, 255, 0.75);
-  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.5;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .discord-hero .hero-actions {
@@ -3476,16 +3481,17 @@ h1 + .hero-sub {
 }
 
 .discord-hero .btn-primary {
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
+  background: linear-gradient(135deg, #5865f2, #7289da);
+  color: #ffffff;
   border: none;
-  box-shadow: 0 18px 36px -20px rgba(105, 168, 255, 0.55);
+  box-shadow: 0 18px 36px -20px rgba(88, 101, 242, 0.55);
 }
 
 .discord-hero .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 22px 46px -22px rgba(105, 168, 255, 0.65);
+  box-shadow: 0 22px 46px -22px rgba(88, 101, 242, 0.65);
   filter: brightness(1.05);
+  background: linear-gradient(135deg, #4752c4, #5865f2);
 }
 
 .discord-hero .btn-primary:active {
@@ -3521,8 +3527,8 @@ h1 + .hero-sub {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 24px;
-  padding: clamp(2.5rem, 5vw, 4rem);
-  margin-bottom: clamp(2rem, 4vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
   backdrop-filter: blur(12px) saturate(140%);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;

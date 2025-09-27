@@ -172,13 +172,6 @@ a.is-disabled {
   backdrop-filter: blur(18px);
 }
 
-.about-hero {
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  padding-top: var(--space-16);
-}
 
 .about-hero .section-eyebrow {
   margin-bottom: 0.35rem;
@@ -304,6 +297,17 @@ strong {
   box-shadow: 0 8px 40px rgba(16, 30, 50, 0.35);
   position: relative;
   overflow: hidden;
+}
+
+/* Override hero styles for about page */
+.about-hero {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  padding-top: var(--space-16) !important;
+  margin-top: var(--hero-mt) !important;
+  margin-bottom: var(--space-8) !important;
 }
 
 .grid-2 {

@@ -232,18 +232,34 @@
     });
 
     /* Discord accordion */
-    const accordion = document.querySelector("[data-discord-accordion]");
-    if (accordion) {
-      const items = Array.from(accordion.querySelectorAll(".timeline-item"));
+    const discordAccordion = document.querySelector("[data-discord-accordion]");
+    if (discordAccordion) {
+      const items = Array.from(discordAccordion.querySelectorAll(".timeline-item"));
       const closeAll = () => items.forEach((item) => item.classList.remove("is-open"));
+      
       items.forEach((item) => {
         const trigger = item.querySelector(".timeline-trigger");
-        trigger.addEventListener("click", () => {
-          const isOpen = item.classList.contains("is-open");
-          closeAll();
-          if (!isOpen) item.classList.add("is-open");
-        });
+        if (trigger) {
+          trigger.addEventListener("click", () => {
+            const isOpen = item.classList.contains("is-open");
+            closeAll();
+            if (!isOpen) item.classList.add("is-open");
+          });
+          
+          // Keyboard accessibility
+          trigger.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              trigger.click();
+            }
+          });
+        }
       });
+
+      // Initialize with first item open
+      if (items.length > 0 && !items.some(item => item.classList.contains("is-open"))) {
+        items[0].classList.add("is-open");
+      }
 
       const accordionObserver = new IntersectionObserver(
         (entries) => {

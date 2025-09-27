@@ -3210,7 +3210,9 @@ small {
 }
 
 /* 3D tilt subtle glare */
-.project-card::after {
+.project-card::after,
+.home-hero::after,
+.projects-hero::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -3221,7 +3223,11 @@ small {
   pointer-events: none;
 }
 .project-card:hover::after,
-.project-card:focus-visible::after {
+.project-card:focus-visible::after,
+.home-hero:hover::after,
+.home-hero:focus-visible::after,
+.projects-hero:hover::after,
+.projects-hero:focus-visible::after {
   opacity: 1;
 }
 

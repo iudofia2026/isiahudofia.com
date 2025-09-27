@@ -3396,17 +3396,231 @@ h1 + .hero-sub {
 /* ===== DISCORD PAGE STYLES ===== */
 
 /* Discord Hero Section */
-.discord-hero {
-  position: relative;
-  overflow: hidden;
-  border-radius: 28px;
-  padding: clamp(3rem, 6vw, 4.5rem) clamp(2rem, 4vw, 3.5rem);
-  margin-top: clamp(3rem, 8vh, 4.5rem);
-  margin-bottom: clamp(2rem, 5vh, 3rem);
-  background: linear-gradient(145deg, rgba(88, 101, 242, 0.2), rgba(114, 137, 218, 0.15), rgba(88, 101, 242, 0.1));
+/* New Discord Hero - Lightweight Design */
+.discord-hero-new {
+  margin-top: clamp(2rem, 6vh, 3rem);
+  margin-bottom: clamp(2rem, 4vh, 2.5rem);
+  padding: 0;
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.hero-text {
+  max-width: 500px;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(88, 101, 242, 0.15);
   border: 1px solid rgba(88, 101, 242, 0.3);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5865f2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  margin: 0 0 1rem;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.hero-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.feature-icon {
+  font-size: 1.2rem;
+  width: 24px;
   text-align: center;
-  box-shadow: 0 30px 80px -60px rgba(88, 101, 242, 0.4), 0 0 0 1px rgba(88, 101, 242, 0.1) inset;
+}
+
+.hero-actions {
+  margin-top: 2rem;
+}
+
+.hero-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #5865f2, #7289da);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+}
+
+/* Discord Mockup */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.discord-mockup {
+  background: #2f3136;
+  border-radius: 12px;
+  border: 1px solid #40444b;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
+}
+
+.mockup-header {
+  background: #36393f;
+  padding: 12px 16px;
+  border-bottom: 1px solid #40444b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mockup-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.mockup-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #72767d;
+}
+
+.mockup-title {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.mockup-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.message-row.translated {
+  background: rgba(88, 101, 242, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0 -8px;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5865f2, #7289da);
+  flex-shrink: 0;
+}
+
+.message-content {
+  flex: 1;
+}
+
+.message-name {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.message-text {
+  color: #dcddde;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.translation-badge {
+  display: inline-block;
+  background: rgba(88, 101, 242, 0.2);
+  color: #5865f2;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .hero-features {
+    align-items: center;
+  }
+  
+  .discord-mockup {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-container {
+    padding: 0 1rem;
+  }
+  
+  .hero-features {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .feature-item {
+    font-size: 0.85rem;
+  }
 }
 
 .discord-hero::before {

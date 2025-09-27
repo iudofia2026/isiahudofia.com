@@ -23,52 +23,48 @@
     </header>
 
     <main class="page-wrap thesis-page">
-      <section class="hero project-header card pad-xl thesis-hero" data-animate="fade">
-        <div>
-          <h1>B.S. Thesis — Making Sleep Data Actionable with Machine Learning</h1>
-          <p>Starting this year: bridge wearable signals and lived experience to produce evidence-backed guidance people can actually use.</p>
-          <p><strong>Advisor:</strong> Prof. Arielle Baskin-Sommers (Dept. of Psychology, Yale)</p>
-          <div class="status-chips">
-            <span>Data cleaning</span>
-            <span>Feature audits</span>
-            <span>Ridge</span>
-            <span>XGBoost</span>
-            <span>Calibration</span>
-          </div>
+      <section class="container hero" data-animate="fade">
+        <h1>B.S. Thesis — Making Sleep Data Actionable with ML</h1>
+        <p>Bridge wearable signals and lived experience to produce guidance people can actually use.</p>
+        <p><strong>Thesis Advisor:</strong> Prof. Arielle Baskin-Sommers (Dept. of Psychology, Yale)</p>
+        <div class="status-chips">
+          <span>DATA CLEANING</span>
+          <span>FEATURE AUDITS</span>
+          <span>RIDGE</span>
+          <span>XGBOOST</span>
+          <span>CALIBRATION</span>
+        </div>
+        <canvas id="bg-neural" class="hero-canvas" aria-hidden="true"></canvas>
+      </section>
+
+      <section class="container section">
+        <div class="card reveal-on-scroll">
+          <p>
+            I'm building this thesis to <strong>turn sleep signals into guidance people can trust</strong>. Instead of chasing leaderboard scores, I'm focusing on <strong>calibrated models</strong> and an <strong>explainer constrained to peer-reviewed sleep science</strong>. The goal is product-minded rigor: transparent features, reliable feedback, and recommendations that feel usable in real life. This approach emphasizes calibration over raw accuracy, constrained explanations grounded in validated sleep research, transparent feature engineering, real-world validation against user reports, and feedback loops that help people understand and trust the recommendations.
+          </p>
         </div>
       </section>
 
-      <section class="section section--tight" data-animate="fade">
-        <div class="motivation-card card">
-        <p>
-          I’m building this thesis to <strong>turn sleep signals into guidance people can trust</strong>. Instead of chasing leaderboard scores, I’m focusing on <strong>calibrated models</strong> and an <strong>explainer constrained to peer-reviewed sleep science</strong>. The goal is product-minded rigor: transparent features, reliable feedback, and recommendations that feel usable in real life. Advised by Prof. Arielle Baskin-Sommers, I’m starting this year with data cleaning and feature audits, then moving toward baselines, calibration, validation, and a constrained explainer.
-        </p>
-        </div>
-      </section>
-
-      <section class="section section--tight" data-animate="fade">
-        <div class="card-grid thesis-grid">
-        <article class="thesis-card card">
-          <p class="section-eyebrow">Project approach</p>
-          <h3 class="project-title">Evidence-constrained models with human-readable feedback</h3>
-          <ul class="thesis-list">
+      <section class="container section grid-2">
+        <div class="card reveal-on-scroll">
+          <h3>Project approach</h3>
+          <ul>
             <li>Train calibrated Ridge + XGBoost on multi-night wearable + survey features; prefer reliability over raw scores.</li>
             <li>Two-layer design: models for accuracy + an explainer constrained to peer-reviewed sleep science.</li>
             <li>Validate against self-reports and cognitive tasks to check real-world relevance.</li>
             <li>Emphasize transparent features and feedback loops so people understand why a suggestion was made.</li>
           </ul>
-        </article>
+        </div>
 
-        <article class="thesis-card card">
-          <p class="section-eyebrow">Semester plan</p>
-          <h3 class="project-title">Key milestones</h3>
+        <div class="card reveal-on-scroll">
+          <h3>Semester plan (simplified)</h3>
           <div class="milestone-grid">
             <div class="milestone-chip">
               <h4>Data ready</h4>
               <p>Clean/align nights, engineer ~100–120 features, audit leakage.</p>
             </div>
             <div class="milestone-chip">
-              <h4>Baselines + calibration</h4>
+              <h4>Baselines &amp; calibration</h4>
               <p>Ridge + XGBoost; reliability curves (ECE/Brier) and thresholds.</p>
             </div>
             <div class="milestone-chip">
@@ -80,19 +76,6 @@
               <p>LLM narratives bound to vetted sleep sources with safety checks.</p>
             </div>
           </div>
-        </article>
-        </div>
-      </section>
-
-      <section class="section section--tight" data-animate="fade">
-        <div class="detail-card card">
-          <p class="section-eyebrow" style="margin-bottom: 0.6rem;">Success signals</p>
-          <ul class="project-blurb" style="margin: 1rem 0 0 1.2rem; color: rgba(226,232,240,0.78);">
-            <li>Well-calibrated predictions (e.g., ECE < 0.05) with clear calibration plots.</li>
-            <li>Advisor-reviewed feature attributions that align with sleep science.</li>
-            <li>Users can accurately restate “why” behind a suggestion in brief tests.</li>
-            <li>No safety violations or off-source claims in the explainer.</li>
-          </ul>
         </div>
       </section>
     </main>

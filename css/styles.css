@@ -4,7 +4,14 @@
   --yale-blue-600: #184f8a;
   --sky-500: #69a8ff;
   --sky-400: #8bbcff;
-  --ink: #cfd7e6;
+  --ink: #eaf2ff;
+  --text: #ccd6e8;
+  --muted: #9fb1cf;
+  --yb-900: #0b2545;
+  --yb-800: #13315c;
+  --yb-700: #1b3a6b;
+  --accent: #7cc5ff;
+  --accent-2: #b6e3ff;
   --bg-0: #0b1020;
   --bg-1: #0f1730;
   --bg-2: #101a35;
@@ -13,7 +20,6 @@
   --glow-cyan: rgba(105, 168, 255, 0.35);
 
   --text-strong: #ffffff;
-  --text: #e8edf7;
   --text-dim: #aab7cf;
 
   --btn-primary-bg: linear-gradient(180deg, var(--sky-500), var(--sky-400));
@@ -273,9 +279,35 @@ strong {
 }
 
 .container {
-  max-width: 1224px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
+}
+
+.section {
+  padding-block: 48px;
+}
+
+.hero {
+  margin-top: 40px;
+  padding: 48px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(27, 58, 107, 0.6), rgba(11, 37, 69, 0.7));
+  box-shadow: 0 8px 40px rgba(16, 30, 50, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .grid {

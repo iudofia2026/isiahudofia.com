@@ -2709,245 +2709,382 @@ h1 + .hero-sub {
   transform: translateY(0);
 }
 
-/* Discord Section Styles */
-.discord-section {
+/* Discord Page - New Organized Layout */
+
+/* Base section styling */
+.discord-overview,
+.discord-technical,
+.discord-performance,
+.discord-stack,
+.discord-privacy,
+.discord-status {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 22px;
-  padding: clamp(2rem, 4vw, 3rem);
+  border-radius: 24px;
+  padding: clamp(2.5rem, 5vw, 4rem);
   margin-bottom: clamp(2rem, 4vw, 3rem);
-  backdrop-filter: blur(8px) saturate(140%);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.discord-section:hover {
-  transform: translateY(-2px);
-  border-color: rgba(124, 77, 255, 0.25);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 0 24px rgba(124, 77, 255, 0.20);
-}
-
-.discord-section-header {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  margin-bottom: clamp(1rem, 2vw, 1.5rem);
-}
-
-.discord-section-header h2 {
-  margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 800;
-  letter-spacing: -0.012em;
-  line-height: 1.12;
-  color: var(--text-strong);
-}
-
-.discord-section-icon {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  opacity: 0.8;
-}
-
-.discord-section-content p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.86);
-  line-height: 1.6;
-  font-size: clamp(1rem, 2vw, 1.125rem);
-}
-
-/* Discord Details Grid */
-.discord-details-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(1.5rem, 3vw, 2rem);
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-}
-
-.discord-detail-card {
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 20px;
-  padding: clamp(1.5rem, 3vw, 2rem);
-  backdrop-filter: blur(8px) saturate(140%);
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  backdrop-filter: blur(12px) saturate(140%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
-.discord-detail-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(124, 77, 255, 0.22);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 0 24px rgba(124, 77, 255, 0.20);
+.discord-overview:hover,
+.discord-technical:hover,
+.discord-performance:hover,
+.discord-stack:hover,
+.discord-privacy:hover,
+.discord-status:hover {
+  transform: translateY(-4px);
+  border-color: rgba(105, 168, 255, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(105, 168, 255, 0.15);
 }
 
-.discord-card-header {
+/* Section headers */
+.discord-overview h2,
+.discord-technical h2,
+.discord-performance h2,
+.discord-stack h2,
+.discord-privacy h2,
+.discord-status h2 {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text-strong);
+  position: relative;
   display: flex;
   align-items: center;
   gap: clamp(0.75rem, 1.5vw, 1rem);
-  margin-bottom: clamp(1rem, 2vw, 1.25rem);
 }
 
-.discord-card-header h3 {
-  margin: 0;
-  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
-  font-weight: 800;
-  letter-spacing: -0.012em;
-  line-height: 1.12;
-  color: var(--text-strong);
-}
-
-.discord-card-icon {
-  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+/* Icon styling */
+.section-icon {
+  width: clamp(1.5rem, 3vw, 2rem);
+  height: clamp(1.5rem, 3vw, 2rem);
+  color: var(--accent);
   opacity: 0.8;
+  flex-shrink: 0;
 }
 
-.discord-card-content p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.86);
-  line-height: 1.45;
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
+.solution-icon {
+  width: clamp(1rem, 2vw, 1.25rem);
+  height: clamp(1rem, 2vw, 1.25rem);
+  color: var(--accent);
+  opacity: 0.9;
+  margin-right: clamp(0.5rem, 1vw, 0.75rem);
 }
 
-.discord-constraints {
-  margin: 0;
-  padding-left: clamp(1rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.86);
-  line-height: 1.5;
+.flow-icon {
+  width: clamp(1rem, 2vw, 1.25rem);
+  height: clamp(1rem, 2vw, 1.25rem);
+  color: rgba(105, 168, 255, 0.7);
+  margin-right: clamp(0.5rem, 1vw, 0.75rem);
+  flex-shrink: 0;
 }
 
-.discord-constraints li {
-  margin-bottom: clamp(0.5rem, 1vw, 0.75rem);
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
+.discord-overview h2::after,
+.discord-technical h2::after,
+.discord-performance h2::after,
+.discord-stack h2::after,
+.discord-privacy h2::after,
+.discord-status h2::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), rgba(105, 168, 255, 0.5));
+  border-radius: 2px;
 }
 
-/* Discord Stack Section */
-.discord-stack-section {
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 22px;
-  padding: clamp(2rem, 4vw, 3rem);
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-  backdrop-filter: blur(8px) saturate(140%);
-  text-align: center;
+/* Overview Section */
+.discord-overview-content {
+  max-width: 800px;
 }
 
-.discord-stack-header h2 {
-  margin: 0 0 clamp(0.5rem, 1vw, 0.75rem);
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 800;
-  letter-spacing: -0.012em;
-  line-height: 1.12;
-  color: var(--text-strong);
-}
-
-.discord-stack-subtitle {
-  margin: 0 0 clamp(1.5rem, 3vw, 2rem);
-  color: rgba(255, 255, 255, 0.86);
-  line-height: 1.5;
-  font-size: clamp(1rem, 2vw, 1.125rem);
-}
-
-.discord-stack-chips {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: clamp(1rem, 2vw, 1.5rem);
-}
-
-.discord-stack-chip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(0.5rem, 1vw, 0.75rem);
-  padding: clamp(1rem, 2vw, 1.5rem);
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 16px;
-  backdrop-filter: blur(8px) saturate(140%);
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-  min-width: 120px;
-}
-
-.discord-stack-chip:hover {
-  transform: translateY(-2px);
-  border-color: rgba(124, 77, 255, 0.22);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), 0 0 20px rgba(124, 77, 255, 0.20);
-}
-
-.chip-icon {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  opacity: 0.8;
-}
-
-.discord-stack-chip span {
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
-  font-weight: 600;
-  color: var(--text-strong);
-  text-align: center;
-}
-
-/* Discord Status Section */
-.discord-status-section {
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 22px;
-  padding: clamp(2rem, 4vw, 3rem);
-  backdrop-filter: blur(8px) saturate(140%);
-}
-
-.discord-status-header {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  margin-bottom: clamp(1.5rem, 3vw, 2rem);
-}
-
-.discord-status-header h2 {
-  margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 800;
-  letter-spacing: -0.012em;
-  line-height: 1.12;
-  color: var(--text-strong);
-}
-
-.discord-status-icon {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  opacity: 0.8;
-}
-
-.discord-status-main {
-  margin: 0 0 clamp(1.5rem, 3vw, 2rem);
-  color: rgba(255, 255, 255, 0.86);
+.discord-overview-text {
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
   line-height: 1.6;
-  font-size: clamp(1rem, 2vw, 1.125rem);
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.discord-status-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: clamp(1rem, 2vw, 1.5rem);
-}
-
-.discord-status-item {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.discord-solution {
+  background: rgba(105, 168, 255, 0.08);
+  border: 1px solid rgba(105, 168, 255, 0.2);
   border-radius: 16px;
-  padding: clamp(1rem, 2vw, 1.25rem);
-  backdrop-filter: blur(8px) saturate(140%);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  position: relative;
 }
 
-.discord-status-item h4 {
-  margin: 0 0 clamp(0.5rem, 1vw, 0.75rem);
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  font-weight: 600;
+.discord-solution h3 {
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 700;
   color: var(--accent);
 }
 
-.discord-status-item p {
+.discord-solution p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.86);
-  line-height: 1.5;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Technical Implementation Flow */
+.discord-flow {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.discord-flow-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  align-items: start;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.discord-flow-step:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(105, 168, 255, 0.15);
+  transform: translateX(8px);
+}
+
+.flow-number {
+  width: clamp(3rem, 6vw, 4rem);
+  height: clamp(3rem, 6vw, 4rem);
+  background: linear-gradient(135deg, var(--accent), rgba(105, 168, 255, 0.8));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 800;
+  color: var(--bg-0);
+  box-shadow: 0 8px 24px rgba(105, 168, 255, 0.3);
+}
+
+.flow-content h3 {
+  margin: 0 0 clamp(0.75rem, 1.5vw, 1rem);
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
+  font-weight: 700;
+  color: var(--text-strong);
+  display: flex;
+  align-items: center;
+}
+
+.flow-content p {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Performance Metrics */
+.discord-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin: clamp(2rem, 4vw, 3rem) 0;
+}
+
+.performance-metric {
+  text-align: center;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.performance-metric:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(105, 168, 255, 0.15);
+  transform: translateY(-4px);
+}
+
+.metric-value {
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: clamp(0.5rem, 1vw, 0.75rem);
+}
+
+.metric-label {
   font-size: clamp(0.9rem, 1.8vw, 1rem);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.discord-constraints {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.discord-constraints h3 {
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.constraints-list {
+  margin: 0;
+  padding-left: clamp(1.25rem, 2.5vw, 1.75rem);
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+}
+
+.constraints-list li {
+  margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
+  font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+/* Technology Stack */
+.discord-stack-grid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.stack-item {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.stack-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(105, 168, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.stack-category {
+  font-size: clamp(0.85rem, 1.7vw, 1rem);
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: clamp(0.5rem, 1vw, 0.75rem);
+}
+
+.stack-tech {
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
+  font-weight: 700;
+  color: var(--text-strong);
+  margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.stack-desc {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+/* Privacy & User Experience */
+.privacy-content {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.privacy-feature {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.privacy-feature:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(105, 168, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.privacy-feature h3 {
+  margin: 0 0 clamp(0.75rem, 1.5vw, 1rem);
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.privacy-feature p {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Status Section */
+.status-content {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.status-main {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.status-main p {
+  margin: 0;
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.status-main a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(105, 168, 255, 0.3);
+  transition: border-color 0.3s ease;
+}
+
+.status-main a:hover {
+  border-color: var(--accent);
+}
+
+.status-roadmap {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+}
+
+.roadmap-item {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.roadmap-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(105, 168, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.roadmap-item h3 {
+  margin: 0 0 clamp(0.75rem, 1.5vw, 1rem);
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.roadmap-item p {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Responsive adjustments for new layout */

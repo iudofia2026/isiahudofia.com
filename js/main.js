@@ -51,12 +51,13 @@
       if (prefersReduced) stopCanvas(); else startCanvas();
     });
 
-    const revealTargets = document.querySelectorAll("[data-animate='fade']");
+    // IntersectionObserver for reveal-on-scroll
+    const revealTargets = document.querySelectorAll(".reveal-on-scroll");
     const revealObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade", "is-visible");
+            entry.target.classList.add("is-visible");
             observer.unobserve(entry.target);
           }
         });
@@ -64,7 +65,6 @@
       { threshold: 0.22 }
     );
     revealTargets.forEach((el) => {
-      el.classList.add("reveal-on-scroll");
       revealObserver.observe(el);
     });
 
@@ -235,6 +235,24 @@
       );
       items.forEach((item) => accordionObserver.observe(item));
     }
+
+    /* General accordion functionality */
+    const accordions = document.querySelectorAll(".accordion");
+    accordions.forEach((accordion) => {
+      const items = Array.from(accordion.querySelectorAll(".item"));
+      const closeAll = () => items.forEach((item) => item.classList.remove("open"));
+      
+      items.forEach((item) => {
+        const head = item.querySelector(".head");
+        if (head) {
+          head.addEventListener("click", () => {
+            const isOpen = item.classList.contains("open");
+            closeAll();
+            if (!isOpen) item.classList.add("open");
+          });
+        }
+      });
+    });
 
     /* ===== Projects Page Enhancements ===== */
     const projectsHero = document.querySelector(".projects-hero");
@@ -599,3 +617,147 @@
     });
   }
 })();
+
+// Neural canvas helper function
+function attachNeuralCanvas(containerSelector) {
+  const container = document.querySelector(containerSelector);
+  if (!container) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.className = 'hero-canvas';
+  canvas.style.position = 'absolute';
+  canvas.style.inset = '0';
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.style.zIndex = '0';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.borderRadius = 'inherit';
+  canvas.style.overflow = 'hidden';
+  
+  container.style.position = 'relative';
+  container.appendChild(canvas);
+
+  const motionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = motionMq.matches;
+  let ctx, nodes = [], raf, pulseTimer;
+  let w = 0, h = 0, dpr = 1;
+
+  // Limited palette to two blues
+  const NODE_COLORS = [
+    'rgba(124, 197, 255, 0.5)',
+    'rgba(182, 227, 255, 0.35)'
+  ];
+  const LINK_COLOR = 'rgba(124, 197, 255, 0.18)';
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    dpr = window.devicePixelRatio || 1;
+    w = Math.floor(rect.width * dpr);
+    h = Math.floor(rect.height * dpr);
+    canvas.width = w;
+    canvas.height = h;
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function init() {
+    ctx = canvas.getContext('2d');
+    resize();
+    window.addEventListener('resize', resize);
+    
+    const count = Math.max(45, Math.floor((canvas.clientWidth * canvas.clientHeight) / 20000));
+    nodes = Array.from({length: count}, () => {
+      const bx = Math.random(), by = Math.random();
+      return {
+        bx, by,
+        r: 1.2 + Math.random() * 1.8,
+        t: Math.random() * Math.PI * 2,
+        s: 0.6 + Math.random() * 1.2, // ~15% more drift than before
+        pulse: 0
+      };
+    });
+    start();
+  }
+
+  function draw() {
+    if (!ctx || reduced) return;
+    ctx.clearRect(0, 0, w, h);
+
+    // Positions with enhanced drift
+    const pos = nodes.map((n, i) => {
+      n.t += 0.005 * n.s; // Increased drift speed
+      const dx = Math.sin(n.t) * 0.035; // More drift
+      const dy = Math.cos(n.t) * 0.032; // More drift
+      const x = (n.bx + dx) * (w / dpr);
+      const y = (n.by + dy) * (h / dpr);
+      return {n, x, y, i};
+    });
+
+    // Draw nodes
+    for (const p of pos) {
+      const fill = NODE_COLORS[p.i % NODE_COLORS.length];
+      ctx.save();
+      ctx.globalAlpha = 0.3 + p.n.pulse;
+      ctx.shadowBlur = 16;
+      ctx.shadowColor = fill;
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.n.r * 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Draw links with clamped distance
+    const maxDist = Math.min(w, h) / 5.5; // Clamped link distance
+    ctx.lineWidth = 1;
+    for (let i = 0; i < pos.length; i++) {
+      for (let j = i + 1; j < pos.length; j++) {
+        const a = pos[i], b = pos[j];
+        const dx = a.x - b.x, dy = a.y - b.y, dist = Math.hypot(dx, dy);
+        if (dist < maxDist) {
+          const alpha = Math.max(0.08, 1 - dist / maxDist) * (0.6 + (a.n.pulse + b.n.pulse) * 0.3);
+          ctx.strokeStyle = LINK_COLOR.replace('0.18', alpha.toFixed(3));
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  function pulse() {
+    nodes.forEach(n => n.pulse = Math.random() < 0.12 ? 0.4 : n.pulse * 0.88);
+  }
+
+  function start() {
+    if (reduced) return;
+    cancelAnimationFrame(raf);
+    clearInterval(pulseTimer);
+    draw();
+    pulseTimer = setInterval(pulse, 2200);
+  }
+
+  function stop() {
+    cancelAnimationFrame(raf);
+    clearInterval(pulseTimer);
+  }
+
+  if (!reduced) {
+    init();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') stop(); else start();
+    });
+  }
+
+  motionMq.addEventListener('change', (event) => {
+    if (event.matches) {
+      stop();
+    } else {
+      start();
+    }
+  });
+
+  return { start, stop };
+}

@@ -2361,23 +2361,52 @@ small {
 }
 
 .feature-icon {
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 8px 16px;
-  border-radius: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   margin-bottom: 1.5rem;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-icon::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .feature-card:hover .feature-icon {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.4);
-  transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+.feature-card:hover .feature-icon::before {
+  opacity: 1;
+}
+
+.feature-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon svg {
+  transform: rotate(5deg);
 }
 
 .feature-content {

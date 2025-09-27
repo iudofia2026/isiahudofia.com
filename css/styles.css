@@ -1052,31 +1052,85 @@ small {
   line-height: 1.55;
 }
 
-.milestone-grid {
-  display: grid;
+/* Timeline Container */
+.timeline-container {
+  margin-top: 2rem;
+}
+
+.timeline-phase {
+  position: relative;
+  padding: 1.5rem 0;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+  margin-left: 1rem;
+  padding-left: 2rem;
+}
+
+.timeline-phase:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.timeline-phase:last-child {
+  border-left: none;
+}
+
+.phase-header {
+  display: flex;
+  align-items: center;
   gap: 1rem;
-  margin-top: 1.4rem;
+  margin-bottom: 0.75rem;
 }
 
-.milestone-chip {
-  background: rgba(105, 168, 255, 0.12);
-  border: 1px solid var(--edge);
-  border-radius: var(--radius-xl);
-  padding: 1rem 1.2rem;
-  color: var(--text);
-  box-shadow: inset 0 0 0 1px rgba(9, 18, 37, 0.32);
+.phase-month {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 80px;
+  text-align: center;
 }
 
-.milestone-chip h4 {
-  margin: 0 0 0.4rem;
-  font-size: 1rem;
-  color: var(--text-strong);
-}
-
-.milestone-chip p {
+.timeline-phase h4 {
   margin: 0;
-  font-size: 0.92rem;
-  color: var(--text-dim);
+  font-size: 1.2rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.timeline-phase p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Responsive Timeline */
+@media (max-width: 768px) {
+  .timeline-phase {
+    margin-left: 0.5rem;
+    padding-left: 1.5rem;
+  }
+  
+  .phase-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .phase-month {
+    min-width: auto;
+  }
 }
 
 .profile-photo {

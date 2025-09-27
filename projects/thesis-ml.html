@@ -47,35 +47,64 @@
         </div>
       </section>
 
-      <section class="container section grid-2">
+      <section class="container section">
         <div class="card reveal-on-scroll">
-          <h3>Project approach</h3>
-          <ul>
-            <li>Train calibrated Ridge + XGBoost on multi-night wearable + survey features; prefer reliability over raw scores.</li>
-            <li>Two-layer design: models for accuracy + an explainer constrained to peer-reviewed sleep science.</li>
-            <li>Validate against self-reports and cognitive tasks to check real-world relevance.</li>
-            <li>Emphasize transparent features and feedback loops so people understand why a suggestion was made.</li>
-          </ul>
-        </div>
-
-        <div class="card reveal-on-scroll">
-          <h3>Semester plan (simplified)</h3>
-          <div class="milestone-grid">
-            <div class="milestone-chip">
-              <h4>Data ready</h4>
-              <p>Clean/align nights, engineer ~100–120 features, audit leakage.</p>
+          <h3>Research Timeline</h3>
+          <div class="timeline-container">
+            <div class="timeline-phase">
+              <div class="phase-header">
+                <span class="phase-month">September</span>
+                <h4>Data Foundation</h4>
+              </div>
+              <p>Secure ABCD Fitbit dataset access, set up development environment, and begin feature extraction from sleep metrics (TST, sleep efficiency, REM %, HR/HRV, activity patterns).</p>
             </div>
-            <div class="milestone-chip">
-              <h4>Baselines &amp; calibration</h4>
-              <p>Ridge + XGBoost; reliability curves (ECE/Brier) and thresholds.</p>
+            
+            <div class="timeline-phase">
+              <div class="phase-header">
+                <span class="phase-month">October</span>
+                <h4>Model Development</h4>
+              </div>
+              <p>Implement and evaluate baseline predictive models using Ridge regression and XGBoost. Generate initial evaluation metrics and performance figures comparing model outputs to subjective sleep quality reports.</p>
             </div>
-            <div class="milestone-chip">
-              <h4>Validation</h4>
-              <p>Compare to self-reports &amp; cognitive tasks; subgroup error analysis.</p>
+            
+            <div class="timeline-phase">
+              <div class="phase-header">
+                <span class="phase-month">November</span>
+                <h4>Calibration & Explanation</h4>
+              </div>
+              <p>Add calibration methods (Platt scaling, isotonic regression) to improve reliability. Begin developing the retrieval-augmented LLM explanation layer using curated sleep research literature.</p>
             </div>
-            <div class="milestone-chip">
-              <h4>Constrained explainer</h4>
-              <p>LLM narratives bound to vetted sleep sources with safety checks.</p>
+            
+            <div class="timeline-phase">
+              <div class="phase-header">
+                <span class="phase-month">December</span>
+                <h4>Evaluation & Refinement</h4>
+              </div>
+              <p>Complete first round of evaluation and ablation studies comparing baseline vs. calibrated models. Refine literature corpus and explanation quality based on initial results.</p>
+            </div>
+            
+            <div class="timeline-phase">
+              <div class="phase-header">
+                <span class="phase-month">January-February</span>
+                <h4>Extensions & Validation</h4>
+              </div>
+              <p>Explore evidence-based recommendation layer mapping poor sleep patterns to peer-reviewed interventions. Test model generalization on additional datasets and continue refining results.</p>
+            </div>
+            
+            <div class="timeline-phase">
+              <div class="phase-header">
+                <span class="phase-month">March</span>
+                <h4>Analysis Consolidation</h4>
+              </div>
+              <p>Consolidate all analyses, finalize results and figures. Draft Results section and begin Introduction and Methods sections of the thesis.</p>
+            </div>
+            
+            <div class="timeline-phase">
+              <div class="phase-header">
+                <span class="phase-month">April</span>
+                <h4>Final Submission</h4>
+              </div>
+              <p>Complete Discussion section and final revisions. Incorporate advisor feedback and submit final thesis by April 24th.</p>
             </div>
           </div>
         </div>

@@ -231,37 +231,10 @@
       }
     });
 
-    /* Discord accordion */
-    const discordAccordion = document.querySelector("[data-discord-accordion]");
-    if (discordAccordion) {
-      const items = Array.from(discordAccordion.querySelectorAll(".timeline-item"));
-      const closeAll = () => items.forEach((item) => item.classList.remove("is-open"));
-      
-      items.forEach((item) => {
-        const trigger = item.querySelector(".timeline-trigger");
-        if (trigger) {
-          trigger.addEventListener("click", () => {
-            const isOpen = item.classList.contains("is-open");
-            closeAll();
-            if (!isOpen) item.classList.add("is-open");
-          });
-          
-          // Keyboard accessibility
-          trigger.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              trigger.click();
-            }
-          });
-        }
-      });
-
-      // Initialize with first item open
-      if (items.length > 0 && !items.some(item => item.classList.contains("is-open"))) {
-        items[0].classList.add("is-open");
-      }
-
-      const accordionObserver = new IntersectionObserver(
+    /* Discord page enhancements */
+    const discordCards = document.querySelectorAll(".discord-detail-card, .discord-stack-chip, .discord-status-item");
+    if (discordCards.length > 0) {
+      const cardObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -269,9 +242,9 @@
             }
           });
         },
-        { threshold: 0.25 }
+        { threshold: 0.15 }
       );
-      items.forEach((item) => accordionObserver.observe(item));
+      discordCards.forEach((card) => cardObserver.observe(card));
     }
 
     /* General accordion functionality */

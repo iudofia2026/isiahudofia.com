@@ -2015,7 +2015,7 @@ small {
   overflow: clip;
   border-radius: 22px;
   padding: clamp(1.6rem, 4.5vw, 3.4rem) clamp(1.25rem, 3vw, 2rem);
-  margin: 1.6rem auto 0.35rem;
+  margin: 1.6rem auto 2rem;
   background: radial-gradient(
       120% 100% at 10% 0%,
       hsl(var(--projHueA) 70% 16% / 0.45) 0%,
@@ -2059,7 +2059,7 @@ small {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gap);
-  margin: -0.1rem auto 1.6rem;
+  margin: 0 auto 1.6rem;
 }
 .projects-grid > .project-card {
   grid-column: span 4;

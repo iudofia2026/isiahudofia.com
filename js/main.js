@@ -8,13 +8,30 @@
   };
 
   ready(() => {
-    const navPage = document.body.dataset.page;
-    if (navPage) {
-      document.querySelectorAll("[data-nav]").forEach((link) => {
-        if (link.dataset.nav === navPage) {
-          link.classList.add("active");
-        }
-      });
+    // active link by data-page
+    const page = document.body.dataset.page;
+    if(page){ document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.dataset.nav===page) a.classList.add('active'); }); }
+
+    // hamburger
+    const btn = document.querySelector('.nav-toggle');
+    const links = document.querySelector('.nav-links');
+    if(btn && links){
+      const toggle = ()=> {
+        const open = links.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true':'false');
+      };
+      btn.addEventListener('click', toggle);
+      // close when clicking a link (mobile)
+      links.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>links.classList.remove('open')));
+      // close on escape
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') links.classList.remove('open'); });
+    }
+
+    // reveal-on-scroll
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!reduced){
+      const io = new IntersectionObserver((entries)=>entries.forEach(e=>e.isIntersecting && e.target.classList.add('in')),{threshold:0.18});
+      document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
     }
 
     // ----- Resume PDF link normalizer -----

@@ -9,57 +9,67 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body data-page="about">
-    <header class="site-header" data-animate="fade">
-      <nav class="nav-shell">
-        <a class="nav-brand" href="index.html">Isiah Udofia</a>
-        <div class="nav-links">
+    <header class="navbar">
+      <div class="container nav-inner">
+        <a class="brand" href="index.html">
+          <img src="assets/yale.svg" alt="Yale" width="22" height="22">
+          Isiah Udofia
+        </a>
+        <div class="nav-links" id="site-menu">
           <a href="index.html" data-nav="home">Home</a>
           <a href="projects.html" data-nav="projects">Projects</a>
           <a href="about.html" data-nav="about">About</a>
           <a href="contact.html" data-nav="contact">Contact</a>
           <a href="resume.html" data-nav="resume">Resume</a>
         </div>
-      </nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-menu">☰</button>
+      </div>
     </header>
 
-    <main class="page-wrap">
-      <section class="hero section section--tight hero--slim about-hero section-heading stack-vert" data-animate="fade">
-        <p class="section-eyebrow">Profile</p>
-        <h1 class="section-title">Isiah Udofia</h1>
-      </section>
-
-      <section class="section section--tight layout-two-col" data-animate="fade">
-        <div class="profile-photo">
-          <img src="assets/pfp.jpg" alt="Isiah Udofia" class="avatar" />
-        </div>
-        <div class="about-body">
-          <p><strong>Senior B.S. in Cognitive Science at Yale.</strong></p>
-          <p>
-            I’m interested in product management and how technical ideas become usable products.
-            Alongside coursework, I’ve built a live Discord voice translator, picking up design,
-            front-end, and AI integration skills.
-          </p>
-          <p>
-            Outside of coding, I run a video editing agency that partners with creators and brands—
-            managing editors, raising the quality bar, and translating analytics into stronger
-            storytelling.
-          </p>
-          <p>
-            For my senior thesis, I’m applying machine learning to multi-night wearable sleep data—
-            connecting the product-building mindset from projects and agency work with research that
-            impacts real people.
-          </p>
+    <main class="container">
+      <section class="section">
+        <div class="card hero reveal">
+          <h1>About Me</h1>
+          <p class="lead">Senior B.S. in Cognitive Science at Yale</p>
         </div>
       </section>
 
-      <section class="section section--tight page-section" data-animate="fade">
-        <p class="section-eyebrow">Focus areas</p>
-        <div class="tag-cloud">
-          <span>AI + ML</span>
-          <span>Product building</span>
-          <span>Startups</span>
-          <span>Video editing</span>
-          <span>Sleep research</span>
+      <section class="section">
+        <div class="grid grid-2 reveal">
+          <div class="profile-photo">
+            <img src="assets/pfp.jpg" alt="Isiah Udofia" class="avatar" />
+          </div>
+          <div class="about-body">
+            <p><strong>Senior B.S. in Cognitive Science at Yale.</strong></p>
+            <p>
+              I'm interested in product management and how technical ideas become usable products.
+              Alongside coursework, I've built a live Discord voice translator, picking up design,
+              front-end, and AI integration skills.
+            </p>
+            <p>
+              Outside of coding, I run a video editing agency that partners with creators and brands—
+              managing editors, raising the quality bar, and translating analytics into stronger
+              storytelling.
+            </p>
+            <p>
+              For my senior thesis, I'm applying machine learning to multi-night wearable sleep data—
+              connecting the product-building mindset from projects and agency work with research that
+              impacts real people.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="card reveal">
+          <h2>Focus Areas</h2>
+          <div class="tag-cloud">
+            <span>AI + ML</span>
+            <span>Product building</span>
+            <span>Startups</span>
+            <span>Video editing</span>
+            <span>Sleep research</span>
+          </div>
         </div>
       </section>
     </main>

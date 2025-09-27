@@ -9,45 +9,49 @@
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body data-page="projects">
-    <header class="site-header" data-animate="fade">
-      <nav class="nav-shell">
-        <a class="nav-brand" href="../index.html">Isiah Udofia</a>
-        <div class="nav-links">
+    <header class="navbar">
+      <div class="container nav-inner">
+        <a class="brand" href="../index.html">
+          <img src="../assets/yale.svg" alt="Yale" width="22" height="22">
+          Isiah Udofia
+        </a>
+        <div class="nav-links" id="site-menu">
           <a href="../index.html" data-nav="home">Home</a>
           <a href="../projects.html" data-nav="projects">Projects</a>
           <a href="../about.html" data-nav="about">About</a>
           <a href="../contact.html" data-nav="contact">Contact</a>
           <a href="../resume.html" data-nav="resume">Resume</a>
         </div>
-      </nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-menu">☰</button>
+      </div>
     </header>
 
-    <main class="page-wrap">
-      <section class="hero-panel discord-hero" data-animate="fade">
-        <div class="hero-content">
-          <h1 class="hero-title">Live Translator for Discord</h1>
-          <p class="hero-subtitle">Real-time translation built natively for Discord voice calls</p>
-          <div class="hero-actions">
+    <main class="container">
+      <section class="section">
+        <div class="project-header reveal">
+          <h1>Live Translator for Discord</h1>
+          <p>Real-time translation built natively for Discord voice calls</p>
+          <div class="project-actions">
             <a class="btn btn-primary" href="https://livecalltranslator.netlify.app/" target="_blank" rel="noopener">Open Live Website</a>
             <a class="btn btn-ghost" href="mailto:isiah.udofia@yale.edu">Contact</a>
           </div>
         </div>
-        <canvas id="bg-neural" class="hero-canvas" aria-hidden="true"></canvas>
       </section>
 
-      <section class="container section">
-        <div class="project-overview">
-          <div class="card reveal-on-scroll">
-            <h2>Problem & Solution</h2>
-            <p>Cross-language voice chats lose momentum when translation lags or lives outside Discord. Live Translator provides real-time translation with native Discord integration, ensuring no context switching and clear in-channel visibility.</p>
-          </div>
+      <section class="section">
+        <div class="card reveal">
+          <h2>Problem & Solution</h2>
+          <p>Cross-language voice chats lose momentum when translation lags or lives outside Discord. Live Translator provides real-time translation with native Discord integration, ensuring no context switching and clear in-channel visibility.</p>
+        </div>
+      </section>
 
-          <div class="card reveal-on-scroll">
-            <h2>Technical Approach</h2>
-            <p>Streaming STT (Deepgram) feeds a translation worker; inline bot posts interim + final lines. Optional captions overlay mirrors chat feed for on-screen visibility.</p>
-            <div class="constraints">
-              <h3>Key Constraints</h3>
-              <ul>
+      <section class="section">
+        <div class="card reveal">
+          <h2>Technical Approach</h2>
+          <p>Streaming STT (Deepgram) feeds a translation worker; inline bot posts interim + final lines. Optional captions overlay mirrors chat feed for on-screen visibility.</p>
+          <div class="constraints">
+            <h3>Key Constraints</h3>
+            <ul>
                 <li>&lt;250ms interim response, sub-second final translations</li>
                 <li>Works inside Discord chat; keeps moderator controls intact</li>
                 <li>Reconnection guards + jitter buffers smooth dropouts</li>

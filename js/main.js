@@ -115,7 +115,7 @@
           y: baseY,
           radius: 1.2 + Math.random() * 1.5,
           offset: Math.random() * Math.PI * 2,
-          speed: 0.15 + Math.random() * 0.25,
+          speed: 0.08 + Math.random() * 0.12,
           pulse: 0,
         };
       });
@@ -129,7 +129,7 @@
         "rgba(147,51,234,0.45)",
       ];
       const nodePositions = nodes.map((node) => {
-        node.offset += 0.0008 * node.speed * (performance.now() / 16.6);
+        node.offset += 0.0004 * node.speed * (performance.now() / 16.6);
         const driftX = Math.sin(node.offset) * 0.015;
         const driftY = Math.cos(node.offset) * 0.015;
         const x = (node.baseX + driftX) * canvas.width;
@@ -192,7 +192,7 @@
       cancelAnimationFrame(animationId);
       draw();
       clearInterval(pulseTimer);
-      pulseTimer = setInterval(pulseNodes, 2400);
+      pulseTimer = setInterval(pulseNodes, 4000);
     };
 
     const stopCanvas = () => {

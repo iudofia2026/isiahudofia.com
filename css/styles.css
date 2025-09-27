@@ -2361,14 +2361,23 @@ small {
 }
 
 .feature-icon {
-  font-size: 2.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   margin-bottom: 1.5rem;
-  filter: grayscale(100%) brightness(1.2);
-  transition: filter 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .feature-card:hover .feature-icon {
-  filter: grayscale(0%) brightness(1);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
 }
 
 .feature-content {
@@ -2513,11 +2522,11 @@ small {
 
 /* timeline & rail */
 .zen-loop{position:relative;overflow:hidden}
-.zen-rail{position:absolute;left:28px;top:76px;bottom:24px;width:2px;background:linear-gradient(var(--sky-500),var(--yale-blue-600));opacity:.6;border-radius:2px}
+.zen-rail{position:absolute;left:28px;top:76px;bottom:24px;width:2px;background:linear-gradient(#ffffff,#cccccc);opacity:.6;border-radius:2px}
 .timeline{margin-left:24px}
 .timeline-item{position:relative;border:1px solid var(--edge);background:rgba(9,18,37,.78);border-radius:var(--radius-xl);padding:16px 16px 14px;box-shadow:inset 0 0 0 1px rgba(5,12,24,0.35);transition:transform .2s ease, box-shadow .2s ease}
-.timeline-item:hover{transform:translateY(-2px);box-shadow:0 16px 44px -30px rgba(105,168,255,.45)}
-.timeline-item::before{content:"";position:absolute;left:-22px;top:22px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, rgba(105,168,255,.9));box-shadow:0 0 14px rgba(105,168,255,.45)}
+.timeline-item:hover{transform:translateY(-2px);box-shadow:0 16px 44px -30px rgba(255,255,255,.45)}
+.timeline-item::before{content:"";position:absolute;left:-22px;top:22px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.9));box-shadow:0 0 14px rgba(255,255,255,.45)}
 .timeline-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .timeline-copy{color:var(--text-dim);margin:0}
 

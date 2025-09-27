@@ -3396,107 +3396,134 @@ h1 + .hero-sub {
 /* ===== DISCORD PAGE STYLES ===== */
 
 /* Discord Hero Section */
-/* New Discord Hero - Lightweight Design */
-.discord-hero-new {
-  margin-top: clamp(2rem, 6vh, 3rem);
-  margin-bottom: clamp(2rem, 4vh, 2.5rem);
-  padding: 0;
+/* Professional Discord Hero */
+.discord-hero-professional {
+  margin-top: clamp(3rem, 8vh, 5rem);
+  margin-bottom: clamp(3rem, 6vh, 4rem);
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  background: linear-gradient(135deg, rgba(88, 101, 242, 0.08), rgba(114, 137, 218, 0.05));
+  border-radius: 24px;
+  border: 1px solid rgba(88, 101, 242, 0.15);
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 800px;
+.discord-hero-professional::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(88, 101, 242, 0.1), transparent 60%),
+              radial-gradient(circle at 80% 80%, rgba(114, 137, 218, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.hero-wrapper {
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-.hero-text {
-  max-width: 600px;
+.hero-content {
   text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .hero-badge {
   display: inline-block;
-  padding: 6px 12px;
-  background: rgba(88, 101, 242, 0.15);
-  border: 1px solid rgba(88, 101, 242, 0.3);
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 8px 16px;
+  background: rgba(88, 101, 242, 0.12);
+  border: 1px solid rgba(88, 101, 242, 0.25);
+  border-radius: 24px;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #5865f2;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
-}
-
-.hero-title {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 800;
-  margin: 0 0 1rem;
-  line-height: 1.1;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 2rem;
-  line-height: 1.6;
-}
-
-.hero-features {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  letter-spacing: 0.08em;
   margin-bottom: 2rem;
 }
 
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.9);
+.hero-title {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 800;
+  margin: 0 0 1.5rem;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff, rgba(114, 137, 218, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.feature-icon {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 4px 8px;
-  border-radius: 12px;
-  background: rgba(88, 101, 242, 0.15);
-  border: 1px solid rgba(88, 101, 242, 0.25);
-  color: #5865f2;
-  min-width: 60px;
+.hero-description {
+  font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 3rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.stat-item {
   text-align: center;
 }
 
-.hero-actions {
+.stat-number {
+  display: block;
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: #5865f2;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hero-cta {
   margin-top: 2rem;
 }
 
-.hero-actions .btn {
+.cta-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 12px 24px;
+  gap: 0.75rem;
+  padding: 16px 32px;
   background: linear-gradient(135deg, #5865f2, #7289da);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
+  font-size: 1rem;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
 }
 
-.hero-actions .btn:hover {
+.cta-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+  box-shadow: 0 8px 30px rgba(88, 101, 242, 0.4);
+  background: linear-gradient(135deg, #4752c4, #5865f2);
 }
 
 /* Discord Mockup */
@@ -3600,24 +3627,34 @@ h1 + .hero-sub {
 
 /* Responsive Design */
 @media (max-width: 968px) {
-  .hero-features {
-    align-items: center;
+  .hero-stats {
+    gap: 2rem;
+  }
+  
+  .hero-wrapper {
+    padding: 0 1.5rem;
   }
 }
 
 @media (max-width: 640px) {
-  .hero-container {
+  .discord-hero-professional {
+    margin-top: clamp(2rem, 6vh, 3rem);
+    margin-bottom: clamp(2rem, 4vh, 2.5rem);
+    padding: clamp(2rem, 4vw, 3rem) 0;
+  }
+  
+  .hero-wrapper {
     padding: 0 1rem;
   }
   
-  .hero-features {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  .hero-stats {
+    flex-direction: column;
+    gap: 1.5rem;
   }
   
-  .feature-item {
-    font-size: 0.85rem;
+  .cta-button {
+    padding: 14px 28px;
+    font-size: 0.95rem;
   }
 }
 

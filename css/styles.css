@@ -1507,19 +1507,35 @@ small {
 
 /* Sunset theme for thesis page */
 .thesis-page {
-  background: var(--sunset-bg);
+  background: linear-gradient(135deg, 
+    var(--sunset-bg) 0%, 
+    var(--sunset-bg-light) 25%, 
+    rgba(255, 107, 53, 0.1) 50%, 
+    var(--sunset-bg-light) 75%, 
+    var(--sunset-bg) 100%);
   color: var(--sunset-text);
+  min-height: 100vh;
+}
+
+body[data-page="projects"] .thesis-page {
+  background: linear-gradient(135deg, 
+    var(--sunset-bg) 0%, 
+    var(--sunset-bg-light) 25%, 
+    rgba(255, 107, 53, 0.1) 50%, 
+    var(--sunset-bg-light) 75%, 
+    var(--sunset-bg) 100%);
 }
 
 .thesis-page .hero {
   background: linear-gradient(135deg, 
-    rgba(255, 107, 53, 0.4) 0%, 
-    rgba(255, 140, 105, 0.3) 25%, 
-    rgba(255, 127, 80, 0.35) 50%, 
-    rgba(204, 74, 31, 0.4) 75%, 
-    rgba(45, 27, 14, 0.9) 100%);
-  border: 1px solid rgba(255, 107, 53, 0.2);
-  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.15), 0 0 0 1px rgba(255, 107, 53, 0.1);
+    rgba(255, 107, 53, 0.6) 0%, 
+    rgba(255, 140, 105, 0.5) 25%, 
+    rgba(255, 127, 80, 0.55) 50%, 
+    rgba(204, 74, 31, 0.6) 75%, 
+    rgba(45, 27, 14, 0.7) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.4);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.25), 0 0 0 1px rgba(255, 107, 53, 0.2);
+  backdrop-filter: blur(15px);
 }
 
 .thesis-page .hero h1 {
@@ -1540,11 +1556,12 @@ small {
 
 .thesis-page .card {
   background: linear-gradient(160deg, 
-    rgba(255, 107, 53, 0.15) 0%, 
-    rgba(45, 27, 14, 0.8) 100%);
-  border: 1px solid rgba(255, 107, 53, 0.2);
+    rgba(255, 107, 53, 0.25) 0%, 
+    rgba(45, 27, 14, 0.6) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.4);
   color: var(--sunset-text);
-  box-shadow: 0 8px 32px rgba(255, 107, 53, 0.1);
+  box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .thesis-page .card h3 {

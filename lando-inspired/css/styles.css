@@ -2,21 +2,28 @@
    Lando Norris-Inspired Design System
    ======================================== */
 
-:root {
-  /* Color Palette - Dark Green Theme with Lime Accents */
-  --color-dark-green: #0a1f1a;
-  --color-medium-green: #13312a;
-  --color-lime: #c1ff72;
-  --color-lime-hover: #d4ff9f;
-  --color-white: #ffffff;
-  --color-off-white: #f5f5f5;
-  --color-gray-light: #e0e0e0;
-  --color-gray-medium: #999999;
-  --color-gray-dark: #333333;
+/* Google Fonts - Outfit (Display) & Inter (Body) */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-  /* Typography - Fluid Scaling */
-  --font-primary: 'Brier', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+:root {
+  /* Color Palette - White, Navy & Dark Grey Theme */
+  --color-navy: #001f3f;
+  --color-navy-dark: #001429;
+  --color-navy-light: #003366;
+  --color-white: #ffffff;
+  --color-off-white: #f8f9fa;
+  --color-gray-light: #e8eaed;
+  --color-gray-medium: #6c757d;
+  --color-gray-dark: #2c3e50;
+  --color-accent-blue: #0066cc;
+  --color-accent-blue-hover: #0052a3;
+
+  /* Typography - Lando Fonts */
+  /* Using Outfit as Brier alternative (similar geometric sans) */
+  /* Using Inter as Mona alternative (variable font) */
+  --font-display: 'Outfit', 'Brier', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
   /* Fluid Font Sizes (320px - 1920px viewport) */
   --fluid-min-width: 320;
@@ -90,13 +97,16 @@ html.lenis {
 }
 
 body {
-  font-family: var(--font-system);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
+  font-weight: 400;
   line-height: 1.6;
-  color: var(--color-white);
-  background-color: var(--color-dark-green);
+  color: var(--color-gray-dark);
+  background-color: var(--color-white);
   overflow-x: hidden;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Hide scrollbar but keep functionality */
@@ -127,10 +137,18 @@ button {
   font-family: inherit;
 }
 
+/* Typography hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
 /* Focus visible for accessibility */
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--color-lime);
+  outline: 2px solid var(--color-accent-blue);
   outline-offset: 4px;
 }
 
@@ -149,8 +167,9 @@ button:focus-visible {
 }
 
 .main-nav[data-nav-theme="light"] {
-  background-color: var(--color-off-white);
-  color: var(--color-dark-green);
+  background-color: var(--color-white);
+  color: var(--color-navy);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .main-nav[data-nav-theme="dark"] {
@@ -159,7 +178,12 @@ button:focus-visible {
 }
 
 .main-nav.scrolled[data-nav-theme="dark"] {
-  background-color: rgba(10, 31, 26, 0.95);
+  background-color: rgba(0, 31, 63, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.main-nav.scrolled[data-nav-theme="light"] {
+  background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
 }
 
@@ -203,7 +227,7 @@ button:focus-visible {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: var(--color-lime);
+  background-color: var(--color-accent-blue);
   transition: width 0.3s var(--ease-lando);
 }
 
@@ -245,7 +269,7 @@ button:focus-visible {
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: var(--color-dark-green);
+  background-color: var(--color-navy);
   z-index: var(--z-menu);
   display: flex;
   align-items: center;
@@ -338,8 +362,8 @@ button:focus-visible {
   flex-direction: column;
   gap: var(--spacing-xs);
   padding: var(--spacing-md) var(--spacing-lg);
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(193, 255, 114, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
   backdrop-filter: blur(10px);
 }
@@ -348,8 +372,9 @@ button:focus-visible {
   font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-lime);
+  color: var(--color-accent-blue);
   font-weight: 600;
+  font-family: var(--font-display);
 }
 
 .event-details {
@@ -380,7 +405,7 @@ button:focus-visible {
 .scroll-line {
   width: 2px;
   height: 60px;
-  background: linear-gradient(to bottom, var(--color-lime), transparent);
+  background: linear-gradient(to bottom, var(--color-accent-blue), transparent);
   animation: scrollPulse 2s ease-in-out infinite;
 }
 
@@ -421,7 +446,7 @@ button:focus-visible {
 .message-section {
   padding: var(--spacing-2xl) var(--spacing-lg);
   background-color: var(--color-off-white);
-  color: var(--color-dark-green);
+  color: var(--color-navy);
 }
 
 .container {
@@ -457,13 +482,15 @@ button:focus-visible {
 }
 
 .on-track-section {
-  background-color: var(--color-dark-green);
+  background-color: var(--color-navy);
   color: var(--color-white);
 }
 
 .off-track-section {
-  background-color: var(--color-off-white);
-  color: var(--color-dark-green);
+  background-color: var(--color-white);
+  color: var(--color-navy);
+  border-top: 1px solid var(--color-gray-light);
+  border-bottom: 1px solid var(--color-gray-light);
 }
 
 .section-header {
@@ -549,12 +576,13 @@ button:focus-visible {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-lime);
+  font-family: var(--font-display);
+  color: var(--color-accent-blue);
   transition: gap 0.3s var(--ease-out-cubic);
 }
 
 .off-track-section .track-link {
-  color: var(--color-dark-green);
+  color: var(--color-accent-blue);
 }
 
 .track-link:hover {
@@ -575,8 +603,8 @@ button:focus-visible {
 
 .timeline-section {
   padding: var(--spacing-2xl) var(--spacing-lg);
-  background-color: var(--color-dark-green);
-  color: var(--color-white);
+  background-color: var(--color-off-white);
+  color: var(--color-navy);
 }
 
 .helmet-grid {
@@ -662,8 +690,8 @@ button:focus-visible {
 
 .partnerships-section {
   padding: var(--spacing-2xl) var(--spacing-lg);
-  background-color: var(--color-off-white);
-  color: var(--color-dark-green);
+  background-color: var(--color-white);
+  color: var(--color-navy);
 }
 
 .partnerships-grid {
@@ -706,7 +734,8 @@ button:focus-visible {
 .partnership-text {
   font-size: var(--font-size-xl);
   font-weight: 700;
-  color: var(--color-dark-green);
+  font-family: var(--font-display);
+  color: var(--color-navy);
 }
 
 .partnership-name {
@@ -721,7 +750,7 @@ button:focus-visible {
 
 .contact-section {
   padding: var(--spacing-2xl) var(--spacing-lg);
-  background-color: var(--color-dark-green);
+  background-color: var(--color-navy);
   color: var(--color-white);
 }
 
@@ -744,14 +773,14 @@ button:focus-visible {
   gap: var(--spacing-md);
   padding: var(--spacing-lg);
   background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(193, 255, 114, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   transition: background-color 0.3s, border-color 0.3s, transform 0.3s var(--ease-out-cubic);
 }
 
 .contact-card:hover {
-  background-color: rgba(193, 255, 114, 0.1);
-  border-color: var(--color-lime);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-4px);
 }
 
@@ -761,8 +790,8 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-lime);
-  color: var(--color-dark-green);
+  background-color: var(--color-accent-blue);
+  color: var(--color-white);
   border-radius: 8px;
   flex-shrink: 0;
 }
@@ -807,7 +836,7 @@ button:focus-visible {
 }
 
 .social-link:hover {
-  background-color: rgba(193, 255, 114, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
 
@@ -817,9 +846,9 @@ button:focus-visible {
 
 .main-footer {
   padding: var(--spacing-xl) var(--spacing-lg);
-  background-color: var(--color-medium-green);
+  background-color: var(--color-navy-dark);
   color: var(--color-white);
-  border-top: 1px solid rgba(193, 255, 114, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-content {
@@ -853,7 +882,7 @@ button:focus-visible {
 
 .footer-links a:hover {
   opacity: 1;
-  color: var(--color-lime);
+  color: var(--color-accent-blue);
 }
 
 /* ========================================
@@ -866,7 +895,7 @@ button:focus-visible {
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: var(--color-dark-green);
+  background-color: var(--color-navy);
   color: var(--color-white);
   display: none;
   flex-direction: column;

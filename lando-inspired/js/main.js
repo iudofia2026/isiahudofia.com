@@ -212,7 +212,7 @@
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(193, 255, 114, ${this.opacity})`;
+        ctx.fillStyle = `rgba(0, 102, 204, ${this.opacity})`;
         ctx.fill();
       }
     }
@@ -233,8 +233,8 @@
 
       // Create gradient background
       const gradient = ctx.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, 'rgba(10, 31, 26, 0.3)');
-      gradient.addColorStop(1, 'rgba(19, 49, 42, 0.5)');
+      gradient.addColorStop(0, 'rgba(0, 31, 63, 0.3)');
+      gradient.addColorStop(1, 'rgba(0, 20, 41, 0.5)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
@@ -253,7 +253,7 @@
 
           if (distance < 150) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(193, 255, 114, ${(1 - distance / 150) * 0.2})`;
+            ctx.strokeStyle = `rgba(0, 102, 204, ${(1 - distance / 150) * 0.2})`;
             ctx.lineWidth = 1;
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -402,7 +402,7 @@
     position: fixed;
     width: 20px;
     height: 20px;
-    border: 2px solid var(--color-lime);
+    border: 2px solid #0066cc;
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
@@ -443,7 +443,7 @@
     hoverables.forEach(el => {
       el.addEventListener('mouseenter', () => {
         cursor.style.transform = 'scale(1.5)';
-        cursor.style.borderColor = 'var(--color-lime)';
+        cursor.style.borderColor = '#0066cc';
       });
 
       el.addEventListener('mouseleave', () => {
@@ -455,9 +455,9 @@
   // ========================================
   // Console Easter Egg
   // ========================================
-  console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #c1ff72; font-weight: bold;');
-  console.log('%cIsiah Udofia - Yale University 2026', 'font-size: 14px; color: #69a8ff;');
-  console.log('%cInterested in the code? Check out the repo!', 'font-size: 12px; color: #999;');
+  console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');
+  console.log('%cIsiah Udofia - Yale University 2026', 'font-size: 14px; color: #001f3f;');
+  console.log('%cInterested in the code? Check out the repo!', 'font-size: 12px; color: #6c757d;');
 
   // ========================================
   // Performance Monitoring

@@ -323,22 +323,42 @@ button:focus-visible {
 .nav-brand {
   display: flex;
   align-items: center;
-  transition: opacity 0.3s var(--ease-out-cubic);
-}
-
-.nav-brand:hover {
-  opacity: 0.8;
-}
-
-.nav-logo {
-  height: 65px;
-  width: auto;
-  display: block;
   transition: transform 0.3s var(--ease-out-cubic);
 }
 
-.nav-brand:hover .nav-logo {
+.nav-brand:hover {
+  transform: translateY(-1px);
+}
+
+.nav-logo-wrapper {
+  position: relative;
+  display: inline-block;
+  height: 65px;
+}
+
+.nav-logo {
+  height: 100%;
+  width: auto;
+  display: block;
+  transition: opacity 0.4s var(--ease-out-cubic), transform 0.4s var(--ease-out-cubic);
+}
+
+.nav-logo--hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.nav-brand:hover .nav-logo--default {
+  opacity: 0;
   transform: scale(1.05);
+}
+
+.nav-brand:hover .nav-logo--hover {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Hide desktop nav links - using hamburger menu only */

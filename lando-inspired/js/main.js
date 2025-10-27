@@ -41,18 +41,23 @@
   }
 
   // ========================================
-  // Loading Screen Transition
+  // Loading Screen Transition - Circular Progress
   // ========================================
   const loadingScreen = document.getElementById('loading-screen');
-  const loadingProgress = document.getElementById('loading-progress');
+  const loadingCircleProgress = document.getElementById('loading-circle-progress');
+
+  // Circle circumference: 2 * PI * radius = 2 * 3.14159 * 90 = 565.48
+  const circumference = 565.48;
 
   let progress = 0;
   const progressInterval = setInterval(() => {
     progress += Math.random() * 15;
     if (progress > 100) progress = 100;
 
-    if (loadingProgress) {
-      loadingProgress.style.width = `${progress}%`;
+    if (loadingCircleProgress) {
+      // Calculate dash offset (100% = 0 offset, 0% = full circumference)
+      const offset = circumference - (progress / 100) * circumference;
+      loadingCircleProgress.style.strokeDashoffset = offset;
     }
 
     if (progress >= 100) {
@@ -63,11 +68,11 @@
   // Wait for page load
   window.addEventListener('load', () => {
     // Ensure progress reaches 100%
-    if (loadingProgress) {
-      loadingProgress.style.width = '100%';
+    if (loadingCircleProgress) {
+      loadingCircleProgress.style.strokeDashoffset = 0;
     }
 
-    // Initialize Vanta TOPOLOGY background before transition
+    // Initialize Vanta NET background before transition
     initTopographyBackground();
 
     // Start mask transition after brief delay

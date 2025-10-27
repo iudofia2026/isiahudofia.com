@@ -196,69 +196,72 @@ button:focus-visible {
 }
 
 .nav-brand {
-  font-size: var(--font-size-lg);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s var(--ease-out-cubic);
 }
 
 .nav-brand:hover {
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
+.nav-logo {
+  height: 50px;
+  width: auto;
+  display: block;
+  transition: transform 0.3s var(--ease-out-cubic);
+}
+
+.nav-brand:hover .nav-logo {
+  transform: scale(1.05);
+}
+
+/* Hide desktop nav links - using hamburger menu only */
 .nav-links {
-  display: flex;
-  gap: var(--spacing-lg);
-}
-
-.nav-links a {
-  position: relative;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition: opacity 0.2s;
-}
-
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: var(--color-accent-blue);
-  transition: width 0.3s var(--ease-lando);
-}
-
-.nav-links a:hover::after {
-  width: 100%;
+  display: none;
 }
 
 .hamburger-menu {
-  display: none;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 6px;
-  padding: var(--spacing-xs);
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  z-index: calc(var(--z-menu) + 1);
+  transition: transform 0.3s var(--ease-out-cubic);
 }
 
-.hamburger-menu span {
+.hamburger-menu:hover {
+  transform: scale(1.1);
+}
+
+.hamburger-line {
   display: block;
   width: 24px;
   height: 2px;
   background-color: currentColor;
-  transition: transform 0.3s var(--ease-lando), opacity 0.3s;
+  border-radius: 2px;
+  transition: all 0.4s var(--ease-lando);
+  transform-origin: center;
 }
 
-.hamburger-menu.active span:nth-child(1) {
+/* Lando-style X animation */
+.hamburger-menu.active .hamburger-line:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
 
-.hamburger-menu.active span:nth-child(2) {
+.hamburger-menu.active .hamburger-line:nth-child(2) {
   opacity: 0;
+  transform: scaleX(0);
 }
 
-.hamburger-menu.active span:nth-child(3) {
+.hamburger-menu.active .hamburger-line:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
 
@@ -294,21 +297,45 @@ button:focus-visible {
 .mobile-menu-link {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  justify-content: space-between;
+  gap: var(--spacing-lg);
   font-size: var(--font-size-xl);
   font-weight: 700;
-  transition: transform 0.3s var(--ease-out-cubic);
+  font-family: var(--font-display);
+  padding: var(--spacing-md) 0;
+  transition: all 0.4s var(--ease-out-cubic);
+  opacity: 0;
+  transform: translateX(-30px);
 }
 
+.mobile-menu.active .mobile-menu-link {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.mobile-menu.active .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; }
+.mobile-menu.active .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; }
+.mobile-menu.active .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; }
+.mobile-menu.active .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; }
+.mobile-menu.active .mobile-menu-link:nth-child(5) { transition-delay: 0.3s; }
+.mobile-menu.active .mobile-menu-link:nth-child(6) { transition-delay: 0.35s; }
+
 .mobile-menu-link:hover {
-  transform: translateX(10px);
+  transform: translateX(15px);
+  color: var(--color-accent-blue);
 }
 
 .mobile-menu-preview {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
   object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s var(--ease-out-cubic);
+}
+
+.mobile-menu-link:hover .mobile-menu-preview {
+  transform: scale(1.1);
 }
 
 /* ========================================
@@ -978,14 +1005,6 @@ button:focus-visible {
     --spacing-lg: 2rem;
     --spacing-xl: 3rem;
     --spacing-2xl: 4rem;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .hamburger-menu {
-    display: flex;
   }
 
   .hero-section {

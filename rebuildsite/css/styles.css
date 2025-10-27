@@ -450,6 +450,15 @@ button:focus-visible {
   color: var(--color-accent-blue);
 }
 
+.mobile-menu-link[aria-disabled="true"] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.mobile-menu-link[aria-disabled="true"] .mobile-menu-preview {
+  filter: grayscale(1) brightness(0.75);
+}
+
 .mobile-menu-preview {
   width: 80px;
   height: 80px;
@@ -486,6 +495,58 @@ button:focus-visible {
   height: 100%;
   z-index: var(--z-canvas);
 }
+
+.hero-label-layer {
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-canvas) + 1);
+  pointer-events: none;
+}
+
+.hero-label {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--color-navy);
+  box-shadow: 0 12px 30px rgba(0, 31, 63, 0.12);
+  transform: translate3d(-50%, -50%, 0);
+  transition: opacity 0.3s var(--ease-out-cubic), background 0.3s var(--ease-out-cubic), color 0.3s var(--ease-out-cubic);
+  pointer-events: auto;
+  opacity: 0;
+  text-decoration: none;
+}
+
+.hero-label::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-navy);
+  box-shadow: 0 0 0 4px rgba(0, 31, 63, 0.12);
+}
+
+.hero-label:hover {
+  background: rgba(0, 31, 63, 0.92);
+  color: var(--color-white);
+}
+
+@media (max-width: 768px) {
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    padding: 0.28rem 0.6rem;
+    gap: 0.35rem;
+  }
+}
+
 
 .hero-content {
   position: relative;

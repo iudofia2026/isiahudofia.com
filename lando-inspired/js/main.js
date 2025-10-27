@@ -6,7 +6,7 @@
   'use strict';
 
   // ========================================
-  // Vanta.js TOPOLOGY - 2D Topographic Mesh
+  // Vanta.js NET - 2D Network Mesh
   // ========================================
   let vantaEffect = null;
 
@@ -14,21 +14,29 @@
     const heroBackground = document.getElementById('hero-background');
 
     if (heroBackground && window.VANTA) {
-      vantaEffect = VANTA.TOPOLOGY({
-        el: heroBackground,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0x001f3f,          // Navy
-        backgroundColor: 0xffffff, // White
-        points: 12.00,             // Number of mesh points
-        maxDistance: 25.00,        // Connection distance
-        spacing: 18.00             // Grid spacing
-      });
+      console.log('Initializing Vanta NET...');
+      try {
+        vantaEffect = VANTA.NET({
+          el: heroBackground,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          color: 0x001f3f,          // Navy lines
+          backgroundColor: 0xffffff, // White background
+          points: 10.00,             // Number of points
+          maxDistance: 20.00,        // Connection distance
+          spacing: 16.00             // Spacing between points
+        });
+        console.log('Vanta NET initialized successfully');
+      } catch (error) {
+        console.error('Vanta NET error:', error);
+      }
+    } else {
+      console.error('Vanta or hero-background not found');
     }
   }
 
@@ -264,6 +272,6 @@
   // ========================================
   console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');
   console.log('%cIsiah Udofia - Yale University 2026', 'font-size: 14px; color: #001f3f;');
-  console.log('%cVanta.js TOPOLOGY + Seamless Loading Transition', 'font-size: 12px; color: #6c757d;');
+  console.log('%cVanta.js NET + Seamless Loading Transition', 'font-size: 12px; color: #6c757d;');
 
 })();

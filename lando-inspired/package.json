@@ -1,0 +1,16 @@
+{
+  "name": "isiah-udofia-lando-inspired",
+  "version": "1.0.0",
+  "description": "Personal website for Isiah Udofia inspired by landonorris.com design",
+  "scripts": {
+    "dev": "npx http-server -p 3000",
+    "start": "npx http-server -p 3000"
+  },
+  "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "lenis": "^1.1.13"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

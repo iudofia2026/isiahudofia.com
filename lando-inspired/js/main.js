@@ -6,102 +6,28 @@
   'use strict';
 
   // ========================================
-  // tsParticles Background
+  // Vanta.js TOPOLOGY - 2D Topographic Mesh
   // ========================================
-  async function initParticlesBackground() {
+  let vantaEffect = null;
+
+  function initTopographyBackground() {
     const heroBackground = document.getElementById('hero-background');
 
-    if (heroBackground && window.tsParticles) {
-      await tsParticles.load(heroBackground, {
-        fullScreen: false,
-        fpsLimit: 120,
-        particles: {
-          number: {
-            value: 80,
-            density: {
-              enable: true,
-              area: 800
-            }
-          },
-          color: {
-            value: "#001f3f"
-          },
-          shape: {
-            type: "circle"
-          },
-          opacity: {
-            value: 0.3,
-            random: true,
-            animation: {
-              enable: true,
-              speed: 0.5,
-              minimumValue: 0.1,
-              sync: false
-            }
-          },
-          size: {
-            value: { min: 1, max: 3 }
-          },
-          links: {
-            enable: true,
-            distance: 150,
-            color: "#001f3f",
-            opacity: 0.2,
-            width: 1
-          },
-          move: {
-            enable: true,
-            speed: 1,
-            direction: "none",
-            random: true,
-            straight: false,
-            outModes: {
-              default: "bounce"
-            },
-            attract: {
-              enable: false,
-              rotateX: 600,
-              rotateY: 1200
-            }
-          }
-        },
-        interactivity: {
-          detectsOn: "canvas",
-          events: {
-            onHover: {
-              enable: true,
-              mode: ["grab", "bubble"]
-            },
-            onClick: {
-              enable: true,
-              mode: "push"
-            },
-            resize: true
-          },
-          modes: {
-            grab: {
-              distance: 200,
-              links: {
-                opacity: 0.5,
-                color: "#0066cc"
-              }
-            },
-            bubble: {
-              distance: 200,
-              size: 6,
-              duration: 2,
-              opacity: 0.6
-            },
-            push: {
-              quantity: 4
-            },
-            repulse: {
-              distance: 100,
-              duration: 0.4
-            }
-          }
-        },
-        detectRetina: true
+    if (heroBackground && window.VANTA) {
+      vantaEffect = VANTA.TOPOLOGY({
+        el: heroBackground,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x001f3f,          // Navy
+        backgroundColor: 0xffffff, // White
+        points: 12.00,             // Number of mesh points
+        maxDistance: 25.00,        // Connection distance
+        spacing: 18.00             // Grid spacing
       });
     }
   }
@@ -133,8 +59,8 @@
       loadingProgress.style.width = '100%';
     }
 
-    // Initialize tsParticles background before transition
-    initParticlesBackground();
+    // Initialize Vanta TOPOLOGY background before transition
+    initTopographyBackground();
 
     // Start mask transition after brief delay
     setTimeout(() => {
@@ -327,10 +253,17 @@
   checkOrientation();
 
   // ========================================
+  // Cleanup on page unload
+  // ========================================
+  window.addEventListener('beforeunload', () => {
+    if (vantaEffect) vantaEffect.destroy();
+  });
+
+  // ========================================
   // Console Easter Egg
   // ========================================
   console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');
   console.log('%cIsiah Udofia - Yale University 2026', 'font-size: 14px; color: #001f3f;');
-  console.log('%ctsParticles 3.0 + Seamless Loading Transition', 'font-size: 12px; color: #6c757d;');
+  console.log('%cVanta.js TOPOLOGY + Seamless Loading Transition', 'font-size: 12px; color: #6c757d;');
 
 })();

@@ -2,18 +2,18 @@
 
 A modern, responsive portfolio website for Isiah Udofia, a Yale University student studying Cognitive Science with a focus on product management, AI/ML, and technical execution.
 
-## 🌟 Overview
+## Overview
 
 This is a professional portfolio website built with vanilla HTML, CSS, and JavaScript - no frameworks or build tools required. The site showcases Isiah's projects, experience, and academic work with a focus on product management readiness and technical storytelling.
 
-## 🎯 Site Purpose
+## Site Purpose
 
 - **Primary Goal**: Present a crisp, professional, product-management-ready portfolio
 - **Emphasis**: Product sense, execution, and storytelling (problem → approach → results)
 - **Design**: Accessibility, performance, and visual consistency with Yale blue color system
 - **Technology**: Pure HTML/CSS/vanilla JS (Netlify-friendly, no packages)
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 isiahudofia.com/
@@ -49,7 +49,7 @@ isiahudofia.com/
 └── _headers               # Netlify headers configuration
 ```
 
-## 🎨 Design System
+## Design System
 
 ### Color Palette
 - **Primary**: Deep navy Yale blues (`#00356B`, `#0b2545`, `#13315c`)
@@ -70,7 +70,7 @@ isiahudofia.com/
 - **Grids**: Responsive CSS Grid layouts
 - **Animations**: Neural canvas backgrounds, reveal-on-scroll effects
 
-## 🚀 Key Features
+## Key Features
 
 ### Interactive Elements
 - **Neural Canvas**: Animated background with floating nodes and connections
@@ -86,14 +86,14 @@ isiahudofia.com/
 - **Reduced Motion Support**: Respects user preferences
 - **Lazy Loading**: Images load as needed
 
-## 📱 Responsive Design
+## Responsive Design
 
 The site is fully responsive with breakpoints at:
 - **Mobile**: < 768px (stacked layouts, simplified navigation)
 - **Tablet**: 768px - 1024px (adjusted grids, maintained readability)
 - **Desktop**: > 1024px (full grid layouts, enhanced interactions)
 
-## 🎯 Project Showcase
+## Project Showcase
 
 ### 1. Live Translator for Discord
 - **Technology**: Discord API, Deepgram STT, WebSocket
@@ -113,7 +113,7 @@ The site is fully responsive with breakpoints at:
 - **Approach**: Calibrated models with evidence-based explanations
 - **Timeline**: September 2024 - April 2025
 
-## 🛠️ Technical Implementation
+## Technical Implementation
 
 ### CSS Architecture
 - **Custom Properties**: Centralized design tokens
@@ -133,7 +133,7 @@ The site is fully responsive with breakpoints at:
 - **Focus Management**: Visible focus indicators
 - **Color Contrast**: WCAG AA compliant
 
-## 📋 Development Guidelines
+## Development Guidelines
 
 ### Code Standards
 - **No Frameworks**: Pure HTML/CSS/JavaScript only
@@ -147,7 +147,7 @@ The site is fully responsive with breakpoints at:
 - **Asset Management**: Optimized images and icons
 - **Documentation**: Comprehensive project docs
 
-## 🚀 Deployment
+## Deployment
 
 The site is designed for easy deployment on Netlify or similar static hosting platforms:
 
@@ -156,7 +156,7 @@ The site is designed for easy deployment on Netlify or similar static hosting pl
 3. **404 Handling**: Custom error page
 4. **Asset Optimization**: Compressed images and minified code
 
-## 📊 Performance Metrics
+## Performance Metrics
 
 - **Lighthouse Score**: 95+ across all categories
 - **First Contentful Paint**: < 1.5s
@@ -164,18 +164,18 @@ The site is designed for easy deployment on Netlify or similar static hosting pl
 - **Cumulative Layout Shift**: < 0.1
 - **Time to Interactive**: < 3s
 
-## 🔧 Browser Support
+## Browser Support
 
 - **Modern Browsers**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
 - **Mobile**: iOS Safari 14+, Chrome Mobile 90+
 - **Features**: CSS Grid, Custom Properties, Intersection Observer
 - **Fallbacks**: Graceful degradation for older browsers
 
-## 📝 License
+## License
 
 This project is part of Isiah Udofia's personal portfolio. All rights reserved.
 
-## 🤝 Contact
+## Contact
 
 - **Email**: isiah.udofia@yale.edu
 - **Phone**: (973) 303-6883
@@ -184,4 +184,4 @@ This project is part of Isiah Udofia's personal portfolio. All rights reserved.
 
 ---
 
-*Built with ❤️ and attention to detail for product management opportunities.*
+*Built with attention to detail for product management opportunities.*

@@ -13,9 +13,12 @@
   <!-- Loading Transition Screen -->
   <div class="loading-screen" id="loading-screen">
     <div class="loading-content">
-      <img src="assets/hero-icon.png" alt="Loading" class="loading-icon">
-      <div class="loading-bar">
-        <div class="loading-progress" id="loading-progress"></div>
+      <div class="loading-circle-container">
+        <svg class="loading-circle" viewBox="0 0 200 200">
+          <circle class="loading-circle-bg" cx="100" cy="100" r="90"></circle>
+          <circle class="loading-circle-progress" id="loading-circle-progress" cx="100" cy="100" r="90"></circle>
+        </svg>
+        <img src="assets/hero-icon.png" alt="Loading" class="loading-icon">
       </div>
     </div>
   </div>

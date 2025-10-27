@@ -4,6 +4,7 @@
   "description": "Personal website for Isiah Udofia inspired by landonorris.com design",
   "scripts": {
     "dev": "npx http-server -p 3000",
+    "dev:watch": "npx browser-sync start --server --files 'css/*.css, js/*.js, *.html' --port 3000 --no-notify",
     "start": "npx http-server -p 3000"
   },
   "dependencies": {
@@ -11,6 +12,7 @@
     "lenis": "^1.1.13"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "browser-sync": "^3.0.2"
   }
 }

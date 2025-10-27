@@ -77,6 +77,8 @@
   opacity: 1;
   visibility: visible;
   overflow: hidden;
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
 }
 
 .loading-screen::before {
@@ -96,15 +98,17 @@
 }
 
 .loading-screen.loaded {
-  animation: loadingMaskReveal 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation: loadingFadeOut 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.8s forwards;
+  pointer-events: none;
 }
 
-@keyframes loadingMaskReveal {
+@keyframes loadingFadeOut {
   0% {
-    clip-path: circle(100% at 50% 50%);
+    opacity: 1;
   }
   100% {
-    clip-path: circle(0% at 50% 50%);
+    opacity: 0;
+    visibility: hidden;
   }
 }
 
@@ -115,6 +119,7 @@
   gap: 3rem;
   position: relative;
   z-index: 1;
+  transform-style: preserve-3d;
 }
 
 .loading-icon {
@@ -138,18 +143,23 @@
 }
 
 .loading-screen.loaded .loading-icon {
-  animation: loadingIconExit 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation: loadingIconFlyThrough 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-@keyframes loadingIconExit {
+@keyframes loadingIconFlyThrough {
   0% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: scale(1) rotate(0deg) translateZ(0);
+    filter: blur(0px);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2) rotate(0deg) translateZ(0);
   }
   100% {
-    opacity: 0;
-    transform: scale(1.5) rotate(10deg);
-    filter: blur(20px);
+    opacity: 1;
+    transform: scale(15) rotate(0deg) translateZ(1000px);
+    filter: blur(40px);
   }
 }
 

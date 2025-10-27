@@ -60,6 +60,137 @@
 }
 
 /* ========================================
+   Loading Screen Transition
+   ======================================== */
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-navy);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  overflow: hidden;
+}
+
+.loading-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-navy-dark) 100%);
+  opacity: 1;
+  transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.loading-screen.loaded::before {
+  opacity: 0;
+}
+
+.loading-screen.loaded {
+  animation: loadingMaskReveal 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes loadingMaskReveal {
+  0% {
+    clip-path: circle(100% at 50% 50%);
+  }
+  100% {
+    clip-path: circle(0% at 50% 50%);
+  }
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.loading-icon {
+  width: clamp(150px, 25vw, 300px);
+  height: auto;
+  opacity: 0;
+  transform: scale(0.8) rotate(-5deg);
+  animation: loadingIconFloat 2.5s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+  filter: drop-shadow(0 20px 60px rgba(0, 102, 204, 0.3));
+}
+
+@keyframes loadingIconFloat {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(0.95) rotate(-5deg) translateY(0px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) translateY(-20px);
+  }
+}
+
+.loading-screen.loaded .loading-icon {
+  animation: loadingIconExit 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes loadingIconExit {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(10deg);
+    filter: blur(20px);
+  }
+}
+
+.loading-bar {
+  width: 350px;
+  max-width: 80vw;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 102, 204, 0.2);
+}
+
+.loading-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,
+    var(--color-accent-blue) 0%,
+    #00b4ff 50%,
+    var(--color-accent-blue) 100%);
+  background-size: 200% 100%;
+  border-radius: 10px;
+  transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 0 20px rgba(0, 102, 204, 0.6);
+  animation: progressShimmer 2s ease-in-out infinite;
+}
+
+@keyframes progressShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========================================
    Reset & Base Styles
    ======================================== */
 
@@ -379,6 +510,34 @@ button:focus-visible {
   margin: 0;
   text-transform: uppercase;
   color: var(--color-navy);
+}
+
+.hero-icon {
+  width: clamp(200px, 30vw, 500px);
+  height: auto;
+  display: block;
+  opacity: 0;
+  transform: scale(0.5) translateY(50px);
+  filter: blur(20px);
+  animation: heroIconAppear 1.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes heroIconAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
 }
 
 

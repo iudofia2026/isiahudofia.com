@@ -6,6 +6,42 @@
   'use strict';
 
   // ========================================
+  // Loading Screen Transition
+  // ========================================
+  const loadingScreen = document.getElementById('loading-screen');
+  const loadingProgress = document.getElementById('loading-progress');
+
+  let progress = 0;
+  const progressInterval = setInterval(() => {
+    progress += Math.random() * 15;
+    if (progress > 100) progress = 100;
+
+    if (loadingProgress) {
+      loadingProgress.style.width = `${progress}%`;
+    }
+
+    if (progress >= 100) {
+      clearInterval(progressInterval);
+    }
+  }, 150);
+
+  // Wait for page load
+  window.addEventListener('load', () => {
+    // Ensure progress reaches 100%
+    if (loadingProgress) {
+      loadingProgress.style.width = '100%';
+    }
+
+    // Fade out loading screen after brief delay
+    setTimeout(() => {
+      if (loadingScreen) {
+        loadingScreen.classList.add('loaded');
+      }
+      clearInterval(progressInterval);
+    }, 800);
+  });
+
+  // ========================================
   // Smooth Scrolling with Lenis
   // ========================================
   const lenis = new Lenis({

@@ -167,9 +167,8 @@ button:focus-visible {
 }
 
 .main-nav[data-nav-theme="light"] {
-  background-color: var(--color-white);
+  background-color: transparent;
   color: var(--color-navy);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .main-nav[data-nav-theme="dark"] {
@@ -180,11 +179,13 @@ button:focus-visible {
 .main-nav.scrolled[data-nav-theme="dark"] {
   background-color: rgba(0, 31, 63, 0.95);
   backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .main-nav.scrolled[data-nav-theme="light"] {
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .nav-container {

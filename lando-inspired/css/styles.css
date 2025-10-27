@@ -206,7 +206,7 @@ button:focus-visible {
 }
 
 .nav-logo {
-  height: 50px;
+  height: 65px;
   width: auto;
   display: block;
   transition: transform 0.3s var(--ease-out-cubic);

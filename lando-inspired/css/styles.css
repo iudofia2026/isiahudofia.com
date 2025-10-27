@@ -371,55 +371,15 @@ button:focus-visible {
 }
 
 .hero-title {
-  font-size: var(--font-size-hero);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin-bottom: var(--spacing-md);
-}
-
-.hero-subtitle {
-  font-size: var(--font-size-xl);
-  font-weight: 400;
-  opacity: 0.8;
-  margin-bottom: var(--spacing-lg);
-}
-
-.hero-next-event {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-}
-
-.next-label {
-  font-size: var(--font-size-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-accent-blue);
-  font-weight: 600;
   font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin: 0;
+  text-transform: uppercase;
 }
 
-.event-details {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.event-name {
-  font-size: var(--font-size-lg);
-  font-weight: 700;
-}
-
-.event-date {
-  font-size: var(--font-size-base);
-  opacity: 0.7;
-}
 
 /* Scroll Indicator */
 .scroll-indicator {
@@ -468,36 +428,12 @@ button:focus-visible {
 }
 
 /* ========================================
-   Message Section
+   Container
    ======================================== */
-
-.message-section {
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  background-color: var(--color-off-white);
-  color: var(--color-navy);
-}
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.message-content {
-  text-align: center;
-}
-
-.message-content blockquote {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: var(--spacing-md);
-  font-style: italic;
-}
-
-.message-content cite {
-  font-size: var(--font-size-base);
-  font-style: normal;
-  opacity: 0.7;
 }
 
 /* ========================================

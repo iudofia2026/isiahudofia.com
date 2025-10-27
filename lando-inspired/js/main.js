@@ -1,6 +1,5 @@
 /* ========================================
-   Lando Norris-Inspired JavaScript
-   Smooth Scroll, Animations, Canvas Effects
+   Topography Animation with Mouse Interaction
    ======================================== */
 
 (function() {
@@ -164,102 +163,188 @@
   splitElements.forEach(el => splitObserver.observe(el));
 
   // ========================================
-  // Hero Canvas Animation (Rive-inspired)
+  // Enhanced Topography Animation - Lando Style
   // ========================================
-  const heroCanvas = document.getElementById('hero-rive');
+  const canvas = document.getElementById('topography-canvas');
 
-  if (heroCanvas) {
-    const ctx = heroCanvas.getContext('2d');
-    let width, height, particles = [];
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetMouseX = 0;
+    let targetMouseY = 0;
+    let time = 0;
     let animationId;
+
+    // Finer grid for smoother topography
+    const gridSize = 30;
+    const points = [];
 
     function resize() {
       const dpr = window.devicePixelRatio || 1;
-      const rect = heroCanvas.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
 
       width = rect.width;
       height = rect.height;
 
-      heroCanvas.width = rect.width * dpr;
-      heroCanvas.height = rect.height * dpr;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
 
       ctx.scale(dpr, dpr);
-    }
 
-    class Particle {
-      constructor() {
-        this.reset();
-        this.y = Math.random() * height;
-        this.opacity = Math.random() * 0.5 + 0.2;
-      }
+      // Recreate grid points
+      points.length = 0;
+      const cols = Math.ceil(width / gridSize) + 4;
+      const rows = Math.ceil(height / gridSize) + 4;
 
-      reset() {
-        this.x = Math.random() * width;
-        this.y = 0;
-        this.speed = Math.random() * 0.5 + 0.2;
-        this.radius = Math.random() * 2 + 1;
-        this.opacity = Math.random() * 0.5 + 0.2;
-      }
-
-      update() {
-        this.y += this.speed;
-
-        if (this.y > height) {
-          this.reset();
+      for (let y = -2; y < rows; y++) {
+        for (let x = -2; x < cols; x++) {
+          points.push({
+            baseX: x * gridSize,
+            baseY: y * gridSize,
+            x: x * gridSize,
+            y: y * gridSize,
+            vx: 0,
+            vy: 0
+          });
         }
       }
-
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 102, 204, ${this.opacity})`;
-        ctx.fill();
-      }
     }
 
-    function init() {
-      resize();
-      particles = [];
+    // Mouse tracking
+    window.addEventListener('mousemove', (e) => {
+      targetMouseX = e.clientX;
+      targetMouseY = e.clientY;
+    });
 
-      const particleCount = Math.floor((width * height) / 15000);
-
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-      }
-    }
+    window.addEventListener('mouseleave', () => {
+      targetMouseX = width / 2;
+      targetMouseY = height / 2;
+    });
 
     function animate() {
-      ctx.clearRect(0, 0, width, height);
+      time += 0.003;
 
-      // Create gradient background
-      const gradient = ctx.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, 'rgba(0, 31, 63, 0.3)');
-      gradient.addColorStop(1, 'rgba(0, 20, 41, 0.5)');
-      ctx.fillStyle = gradient;
+      // Ultra smooth mouse following with easing
+      mouseX += (targetMouseX - mouseX) * 0.08;
+      mouseY += (targetMouseY - mouseY) * 0.08;
+
+      // Clear canvas with white background
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, width, height);
 
-      // Update and draw particles
-      particles.forEach(particle => {
-        particle.update();
-        particle.draw();
+      // Update points with smooth physics
+      const cols = Math.ceil(width / gridSize) + 4;
+
+      points.forEach((point, index) => {
+        // Distance from mouse
+        const dx = point.baseX - mouseX;
+        const dy = point.baseY - mouseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Smoother mouse influence with falloff
+        const maxDistance = 250;
+        const force = Math.max(0, 1 - distance / maxDistance);
+        const easedForce = force * force * force; // Cubic easing for smoother falloff
+        const angle = Math.atan2(dy, dx);
+
+        const pushX = Math.cos(angle) * easedForce * 40;
+        const pushY = Math.sin(angle) * easedForce * 40;
+
+        // Multiple wave layers for richer movement
+        const wave1 = Math.sin(point.baseX * 0.008 + time * 1.5) * Math.cos(point.baseY * 0.008 + time * 1.5) * 8;
+        const wave2 = Math.sin(point.baseX * 0.015 + time * 0.7) * 3;
+        const wave3 = Math.cos(point.baseY * 0.012 + time * 1.2) * 4;
+
+        // Target position
+        const targetX = point.baseX + pushX + wave1 + wave2;
+        const targetY = point.baseY + pushY + wave1 + wave3;
+
+        // Smooth spring physics
+        const springStrength = 0.02;
+        const damping = 0.85;
+
+        point.vx += (targetX - point.x) * springStrength;
+        point.vy += (targetY - point.y) * springStrength;
+
+        point.vx *= damping;
+        point.vy *= damping;
+
+        point.x += point.vx;
+        point.y += point.vy;
       });
 
-      // Draw connections
-      particles.forEach((p1, i) => {
-        particles.slice(i + 1).forEach(p2 => {
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      // Draw with smooth bezier curves instead of straight lines
+      ctx.strokeStyle = 'rgba(0, 31, 63, 0.12)';
+      ctx.lineWidth = 0.8;
 
-          if (distance < 150) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(0, 102, 204, ${(1 - distance / 150) * 0.2})`;
-            ctx.lineWidth = 1;
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
+      // Horizontal smooth curves
+      for (let row = 0; row < points.length / cols; row++) {
+        ctx.beginPath();
+        for (let col = 0; col < cols - 1; col++) {
+          const index = row * cols + col;
+          const point = points[index];
+          const nextPoint = points[index + 1];
+
+          if (col === 0) {
+            ctx.moveTo(point.x, point.y);
+          } else {
+            // Use quadratic curves for smoothness
+            const cpX = (point.x + nextPoint.x) / 2;
+            const cpY = (point.y + nextPoint.y) / 2;
+            ctx.quadraticCurveTo(point.x, point.y, cpX, cpY);
           }
-        });
+        }
+        ctx.stroke();
+      }
+
+      // Vertical smooth curves
+      for (let col = 0; col < cols; col++) {
+        ctx.beginPath();
+        for (let row = 0; row < points.length / cols - 1; row++) {
+          const index = row * cols + col;
+          const point = points[index];
+          const nextPoint = points[(row + 1) * cols + col];
+
+          if (row === 0) {
+            ctx.moveTo(point.x, point.y);
+          } else {
+            // Use quadratic curves for smoothness
+            const cpX = (point.x + nextPoint.x) / 2;
+            const cpY = (point.y + nextPoint.y) / 2;
+            ctx.quadraticCurveTo(point.x, point.y, cpX, cpY);
+          }
+        }
+        ctx.stroke();
+      }
+
+      // Draw glowing points near mouse with gradient
+      points.forEach(point => {
+        const dx = point.x - mouseX;
+        const dy = point.y - mouseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 180) {
+          const opacity = (1 - distance / 180) * 0.9;
+          const radius = 2 + (1 - distance / 180) * 2;
+
+          // Gradient glow
+          const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius * 2);
+          gradient.addColorStop(0, `rgba(0, 102, 204, ${opacity})`);
+          gradient.addColorStop(1, `rgba(0, 102, 204, 0)`);
+
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius * 2, 0, Math.PI * 2);
+          ctx.fillStyle = gradient;
+          ctx.fill();
+
+          // Core point
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, radius * 0.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 102, 204, ${opacity})`;
+          ctx.fill();
+        }
       });
 
       animationId = requestAnimationFrame(animate);
@@ -269,12 +354,18 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!prefersReducedMotion) {
-      init();
+      resize();
+      // Initialize mouse to center
+      mouseX = width / 2;
+      mouseY = height / 2;
+      targetMouseX = width / 2;
+      targetMouseY = height / 2;
+
       animate();
 
       window.addEventListener('resize', () => {
         cancelAnimationFrame(animationId);
-        init();
+        resize();
         animate();
       });
 
@@ -288,70 +379,6 @@
       });
     }
   }
-
-  // ========================================
-  // Helmet Gallery Hover Effects
-  // ========================================
-  const helmetItems = document.querySelectorAll('.helmet-item');
-
-  helmetItems.forEach(item => {
-    item.addEventListener('mouseenter', function() {
-      this.style.transform = 'scale(1.05) rotateZ(2deg)';
-    });
-
-    item.addEventListener('mouseleave', function() {
-      this.style.transform = '';
-    });
-  });
-
-  // ========================================
-  // Track Card Tilt Effect
-  // ========================================
-  const trackCards = document.querySelectorAll('.track-card');
-
-  trackCards.forEach(card => {
-    card.addEventListener('mousemove', function(e) {
-      const rect = this.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = (y - centerY) / 20;
-      const rotateY = (centerX - x) / 20;
-
-      this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-    });
-
-    card.addEventListener('mouseleave', function() {
-      this.style.transform = '';
-    });
-  });
-
-  // ========================================
-  // Scroll-triggered Fade In Animations
-  // ========================================
-  const fadeElements = document.querySelectorAll('.track-card, .helmet-item, .partnership-item, .contact-card');
-
-  const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }, index * 100);
-        fadeObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  fadeElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    fadeObserver.observe(el);
-  });
 
   // ========================================
   // Device Rotation Detection (Mobile)
@@ -378,111 +405,10 @@
   checkOrientation();
 
   // ========================================
-  // Parallax Effect on Hero Section
-  // ========================================
-  const heroSection = document.querySelector('.hero-section');
-
-  if (heroSection && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const parallax = scrolled * 0.5;
-
-      if (scrolled < window.innerHeight) {
-        heroSection.style.transform = `translateY(${parallax}px)`;
-      }
-    });
-  }
-
-  // ========================================
-  // Custom Cursor Effect (Optional)
-  // ========================================
-  const cursor = document.createElement('div');
-  cursor.className = 'custom-cursor';
-  cursor.style.cssText = `
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #0066cc;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.15s ease;
-    display: none;
-  `;
-  document.body.appendChild(cursor);
-
-  let mouseX = 0, mouseY = 0;
-  let cursorX = 0, cursorY = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-
-  function animateCursor() {
-    const diffX = mouseX - cursorX;
-    const diffY = mouseY - cursorY;
-
-    cursorX += diffX * 0.1;
-    cursorY += diffY * 0.1;
-
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
-
-    requestAnimationFrame(animateCursor);
-  }
-
-  // Only show custom cursor on desktop
-  if (window.innerWidth > 1024) {
-    cursor.style.display = 'block';
-    animateCursor();
-
-    // Scale cursor on hoverable elements
-    const hoverables = document.querySelectorAll('a, button, .track-card, .helmet-item');
-
-    hoverables.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(1.5)';
-        cursor.style.borderColor = '#0066cc';
-      });
-
-      el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-      });
-    });
-  }
-
-  // ========================================
   // Console Easter Egg
   // ========================================
   console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');
   console.log('%cIsiah Udofia - Yale University 2026', 'font-size: 14px; color: #001f3f;');
-  console.log('%cInterested in the code? Check out the repo!', 'font-size: 12px; color: #6c757d;');
-
-  // ========================================
-  // Performance Monitoring
-  // ========================================
-  if ('PerformanceObserver' in window) {
-    const observer = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        if (entry.entryType === 'largest-contentful-paint') {
-          console.log('LCP:', entry.renderTime || entry.loadTime);
-        }
-      }
-    });
-
-    observer.observe({ entryTypes: ['largest-contentful-paint'] });
-  }
-
-  // ========================================
-  // Service Worker Registration (Optional)
-  // ========================================
-  if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {
-        // Service worker not available, continue without it
-      });
-    });
-  }
+  console.log('%cTopography animation with mouse interaction', 'font-size: 12px; color: #6c757d;');
 
 })();

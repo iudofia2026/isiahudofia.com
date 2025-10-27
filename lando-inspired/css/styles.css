@@ -125,19 +125,19 @@
 
 .loading-circle-bg {
   fill: none;
-  stroke: rgba(0, 31, 63, 0.1);
+  stroke: rgba(0, 31, 63, 0.08);
   stroke-width: 3;
 }
 
 .loading-circle-progress {
   fill: none;
-  stroke: var(--color-accent-blue);
+  stroke: var(--color-navy);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-dasharray: 565.48;
   stroke-dashoffset: 565.48;
   transition: stroke-dashoffset 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  filter: drop-shadow(0 0 8px rgba(0, 102, 204, 0.6));
+  filter: drop-shadow(0 0 6px rgba(0, 31, 63, 0.3));
 }
 
 .loading-icon {

@@ -291,6 +291,7 @@ button:focus-visible {
 .nav-logo-default {
   opacity: 1;
   position: relative;
+  transition: opacity 0.4s var(--ease-out-cubic);
 }
 
 .nav-logo-hover {
@@ -298,15 +299,18 @@ button:focus-visible {
   position: absolute;
   top: 0;
   left: 0;
+  transition: opacity 0.4s var(--ease-out-cubic);
 }
 
 .nav-brand:hover .nav-logo-default,
-.nav-logo-wrapper.synced-hover .nav-logo-default {
+.nav-logo-wrapper.synced-hover .nav-logo-default,
+.main-nav.scrolled .nav-logo-default {
   opacity: 0;
 }
 
 .nav-brand:hover .nav-logo-hover,
-.nav-logo-wrapper.synced-hover .nav-logo-hover {
+.nav-logo-wrapper.synced-hover .nav-logo-hover,
+.main-nav.scrolled .nav-logo-hover {
   opacity: 1;
 }
 

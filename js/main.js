@@ -844,7 +844,13 @@
   });
 
   splitTargets.forEach(element => {
-    if (!element || element.dataset.split === 'menu') return;
+    if (!element) return;
+    
+    if (element.dataset.split === 'menu') {
+      // Menu items are handled separately - no intersection observer needed
+      return;
+    }
+    
     splitObserver.observe(element);
   });
 
@@ -879,8 +885,8 @@
         charSpan.className = 'char';
         charSpan.textContent = char;
 
-        const jitter = (Math.random() - 0.5) * jitterMax;
-        const delay = Math.max(baseDelay + wordIndex * wordStep + globalIndex * charStep + jitter, 0);
+        // For menu items, use simple increasing delay of 0.1s per character
+        const delay = context === 'menu' ? globalIndex * 0.1 : Math.max(baseDelay + wordIndex * wordStep + globalIndex * charStep + (Math.random() - 0.5) * jitterMax, 0);
         charSpan.style.setProperty('--char-delay', `${delay.toFixed(3)}s`);
 
         wordSpan.appendChild(charSpan);

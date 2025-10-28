@@ -6,6 +6,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
+/* Carousel Fonts - Diverse Set */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@700&family=Anton&family=Righteous&family=Audiowide&family=Black+Ops+One&family=Russo+One&family=Permanent+Marker&family=Bangers&family=Passion+One:wght@900&display=swap');
+
 
 :root {
   /* Color Palette - White, Navy & Dark Grey Theme */
@@ -989,7 +992,7 @@ body.menu-open .hero-label {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .carousel-row:last-child {
@@ -1011,10 +1014,9 @@ body.menu-open .hero-label {
 }
 
 .carousel-text {
-  font-family: var(--font-display);
-  font-size: clamp(6rem, 15vw, 12rem);
+  font-size: clamp(4.5rem, 12vw, 9rem);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 1);
   letter-spacing: -0.03em;
   padding: 0 4rem;
   display: inline-block;
@@ -1022,6 +1024,18 @@ body.menu-open .hero-label {
   -moz-osx-font-smoothing: grayscale;
   text-transform: uppercase;
 }
+
+/* Different fonts for ISIAH row (carousel-row-1) */
+.carousel-row-1 .carousel-text:nth-child(1) { font-family: 'Bebas Neue', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(2) { font-family: 'Anton', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(3) { font-family: 'Oswald', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(4) { font-family: 'Righteous', sans-serif; }
+
+/* Different fonts for UDOFIA row (carousel-row-2) */
+.carousel-row-2 .carousel-text:nth-child(1) { font-family: 'Audiowide', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(2) { font-family: 'Black Ops One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(3) { font-family: 'Russo One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(4) { font-family: 'Passion One', sans-serif; }
 
 @keyframes scrollLeft {
   0% {

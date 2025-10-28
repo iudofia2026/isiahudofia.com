@@ -1117,7 +1117,9 @@
       this.frameId = null;
 
       // Simplified physics - no mouse interaction for performance
-      this.rotationSpeed = 0.0005;
+      this.rotationSpeed = 0.0008; // Match hero rotation speed
+      this.randomMovementStrength = 0.005; // Add random continuous movement
+      this.randomMovementFrequency = 1.0;
 
       this.handleResize = this.handleResize.bind(this);
       this.animate = this.animate.bind(this);
@@ -1139,9 +1141,9 @@
         this.positions[idx + 1] = radius * Math.sin(phi) * Math.sin(theta);
         this.positions[idx + 2] = radius * Math.cos(phi);
 
-        this.velocities[idx] = (Math.random() - 0.5) * 0.3;
+        this.velocities[idx] = (Math.random() - 0.5) * 0.4;
         this.velocities[idx + 1] = (Math.random() - 0.5) * 0.3;
-        this.velocities[idx + 2] = (Math.random() - 0.5) * 0.3;
+        this.velocities[idx + 2] = (Math.random() - 0.5) * 0.4;
       }
     }
 
@@ -1150,6 +1152,13 @@
 
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
+
+        // Add random movement for natural organic motion
+        if (Math.random() < this.randomMovementFrequency) {
+          this.velocities[idx] += (Math.random() - 0.5) * this.randomMovementStrength;
+          this.velocities[idx + 1] += (Math.random() - 0.5) * this.randomMovementStrength;
+          this.velocities[idx + 2] += (Math.random() - 0.5) * this.randomMovementStrength;
+        }
 
         // Simple damping
         const damping = 0.98;
@@ -1281,32 +1290,8 @@
   window.addEventListener('load', () => {
     setTimeout(() => {
       initAboutNetwork();
-      initAboutNetworkScroll();
     }, 3000);
   });
-
-  // Add scroll-based parallax to About network
-  function initAboutNetworkScroll() {
-    const aboutBg = document.getElementById('about-background');
-
-    if (!aboutBg || !window.gsap || !window.ScrollTrigger) {
-      console.warn('Cannot initialize About network scroll');
-      return;
-    }
-
-    // Parallax effect on scroll
-    gsap.to(aboutBg, {
-      y: -100, // Move upward as you scroll
-      ease: 'none',
-      scrollTrigger: {
-        trigger: aboutBg,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1.5, // Smooth scrubbing
-        invalidateOnRefresh: true
-      }
-    });
-  }
 
   // Cleanup
   window.addEventListener('beforeunload', () => {

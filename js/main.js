@@ -994,6 +994,63 @@
         // Refresh ScrollTrigger
         ScrollTrigger.refresh();
       }
+
+      // Premium About Section Animations with SplitType
+      function initAboutAnimations() {
+        if (!window.SplitType) {
+          console.warn('SplitType not loaded');
+          return;
+        }
+
+        const aboutTitle = document.querySelector('.about-title');
+        const aboutTexts = document.querySelectorAll('.about-text');
+
+        if (aboutTitle) {
+          // Split title into characters
+          const titleSplit = new SplitType(aboutTitle, { types: 'chars' });
+
+          // Animate title on scroll (bidirectional)
+          ScrollTrigger.create({
+            trigger: aboutTitle,
+            start: 'top 80%',
+            end: 'top 20%',
+            onEnter: () => aboutTitle.setAttribute('data-animated', 'true'),
+            onLeave: () => aboutTitle.setAttribute('data-animated', 'false'),
+            onEnterBack: () => aboutTitle.setAttribute('data-animated', 'true'),
+            onLeaveBack: () => aboutTitle.setAttribute('data-animated', 'false')
+          });
+        }
+
+        if (aboutTexts.length) {
+          aboutTexts.forEach((text, index) => {
+            // Split text into characters
+            const textSplit = new SplitType(text, { types: 'chars' });
+
+            // Add custom property for staggered delays
+            textSplit.chars.forEach((char, charIndex) => {
+              char.style.setProperty('--char-index', charIndex);
+              char.style.transitionDelay = `${charIndex * 0.015}s`;
+            });
+
+            // Animate text on scroll (bidirectional)
+            ScrollTrigger.create({
+              trigger: text,
+              start: 'top 85%',
+              end: 'top 15%',
+              onEnter: () => text.setAttribute('data-animated', 'true'),
+              onLeave: () => text.setAttribute('data-animated', 'false'),
+              onEnterBack: () => text.setAttribute('data-animated', 'true'),
+              onLeaveBack: () => text.setAttribute('data-animated', 'false')
+            });
+          });
+        }
+      }
+
+      // Initialize about animations after a delay
+      setTimeout(() => {
+        initAboutAnimations();
+      }, 3500);
+
     } else {
       console.warn('Required sections not found for scroll animations');
     }

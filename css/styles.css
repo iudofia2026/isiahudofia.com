@@ -81,7 +81,7 @@
   background-color: var(--color-white);
   z-index: 9999;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   opacity: 1;
   visibility: visible;
@@ -295,14 +295,14 @@ button:focus-visible {
 }
 
 .nav-logo-wrapper {
-  height: 65px;
+  height: 98px;
   width: auto;
   display: block;
   position: relative;
 }
 
 .nav-logo-wrapper img {
-  height: 65px;
+  height: 98px;
   width: auto;
   display: block;
   transition: opacity 0.3s ease, transform 0.3s var(--ease-out-cubic);
@@ -361,10 +361,10 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   justify-content: center;
   align-items: center;
   gap: 6px;
-  width: 52px;
-  height: 52px;
-  padding: 10px;
-  border-radius: 999px;
+  width: 64px;
+  height: 48px;
+  padding: 10px 14px;
+  border-radius: 16px;
   border: 1.5px solid currentColor;
   background: rgba(0, 31, 63, 0.04);
   backdrop-filter: blur(14px);
@@ -377,6 +377,21 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
     box-shadow 0.4s var(--ease-out-cubic),
     background-color 0.4s var(--ease-out-cubic),
     border-color 0.4s var(--ease-out-cubic);
+}
+
+.hamburger-menu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-navy);
+  transform: scale(0);
+  opacity: 0;
+  transition:
+    transform 0.6s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+  transform-origin: center;
+  z-index: 0;
 }
 
 .hamburger-menu::after {
@@ -424,6 +439,8 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
     background 0.45s cubic-bezier(0.65, 0.05, 0, 1);
   transform-origin: center;
   will-change: transform, opacity;
+  position: relative;
+  z-index: 1;
 }
 
 .hamburger-menu:hover .hamburger-line:nth-child(2),
@@ -433,6 +450,9 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
 
 .hamburger-menu.active {
   background: rgba(0, 31, 63, 0.1);
+  box-shadow: 0 24px 55px rgba(0, 31, 63, 0.32);
+  border-color: rgba(0, 31, 63, 0.65);
+  color: var(--color-white);
 }
 
 .hamburger-menu.active .hamburger-line:nth-child(1) {
@@ -446,6 +466,36 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
 
 .hamburger-menu.active .hamburger-line:nth-child(3) {
   transform: translateY(-9px) rotate(-42deg);
+}
+
+.hamburger-menu.active::before {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.hamburger-menu.active .hamburger-line {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
+}
+
+body.is-hero-inverted .hamburger-menu {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+body.is-hero-inverted .hamburger-menu::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.is-hero-inverted .hamburger-menu.active::before {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+body.is-hero-inverted .hamburger-menu.active .hamburger-line {
+  background: linear-gradient(90deg, rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 1));
+}
+
+body.is-hero-inverted .hamburger-menu.active {
+  color: var(--color-navy);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Mobile Menu */
@@ -554,7 +604,7 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
   inset: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-family: inherit;
   font-variation-settings: inherit;
   letter-spacing: inherit;
@@ -562,6 +612,8 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
   text-transform: inherit;
   color: currentColor;
   z-index: 0;
+  padding-inline: 0;
+  transform-origin: left center;
   pointer-events: none;
   transition:
     opacity 0.65s cubic-bezier(0.19, 1, 0.22, 1),
@@ -603,69 +655,19 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
   width: 100%;
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: clamp(1rem, 4vw, 2.5rem);
+  justify-content: flex-start;
 }
 
 .mobile-menu-brand {
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
   text-decoration: none;
-  color: var(--color-white);
-  font-family: var(--font-menu);
-  font-variation-settings: 'wght' 540, 'wdth' 100;
-  font-size: clamp(1rem, 2vw, 1.35rem);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  position: relative;
-}
-
-.mobile-menu-brand-text {
-  line-height: 1;
-}
-
-.mobile-menu-brand:hover,
-.mobile-menu-brand:focus-visible {
-  color: rgba(210, 255, 0, 0.9);
 }
 
 .mobile-menu-brand-logo {
-  width: clamp(52px, 8vw, 72px);
-  height: clamp(52px, 8vw, 72px);
+  width: 65px;
+  height: 65px;
   object-fit: contain;
-  filter: drop-shadow(0 14px 35px rgba(0, 0, 0, 0.28));
-  transition: transform 0.45s var(--ease-lando);
-}
-
-.mobile-menu-brand:hover .mobile-menu-brand-logo,
-.mobile-menu-brand:focus-visible .mobile-menu-brand-logo {
-  transform: rotate(-6deg) scale(1.04);
-}
-
-.mobile-menu-tagline {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-body);
-  font-size: clamp(0.8rem, 1.4vw, 0.95rem);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.mobile-menu-tagline span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.mobile-menu-tagline-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(210, 255, 0, 0.75);
-  box-shadow: 0 0 12px rgba(210, 255, 0, 0.65);
 }
 
 .mobile-menu-grid {
@@ -691,7 +693,7 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.4rem, 3.8vw, 2.6rem);
+  gap: clamp(0.75rem, 2.2vw, 1.8rem);
   z-index: 1;
 }
 

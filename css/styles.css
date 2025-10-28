@@ -488,6 +488,31 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
 }
 
+.hamburger-menu.active:hover,
+.hamburger-menu.active:focus-visible {
+  color: var(--color-navy);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 31, 63, 0.3);
+  box-shadow: 0 22px 48px rgba(0, 31, 63, 0.32);
+}
+
+.hamburger-menu.active:hover::before,
+.hamburger-menu.active:focus-visible::before {
+  background: rgba(0, 31, 63, 0.15);
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.hamburger-menu.active:hover::after,
+.hamburger-menu.active:focus-visible::after {
+  opacity: 1;
+}
+
+.hamburger-menu.active:hover .hamburger-line,
+.hamburger-menu.active:focus-visible .hamburger-line {
+  background: linear-gradient(90deg, rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 1));
+}
+
 body.is-hero-inverted .hamburger-menu {
   border-color: rgba(255, 255, 255, 0.6);
 }
@@ -517,6 +542,25 @@ body.is-hero-inverted .hamburger-menu.active .hamburger-line {
 body.is-hero-inverted .hamburger-menu.active {
   color: var(--color-navy);
   border-color: rgba(255, 255, 255, 0.4);
+}
+
+body.is-hero-inverted .hamburger-menu.active:hover,
+body.is-hero-inverted .hamburger-menu.active:focus-visible {
+  color: var(--color-navy);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 31, 63, 0.3);
+}
+
+body.is-hero-inverted .hamburger-menu.active:hover::before,
+body.is-hero-inverted .hamburger-menu.active:focus-visible::before {
+  background: rgba(0, 31, 63, 0.15);
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+body.is-hero-inverted .hamburger-menu.active:hover .hamburger-line,
+body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
+  background: linear-gradient(90deg, rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 1));
 }
 
 /* Mobile Menu */

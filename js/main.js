@@ -1074,6 +1074,103 @@
   }
 
   // ========================================
+  // Procedural Text Carousel Generator
+  // ========================================
+  class ProceduralCarousel {
+    constructor() {
+      this.row1 = document.querySelector('.carousel-row-1 .carousel-content');
+      this.row2 = document.querySelector('.carousel-row-2 .carousel-content');
+      this.texts = ['ISIAH', 'UDOFIA'];
+      this.fonts = [
+        'Montserrat', 'Oswald', 'Archivo Black', 
+        'Bebas Neue', 'Source Sans Pro'
+      ];
+      
+      // Performance settings
+      this.maxElements = 20; // Maximum elements per row
+      this.viewportWidth = window.innerWidth;
+      this.elementWidth = 200; // Approximate width of each text element
+      this.elementsPerViewport = Math.ceil(this.viewportWidth / this.elementWidth) + 2;
+      
+      this.init();
+    }
+    
+    init() {
+      // Generate initial elements
+      this.generateRow(this.row1, 'ISIAH');
+      this.generateRow(this.row2, 'UDOFIA');
+      
+      // Set up intersection observer for performance
+      this.setupObserver();
+    }
+    
+    generateRow(container, text) {
+      // Clear existing content
+      container.innerHTML = '';
+      
+      // Generate enough elements to fill viewport + buffer
+      const totalElements = this.elementsPerViewport * 2;
+      
+      for (let i = 0; i < totalElements; i++) {
+        const span = document.createElement('span');
+        span.className = 'carousel-text';
+        span.textContent = text;
+        
+        // Apply random font for variety
+        const fontIndex = i % this.fonts.length;
+        span.style.fontFamily = this.fonts[fontIndex];
+        
+        container.appendChild(span);
+      }
+    }
+    
+    setupObserver() {
+      // Only regenerate if viewport changes significantly
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const newWidth = window.innerWidth;
+          const newElementsPerViewport = Math.ceil(newWidth / this.elementWidth) + 2;
+          
+          if (Math.abs(newElementsPerViewport - this.elementsPerViewport) > 2) {
+            this.elementsPerViewport = newElementsPerViewport;
+            this.regenerate();
+          }
+        }, 250);
+      });
+    }
+    
+    regenerate() {
+      this.generateRow(this.row1, 'ISIAH');
+      this.generateRow(this.row2, 'UDOFIA');
+    }
+    
+    // Method to add more elements if needed (for very wide screens)
+    ensureCoverage() {
+      const containerWidth = this.row1.scrollWidth;
+      const viewportWidth = window.innerWidth;
+      
+      if (containerWidth < viewportWidth * 1.5) {
+        this.regenerate();
+      }
+    }
+  }
+  
+  // Initialize procedural carousel
+  let proceduralCarousel = null;
+  
+  function initProceduralCarousel() {
+    if (proceduralCarousel) return;
+    proceduralCarousel = new ProceduralCarousel();
+  }
+  
+  // Initialize after page load
+  window.addEventListener('load', () => {
+    setTimeout(initProceduralCarousel, 1000);
+  });
+
+  // ========================================
   // About Section Network Background (Lightweight)
   // ========================================
   class AboutNetwork {

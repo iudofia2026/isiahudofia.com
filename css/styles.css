@@ -638,7 +638,7 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
 
 .mobile-menu-link:hover,
 .mobile-menu-link:focus-visible {
-  color: var(--color-accent-blue);
+  color: rgba(180, 184, 192, 0.9);
 }
 
 .mobile-menu-link:focus-visible {

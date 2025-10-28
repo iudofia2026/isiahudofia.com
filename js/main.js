@@ -196,17 +196,17 @@
           z = pos.z;
         } else {
           let radius;
-          // Create more density at outermost radius
+          // Create maximum density at outermost radius
           const randomValue = Math.random();
           
-          if (randomValue < 0.25) {
-            // 25% of nodes in close region (60-100px)
+          if (randomValue < 0.15) {
+            // 15% of nodes in close region (60-100px)
             radius = 60 + Math.random() * 40;
-          } else if (randomValue < 0.45) {
-            // 20% of nodes in mid region (100-140px)
+          } else if (randomValue < 0.25) {
+            // 10% of nodes in mid region (100-140px)
             radius = 100 + Math.random() * 40;
           } else {
-            // 55% of nodes in far region (140-200px)
+            // 75% of nodes in far region (140-200px)
             radius = 140 + Math.random() * 60;
           }
           

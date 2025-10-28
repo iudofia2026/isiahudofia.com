@@ -986,6 +986,30 @@
           ease: 'power2.out'
         }, '<'); // '<' means start at the same time as previous animation
 
+        // Continue carousel movement as hero scrolls up and off screen
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: heroSection,
+            start: '+=100%', // Start after the zoom animation
+            end: '+=60%', // Continue for another 60vh
+            scrub: 1.2,
+            invalidateOnRefresh: true,
+            toggleActions: 'play none none reset',
+            onUpdate: (self) => {
+              // Change positioning from fixed to absolute during animation
+              if (self.progress > 0.1) {
+                textCarousel.style.position = 'absolute';
+                textCarousel.style.top = '50%';
+              }
+            }
+          }
+        })
+        .to(textCarousel, {
+          y: -window.innerHeight * 1.5, // Move carousel up and off screen
+          scale: 0.2, // Continue scaling down dramatically
+          ease: 'power2.inOut'
+        });
+
         // Global scroll listener to handle scroll-to-top from anywhere
         let isScrollingToTop = false;
 

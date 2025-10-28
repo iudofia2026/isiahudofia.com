@@ -790,6 +790,7 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   transition: background-color 0.45s var(--ease-out-cubic), color 0.45s var(--ease-out-cubic);
   transform-origin: center center;
   will-change: transform;
+  z-index: 10; /* Ensure hero stays above About network */
 }
 
 .hero-section.hero-section--inverted {
@@ -968,7 +969,7 @@ body.menu-open .hero-label {
   left: 0;
   width: 100%;
   height: 200vh; /* Double height to cover both the space above and the About section */
-  z-index: var(--z-canvas);
+  z-index: 0; /* Below hero section */
   pointer-events: none;
 }
 

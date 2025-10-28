@@ -165,16 +165,28 @@
       const radiusVariation = 80; // Variation in radius (increased)
       const numLayers = 4; // Number of concentric layers
       
+      // Special radius for tracked labels (closer to center)
+      const labelRadius = 60; // Fixed radius for contact, research, projects
+      const trackedLabelIndices = [8, 21, 55]; // Indices for tracked labels
+      
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
         
-        // Determine which layer this particle belongs to
-        const layer = Math.floor((i / this.pointCount) * numLayers);
-        const layerProgress = (i % (this.pointCount / numLayers)) / (this.pointCount / numLayers);
+        let radius;
         
-        // Calculate radius for this layer
-        const baseRadius = centerRadius + (layer * radiusVariation / numLayers);
-        const radius = baseRadius + (Math.random() - 0.5) * (radiusVariation / numLayers);
+        // Check if this is a tracked label node
+        if (trackedLabelIndices.includes(i)) {
+          // Use fixed closer radius for tracked labels
+          radius = labelRadius;
+        } else {
+          // Determine which layer this particle belongs to
+          const layer = Math.floor((i / this.pointCount) * numLayers);
+          const layerProgress = (i % (this.pointCount / numLayers)) / (this.pointCount / numLayers);
+          
+          // Calculate radius for this layer
+          const baseRadius = centerRadius + (layer * radiusVariation / numLayers);
+          radius = baseRadius + (Math.random() - 0.5) * (radiusVariation / numLayers);
+        }
         
         // Generate random spherical coordinates
         const theta = Math.random() * Math.PI * 2; // Azimuth angle (0 to 2π)

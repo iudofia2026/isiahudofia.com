@@ -196,8 +196,19 @@
           return;
         }
 
-        const x = (this.tempVector.x * 0.5 + 0.5) * this.width;
-        const y = (-this.tempVector.y * 0.5 + 0.5) * this.height;
+        // Calculate projected position
+        let x = (this.tempVector.x * 0.5 + 0.5) * this.width;
+        let y = (-this.tempVector.y * 0.5 + 0.5) * this.height;
+
+        // Get label dimensions (with fallback if not yet rendered)
+        const labelWidth = element.offsetWidth || 100;
+        const labelHeight = element.offsetHeight || 30;
+
+        // Clamp position to keep label within viewport bounds
+        // Account for label being centered on the point
+        const padding = 10; // Add padding from edges
+        x = Math.max(padding, Math.min(x, this.width - labelWidth - padding));
+        y = Math.max(padding, Math.min(y, this.height - labelHeight - padding));
 
         element.style.opacity = '1';
         element.style.transform = `translate3d(${x}px, ${y}px, 0)`;

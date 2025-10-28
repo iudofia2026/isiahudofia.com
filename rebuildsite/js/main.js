@@ -220,6 +220,7 @@
   }
 
   let heroNetwork = null;
+  let heroHoverEffect = null;
 
   function initTopographyBackground() {
     const heroBackground = document.getElementById('hero-background');
@@ -239,6 +240,49 @@
     }
 
     heroNetwork = new HeroNetwork(heroBackground);
+  }
+
+  function initHeroLogoDistortion() {
+    const heroIcon = document.getElementById('hero-icon');
+    if (!heroIcon) {
+      return;
+    }
+
+    const { imageDefault, imageHover, displacement, imagesRatio } = heroIcon.dataset;
+    const fallbackSrc = imageDefault || 'assets/hero-icon.png';
+
+    const supportsHover = window.matchMedia('(hover: hover)').matches && window.matchMedia('(pointer: fine)').matches;
+
+    if (typeof hoverEffect !== 'function' || !supportsHover) {
+      if (!heroIcon.querySelector('img')) {
+        const fallbackImg = document.createElement('img');
+        fallbackImg.src = fallbackSrc;
+        fallbackImg.alt = 'Isiah Udofia';
+        fallbackImg.className = 'hero-icon-fallback';
+        heroIcon.appendChild(fallbackImg);
+        heroIcon.classList.add('distortion-fallback');
+      }
+      return;
+    }
+
+    if (heroHoverEffect) {
+      return;
+    }
+
+    heroHoverEffect = new hoverEffect({
+      parent: heroIcon,
+      hover: true,
+      intensity: 0.45,
+      speedIn: 1.1,
+      speedOut: 1.05,
+      easing: 'easeOutQuad',
+      image1: fallbackSrc,
+      image2: imageHover || 'assets/logo-hover.png',
+      displacementImage: displacement || 'assets/hero-displacement.png',
+      imagesRatio: imagesRatio ? parseFloat(imagesRatio) : 1
+    });
+
+    heroIcon.classList.add('distortion-ready');
   }
 
   // ========================================
@@ -275,6 +319,7 @@
 
     // Initialize Three.js hero background before transition
     initTopographyBackground();
+    initHeroLogoDistortion();
 
     // Start mask transition after brief delay
     setTimeout(() => {

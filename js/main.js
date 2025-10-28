@@ -409,10 +409,11 @@
 
     // Check if hoverEffect library is available
     const hasHoverEffect = typeof window.hoverEffect === 'function';
-    console.log('hoverEffect available:', hasHoverEffect, 'supportsHover:', supportsHover);
+    const hasTweenMax = typeof window.TweenMax !== 'undefined';
+    console.log('hoverEffect available:', hasHoverEffect, 'TweenMax available:', hasTweenMax, 'supportsHover:', supportsHover);
 
-    if (!hasHoverEffect || !supportsHover) {
-      console.log('Using fallback image (hoverEffect unavailable or no hover support)');
+    if (!hasHoverEffect || !hasTweenMax || !supportsHover) {
+      console.log('Using fallback image for hero (hoverEffect/TweenMax unavailable or no hover support)');
       createFallbackImage();
       return;
     }
@@ -469,10 +470,11 @@
 
     // Check if hoverEffect library is available
     const hasHoverEffect = typeof window.hoverEffect === 'function';
-    console.log('Nav logo - hoverEffect available:', hasHoverEffect, 'supportsHover:', supportsHover);
+    const hasTweenMax = typeof window.TweenMax !== 'undefined';
+    console.log('Nav logo - hoverEffect available:', hasHoverEffect, 'TweenMax available:', hasTweenMax, 'supportsHover:', supportsHover);
 
-    if (!hasHoverEffect || !supportsHover) {
-      console.log('Using fallback image for nav logo (hoverEffect unavailable or no hover support)');
+    if (!hasHoverEffect || !hasTweenMax || !supportsHover) {
+      console.log('Using fallback image for nav logo (hoverEffect/TweenMax unavailable or no hover support)');
       createFallbackImage();
       return;
     }

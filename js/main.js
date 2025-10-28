@@ -795,6 +795,8 @@
 
       if (isOpen) {
         lenis.stop();
+        // Ensure split text is applied to menu items when menu opens
+        ensureMenuSplitText();
       } else {
         lenis.start();
       }
@@ -897,6 +899,18 @@
 
       if (wordIndex < words.length - 1) {
         element.appendChild(document.createTextNode('\u00A0'));
+      }
+    });
+  }
+
+  // ========================================
+  // Menu Split Text Initialization
+  // ========================================
+  function ensureMenuSplitText() {
+    const menuLinks = document.querySelectorAll('.mobile-menu-link[data-split="menu"]');
+    menuLinks.forEach((link, index) => {
+      if (!link.dataset.splitReady) {
+        prepareSplitText(link, index);
       }
     });
   }

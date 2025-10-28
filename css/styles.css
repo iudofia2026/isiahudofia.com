@@ -411,6 +411,12 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   box-shadow: 0 18px 42px rgba(0, 31, 63, 0.2);
 }
 
+.hamburger-menu:hover::before,
+.hamburger-menu:focus-visible::before {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
 .hamburger-menu:hover::after,
 .hamburger-menu:focus-visible::after,
 .hamburger-menu.active::after {
@@ -448,6 +454,11 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
   transform: translateX(2px);
 }
 
+.hamburger-menu:hover .hamburger-line,
+.hamburger-menu:focus-visible .hamburger-line {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 1));
+}
+
 .hamburger-menu.active {
   background: rgba(0, 31, 63, 0.1);
   box-shadow: 0 24px 55px rgba(0, 31, 63, 0.32);
@@ -483,6 +494,16 @@ body.is-hero-inverted .hamburger-menu {
 
 body.is-hero-inverted .hamburger-menu::before {
   background: rgba(255, 255, 255, 0.1);
+}
+
+body.is-hero-inverted .hamburger-menu:hover::before,
+body.is-hero-inverted .hamburger-menu:focus-visible::before {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+body.is-hero-inverted .hamburger-menu:hover .hamburger-line,
+body.is-hero-inverted .hamburger-menu:focus-visible .hamburger-line {
+  background: linear-gradient(90deg, rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 1));
 }
 
 body.is-hero-inverted .hamburger-menu.active::before {

@@ -349,9 +349,8 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   height: 48px;
   padding: 10px 14px;
   border-radius: 16px;
-  border: 1.5px solid currentColor;
-  background: rgba(0, 31, 63, 0.04);
-  backdrop-filter: blur(14px);
+  border: none;
+  background: none;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -440,8 +439,8 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
 
 /* White hamburger when scrolled */
 .main-nav.scrolled .hamburger-menu {
-  border-color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  background: none;
 }
 
 .main-nav.scrolled .hamburger-line {
@@ -459,9 +458,9 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
 }
 
 .hamburger-menu.active {
-  background: rgba(0, 31, 63, 0.1);
-  box-shadow: 0 24px 55px rgba(0, 31, 63, 0.32);
-  border-color: rgba(0, 31, 63, 0.65);
+  background: none;
+  box-shadow: none;
+  border: none;
   color: var(--color-white);
 }
 
@@ -490,9 +489,9 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
 .hamburger-menu.active:hover,
 .hamburger-menu.active:focus-visible {
   color: var(--color-navy);
-  background: rgba(255, 255, 255, 0.95);
-  border-color: rgba(0, 31, 63, 0.3);
-  box-shadow: 0 22px 48px rgba(0, 31, 63, 0.32);
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
 .hamburger-menu.active:hover::before,

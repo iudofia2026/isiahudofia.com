@@ -355,32 +355,47 @@
     heroNetwork = new HeroNetwork(heroBackground);
   }
 
-  function initHeroLogoInversion() {
+  function initSyncedLogoHover() {
     const heroIcon = document.getElementById('hero-icon');
-    if (!heroIcon) {
+    const navLogoWrapper = document.querySelector('.nav-logo-wrapper');
+
+    if (!heroIcon || !navLogoWrapper) {
       return;
     }
 
     const heroSection = document.querySelector('.hero-section');
     const heroBackground = document.getElementById('hero-background');
 
-    const toggleHeroInversion = (isActive) => {
+    // Toggle background inversion AND synchronized logo hover states
+    const toggleHoverState = (isActive) => {
+      // Toggle background inversion
       document.body.classList.toggle('is-hero-inverted', isActive);
       if (heroSection) heroSection.classList.toggle('hero-section--inverted', isActive);
       if (heroBackground) heroBackground.classList.toggle('hero-background--inverted', isActive);
       if (heroNetwork && typeof heroNetwork.setInverted === 'function') {
         heroNetwork.setInverted(isActive);
       }
+
+      // Toggle synchronized hover class on both logos
+      heroIcon.classList.toggle('synced-hover', isActive);
+      navLogoWrapper.classList.toggle('synced-hover', isActive);
     };
 
-    const enterHandler = () => toggleHeroInversion(true);
-    const leaveHandler = () => toggleHeroInversion(false);
+    const enterHandler = () => toggleHoverState(true);
+    const leaveHandler = () => toggleHoverState(false);
 
+    // Add event listeners to hero logo
     heroIcon.addEventListener('pointerenter', enterHandler);
     heroIcon.addEventListener('pointerleave', leaveHandler);
     heroIcon.addEventListener('pointercancel', leaveHandler);
     heroIcon.addEventListener('focusin', enterHandler);
     heroIcon.addEventListener('focusout', leaveHandler);
+
+    // Add event listeners to nav logo
+    navLogoWrapper.addEventListener('pointerenter', enterHandler);
+    navLogoWrapper.addEventListener('pointerleave', leaveHandler);
+    navLogoWrapper.addEventListener('pointercancel', leaveHandler);
+
     window.addEventListener('blur', leaveHandler);
   }
 
@@ -423,7 +438,7 @@
     // Initialize Three.js hero background before transition
     try {
       initTopographyBackground();
-      initHeroLogoInversion();
+      initSyncedLogoHover();
     } catch (error) {
       console.warn('Hero initialization failed:', error);
     }

@@ -1025,25 +1025,7 @@ body.menu-open .hero-label {
   text-transform: uppercase;
 }
 
-/* Different fonts for ISIAH row (carousel-row-1) - cycling pattern */
-.carousel-row-1 .carousel-text:nth-child(8n+1) { font-family: 'Montserrat', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+2) { font-family: 'Oswald', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+3) { font-family: 'Archivo Black', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+4) { font-family: 'Bebas Neue', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+5) { font-family: 'Source Sans Pro', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+6) { font-family: 'Montserrat', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+7) { font-family: 'Oswald', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+8) { font-family: 'Archivo Black', sans-serif; }
-
-/* Different fonts for UDOFIA row (carousel-row-2) - cycling pattern */
-.carousel-row-2 .carousel-text:nth-child(8n+1) { font-family: 'Bebas Neue', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+2) { font-family: 'Source Sans Pro', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+3) { font-family: 'Archivo Black', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+4) { font-family: 'Montserrat', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+5) { font-family: 'Oswald', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+6) { font-family: 'Bebas Neue', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+7) { font-family: 'Source Sans Pro', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+8) { font-family: 'Archivo Black', sans-serif; }
+/* Font cycling now handled by JavaScript for better performance */
 
 @keyframes scrollLeft {
   0% {

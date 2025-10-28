@@ -971,7 +971,7 @@
         })
         .to(heroSection, {
           scale: 0.6,
-          borderRadius: '32px',
+          borderRadius: '0px',
           ease: 'power2.inOut'
         })
         .to(aboutContainer, {

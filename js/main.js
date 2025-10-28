@@ -572,19 +572,24 @@
   const loadingLogoContainer = document.querySelector('.loading-logo-container');
 
   // Use GSAP to animate progress circle
-  if (window.gsap && loadingCircleProgress) {
-    gsap.to(loadingCircleProgress, {
-      strokeDashoffset: 0,
-      duration: 2.5,
-      ease: "power2.inOut"
-    });
-  }
+  const circleAnimation = window.gsap && loadingCircleProgress
+    ? gsap.to(loadingCircleProgress, {
+        strokeDashoffset: 0,
+        duration: 2.5,
+        ease: "power2.inOut",
+        paused: true
+      })
+    : null;
 
   // Function to complete loading screen transition
   let transitionCompleted = false;
   function completeLoadingTransition() {
     if (transitionCompleted) return;
     transitionCompleted = true;
+
+    if (circleAnimation) {
+      circleAnimation.play();
+    }
 
     // Initialize Three.js hero background before transition
     try {
@@ -616,6 +621,12 @@
           loadingScreen.style.display = 'none';
         }
       });
+
+      tl.add(() => {
+        if (circleAnimation) {
+          circleAnimation.play();
+        }
+      }, 0);
 
       // Fade out progress circle
       tl.to('.loading-circle', {
@@ -650,6 +661,9 @@
         document.body.classList.add('page-loaded');
       }, "+=0.8");
     } else {
+      if (circleAnimation) {
+        circleAnimation.play();
+      }
       // Fallback
       loadingScreen.style.opacity = '0';
       setTimeout(() => {

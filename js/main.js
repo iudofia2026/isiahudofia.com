@@ -1059,6 +1059,237 @@
   }
 
   // ========================================
+  // About Section Network Background (Lightweight)
+  // ========================================
+  class AboutNetwork {
+    constructor(container) {
+      this.container = container;
+      this.width = container.clientWidth || window.innerWidth;
+      this.height = container.clientHeight || window.innerHeight;
+      this.pointCount = 120; // Fewer particles for performance
+      this.maxLinkDistance = 80;
+      this.bounds = { x: 150, y: 100, z: 150 };
+
+      this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false }); // No antialiasing for speed
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Cap pixel ratio
+      this.renderer.setSize(this.width, this.height);
+      this.renderer.domElement.classList.add('about-canvas');
+      this.container.appendChild(this.renderer.domElement);
+
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
+      this.camera.position.set(0, 0, 200);
+
+      this.positions = new Float32Array(this.pointCount * 3);
+      this.velocities = new Float32Array(this.pointCount * 3);
+      this._initParticles();
+
+      // White particles for dark navy background
+      this.pointsMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 2.0,
+        sizeAttenuation: true,
+        transparent: true,
+        opacity: 0.6
+      });
+
+      this.pointsGeometry = new THREE.BufferGeometry();
+      this.pointsGeometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+      this.pointsMesh = new THREE.Points(this.pointsGeometry, this.pointsMaterial);
+      this.scene.add(this.pointsMesh);
+
+      const maxSegments = this.pointCount * this.pointCount * 2;
+      const lineArray = new Float32Array(maxSegments * 3);
+      this.linesGeometry = new THREE.BufferGeometry();
+      this.linesGeometry.setAttribute('position', new THREE.BufferAttribute(lineArray, 3));
+      this.linesGeometry.setDrawRange(0, 0);
+      this.linesMaterial = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.15
+      });
+      this.linesMesh = new THREE.LineSegments(this.linesGeometry, this.linesMaterial);
+      this.scene.add(this.linesMesh);
+
+      this.renderer.setClearColor(0x000000, 0);
+
+      this.clock = new THREE.Clock();
+      this.frameId = null;
+
+      // Simplified physics - no mouse interaction for performance
+      this.rotationSpeed = 0.0005;
+
+      this.handleResize = this.handleResize.bind(this);
+      this.animate = this.animate.bind(this);
+
+      window.addEventListener('resize', this.handleResize);
+      this.animate();
+    }
+
+    _initParticles() {
+      for (let i = 0; i < this.pointCount; i += 1) {
+        const idx = i * 3;
+
+        // Spherical distribution
+        const radius = 60 + Math.random() * 120;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+
+        this.positions[idx] = radius * Math.sin(phi) * Math.cos(theta);
+        this.positions[idx + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        this.positions[idx + 2] = radius * Math.cos(phi);
+
+        this.velocities[idx] = (Math.random() - 0.5) * 0.3;
+        this.velocities[idx + 1] = (Math.random() - 0.5) * 0.3;
+        this.velocities[idx + 2] = (Math.random() - 0.5) * 0.3;
+      }
+    }
+
+    _updatePositions(delta) {
+      const cappedDelta = Math.min(delta, 3);
+
+      for (let i = 0; i < this.pointCount; i += 1) {
+        const idx = i * 3;
+
+        // Simple damping
+        const damping = 0.98;
+        this.velocities[idx] *= damping;
+        this.velocities[idx + 1] *= damping;
+        this.velocities[idx + 2] *= damping;
+
+        this.positions[idx] += this.velocities[idx] * cappedDelta;
+        this.positions[idx + 1] += this.velocities[idx + 1] * cappedDelta;
+        this.positions[idx + 2] += this.velocities[idx + 2] * cappedDelta;
+
+        // Rotation
+        if (this.rotationSpeed) {
+          const angle = this.rotationSpeed * cappedDelta;
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+
+          const relX = this.positions[idx];
+          const relY = this.positions[idx + 1];
+
+          this.positions[idx] = relX * cos - relY * sin;
+          this.positions[idx + 1] = relX * sin + relY * cos;
+        }
+
+        // Boundary bounce
+        const limitX = this.bounds.x;
+        const limitY = this.bounds.y;
+        const limitZ = this.bounds.z;
+
+        if (this.positions[idx] > limitX || this.positions[idx] < -limitX) {
+          this.velocities[idx] *= -1;
+          this.positions[idx] = Math.max(-limitX, Math.min(limitX, this.positions[idx]));
+        }
+        if (this.positions[idx + 1] > limitY || this.positions[idx + 1] < -limitY) {
+          this.velocities[idx + 1] *= -1;
+          this.positions[idx + 1] = Math.max(-limitY, Math.min(limitY, this.positions[idx + 1]));
+        }
+        if (this.positions[idx + 2] > limitZ || this.positions[idx + 2] < -limitZ) {
+          this.velocities[idx + 2] *= -1;
+          this.positions[idx + 2] = Math.max(-limitZ, Math.min(limitZ, this.positions[idx + 2]));
+        }
+      }
+
+      this.pointsGeometry.attributes.position.needsUpdate = true;
+    }
+
+    _updateLines() {
+      const linePositions = this.linesGeometry.attributes.position.array;
+      let ptr = 0;
+
+      for (let i = 0; i < this.pointCount; i += 1) {
+        const ix = i * 3;
+        for (let j = i + 1; j < this.pointCount; j += 1) {
+          const jx = j * 3;
+          const dx = this.positions[ix] - this.positions[jx];
+          const dy = this.positions[ix + 1] - this.positions[jx + 1];
+          const dz = this.positions[ix + 2] - this.positions[jx + 2];
+          const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+          if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
+            linePositions[ptr] = this.positions[ix];
+            linePositions[ptr + 1] = this.positions[ix + 1];
+            linePositions[ptr + 2] = this.positions[ix + 2];
+            linePositions[ptr + 3] = this.positions[jx];
+            linePositions[ptr + 4] = this.positions[jx + 1];
+            linePositions[ptr + 5] = this.positions[jx + 2];
+            ptr += 6;
+          }
+        }
+      }
+
+      this.linesGeometry.attributes.position.needsUpdate = true;
+      this.linesGeometry.setDrawRange(0, ptr / 3);
+    }
+
+    handleResize() {
+      this.width = this.container.clientWidth || window.innerWidth;
+      this.height = this.container.clientHeight || window.innerHeight;
+      this.renderer.setSize(this.width, this.height);
+      this.camera.aspect = this.width / this.height;
+      this.camera.updateProjectionMatrix();
+    }
+
+    animate() {
+      this.frameId = requestAnimationFrame(this.animate);
+      const delta = this.clock.getDelta() * 60;
+      this._updatePositions(delta);
+      this._updateLines();
+      this.renderer.render(this.scene, this.camera);
+    }
+
+    destroy() {
+      cancelAnimationFrame(this.frameId);
+      window.removeEventListener('resize', this.handleResize);
+      this.renderer.dispose();
+      this.pointsGeometry.dispose();
+      this.linesGeometry.dispose();
+      this.pointsMaterial.dispose();
+      this.linesMaterial.dispose();
+      if (this.renderer.domElement.parentNode === this.container) {
+        this.container.removeChild(this.renderer.domElement);
+      }
+    }
+  }
+
+  let aboutNetwork = null;
+
+  function initAboutNetwork() {
+    const aboutBackground = document.getElementById('about-background');
+
+    if (!aboutBackground) {
+      console.warn('About background element not found');
+      return;
+    }
+
+    if (!window.THREE) {
+      console.warn('Three.js is not available');
+      return;
+    }
+
+    if (aboutNetwork) {
+      aboutNetwork.destroy();
+    }
+
+    aboutNetwork = new AboutNetwork(aboutBackground);
+  }
+
+  // Initialize About network after page loads
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      initAboutNetwork();
+    }, 3000);
+  });
+
+  // Cleanup
+  window.addEventListener('beforeunload', () => {
+    if (aboutNetwork) aboutNetwork.destroy();
+  });
+
+  // ========================================
   // Console Easter Egg
   // ========================================
   console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');

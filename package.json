@@ -8,8 +8,7 @@
     "start": "npx http-server -p 3000"
   },
   "dependencies": {
-    "@studio-freight/lenis": "^1.0.42",
-    "lenis": "^1.1.13"
+    "@studio-freight/lenis": "^1.0.42"
   },
   "devDependencies": {
     "http-server": "^14.1.1",

@@ -13,7 +13,7 @@
       this.container = container;
       this.width = container.clientWidth || window.innerWidth;
       this.height = container.clientHeight || window.innerHeight;
-      this.pointCount = 200; // Slightly above original density
+      this.pointCount = 350; // Increased to maintain density across expanded bounds (200 * 1.75)
       this.maxLinkDistance = 60; // Increased to work with larger bounds
       this.bounds = { x: 200, y: 120, z: 200 }; // Expanded bounds for better screen coverage
 

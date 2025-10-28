@@ -93,11 +93,37 @@
       this.clock = new THREE.Clock();
       this.frameId = null;
 
+      // Mouse interaction
+      this.mouse = { x: 0, y: 0, isInside: false };
+      this.mouseInfluenceRadius = 80;
+      this.mouseForce = 0.3;
+
       this.handleResize = this.handleResize.bind(this);
       this.animate = this.animate.bind(this);
+      this.handleMouseMove = this.handleMouseMove.bind(this);
+      this.handleMouseEnter = this.handleMouseEnter.bind(this);
+      this.handleMouseLeave = this.handleMouseLeave.bind(this);
 
       window.addEventListener('resize', this.handleResize);
+      this.container.addEventListener('mousemove', this.handleMouseMove);
+      this.container.addEventListener('mouseenter', this.handleMouseEnter);
+      this.container.addEventListener('mouseleave', this.handleMouseLeave);
       this.animate();
+    }
+
+    handleMouseMove(event) {
+      const rect = this.container.getBoundingClientRect();
+      // Convert mouse position to normalized device coordinates (-1 to +1)
+      this.mouse.x = ((event.clientX - rect.left) / this.width) * 2 - 1;
+      this.mouse.y = -((event.clientY - rect.top) / this.height) * 2 + 1;
+    }
+
+    handleMouseEnter() {
+      this.mouse.isInside = true;
+    }
+
+    handleMouseLeave() {
+      this.mouse.isInside = false;
     }
 
     _initParticles() {
@@ -127,8 +153,30 @@
     }
 
     _updatePositions(delta) {
+      // Convert mouse position from NDC to world space for interaction
+      let mouseWorldX = 0;
+      let mouseWorldY = 0;
+      if (this.mouse.isInside) {
+        mouseWorldX = this.mouse.x * (this.bounds.x * 1.5);
+        mouseWorldY = this.mouse.y * (this.bounds.y * 1.5);
+      }
+
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
+
+        // Apply mouse interaction force
+        if (this.mouse.isInside) {
+          const dx = this.positions[idx] - mouseWorldX;
+          const dy = this.positions[idx + 1] - mouseWorldY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < this.mouseInfluenceRadius && distance > 0) {
+            const force = (1 - distance / this.mouseInfluenceRadius) * this.mouseForce;
+            this.positions[idx] += (dx / distance) * force * delta;
+            this.positions[idx + 1] += (dy / distance) * force * delta;
+          }
+        }
+
         this.positions[idx] += this.velocities[idx] * delta;
         this.positions[idx + 1] += this.velocities[idx + 1] * delta;
         this.positions[idx + 2] += this.velocities[idx + 2] * delta;
@@ -261,6 +309,9 @@
     destroy() {
       cancelAnimationFrame(this.frameId);
       window.removeEventListener('resize', this.handleResize);
+      this.container.removeEventListener('mousemove', this.handleMouseMove);
+      this.container.removeEventListener('mouseenter', this.handleMouseEnter);
+      this.container.removeEventListener('mouseleave', this.handleMouseLeave);
       this.setInverted(false);
       this.renderer.dispose();
       this.pointsGeometry.dispose();

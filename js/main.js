@@ -956,12 +956,12 @@
       function initSmoothZoomEffect() {
         const textCarousel = document.querySelector('.text-carousel');
 
-        // Pin the hero section and zoom it out
+        // Pin the hero section and zoom it out, then move it up and off screen
         gsap.timeline({
           scrollTrigger: {
             trigger: heroSection,
             start: 'top top',
-            end: '+=100%', // Zoom happens over 100vh of scroll
+            end: '+=160%', // Extended to include both zoom and scroll-off
             scrub: 1.2, // Smooth scrubbing
             pin: true,
             pinSpacing: true, // Create space so other content flows naturally
@@ -984,31 +984,16 @@
           opacity: 1,
           y: 0,
           ease: 'power2.out'
-        }, '<'); // '<' means start at the same time as previous animation
-
-        // Continue carousel movement as hero scrolls up and off screen
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: heroSection,
-            start: '+=100%', // Start after the zoom animation
-            end: '+=60%', // Continue for another 60vh
-            scrub: 1.2,
-            invalidateOnRefresh: true,
-            toggleActions: 'play none none reset',
-            onUpdate: (self) => {
-              // Change positioning from fixed to absolute during animation
-              if (self.progress > 0.1) {
-                textCarousel.style.position = 'absolute';
-                textCarousel.style.top = '50%';
-              }
-            }
-          }
-        })
+        }, '<') // '<' means start at the same time as previous animation
+        .to(heroSection, {
+          y: -window.innerHeight * 0.8, // Move hero section up
+          ease: 'power2.inOut'
+        }, '>') // '>' means start after previous animation
         .to(textCarousel, {
-          y: -window.innerHeight * 1.5, // Move carousel up and off screen
+          y: -window.innerHeight * 0.8, // Move carousel up with hero
           scale: 0.2, // Continue scaling down dramatically
           ease: 'power2.inOut'
-        });
+        }, '<'); // '<' means start at the same time as previous animation
 
         // Global scroll listener to handle scroll-to-top from anywhere
         let isScrollingToTop = false;

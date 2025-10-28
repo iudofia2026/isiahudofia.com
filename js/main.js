@@ -1281,8 +1281,32 @@
   window.addEventListener('load', () => {
     setTimeout(() => {
       initAboutNetwork();
+      initAboutNetworkScroll();
     }, 3000);
   });
+
+  // Add scroll-based parallax to About network
+  function initAboutNetworkScroll() {
+    const aboutBg = document.getElementById('about-background');
+
+    if (!aboutBg || !window.gsap || !window.ScrollTrigger) {
+      console.warn('Cannot initialize About network scroll');
+      return;
+    }
+
+    // Parallax effect on scroll
+    gsap.to(aboutBg, {
+      y: -100, // Move upward as you scroll
+      ease: 'none',
+      scrollTrigger: {
+        trigger: aboutBg,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.5, // Smooth scrubbing
+        invalidateOnRefresh: true
+      }
+    });
+  }
 
   // Cleanup
   window.addEventListener('beforeunload', () => {

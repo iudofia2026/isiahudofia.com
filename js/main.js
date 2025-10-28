@@ -160,60 +160,39 @@
     }
 
     _initParticles() {
-      // Use a hybrid approach: grid-based initial placement + jitter for natural look
-      const gridSize = Math.ceil(Math.cbrt(this.pointCount)); // 3D grid size
-      const cellSize = Math.min(this.bounds.x, this.bounds.y, this.bounds.z) * 2 / gridSize;
-      const jitterAmount = cellSize * 0.3; // 30% jitter for natural distribution
-      const positions = [];
+      // Create concentric spheres around the center point
+      const centerRadius = 80; // Base radius from center
+      const radiusVariation = 40; // Variation in radius
+      const numLayers = 4; // Number of concentric layers
       
-      // Create a 3D grid and place particles with jitter
-      let particleIndex = 0;
-      for (let x = 0; x < gridSize && particleIndex < this.pointCount; x++) {
-        for (let y = 0; y < gridSize && particleIndex < this.pointCount; y++) {
-          for (let z = 0; z < gridSize && particleIndex < this.pointCount; z++) {
-            // Calculate base position in grid
-            const baseX = (x / (gridSize - 1)) * this.bounds.x * 2 - this.bounds.x;
-            const baseY = (y / (gridSize - 1)) * this.bounds.y * 2 - this.bounds.y;
-            const baseZ = (z / (gridSize - 1)) * this.bounds.z * 2 - this.bounds.z;
-            
-            // Add random jitter
-            const jitterX = (Math.random() - 0.5) * jitterAmount;
-            const jitterY = (Math.random() - 0.5) * jitterAmount;
-            const jitterZ = (Math.random() - 0.5) * jitterAmount;
-            
-            positions.push({
-              x: baseX + jitterX,
-              y: baseY + jitterY,
-              z: baseZ + jitterZ
-            });
-            
-            particleIndex++;
-          }
-        }
-      }
-      
-      // Fill remaining particles randomly if we didn't fill the grid
-      while (particleIndex < this.pointCount) {
-        positions.push({
-          x: (Math.random() - 0.5) * this.bounds.x * 2,
-          y: (Math.random() - 0.5) * this.bounds.y * 2,
-          z: (Math.random() - 0.5) * this.bounds.z * 2
-        });
-        particleIndex++;
-      }
-      
-      // Convert to the format expected by the rest of the code
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
-        const pos = positions[i] || { x: 0, y: 0, z: 0 };
         
-        this.positions[idx] = pos.x;
-        this.positions[idx + 1] = pos.y;
-        this.positions[idx + 2] = pos.z;
+        // Determine which layer this particle belongs to
+        const layer = Math.floor((i / this.pointCount) * numLayers);
+        const layerProgress = (i % (this.pointCount / numLayers)) / (this.pointCount / numLayers);
+        
+        // Calculate radius for this layer
+        const baseRadius = centerRadius + (layer * radiusVariation / numLayers);
+        const radius = baseRadius + (Math.random() - 0.5) * (radiusVariation / numLayers);
+        
+        // Generate random spherical coordinates
+        const theta = Math.random() * Math.PI * 2; // Azimuth angle (0 to 2π)
+        const phi = Math.random() * Math.PI; // Polar angle (0 to π)
+        
+        // Convert to Cartesian coordinates
+        const x = radius * Math.sin(phi) * Math.cos(theta);
+        const y = radius * Math.sin(phi) * Math.sin(theta);
+        const z = radius * Math.cos(phi);
+        
+        this.positions[idx] = x;
+        this.positions[idx + 1] = y;
+        this.positions[idx + 2] = z;
 
-        this.velocities[idx] = (Math.random() - 0.5) * 0.25;
-        this.velocities[idx + 1] = (Math.random() - 0.5) * 0.18;
-        this.velocities[idx + 2] = (Math.random() - 0.5) * 0.25;
+        // Create varied velocities for natural movement
+        this.velocities[idx] = (Math.random() - 0.5) * 0.4;
+        this.velocities[idx + 1] = (Math.random() - 0.5) * 0.3;
+        this.velocities[idx + 2] = (Math.random() - 0.5) * 0.4;
       }
     }
 

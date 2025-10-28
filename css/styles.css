@@ -959,16 +959,17 @@ body.menu-open .hero-label {
   align-items: center;
   justify-content: center;
   padding: var(--spacing-2xl) var(--spacing-lg);
-  overflow: hidden;
+  overflow: visible; /* Allow background to extend beyond section */
 }
 
 .about-background {
   position: absolute;
-  top: 0;
+  top: -100vh; /* Extend upward by full viewport height */
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 200vh; /* Double height to cover both the space above and the About section */
   z-index: var(--z-canvas);
+  pointer-events: none;
 }
 
 .about-container {

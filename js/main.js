@@ -13,8 +13,8 @@
       this.container = container;
       this.width = container.clientWidth || window.innerWidth;
       this.height = container.clientHeight || window.innerHeight;
-      this.pointCount = 150; // Increased from 90 for more nodes
-      this.maxLinkDistance = 50; // Increased from 45 for more connections
+      this.pointCount = 200; // Slightly above original density
+      this.maxLinkDistance = 45; // Adjusted for better spacing (was 56)
       this.bounds = { x: 120, y: 70, z: 120 };
 
       this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -110,7 +110,8 @@
 
       // Orbital settings
       this.centerPoint = { x: 0, y: 0, z: 0 }; // Center of rotation
-      this.orbitalForce = 0.0003; // Very slight rotation around center
+      this.orbitalForce = 0.000002; // Gentle tangential drift
+      this.rotationSpeed = 0.0008; // Radians per second, counterclockwise
 
       // Random movement - smooth continuous forces
       this.randomMovementStrength = 0.005; // Gentle continuous random force
@@ -159,11 +160,59 @@
     }
 
     _initParticles() {
+      // Use Poisson disk sampling for better spacing distribution
+      const minDistance = 25; // Minimum distance between particles
+      const maxAttempts = 30; // Max attempts to place each particle
+      const positions = [];
+      
+      // Helper function to check if a position is valid (not too close to existing particles)
+      const isValidPosition = (x, y, z) => {
+        for (const pos of positions) {
+          const dx = x - pos.x;
+          const dy = y - pos.y;
+          const dz = z - pos.z;
+          const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+          if (distance < minDistance) {
+            return false;
+          }
+        }
+        return true;
+      };
+      
+      // Place particles with improved spacing
+      for (let i = 0; i < this.pointCount; i += 1) {
+        let attempts = 0;
+        let placed = false;
+        
+        while (attempts < maxAttempts && !placed) {
+          const x = (Math.random() - 0.5) * this.bounds.x * 2;
+          const y = (Math.random() - 0.5) * this.bounds.y * 2;
+          const z = (Math.random() - 0.5) * this.bounds.z * 2;
+          
+          if (isValidPosition(x, y, z)) {
+            positions.push({ x, y, z });
+            placed = true;
+          }
+          attempts++;
+        }
+        
+        // If we couldn't place with good spacing, fall back to random placement
+        if (!placed) {
+          const x = (Math.random() - 0.5) * this.bounds.x * 2;
+          const y = (Math.random() - 0.5) * this.bounds.y * 2;
+          const z = (Math.random() - 0.5) * this.bounds.z * 2;
+          positions.push({ x, y, z });
+        }
+      }
+      
+      // Convert to the format expected by the rest of the code
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
-        this.positions[idx] = (Math.random() - 0.5) * this.bounds.x * 2;
-        this.positions[idx + 1] = (Math.random() - 0.5) * this.bounds.y * 2;
-        this.positions[idx + 2] = (Math.random() - 0.5) * this.bounds.z * 2;
+        const pos = positions[i] || { x: 0, y: 0, z: 0 };
+        
+        this.positions[idx] = pos.x;
+        this.positions[idx + 1] = pos.y;
+        this.positions[idx + 2] = pos.z;
 
         this.velocities[idx] = (Math.random() - 0.5) * 0.25;
         this.velocities[idx + 1] = (Math.random() - 0.5) * 0.18;
@@ -205,13 +254,15 @@
 
         // Apply orbital/tangential force for rotation (no inward gravity)
         // Create perpendicular vector for orbital motion (simplified 2D rotation in XY plane)
-        const orbitalX = -dy;
-        const orbitalY = dx;
-        const orbitalLength = Math.sqrt(orbitalX * orbitalX + orbitalY * orbitalY);
+        if (this.orbitalForce > 0) {
+          const orbitalX = -dy;
+          const orbitalY = dx;
+          const orbitalLength = Math.sqrt(orbitalX * orbitalX + orbitalY * orbitalY);
 
-        if (orbitalLength > 0) {
-          this.velocities[idx] += (orbitalX / orbitalLength) * this.orbitalForce;
-          this.velocities[idx + 1] += (orbitalY / orbitalLength) * this.orbitalForce;
+          if (orbitalLength > 0) {
+            this.velocities[idx] += (orbitalX / orbitalLength) * this.orbitalForce;
+            this.velocities[idx + 1] += (orbitalY / orbitalLength) * this.orbitalForce;
+          }
         }
 
         // Apply random movement for more natural, organic motion
@@ -246,6 +297,29 @@
         this.positions[idx] += this.velocities[idx] * cappedDelta;
         this.positions[idx + 1] += this.velocities[idx + 1] * cappedDelta;
         this.positions[idx + 2] += this.velocities[idx + 2] * cappedDelta;
+
+        if (this.rotationSpeed) {
+          const angle = this.rotationSpeed * cappedDelta;
+          if (angle !== 0) {
+            const cos = Math.cos(angle);
+            const sin = Math.sin(angle);
+
+            const relX = this.positions[idx] - this.centerPoint.x;
+            const relY = this.positions[idx + 1] - this.centerPoint.y;
+
+            const rotatedX = relX * cos - relY * sin;
+            const rotatedY = relX * sin + relY * cos;
+
+            this.positions[idx] = rotatedX + this.centerPoint.x;
+            this.positions[idx + 1] = rotatedY + this.centerPoint.y;
+
+            const velX = this.velocities[idx];
+            const velY = this.velocities[idx + 1];
+
+            this.velocities[idx] = velX * cos - velY * sin;
+            this.velocities[idx + 1] = velX * sin + velY * cos;
+          }
+        }
 
         const limitX = this.bounds.x;
         const limitY = this.bounds.y;
@@ -749,6 +823,7 @@
     element.dataset.splitReady = 'true';
     element.classList.add('split-text');
     element.setAttribute('aria-label', originalText);
+    element.setAttribute('data-text', originalText);
 
     const words = originalText.split(/\s+/);
     element.textContent = '';

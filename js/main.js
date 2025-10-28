@@ -954,6 +954,8 @@
       });
 
       function initSmoothZoomEffect() {
+        const textCarousel = document.querySelector('.text-carousel');
+
         // Pin the hero section and zoom it out
         gsap.timeline({
           scrollTrigger: {
@@ -974,6 +976,10 @@
           borderRadius: '0px',
           ease: 'power2.inOut'
         })
+        .to(textCarousel, {
+          scale: 0.6,
+          ease: 'power2.inOut'
+        }, '<')
         .to(aboutContainer, {
           opacity: 1,
           y: 0,

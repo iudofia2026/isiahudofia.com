@@ -169,16 +169,33 @@
       const labelRadius = 60; // Fixed radius for contact, research, projects
       const trackedLabelIndices = [8, 21, 55]; // Indices for tracked labels
       
+      // Pre-calculate evenly spaced positions for tracked labels
+      const labelPositions = [];
+      for (let i = 0; i < trackedLabelIndices.length; i++) {
+        const angle = (i / trackedLabelIndices.length) * Math.PI * 2; // Evenly spaced around circle
+        const phi = Math.PI / 2; // Keep them at same height level
+        labelPositions.push({
+          x: labelRadius * Math.sin(phi) * Math.cos(angle),
+          y: labelRadius * Math.sin(phi) * Math.sin(angle),
+          z: labelRadius * Math.cos(phi)
+        });
+      }
+      
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
         
-        let radius;
+        let x, y, z;
         
         // Check if this is a tracked label node
         if (trackedLabelIndices.includes(i)) {
-          // Use fixed closer radius for tracked labels
-          radius = labelRadius;
+          // Use pre-calculated evenly spaced position
+          const labelIndex = trackedLabelIndices.indexOf(i);
+          const pos = labelPositions[labelIndex];
+          x = pos.x;
+          y = pos.y;
+          z = pos.z;
         } else {
+          let radius;
           // Create more density in closer regions
           const randomValue = Math.random();
           
@@ -192,16 +209,16 @@
             // 30% of nodes in far region (140-200px)
             radius = 140 + Math.random() * 60;
           }
+          
+          // Generate random spherical coordinates
+          const theta = Math.random() * Math.PI * 2; // Azimuth angle (0 to 2π)
+          const phi = Math.random() * Math.PI; // Polar angle (0 to π)
+          
+          // Convert to Cartesian coordinates
+          x = radius * Math.sin(phi) * Math.cos(theta);
+          y = radius * Math.sin(phi) * Math.sin(theta);
+          z = radius * Math.cos(phi);
         }
-        
-        // Generate random spherical coordinates
-        const theta = Math.random() * Math.PI * 2; // Azimuth angle (0 to 2π)
-        const phi = Math.random() * Math.PI; // Polar angle (0 to π)
-        
-        // Convert to Cartesian coordinates
-        const x = radius * Math.sin(phi) * Math.cos(theta);
-        const y = radius * Math.sin(phi) * Math.sin(theta);
-        const z = radius * Math.cos(phi);
         
         this.positions[idx] = x;
         this.positions[idx + 1] = y;

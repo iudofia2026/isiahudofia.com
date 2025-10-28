@@ -832,6 +832,12 @@
 
   splitTargets.forEach((element, index) => {
     if (!element) return;
+    
+    // Skip menu items - they'll be handled when menu opens
+    if (element.dataset.split === 'menu') {
+      return;
+    }
+    
     prepareSplitText(element, index);
   });
 
@@ -890,10 +896,6 @@
         // For menu items, use simple increasing delay of 0.1s per character
         const delay = context === 'menu' ? globalIndex * 0.1 : Math.max(baseDelay + wordIndex * wordStep + globalIndex * charStep + (Math.random() - 0.5) * jitterMax, 0);
         charSpan.style.setProperty('--char-delay', `${delay.toFixed(3)}s`);
-        
-        if (context === 'menu') {
-          console.log(`Character ${char} delay: ${delay.toFixed(3)}s`);
-        }
 
         wordSpan.appendChild(charSpan);
         globalIndex += 1;
@@ -912,13 +914,9 @@
   // ========================================
   function ensureMenuSplitText() {
     const menuLinks = document.querySelectorAll('.mobile-menu-link[data-split="menu"]');
-    console.log('Found menu links:', menuLinks.length);
     menuLinks.forEach((link, index) => {
       if (!link.dataset.splitReady) {
-        console.log('Preparing split text for:', link.textContent);
         prepareSplitText(link, index);
-      } else {
-        console.log('Split text already ready for:', link.textContent);
       }
     });
   }

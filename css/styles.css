@@ -6,14 +6,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-@font-face {
-  font-family: 'Mona Sans';
-  src: url('../assets/fonts/MonaSans-Variable.woff2') format('woff2');
-  font-weight: 200 900;
-  font-stretch: 75% 125%;
-  font-style: normal;
-  font-display: swap;
-}
 
 :root {
   /* Color Palette - White, Navy & Dark Grey Theme */
@@ -21,12 +13,8 @@
   --color-navy-dark: #001429;
   --color-navy-light: #003366;
   --color-white: #ffffff;
-  --color-off-white: #f8f9fa;
-  --color-gray-light: #e8eaed;
-  --color-gray-medium: #6c757d;
   --color-gray-dark: #2c3e50;
   --color-accent-blue: #0066cc;
-  --color-accent-blue-hover: #0052a3;
 
   /* Typography - Lando Fonts */
   /* Using Outfit as Brier alternative (similar geometric sans) */
@@ -350,10 +338,6 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.9) 30%, rgba(255, 255, 255, 0.9) 70%, rgba(255, 255, 255, 0.4));
 }
 
-/* Hide desktop nav links - using hamburger menu only */
-.nav-links {
-  display: none;
-}
 
 .hamburger-menu {
   display: flex;
@@ -751,96 +735,6 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   min-height: clamp(140px, 24vw, 280px);
 }
 
-.mobile-menu-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 28px;
-  padding: clamp(1rem, 3vw, 1.8rem);
-  background: linear-gradient(135deg, rgba(0, 31, 63, 0.65), rgba(0, 31, 63, 0.2));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(22px);
-}
-
-.mobile-menu-card::before,
-.mobile-menu-card::after {
-  content: '';
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(45px);
-  opacity: 0.75;
-  pointer-events: none;
-}
-
-.mobile-menu-card::before {
-  width: 240px;
-  height: 240px;
-  top: -50px;
-  right: -80px;
-  background: radial-gradient(circle, rgba(0, 102, 204, 0.45), transparent 70%);
-}
-
-.mobile-menu-card::after {
-  width: 180px;
-  height: 180px;
-  bottom: -60px;
-  left: -40px;
-  background: radial-gradient(circle, rgba(30, 144, 255, 0.32), transparent 70%);
-}
-
-.mobile-menu-card-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(30, 144, 255, 0.85);
-  font-weight: 600;
-  position: relative;
-  z-index: 1;
-}
-
-.mobile-menu-card-image {
-  width: clamp(54px, 10vw, 82px);
-  height: auto;
-  margin: clamp(0.6rem, 2vw, 1.1rem) 0 clamp(0.5rem, 1.6vw, 1rem);
-  filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.4));
-  position: relative;
-  z-index: 1;
-}
-
-.mobile-menu-card-title {
-  position: relative;
-  z-index: 1;
-  font-family: var(--font-menu);
-  font-variation-settings: 'wght' 610, 'wdth' 92;
-  text-transform: lowercase;
-  font-size: clamp(1.3rem, 3.2vw, 1.8rem);
-  letter-spacing: 0.08em;
-  color: var(--color-white);
-  margin-bottom: 0.45rem;
-}
-
-.mobile-menu-card-copy {
-  position: relative;
-  z-index: 1;
-  max-width: 24ch;
-  font-size: clamp(0.72rem, 1.4vw, 0.85rem);
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.mobile-menu-cta {
-  display: none;
-}
-
-.mobile-menu-footer {
-  display: none;
-}
 
 @media (max-width: 1024px) {
   .mobile-menu-grid {
@@ -864,13 +758,6 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
     font-size: clamp(1.8rem, 16vw, 2.8rem);
   }
 
-  .mobile-menu-card {
-    padding: clamp(0.8rem, 3vw, 1.4rem);
-  }
-
-  .mobile-menu-card-title {
-    font-size: 1.3rem;
-  }
 }
 
 /* ========================================
@@ -1167,7 +1054,6 @@ body.menu-open .hero-label {
   .main-nav,
   .hamburger-menu,
   .mobile-menu,
-  .hero-canvas,
   .rotation-prompt {
     display: none !important;
   }

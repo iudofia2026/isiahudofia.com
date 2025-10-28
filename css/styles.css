@@ -973,6 +973,74 @@ body.menu-open .hero-label {
   pointer-events: none;
 }
 
+/* Text Carousel - ISIAH & UDOFIA */
+.text-carousel {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  z-index: 1; /* Above about-background, below hero */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.carousel-row {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 2rem;
+}
+
+.carousel-row:last-child {
+  margin-bottom: 0;
+}
+
+.carousel-content {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.carousel-row[data-direction="left"] .carousel-content {
+  animation: scrollLeft 30s linear infinite;
+}
+
+.carousel-row[data-direction="right"] .carousel-content {
+  animation: scrollRight 30s linear infinite;
+}
+
+.carousel-text {
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 15vw, 12rem);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.08);
+  letter-spacing: -0.03em;
+  padding: 0 4rem;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-transform: uppercase;
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .about-container {
   max-width: 1200px;
   width: 100%;

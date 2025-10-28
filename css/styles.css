@@ -341,9 +341,6 @@ button:focus-visible {
   height: 65px;
   width: auto;
   display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
   transition: opacity 0.3s ease, transform 0.3s var(--ease-out-cubic);
 }
 
@@ -354,6 +351,9 @@ button:focus-visible {
 
 .nav-logo-hover {
   opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .nav-brand:hover .nav-logo-default {
@@ -640,9 +640,6 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   height: auto;
   display: block;
   border-radius: 16px;
-  position: absolute;
-  top: 0;
-  left: 0;
   transition: opacity 0.4s ease, transform 0.45s var(--ease-out-cubic);
 }
 
@@ -653,6 +650,9 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
 
 .hero-icon-hover {
   opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .hero-icon-wrapper:hover .hero-icon-default {

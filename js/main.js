@@ -407,40 +407,26 @@
   }
 
   // ========================================
-  // Loading Screen Transition - Circular Progress
+  // Loading Screen Transition - Anime.js Mask Reveal
   // ========================================
   const loadingScreen = document.getElementById('loading-screen');
   const loadingCircleProgress = document.getElementById('loading-circle-progress');
 
-  // Circle circumference: 2 * PI * radius = 2 * 3.14159 * 90 = 565.48
-  const circumference = 565.48;
-
-  let progress = 0;
-  const progressInterval = setInterval(() => {
-    progress += Math.random() * 15;
-    if (progress > 100) progress = 100;
-
-    if (loadingCircleProgress) {
-      // Calculate dash offset (100% = 0 offset, 0% = full circumference)
-      const offset = circumference - (progress / 100) * circumference;
-      loadingCircleProgress.style.strokeDashoffset = offset;
-    }
-
-    if (progress >= 100) {
-      clearInterval(progressInterval);
-    }
-  }, 150);
+  // Animate progress bar to 100%
+  if (window.anime && loadingCircleProgress) {
+    anime({
+      targets: loadingCircleProgress,
+      strokeDashoffset: [565.48, 0],
+      easing: 'easeInOutQuad',
+      duration: 2000
+    });
+  }
 
   // Function to complete loading screen transition
   let transitionCompleted = false;
   function completeLoadingTransition() {
     if (transitionCompleted) return;
     transitionCompleted = true;
-
-    // Ensure progress reaches 100%
-    if (loadingCircleProgress) {
-      loadingCircleProgress.style.strokeDashoffset = 0;
-    }
 
     // Initialize Three.js hero background before transition
     try {
@@ -450,25 +436,41 @@
       console.warn('Hero initialization failed:', error);
     }
 
-    // Start mask transition after brief delay
-    setTimeout(() => {
+    if (!window.anime) {
       if (loadingScreen) {
-        loadingScreen.classList.add('loaded');
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => loadingScreen.style.display = 'none', 500);
       }
-      clearInterval(progressInterval);
-    }, 600);
+      return;
+    }
+
+    // Mask reveal animation
+    const tl = anime.timeline({
+      complete: () => loadingScreen.style.display = 'none'
+    });
+
+    tl.add({
+      targets: '.loading-circle-container',
+      scale: [1, 25],
+      opacity: [1, 0],
+      duration: 1400,
+      easing: 'easeInExpo'
+    }).add({
+      targets: loadingScreen,
+      opacity: [1, 0],
+      duration: 600,
+      easing: 'easeOutQuad'
+    }, 800);
   }
 
-  // Wait for page load
   window.addEventListener('load', completeLoadingTransition);
 
-  // Failsafe: Force loading screen to complete after 5 seconds maximum
   setTimeout(() => {
-    if (loadingScreen && !loadingScreen.classList.contains('loaded')) {
+    if (loadingScreen && loadingScreen.style.display !== 'none') {
       console.warn('Loading timeout reached, forcing transition');
       completeLoadingTransition();
     }
-  }, 5000);
+  }, 3000);
 
   // ========================================
   // Smooth Scrolling with Lenis

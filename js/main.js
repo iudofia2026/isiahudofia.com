@@ -89,9 +89,9 @@
 
       // Each entry maps a point index to a clickable label. Adjust to match your sections/links.
       this.trackedLabels = [
-        { index: 8, text: 'Projects', href: '#projects' },
-        { index: 21, text: 'Research', href: '#research' },
-        { index: 55, text: 'Contact', href: '#contact' }
+        { index: 8, text: 'projects', href: '#projects' },
+        { index: 21, text: 'research', href: '#research' },
+        { index: 55, text: 'contact', href: '#contact' }
       ];
       this.labelElements = [];
       this._createLabels();
@@ -606,6 +606,8 @@
 
   requestAnimationFrame(raf);
 
+  let toggleMenuHandler = null;
+
   // Anchor link smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -621,8 +623,15 @@
         const mobileMenu = document.querySelector('.mobile-menu');
         const hamburger = document.querySelector('.hamburger-menu');
         if (mobileMenu && mobileMenu.classList.contains('active')) {
-          mobileMenu.classList.remove('active');
-          hamburger.classList.remove('active');
+          if (typeof toggleMenuHandler === 'function') {
+            toggleMenuHandler(false);
+          } else {
+            mobileMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('menu-open');
+            lenis.start();
+          }
         }
       }
     });
@@ -666,33 +675,42 @@
   const mobileMenu = document.querySelector('.mobile-menu');
 
   if (hamburger && mobileMenu) {
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
+    const toggleMenu = (forceState) => {
+      const isOpen = typeof forceState === 'boolean'
+        ? forceState
+        : !hamburger.classList.contains('active');
 
-      // Prevent scroll when menu is open
-      if (mobileMenu.classList.contains('active')) {
+      hamburger.classList.toggle('active', isOpen);
+      mobileMenu.classList.toggle('active', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      document.body.classList.toggle('menu-open', isOpen);
+
+      if (isOpen) {
         lenis.stop();
       } else {
         lenis.start();
       }
+
+      return isOpen;
+    };
+
+    toggleMenuHandler = toggleMenu;
+
+    hamburger.addEventListener('click', () => {
+      toggleMenu();
     });
 
     // Close menu when clicking outside
     mobileMenu.addEventListener('click', (e) => {
       if (e.target === mobileMenu) {
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        lenis.start();
+        toggleMenu(false);
       }
     });
 
     // Close menu on escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        lenis.start();
+        toggleMenu(false);
       }
     });
   }
@@ -700,46 +718,73 @@
   // ========================================
   // Split Text Animation
   // ========================================
-  function splitText(element) {
-    const text = element.textContent;
-    const words = text.split(' ');
+  const splitTargets = Array.from(document.querySelectorAll('[data-split]'));
 
-    element.innerHTML = '';
+  splitTargets.forEach((element, index) => {
+    if (!element) return;
+    prepareSplitText(element, index);
+  });
+
+  const splitObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('animated');
+      observer.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.45
+  });
+
+  splitTargets.forEach(element => {
+    if (!element || element.dataset.split === 'menu') return;
+    splitObserver.observe(element);
+  });
+
+  function prepareSplitText(element, elementIndex = 0) {
+    if (!element || element.dataset.splitReady === 'true') return;
+
+    const originalText = element.textContent.trim();
+    if (!originalText.length) return;
+
+    element.dataset.splitReady = 'true';
+    element.classList.add('split-text');
+    element.setAttribute('aria-label', originalText);
+
+    const words = originalText.split(/\s+/);
+    element.textContent = '';
+
+    const context = element.dataset.split || 'default';
+    const baseDelay = Number(element.dataset.splitDelay) || elementIndex * 0.08;
+    const charStep = Number(element.dataset.splitStep) || (context === 'menu' ? 0.038 : 0.024);
+    const wordStep = Number(element.dataset.splitWordStep) || (context === 'menu' ? 0.14 : 0.1);
+    const jitterMax = context === 'menu' ? 0.045 : 0.03;
+
+    let globalIndex = 0;
 
     words.forEach((word, wordIndex) => {
       const wordSpan = document.createElement('span');
       wordSpan.className = 'word';
-      wordSpan.style.display = 'inline-block';
-      wordSpan.style.marginRight = '0.3em';
 
-      const chars = word.split('');
-      chars.forEach((char, charIndex) => {
+      Array.from(word).forEach((char) => {
         const charSpan = document.createElement('span');
         charSpan.className = 'char';
         charSpan.textContent = char;
-        charSpan.style.transitionDelay = `${(wordIndex * 0.1 + charIndex * 0.03)}s`;
+
+        const jitter = (Math.random() - 0.5) * jitterMax;
+        const delay = Math.max(baseDelay + wordIndex * wordStep + globalIndex * charStep + jitter, 0);
+        charSpan.style.setProperty('--char-delay', `${delay.toFixed(3)}s`);
+
         wordSpan.appendChild(charSpan);
+        globalIndex += 1;
       });
 
       element.appendChild(wordSpan);
-    });
-  }
 
-  // Apply split text to elements
-  const splitElements = document.querySelectorAll('[data-split]');
-  splitElements.forEach(splitText);
-
-  // Animate on scroll
-  const splitObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animated');
-        splitObserver.unobserve(entry.target);
+      if (wordIndex < words.length - 1) {
+        element.appendChild(document.createTextNode('\u00A0'));
       }
     });
-  }, { threshold: 0.3 });
-
-  splitElements.forEach(el => splitObserver.observe(el));
+  }
 
   // ========================================
   // Device Rotation Detection (Mobile)
@@ -780,4 +825,3 @@
   console.log('%cCustom Three.js hero network + Seamless Loading Transition', 'font-size: 12px; color: #6c757d;');
 
 })();
-

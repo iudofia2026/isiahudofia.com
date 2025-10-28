@@ -330,6 +330,28 @@ button:focus-visible {
   opacity: 0.8;
 }
 
+.nav-logo-wrapper {
+  height: 65px;
+  width: auto;
+  display: block;
+  position: relative;
+}
+
+.nav-logo-wrapper canvas,
+.nav-logo-wrapper img {
+  height: 65px !important;
+  width: auto !important;
+  display: block;
+}
+
+.nav-logo-wrapper.distortion-fallback img {
+  transition: transform 0.3s var(--ease-out-cubic);
+}
+
+.nav-brand:hover .nav-logo-wrapper.distortion-fallback img {
+  transform: scale(1.05);
+}
+
 .nav-logo {
   height: 65px;
   width: auto;

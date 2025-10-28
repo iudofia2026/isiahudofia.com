@@ -367,16 +367,24 @@
     }
   }, 150);
 
-  // Wait for page load
-  window.addEventListener('load', () => {
+  // Function to complete loading screen transition
+  let transitionCompleted = false;
+  function completeLoadingTransition() {
+    if (transitionCompleted) return;
+    transitionCompleted = true;
+
     // Ensure progress reaches 100%
     if (loadingCircleProgress) {
       loadingCircleProgress.style.strokeDashoffset = 0;
     }
 
     // Initialize Three.js hero background before transition
-    initTopographyBackground();
-    initHeroLogoDistortion();
+    try {
+      initTopographyBackground();
+      initHeroLogoDistortion();
+    } catch (error) {
+      console.warn('Hero initialization failed:', error);
+    }
 
     // Start mask transition after brief delay
     setTimeout(() => {
@@ -385,7 +393,18 @@
       }
       clearInterval(progressInterval);
     }, 600);
-  });
+  }
+
+  // Wait for page load
+  window.addEventListener('load', completeLoadingTransition);
+
+  // Failsafe: Force loading screen to complete after 5 seconds maximum
+  setTimeout(() => {
+    if (loadingScreen && !loadingScreen.classList.contains('loaded')) {
+      console.warn('Loading timeout reached, forcing transition');
+      completeLoadingTransition();
+    }
+  }, 5000);
 
   // ========================================
   // Smooth Scrolling with Lenis

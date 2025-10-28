@@ -992,7 +992,8 @@ body.menu-open .hero-label {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  margin-bottom: 0.5rem;
+  margin-bottom: -1rem;
+  line-height: 0.85;
 }
 
 .carousel-row:last-child {

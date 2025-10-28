@@ -13,7 +13,7 @@
       this.container = container;
       this.width = container.clientWidth || window.innerWidth;
       this.height = container.clientHeight || window.innerHeight;
-      this.pointCount = 350; // Increased to maintain density across expanded bounds (200 * 1.75)
+      this.pointCount = 200; // Reduced node count for better spacing
       this.maxLinkDistance = 60; // Increased to work with larger bounds
       this.bounds = { x: 200, y: 120, z: 200 }; // Expanded bounds for better screen coverage
 
@@ -161,8 +161,8 @@
 
     _initParticles() {
       // Create concentric spheres around the center point
-      const centerRadius = 80; // Base radius from center
-      const radiusVariation = 40; // Variation in radius
+      const centerRadius = 120; // Base radius from center (increased)
+      const radiusVariation = 80; // Variation in radius (increased)
       const numLayers = 4; // Number of concentric layers
       
       for (let i = 0; i < this.pointCount; i += 1) {

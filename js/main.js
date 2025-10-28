@@ -252,6 +252,7 @@
 
   let heroNetwork = null;
   let heroHoverEffect = null;
+  let navLogoHoverEffect = null;
 
   function initTopographyBackground() {
     const heroBackground = document.getElementById('hero-background');
@@ -359,6 +360,66 @@
     }
   }
 
+  function initNavLogoDistortion() {
+    const navLogo = document.getElementById('nav-logo');
+    if (!navLogo) {
+      console.error('Nav logo element not found');
+      return;
+    }
+
+    const { imageDefault, imageHover, displacement, imagesRatio } = navLogo.dataset;
+    const fallbackSrc = imageDefault || 'assets/logo.png';
+
+    const supportsHover = window.matchMedia('(hover: hover)').matches && window.matchMedia('(pointer: fine)').matches;
+
+    // Create fallback function to ensure nav logo always displays
+    const createFallbackImage = () => {
+      if (!navLogo.querySelector('img') && !navLogo.querySelector('canvas')) {
+        const fallbackImg = document.createElement('img');
+        fallbackImg.src = fallbackSrc;
+        fallbackImg.alt = 'Isiah Udofia';
+        fallbackImg.className = 'nav-logo-fallback';
+        navLogo.appendChild(fallbackImg);
+      }
+      navLogo.classList.add('distortion-fallback');
+    };
+
+    // Check if hoverEffect library is available
+    const hasHoverEffect = typeof window.hoverEffect === 'function';
+    console.log('Nav logo - hoverEffect available:', hasHoverEffect, 'supportsHover:', supportsHover);
+
+    if (!hasHoverEffect || !supportsHover) {
+      console.log('Using fallback image for nav logo (hoverEffect unavailable or no hover support)');
+      createFallbackImage();
+      return;
+    }
+
+    if (navLogoHoverEffect) {
+      return;
+    }
+
+    try {
+      navLogoHoverEffect = new window.hoverEffect({
+        parent: navLogo,
+        hover: true,
+        intensity: 0.45,
+        speedIn: 1.1,
+        speedOut: 1.05,
+        easing: 'easeOutQuad',
+        image1: fallbackSrc,
+        image2: imageHover || 'assets/logo-nav-hover.png',
+        displacementImage: displacement || 'assets/hero-displacement.png',
+        imagesRatio: imagesRatio ? parseFloat(imagesRatio) : 1
+      });
+
+      console.log('Nav logo hover effect initialized successfully');
+      navLogo.classList.add('distortion-ready');
+    } catch (error) {
+      console.error('Nav logo distortion effect failed, using fallback:', error);
+      createFallbackImage();
+    }
+  }
+
   // ========================================
   // Loading Screen Transition - Circular Progress
   // ========================================
@@ -399,6 +460,7 @@
     try {
       initTopographyBackground();
       initHeroLogoDistortion();
+      initNavLogoDistortion();
     } catch (error) {
       console.warn('Hero initialization failed:', error);
     }

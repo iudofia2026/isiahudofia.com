@@ -334,8 +334,6 @@
   }
 
   let heroNetwork = null;
-  let heroHoverEffect = null;
-  let navLogoHoverEffect = null;
 
   function initTopographyBackground() {
     const heroBackground = document.getElementById('hero-background');
@@ -357,10 +355,9 @@
     heroNetwork = new HeroNetwork(heroBackground);
   }
 
-  function initHeroLogoDistortion() {
+  function initHeroLogoInversion() {
     const heroIcon = document.getElementById('hero-icon');
     if (!heroIcon) {
-      console.error('Hero icon element not found');
       return;
     }
 
@@ -376,133 +373,15 @@
       }
     };
 
-    if (heroIcon.dataset.hoverHandlersAttached !== 'true') {
-      const enterHandler = () => toggleHeroInversion(true);
-      const leaveHandler = () => toggleHeroInversion(false);
+    const enterHandler = () => toggleHeroInversion(true);
+    const leaveHandler = () => toggleHeroInversion(false);
 
-      heroIcon.addEventListener('pointerenter', enterHandler);
-      heroIcon.addEventListener('pointerleave', leaveHandler);
-      heroIcon.addEventListener('pointercancel', leaveHandler);
-      heroIcon.addEventListener('focusin', enterHandler);
-      heroIcon.addEventListener('focusout', leaveHandler);
-      window.addEventListener('blur', leaveHandler);
-
-      heroIcon.dataset.hoverHandlersAttached = 'true';
-    }
-
-    const { imageDefault, imageHover, displacement, imagesRatio } = heroIcon.dataset;
-    const fallbackSrc = imageDefault || 'assets/hero-icon.png';
-
-    const supportsHover = window.matchMedia('(hover: hover)').matches && window.matchMedia('(pointer: fine)').matches;
-
-    // Create fallback function to ensure logo always displays
-    const createFallbackImage = () => {
-      if (!heroIcon.querySelector('img') && !heroIcon.querySelector('canvas')) {
-        const fallbackImg = document.createElement('img');
-        fallbackImg.src = fallbackSrc;
-        fallbackImg.alt = 'Isiah Udofia';
-        fallbackImg.className = 'hero-icon-fallback';
-        heroIcon.appendChild(fallbackImg);
-      }
-      heroIcon.classList.add('distortion-fallback');
-    };
-
-    // Check if hoverEffect library is available
-    const hasHoverEffect = typeof window.hoverEffect === 'function';
-    const hasTweenMax = typeof window.TweenMax !== 'undefined';
-    console.log('hoverEffect available:', hasHoverEffect, 'TweenMax available:', hasTweenMax, 'supportsHover:', supportsHover);
-
-    if (!hasHoverEffect || !hasTweenMax || !supportsHover) {
-      console.log('Using fallback image for hero (hoverEffect/TweenMax unavailable or no hover support)');
-      createFallbackImage();
-      return;
-    }
-
-    if (heroHoverEffect) {
-      return;
-    }
-
-    try {
-      heroHoverEffect = new window.hoverEffect({
-        parent: heroIcon,
-        hover: true,
-        intensity: 0.45,
-        speedIn: 1.1,
-        speedOut: 1.05,
-        easing: 'easeOutQuad',
-        image1: fallbackSrc,
-        image2: imageHover || 'assets/logo-hover.png',
-        displacementImage: displacement || 'assets/hero-displacement.png',
-        imagesRatio: imagesRatio ? parseFloat(imagesRatio) : 1
-      });
-
-      console.log('Hero hover effect initialized successfully');
-      heroIcon.classList.add('distortion-ready');
-    } catch (error) {
-      console.error('Hero distortion effect failed, using fallback:', error);
-      createFallbackImage();
-    }
-  }
-
-  function initNavLogoDistortion() {
-    const navLogo = document.getElementById('nav-logo');
-    if (!navLogo) {
-      console.error('Nav logo element not found');
-      return;
-    }
-
-    const { imageDefault, imageHover, displacement, imagesRatio } = navLogo.dataset;
-    const fallbackSrc = imageDefault || 'assets/logo.png';
-
-    const supportsHover = window.matchMedia('(hover: hover)').matches && window.matchMedia('(pointer: fine)').matches;
-
-    // Create fallback function to ensure nav logo always displays
-    const createFallbackImage = () => {
-      if (!navLogo.querySelector('img') && !navLogo.querySelector('canvas')) {
-        const fallbackImg = document.createElement('img');
-        fallbackImg.src = fallbackSrc;
-        fallbackImg.alt = 'Isiah Udofia';
-        fallbackImg.className = 'nav-logo-fallback';
-        navLogo.appendChild(fallbackImg);
-      }
-      navLogo.classList.add('distortion-fallback');
-    };
-
-    // Check if hoverEffect library is available
-    const hasHoverEffect = typeof window.hoverEffect === 'function';
-    const hasTweenMax = typeof window.TweenMax !== 'undefined';
-    console.log('Nav logo - hoverEffect available:', hasHoverEffect, 'TweenMax available:', hasTweenMax, 'supportsHover:', supportsHover);
-
-    if (!hasHoverEffect || !hasTweenMax || !supportsHover) {
-      console.log('Using fallback image for nav logo (hoverEffect/TweenMax unavailable or no hover support)');
-      createFallbackImage();
-      return;
-    }
-
-    if (navLogoHoverEffect) {
-      return;
-    }
-
-    try {
-      navLogoHoverEffect = new window.hoverEffect({
-        parent: navLogo,
-        hover: true,
-        intensity: 0.45,
-        speedIn: 1.1,
-        speedOut: 1.05,
-        easing: 'easeOutQuad',
-        image1: fallbackSrc,
-        image2: imageHover || 'assets/logo-nav-hover.png',
-        displacementImage: displacement || 'assets/hero-displacement.png',
-        imagesRatio: imagesRatio ? parseFloat(imagesRatio) : 1
-      });
-
-      console.log('Nav logo hover effect initialized successfully');
-      navLogo.classList.add('distortion-ready');
-    } catch (error) {
-      console.error('Nav logo distortion effect failed, using fallback:', error);
-      createFallbackImage();
-    }
+    heroIcon.addEventListener('pointerenter', enterHandler);
+    heroIcon.addEventListener('pointerleave', leaveHandler);
+    heroIcon.addEventListener('pointercancel', leaveHandler);
+    heroIcon.addEventListener('focusin', enterHandler);
+    heroIcon.addEventListener('focusout', leaveHandler);
+    window.addEventListener('blur', leaveHandler);
   }
 
   // ========================================
@@ -544,8 +423,7 @@
     // Initialize Three.js hero background before transition
     try {
       initTopographyBackground();
-      initHeroLogoDistortion();
-      initNavLogoDistortion();
+      initHeroLogoInversion();
     } catch (error) {
       console.warn('Hero initialization failed:', error);
     }

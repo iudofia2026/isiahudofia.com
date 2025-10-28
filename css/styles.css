@@ -6,9 +6,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* Carousel Fonts - Diverse Set */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@700&family=Anton&family=Righteous&family=Audiowide&family=Black+Ops+One&family=Russo+One&family=Permanent+Marker&family=Bangers&family=Passion+One:wght@900&display=swap');
-
+/* Carousel Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Oswald:wght@700&family=Archivo+Black&family=Bebas+Neue&family=Source+Sans+Pro:wght@700&display=swap');
 
 :root {
   /* Color Palette - White, Navy & Dark Grey Theme */
@@ -793,7 +792,7 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   transition: background-color 0.45s var(--ease-out-cubic), color 0.45s var(--ease-out-cubic);
   transform-origin: center center;
   will-change: transform;
-  z-index: 10; /* Ensure hero stays above About network */
+  z-index: 10; /* Ensure hero stays above carousel and About network */
 }
 
 .hero-section.hero-section--inverted {
@@ -983,17 +982,17 @@ body.menu-open .hero-label {
   left: 0;
   width: 100%;
   transform: translateY(-50%);
-  z-index: 1; /* Above about-background, below hero */
+  z-index: 1; /* Above about-background, below hero content */
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .carousel-row {
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   white-space: nowrap;
   margin-bottom: -1rem;
-  line-height: 0.85;
+  line-height: 1.1;
 }
 
 .carousel-row:last-child {
@@ -1019,7 +1018,7 @@ body.menu-open .hero-label {
   font-weight: 900;
   color: rgba(255, 255, 255, 1);
   letter-spacing: -0.03em;
-  padding: 0 4rem;
+  padding: 0 1.5rem;
   display: inline-block;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1027,24 +1026,24 @@ body.menu-open .hero-label {
 }
 
 /* Different fonts for ISIAH row (carousel-row-1) - cycling pattern */
-.carousel-row-1 .carousel-text:nth-child(8n+1) { font-family: 'Bebas Neue', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+2) { font-family: 'Anton', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+3) { font-family: 'Oswald', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+4) { font-family: 'Righteous', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+5) { font-family: 'Bebas Neue', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+6) { font-family: 'Anton', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+1) { font-family: 'Montserrat', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+2) { font-family: 'Oswald', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+3) { font-family: 'Archivo Black', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+4) { font-family: 'Bebas Neue', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+5) { font-family: 'Source Sans Pro', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+6) { font-family: 'Montserrat', sans-serif; }
 .carousel-row-1 .carousel-text:nth-child(8n+7) { font-family: 'Oswald', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(8n+8) { font-family: 'Righteous', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+8) { font-family: 'Archivo Black', sans-serif; }
 
 /* Different fonts for UDOFIA row (carousel-row-2) - cycling pattern */
-.carousel-row-2 .carousel-text:nth-child(8n+1) { font-family: 'Audiowide', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+2) { font-family: 'Black Ops One', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+3) { font-family: 'Russo One', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+4) { font-family: 'Passion One', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+5) { font-family: 'Audiowide', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+6) { font-family: 'Black Ops One', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+7) { font-family: 'Russo One', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(8n+8) { font-family: 'Passion One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+1) { font-family: 'Bebas Neue', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+2) { font-family: 'Source Sans Pro', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+3) { font-family: 'Archivo Black', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+4) { font-family: 'Montserrat', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+5) { font-family: 'Oswald', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+6) { font-family: 'Bebas Neue', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+7) { font-family: 'Source Sans Pro', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+8) { font-family: 'Archivo Black', sans-serif; }
 
 @keyframes scrollLeft {
   0% {

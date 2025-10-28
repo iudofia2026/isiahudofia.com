@@ -57,6 +57,7 @@
   --z-nav: 100;
   --z-menu: 200;
   --z-rotation-prompt: 300;
+  --z-labels: 500;
 }
 
 /* ========================================
@@ -557,7 +558,7 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
 .hero-label-layer {
   position: absolute;
   inset: 0;
-  z-index: 100;
+  z-index: var(--z-labels);
   pointer-events: none;
 }
 

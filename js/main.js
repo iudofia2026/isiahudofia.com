@@ -78,7 +78,14 @@
       this.labelLayer.className = 'hero-label-layer';
       this.labelLayer.style.width = '100%';
       this.labelLayer.style.height = '100%';
-      this.container.appendChild(this.labelLayer);
+
+      // Append to hero-section instead of hero-background for higher z-index
+      const heroSection = this.container.closest('.hero-section');
+      if (heroSection) {
+        heroSection.appendChild(this.labelLayer);
+      } else {
+        this.container.appendChild(this.labelLayer);
+      }
 
       // Each entry maps a point index to a clickable label. Adjust to match your sections/links.
       this.trackedLabels = [
@@ -327,8 +334,8 @@
       if (this.renderer.domElement.parentNode === this.container) {
         this.container.removeChild(this.renderer.domElement);
       }
-      if (this.labelLayer.parentNode === this.container) {
-        this.container.removeChild(this.labelLayer);
+      if (this.labelLayer && this.labelLayer.parentNode) {
+        this.labelLayer.parentNode.removeChild(this.labelLayer);
       }
     }
   }

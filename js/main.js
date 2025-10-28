@@ -55,6 +55,25 @@
       this.linesMesh = new THREE.LineSegments(this.linesGeometry, this.linesMaterial);
       this.scene.add(this.linesMesh);
 
+      this.palettes = {
+        default: {
+          point: new THREE.Color(0x001f3f),
+          line: new THREE.Color(0x001f3f),
+          lineOpacity: 0.25,
+          clearColor: 0x000000,
+          clearAlpha: 0
+        },
+        inverted: {
+          point: new THREE.Color(0xffffff),
+          line: new THREE.Color(0xffffff),
+          lineOpacity: 0.4,
+          clearColor: 0x001f3f,
+          clearAlpha: 1
+        }
+      };
+
+      this.setInverted(false);
+
       this.labelLayer = document.createElement('div');
       this.labelLayer.className = 'hero-label-layer';
       this.labelLayer.style.width = '100%';
@@ -185,6 +204,17 @@
       });
     }
 
+    setInverted(isInverted) {
+      const palette = isInverted ? this.palettes.inverted : this.palettes.default;
+      this.pointsMaterial.color.copy(palette.point);
+      this.linesMaterial.color.copy(palette.line);
+      this.linesMaterial.opacity = palette.lineOpacity;
+      this.renderer.setClearColor(palette.clearColor, palette.clearAlpha);
+      this.pointsMaterial.needsUpdate = true;
+      this.linesMaterial.needsUpdate = true;
+      this.container.classList.toggle('hero-background--inverted', isInverted);
+    }
+
     handleResize() {
       this.width = this.container.clientWidth || window.innerWidth;
       this.height = this.container.clientHeight || window.innerHeight;
@@ -205,6 +235,7 @@
     destroy() {
       cancelAnimationFrame(this.frameId);
       window.removeEventListener('resize', this.handleResize);
+      this.setInverted(false);
       this.renderer.dispose();
       this.pointsGeometry.dispose();
       this.linesGeometry.dispose();
@@ -248,6 +279,32 @@
       return;
     }
 
+    const heroSection = document.querySelector('.hero-section');
+    const heroBackground = document.getElementById('hero-background');
+
+    const toggleHeroInversion = (isActive) => {
+      document.body.classList.toggle('is-hero-inverted', isActive);
+      if (heroSection) heroSection.classList.toggle('hero-section--inverted', isActive);
+      if (heroBackground) heroBackground.classList.toggle('hero-background--inverted', isActive);
+      if (heroNetwork && typeof heroNetwork.setInverted === 'function') {
+        heroNetwork.setInverted(isActive);
+      }
+    };
+
+    if (heroIcon.dataset.hoverHandlersAttached !== 'true') {
+      const enterHandler = () => toggleHeroInversion(true);
+      const leaveHandler = () => toggleHeroInversion(false);
+
+      heroIcon.addEventListener('pointerenter', enterHandler);
+      heroIcon.addEventListener('pointerleave', leaveHandler);
+      heroIcon.addEventListener('pointercancel', leaveHandler);
+      heroIcon.addEventListener('focusin', enterHandler);
+      heroIcon.addEventListener('focusout', leaveHandler);
+      window.addEventListener('blur', leaveHandler);
+
+      heroIcon.dataset.hoverHandlersAttached = 'true';
+    }
+
     const { imageDefault, imageHover, displacement, imagesRatio } = heroIcon.dataset;
     const fallbackSrc = imageDefault || 'assets/hero-icon.png';
 
@@ -260,8 +317,8 @@
         fallbackImg.alt = 'Isiah Udofia';
         fallbackImg.className = 'hero-icon-fallback';
         heroIcon.appendChild(fallbackImg);
-        heroIcon.classList.add('distortion-fallback');
       }
+      heroIcon.classList.add('distortion-fallback');
       return;
     }
 

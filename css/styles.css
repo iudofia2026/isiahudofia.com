@@ -703,8 +703,8 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   transform: translate3d(0, 120%, 0);
   opacity: 0;
   transition:
-    transform 0.38s cubic-bezier(0.19, 1, 0.22, 1),
-    opacity 0.38s cubic-bezier(0.19, 1, 0.22, 1);
+    transform 0.32s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.32s cubic-bezier(0.19, 1, 0.22, 1);
   will-change: transform, opacity;
 }
 
@@ -712,6 +712,7 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
 .mobile-menu-link.split-text:focus-visible .char {
   transform: translate3d(0, 0, 0);
   opacity: 1;
+  transition-delay: var(--char-delay, 0s);
 }
 
 /* top controls handled by main nav */

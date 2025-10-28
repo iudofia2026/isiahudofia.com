@@ -276,6 +276,7 @@
   function initHeroLogoDistortion() {
     const heroIcon = document.getElementById('hero-icon');
     if (!heroIcon) {
+      console.error('Hero icon element not found');
       return;
     }
 
@@ -310,8 +311,9 @@
 
     const supportsHover = window.matchMedia('(hover: hover)').matches && window.matchMedia('(pointer: fine)').matches;
 
-    if (typeof hoverEffect !== 'function' || !supportsHover) {
-      if (!heroIcon.querySelector('img')) {
+    // Create fallback function to ensure logo always displays
+    const createFallbackImage = () => {
+      if (!heroIcon.querySelector('img') && !heroIcon.querySelector('canvas')) {
         const fallbackImg = document.createElement('img');
         fallbackImg.src = fallbackSrc;
         fallbackImg.alt = 'Isiah Udofia';
@@ -319,6 +321,15 @@
         heroIcon.appendChild(fallbackImg);
       }
       heroIcon.classList.add('distortion-fallback');
+    };
+
+    // Check if hoverEffect library is available
+    const hasHoverEffect = typeof window.hoverEffect === 'function';
+    console.log('hoverEffect available:', hasHoverEffect, 'supportsHover:', supportsHover);
+
+    if (!hasHoverEffect || !supportsHover) {
+      console.log('Using fallback image (hoverEffect unavailable or no hover support)');
+      createFallbackImage();
       return;
     }
 
@@ -326,20 +337,26 @@
       return;
     }
 
-    heroHoverEffect = new hoverEffect({
-      parent: heroIcon,
-      hover: true,
-      intensity: 0.45,
-      speedIn: 1.1,
-      speedOut: 1.05,
-      easing: 'easeOutQuad',
-      image1: fallbackSrc,
-      image2: imageHover || 'assets/logo-hover.png',
-      displacementImage: displacement || 'assets/hero-displacement.png',
-      imagesRatio: imagesRatio ? parseFloat(imagesRatio) : 1
-    });
+    try {
+      heroHoverEffect = new window.hoverEffect({
+        parent: heroIcon,
+        hover: true,
+        intensity: 0.45,
+        speedIn: 1.1,
+        speedOut: 1.05,
+        easing: 'easeOutQuad',
+        image1: fallbackSrc,
+        image2: imageHover || 'assets/logo-hover.png',
+        displacementImage: displacement || 'assets/hero-displacement.png',
+        imagesRatio: imagesRatio ? parseFloat(imagesRatio) : 1
+      });
 
-    heroIcon.classList.add('distortion-ready');
+      console.log('Hero hover effect initialized successfully');
+      heroIcon.classList.add('distortion-ready');
+    } catch (error) {
+      console.error('Hero distortion effect failed, using fallback:', error);
+      createFallbackImage();
+    }
   }
 
   // ========================================

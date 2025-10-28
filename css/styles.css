@@ -1026,17 +1026,25 @@ body.menu-open .hero-label {
   text-transform: uppercase;
 }
 
-/* Different fonts for ISIAH row (carousel-row-1) */
-.carousel-row-1 .carousel-text:nth-child(1) { font-family: 'Bebas Neue', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(2) { font-family: 'Anton', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(3) { font-family: 'Oswald', sans-serif; }
-.carousel-row-1 .carousel-text:nth-child(4) { font-family: 'Righteous', sans-serif; }
+/* Different fonts for ISIAH row (carousel-row-1) - cycling pattern */
+.carousel-row-1 .carousel-text:nth-child(8n+1) { font-family: 'Bebas Neue', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+2) { font-family: 'Anton', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+3) { font-family: 'Oswald', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+4) { font-family: 'Righteous', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+5) { font-family: 'Bebas Neue', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+6) { font-family: 'Anton', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+7) { font-family: 'Oswald', sans-serif; }
+.carousel-row-1 .carousel-text:nth-child(8n+8) { font-family: 'Righteous', sans-serif; }
 
-/* Different fonts for UDOFIA row (carousel-row-2) */
-.carousel-row-2 .carousel-text:nth-child(1) { font-family: 'Audiowide', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(2) { font-family: 'Black Ops One', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(3) { font-family: 'Russo One', sans-serif; }
-.carousel-row-2 .carousel-text:nth-child(4) { font-family: 'Passion One', sans-serif; }
+/* Different fonts for UDOFIA row (carousel-row-2) - cycling pattern */
+.carousel-row-2 .carousel-text:nth-child(8n+1) { font-family: 'Audiowide', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+2) { font-family: 'Black Ops One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+3) { font-family: 'Russo One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+4) { font-family: 'Passion One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+5) { font-family: 'Audiowide', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+6) { font-family: 'Black Ops One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+7) { font-family: 'Russo One', sans-serif; }
+.carousel-row-2 .carousel-text:nth-child(8n+8) { font-family: 'Passion One', sans-serif; }
 
 @keyframes scrollLeft {
   0% {

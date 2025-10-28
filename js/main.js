@@ -14,8 +14,8 @@
       this.width = container.clientWidth || window.innerWidth;
       this.height = container.clientHeight || window.innerHeight;
       this.pointCount = 200; // Slightly above original density
-      this.maxLinkDistance = 45; // Adjusted for better spacing (was 56)
-      this.bounds = { x: 120, y: 70, z: 120 };
+      this.maxLinkDistance = 60; // Increased to work with larger bounds
+      this.bounds = { x: 200, y: 120, z: 200 }; // Expanded bounds for better screen coverage
 
       this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -161,7 +161,7 @@
 
     _initParticles() {
       // Use Poisson disk sampling for better spacing distribution
-      const minDistance = 25; // Minimum distance between particles
+      const minDistance = 35; // Minimum distance between particles (increased for larger bounds)
       const maxAttempts = 30; // Max attempts to place each particle
       const positions = [];
       

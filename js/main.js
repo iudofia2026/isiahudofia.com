@@ -767,9 +767,9 @@
 
   sections.forEach(section => navObserver.observe(section));
 
-  // Add scrolled class to nav
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
+  // Add scrolled class to nav (bidirectional)
+  lenis.on('scroll', ({ scroll }) => {
+    if (scroll > 100) {
       nav.classList.add('scrolled');
     } else {
       nav.classList.remove('scrolled');
@@ -925,6 +925,81 @@
   window.addEventListener('beforeunload', () => {
     if (heroNetwork) heroNetwork.destroy();
   });
+
+  // ========================================
+  // Smooth Zoom Effect with GSAP ScrollTrigger + Lenis
+  // ========================================
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Sync GSAP ScrollTrigger with Lenis
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    const heroSection = document.querySelector('.hero-section');
+    const aboutSection = document.querySelector('.about-section');
+    const aboutContainer = document.querySelector('.about-container');
+
+    if (heroSection && aboutSection && aboutContainer) {
+      // Wait for page to load
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          initSmoothZoomEffect();
+        }, 3000);
+      });
+
+      function initSmoothZoomEffect() {
+        // Pin the hero section and zoom it out
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: heroSection,
+            start: 'top top',
+            end: '+=100%', // Zoom happens over 100vh of scroll
+            scrub: 1.2, // Smooth scrubbing
+            pin: true,
+            pinSpacing: true, // Create space so other content flows naturally
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            // This makes it work from any scroll position
+            toggleActions: 'play none none reset'
+          }
+        })
+        .to(heroSection, {
+          scale: 0.6,
+          borderRadius: '32px',
+          ease: 'power2.inOut'
+        })
+        .to(aboutContainer, {
+          opacity: 1,
+          y: 0,
+          ease: 'power2.out'
+        }, '<'); // '<' means start at the same time as previous animation
+
+        // Global scroll listener to handle scroll-to-top from anywhere
+        let isScrollingToTop = false;
+
+        lenis.on('scroll', ({ scroll }) => {
+          // If user scrolls near top (within first section's range)
+          if (scroll < window.innerHeight * 2 && !isScrollingToTop) {
+            // ScrollTrigger will automatically handle the reverse animation
+            // because scrub makes it bidirectional
+          }
+        });
+
+        // Refresh ScrollTrigger
+        ScrollTrigger.refresh();
+      }
+    } else {
+      console.warn('Required sections not found for scroll animations');
+    }
+  } else {
+    console.warn('GSAP or ScrollTrigger not loaded');
+  }
 
   // ========================================
   // Console Easter Egg

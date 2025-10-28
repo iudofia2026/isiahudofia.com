@@ -15,6 +15,7 @@
   --color-white: #ffffff;
   --color-gray-dark: #2c3e50;
   --color-accent-blue: #0066cc;
+  --color-carolina-blue: #5B8FA3;
 
   /* Typography - Lando Fonts */
   /* Using Outfit as Brier alternative (similar geometric sans) */
@@ -174,7 +175,7 @@ body {
   font-weight: 400;
   line-height: 1.6;
   color: var(--color-gray-dark);
-  background-color: var(--color-navy);
+  background-color: var(--color-carolina-blue);
   overflow-x: hidden;
   position: relative;
   -webkit-font-smoothing: antialiased;
@@ -951,7 +952,7 @@ body.menu-open .hero-label {
 .about-section {
   position: relative;
   min-height: 100vh;
-  background-color: var(--color-navy);
+  background-color: var(--color-carolina-blue);
   color: var(--color-white);
   display: flex;
   align-items: center;

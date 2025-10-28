@@ -337,29 +337,34 @@ button:focus-visible {
   position: relative;
 }
 
-.nav-logo-wrapper canvas,
 .nav-logo-wrapper img {
-  height: 65px !important;
-  width: auto !important;
-  display: block;
-}
-
-.nav-logo-wrapper.distortion-fallback img {
-  transition: transform 0.3s var(--ease-out-cubic);
-}
-
-.nav-brand:hover .nav-logo-wrapper.distortion-fallback img {
-  transform: scale(1.05);
-}
-
-.nav-logo {
   height: 65px;
   width: auto;
   display: block;
-  transition: transform 0.3s var(--ease-out-cubic);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-out-cubic);
 }
 
-.nav-brand:hover .nav-logo {
+.nav-logo-default {
+  opacity: 1;
+  position: relative;
+}
+
+.nav-logo-hover {
+  opacity: 0;
+}
+
+.nav-brand:hover .nav-logo-default {
+  opacity: 0;
+}
+
+.nav-brand:hover .nav-logo-hover {
+  opacity: 1;
+}
+
+.nav-brand:hover .nav-logo-wrapper img {
   transform: scale(1.05);
 }
 
@@ -630,29 +635,36 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   overflow: hidden;
 }
 
-.hero-icon-wrapper canvas {
-  width: 100% !important;
-  height: auto !important;
-  display: block;
-}
-
-.hero-icon-wrapper.distortion-ready canvas {
-  transition: transform 0.45s var(--ease-out-cubic);
-}
-
-.hero-icon-wrapper.distortion-ready:hover canvas {
-  transform: scale(1.02);
-}
-
-.hero-icon-wrapper.distortion-fallback {
-  cursor: default;
-}
-
-.hero-icon-fallback {
+.hero-icon-wrapper img {
   width: 100%;
   height: auto;
   display: block;
   border-radius: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.4s ease, transform 0.45s var(--ease-out-cubic);
+}
+
+.hero-icon-default {
+  opacity: 1;
+  position: relative;
+}
+
+.hero-icon-hover {
+  opacity: 0;
+}
+
+.hero-icon-wrapper:hover .hero-icon-default {
+  opacity: 0;
+}
+
+.hero-icon-wrapper:hover .hero-icon-hover {
+  opacity: 1;
+}
+
+.hero-icon-wrapper:hover img {
+  transform: scale(1.02);
 }
 
 @keyframes heroIconAppear {

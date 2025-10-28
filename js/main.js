@@ -108,6 +108,18 @@
       this.mouseInfluenceRadius = 80;
       this.mouseForce = 0.3;
 
+      // Orbital settings
+      this.centerPoint = { x: 0, y: 0, z: 0 }; // Center of rotation
+      this.orbitalForce = 0.0003; // Very slight rotation around center
+
+      // Random movement - smooth continuous forces
+      this.randomMovementStrength = 0.005; // Gentle continuous random force
+      this.randomMovementFrequency = 1.0; // Apply every frame for smoothness
+
+      // Page visibility handling
+      this.isPageVisible = !document.hidden;
+      this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+
       this.handleResize = this.handleResize.bind(this);
       this.animate = this.animate.bind(this);
       this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -118,7 +130,17 @@
       this.container.addEventListener('mousemove', this.handleMouseMove);
       this.container.addEventListener('mouseenter', this.handleMouseEnter);
       this.container.addEventListener('mouseleave', this.handleMouseLeave);
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
       this.animate();
+    }
+
+    handleVisibilityChange() {
+      this.isPageVisible = !document.hidden;
+
+      if (this.isPageVisible) {
+        // Reset clock delta to prevent large time jumps
+        this.clock.getDelta();
+      }
     }
 
     handleMouseMove(event) {
@@ -163,6 +185,9 @@
     }
 
     _updatePositions(delta) {
+      // Cap delta to prevent huge jumps when returning to page
+      const cappedDelta = Math.min(delta, 3);
+
       // Convert mouse position from NDC to world space for interaction
       let mouseWorldX = 0;
       let mouseWorldY = 0;
@@ -174,25 +199,53 @@
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
 
+        // Calculate distance from center point
+        const dx = this.positions[idx] - this.centerPoint.x;
+        const dy = this.positions[idx + 1] - this.centerPoint.y;
+
+        // Apply orbital/tangential force for rotation (no inward gravity)
+        // Create perpendicular vector for orbital motion (simplified 2D rotation in XY plane)
+        const orbitalX = -dy;
+        const orbitalY = dx;
+        const orbitalLength = Math.sqrt(orbitalX * orbitalX + orbitalY * orbitalY);
+
+        if (orbitalLength > 0) {
+          this.velocities[idx] += (orbitalX / orbitalLength) * this.orbitalForce;
+          this.velocities[idx + 1] += (orbitalY / orbitalLength) * this.orbitalForce;
+        }
+
+        // Apply random movement for more natural, organic motion
+        if (Math.random() < this.randomMovementFrequency) {
+          this.velocities[idx] += (Math.random() - 0.5) * this.randomMovementStrength;
+          this.velocities[idx + 1] += (Math.random() - 0.5) * this.randomMovementStrength;
+          this.velocities[idx + 2] += (Math.random() - 0.5) * this.randomMovementStrength;
+        }
+
+        // Apply damping to prevent excessive speeds
+        const damping = 0.98;
+        this.velocities[idx] *= damping;
+        this.velocities[idx + 1] *= damping;
+        this.velocities[idx + 2] *= damping;
+
         // Apply mouse interaction force (reduced for labeled nodes)
         if (this.mouse.isInside) {
-          const dx = this.positions[idx] - mouseWorldX;
-          const dy = this.positions[idx + 1] - mouseWorldY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const mouseDx = this.positions[idx] - mouseWorldX;
+          const mouseDy = this.positions[idx + 1] - mouseWorldY;
+          const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
 
-          if (distance < this.mouseInfluenceRadius && distance > 0) {
+          if (mouseDistance < this.mouseInfluenceRadius && mouseDistance > 0) {
             // Reduce mouse force for nodes with labels to make them easier to click
             const isLabeled = this.labeledIndices.has(i);
             const forcMultiplier = isLabeled ? 0.15 : 1.0; // 85% reduction for labeled nodes
-            const force = (1 - distance / this.mouseInfluenceRadius) * this.mouseForce * forcMultiplier;
-            this.positions[idx] += (dx / distance) * force * delta;
-            this.positions[idx + 1] += (dy / distance) * force * delta;
+            const force = (1 - mouseDistance / this.mouseInfluenceRadius) * this.mouseForce * forcMultiplier;
+            this.positions[idx] += (mouseDx / mouseDistance) * force * cappedDelta;
+            this.positions[idx + 1] += (mouseDy / mouseDistance) * force * cappedDelta;
           }
         }
 
-        this.positions[idx] += this.velocities[idx] * delta;
-        this.positions[idx + 1] += this.velocities[idx + 1] * delta;
-        this.positions[idx + 2] += this.velocities[idx + 2] * delta;
+        this.positions[idx] += this.velocities[idx] * cappedDelta;
+        this.positions[idx + 1] += this.velocities[idx + 1] * cappedDelta;
+        this.positions[idx + 2] += this.velocities[idx + 2] * cappedDelta;
 
         const limitX = this.bounds.x;
         const limitY = this.bounds.y;
@@ -302,6 +355,24 @@
       this.container.classList.toggle('hero-background--inverted', isInverted);
     }
 
+    triggerRipple(centerX = 0, centerY = 0, strength = 15) {
+      // Create a ripple effect emanating from a center point
+      for (let i = 0; i < this.pointCount; i += 1) {
+        const idx = i * 3;
+
+        const dx = this.positions[idx] - centerX;
+        const dy = this.positions[idx + 1] - centerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > 0) {
+          // Push particles outward based on distance (inverse relationship)
+          const force = strength / Math.max(distance, 5);
+          this.velocities[idx] += (dx / distance) * force;
+          this.velocities[idx + 1] += (dy / distance) * force;
+        }
+      }
+    }
+
     handleResize() {
       this.width = this.container.clientWidth || window.innerWidth;
       this.height = this.container.clientHeight || window.innerHeight;
@@ -322,6 +393,7 @@
     destroy() {
       cancelAnimationFrame(this.frameId);
       window.removeEventListener('resize', this.handleResize);
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
       this.container.removeEventListener('mousemove', this.handleMouseMove);
       this.container.removeEventListener('mouseenter', this.handleMouseEnter);
       this.container.removeEventListener('mouseleave', this.handleMouseLeave);
@@ -360,6 +432,7 @@
     }
 
     heroNetwork = new HeroNetwork(heroBackground);
+    window.heroNetwork = heroNetwork; // Make globally accessible for ripple trigger
   }
 
   function initSyncedLogoHover() {
@@ -407,18 +480,18 @@
   }
 
   // ========================================
-  // Loading Screen Transition - Anime.js Mask Reveal
+  // Loading Screen Transition - GSAP Wipe Effect
   // ========================================
   const loadingScreen = document.getElementById('loading-screen');
   const loadingCircleProgress = document.getElementById('loading-circle-progress');
+  const loadingLogoContainer = document.querySelector('.loading-logo-container');
 
-  // Animate progress bar to 100%
-  if (window.anime && loadingCircleProgress) {
-    anime({
-      targets: loadingCircleProgress,
-      strokeDashoffset: [565.48, 0],
-      easing: 'easeInOutQuad',
-      duration: 2000
+  // Use GSAP to animate progress circle
+  if (window.gsap && loadingCircleProgress) {
+    gsap.to(loadingCircleProgress, {
+      strokeDashoffset: 0,
+      duration: 2.5,
+      ease: "power2.inOut"
     });
   }
 
@@ -436,41 +509,80 @@
       console.warn('Hero initialization failed:', error);
     }
 
-    if (!window.anime) {
-      if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => loadingScreen.style.display = 'none', 500);
-      }
-      return;
+    // Get hero logo position for seamless transition
+    const heroIconWrapper = document.querySelector('.hero-icon-wrapper');
+    const loadingLogo = document.querySelector('.loading-logo');
+
+    // GSAP Timeline for smooth coordinated transition
+    if (window.gsap && heroIconWrapper && loadingLogo) {
+      // Calculate exact position to overlay loading logo on hero logo
+      const loadingLogoRect = loadingLogo.getBoundingClientRect();
+      const heroRect = heroIconWrapper.getBoundingClientRect();
+
+      // Calculate deltas from loading logo to hero logo (center to center)
+      const deltaX = heroRect.left + (heroRect.width / 2) - (loadingLogoRect.left + (loadingLogoRect.width / 2));
+      const deltaY = heroRect.top + (heroRect.height / 2) - (loadingLogoRect.top + (loadingLogoRect.height / 2));
+
+      // Calculate scale to match hero logo size exactly
+      const scaleRatio = heroRect.width / loadingLogoRect.width;
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          loadingScreen.style.display = 'none';
+        }
+      });
+
+      // Fade out progress circle
+      tl.to('.loading-circle', {
+        opacity: 0,
+        duration: 0.3,
+        ease: "power2.out"
+      })
+      // Move loading logo to perfectly overlay hero logo position
+      .to(loadingLogo, {
+        x: deltaX,
+        y: deltaY,
+        scale: scaleRatio,
+        duration: 0.9,
+        ease: "power3.inOut"
+      }, "-=0.15")
+      // Fade out white background
+      .to(loadingScreen, {
+        backgroundColor: "rgba(255, 255, 255, 0)",
+        duration: 0.4,
+        ease: "power2.out"
+      }, "-=0.4")
+      // Trigger ripple immediately as logo starts moving
+      .add(() => {
+        // Trigger ripple effect in the background nodes
+        if (window.heroNetwork && typeof window.heroNetwork.triggerRipple === 'function') {
+          // Ripple from center (where logo is positioned)
+          window.heroNetwork.triggerRipple(0, 0, 12);
+        }
+      }, "-=0.9")
+      // Once loading logo is in position, reveal hero logo
+      .add(() => {
+        document.body.classList.add('page-loaded');
+      }, "+=0.8");
+    } else {
+      // Fallback
+      loadingScreen.style.opacity = '0';
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+        document.body.classList.add('page-loaded');
+      }, 500);
     }
-
-    // Mask reveal animation
-    const tl = anime.timeline({
-      complete: () => loadingScreen.style.display = 'none'
-    });
-
-    tl.add({
-      targets: '.loading-circle-container',
-      scale: [1, 25],
-      opacity: [1, 0],
-      duration: 1400,
-      easing: 'easeInExpo'
-    }).add({
-      targets: loadingScreen,
-      opacity: [1, 0],
-      duration: 600,
-      easing: 'easeOutQuad'
-    }, 800);
   }
 
   window.addEventListener('load', completeLoadingTransition);
 
+  // Failsafe: Force loading screen to complete after 5 seconds maximum
   setTimeout(() => {
     if (loadingScreen && loadingScreen.style.display !== 'none') {
       console.warn('Loading timeout reached, forcing transition');
       completeLoadingTransition();
     }
-  }, 3000);
+  }, 5000);
 
   // ========================================
   // Smooth Scrolling with Lenis

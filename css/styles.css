@@ -356,15 +356,18 @@ button:focus-visible {
   left: 0;
 }
 
-.nav-brand:hover .nav-logo-default {
+.nav-brand:hover .nav-logo-default,
+.nav-logo-wrapper.synced-hover .nav-logo-default {
   opacity: 0;
 }
 
-.nav-brand:hover .nav-logo-hover {
+.nav-brand:hover .nav-logo-hover,
+.nav-logo-wrapper.synced-hover .nav-logo-hover {
   opacity: 1;
 }
 
-.nav-brand:hover .nav-logo-wrapper img {
+.nav-brand:hover .nav-logo-wrapper img,
+.nav-logo-wrapper.synced-hover img {
   transform: scale(1.05);
 }
 
@@ -655,15 +658,18 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   left: 0;
 }
 
-.hero-icon-wrapper:hover .hero-icon-default {
+.hero-icon-wrapper:hover .hero-icon-default,
+.hero-icon-wrapper.synced-hover .hero-icon-default {
   opacity: 0;
 }
 
-.hero-icon-wrapper:hover .hero-icon-hover {
+.hero-icon-wrapper:hover .hero-icon-hover,
+.hero-icon-wrapper.synced-hover .hero-icon-hover {
   opacity: 1;
 }
 
-.hero-icon-wrapper:hover img {
+.hero-icon-wrapper:hover img,
+.hero-icon-wrapper.synced-hover img {
   transform: scale(1.02);
 }
 

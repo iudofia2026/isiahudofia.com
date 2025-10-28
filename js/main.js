@@ -13,8 +13,8 @@
       this.container = container;
       this.width = container.clientWidth || window.innerWidth;
       this.height = container.clientHeight || window.innerHeight;
-      this.pointCount = 90;
-      this.maxLinkDistance = 45;
+      this.pointCount = 150; // Increased from 90 for more nodes
+      this.maxLinkDistance = 50; // Increased from 45 for more connections
       this.bounds = { x: 120, y: 70, z: 120 };
 
       this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -137,13 +137,28 @@
         const limitY = this.bounds.y;
         const limitZ = this.bounds.z;
 
-        if (this.positions[idx] > limitX || this.positions[idx] < -limitX) {
+        // Reverse velocity and clamp position when hitting boundaries
+        if (this.positions[idx] > limitX) {
+          this.positions[idx] = limitX;
+          this.velocities[idx] *= -1;
+        } else if (this.positions[idx] < -limitX) {
+          this.positions[idx] = -limitX;
           this.velocities[idx] *= -1;
         }
-        if (this.positions[idx + 1] > limitY || this.positions[idx + 1] < -limitY) {
+
+        if (this.positions[idx + 1] > limitY) {
+          this.positions[idx + 1] = limitY;
+          this.velocities[idx + 1] *= -1;
+        } else if (this.positions[idx + 1] < -limitY) {
+          this.positions[idx + 1] = -limitY;
           this.velocities[idx + 1] *= -1;
         }
-        if (this.positions[idx + 2] > limitZ || this.positions[idx + 2] < -limitZ) {
+
+        if (this.positions[idx + 2] > limitZ) {
+          this.positions[idx + 2] = limitZ;
+          this.velocities[idx + 2] *= -1;
+        } else if (this.positions[idx + 2] < -limitZ) {
+          this.positions[idx + 2] = -limitZ;
           this.velocities[idx + 2] *= -1;
         }
       }

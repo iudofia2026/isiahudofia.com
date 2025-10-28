@@ -557,7 +557,7 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
 .hero-label-layer {
   position: absolute;
   inset: 0;
-  z-index: 10;
+  z-index: 100;
   pointer-events: none;
 }
 
@@ -576,10 +576,17 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   color: var(--color-navy);
   box-shadow: 0 12px 30px rgba(0, 31, 63, 0.12);
   transform: translate3d(-50%, -50%, 0);
-  transition: opacity 0.3s var(--ease-out-cubic), background 0.3s var(--ease-out-cubic), color 0.3s var(--ease-out-cubic);
+  transition: opacity 0.3s var(--ease-out-cubic), background 0.3s var(--ease-out-cubic), color 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic);
   pointer-events: auto;
   opacity: 0;
   text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .hero-label::before {
@@ -594,6 +601,12 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
 .hero-label:hover {
   background: rgba(0, 31, 63, 0.92);
   color: var(--color-white);
+  transform: translate3d(-50%, -50%, 0) scale(1.05);
+  box-shadow: 0 16px 40px rgba(0, 31, 63, 0.25);
+}
+
+.hero-label:active {
+  transform: translate3d(-50%, -50%, 0) scale(0.98);
 }
 
 @media (max-width: 768px) {

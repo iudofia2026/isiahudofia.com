@@ -160,49 +160,46 @@
     }
 
     _initParticles() {
-      // Use Poisson disk sampling for better spacing distribution
-      const minDistance = 35; // Minimum distance between particles (increased for larger bounds)
-      const maxAttempts = 30; // Max attempts to place each particle
+      // Use a hybrid approach: grid-based initial placement + jitter for natural look
+      const gridSize = Math.ceil(Math.cbrt(this.pointCount)); // 3D grid size
+      const cellSize = Math.min(this.bounds.x, this.bounds.y, this.bounds.z) * 2 / gridSize;
+      const jitterAmount = cellSize * 0.3; // 30% jitter for natural distribution
       const positions = [];
       
-      // Helper function to check if a position is valid (not too close to existing particles)
-      const isValidPosition = (x, y, z) => {
-        for (const pos of positions) {
-          const dx = x - pos.x;
-          const dy = y - pos.y;
-          const dz = z - pos.z;
-          const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-          if (distance < minDistance) {
-            return false;
+      // Create a 3D grid and place particles with jitter
+      let particleIndex = 0;
+      for (let x = 0; x < gridSize && particleIndex < this.pointCount; x++) {
+        for (let y = 0; y < gridSize && particleIndex < this.pointCount; y++) {
+          for (let z = 0; z < gridSize && particleIndex < this.pointCount; z++) {
+            // Calculate base position in grid
+            const baseX = (x / (gridSize - 1)) * this.bounds.x * 2 - this.bounds.x;
+            const baseY = (y / (gridSize - 1)) * this.bounds.y * 2 - this.bounds.y;
+            const baseZ = (z / (gridSize - 1)) * this.bounds.z * 2 - this.bounds.z;
+            
+            // Add random jitter
+            const jitterX = (Math.random() - 0.5) * jitterAmount;
+            const jitterY = (Math.random() - 0.5) * jitterAmount;
+            const jitterZ = (Math.random() - 0.5) * jitterAmount;
+            
+            positions.push({
+              x: baseX + jitterX,
+              y: baseY + jitterY,
+              z: baseZ + jitterZ
+            });
+            
+            particleIndex++;
           }
         }
-        return true;
-      };
+      }
       
-      // Place particles with improved spacing
-      for (let i = 0; i < this.pointCount; i += 1) {
-        let attempts = 0;
-        let placed = false;
-        
-        while (attempts < maxAttempts && !placed) {
-          const x = (Math.random() - 0.5) * this.bounds.x * 2;
-          const y = (Math.random() - 0.5) * this.bounds.y * 2;
-          const z = (Math.random() - 0.5) * this.bounds.z * 2;
-          
-          if (isValidPosition(x, y, z)) {
-            positions.push({ x, y, z });
-            placed = true;
-          }
-          attempts++;
-        }
-        
-        // If we couldn't place with good spacing, fall back to random placement
-        if (!placed) {
-          const x = (Math.random() - 0.5) * this.bounds.x * 2;
-          const y = (Math.random() - 0.5) * this.bounds.y * 2;
-          const z = (Math.random() - 0.5) * this.bounds.z * 2;
-          positions.push({ x, y, z });
-        }
+      // Fill remaining particles randomly if we didn't fill the grid
+      while (particleIndex < this.pointCount) {
+        positions.push({
+          x: (Math.random() - 0.5) * this.bounds.x * 2,
+          y: (Math.random() - 0.5) * this.bounds.y * 2,
+          z: (Math.random() - 0.5) * this.bounds.z * 2
+        });
+        particleIndex++;
       }
       
       // Convert to the format expected by the rest of the code

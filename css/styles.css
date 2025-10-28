@@ -674,9 +674,11 @@ body.is-hero-inverted .hamburger-menu.active {
 
 .mobile-menu-top {
   width: 100%;
+  max-width: 1600px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
+  margin: 0 auto;
 }
 
 .mobile-menu-brand {
@@ -699,13 +701,17 @@ body.is-hero-inverted .hamburger-menu.active {
   height: 48px;
   padding: 10px 14px;
   border-radius: 16px;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  background: rgba(0, 31, 63, 0.08);
-  color: inherit;
+  border: 1.5px solid currentColor;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.94);
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: transform 0.35s var(--ease-out-cubic), box-shadow 0.35s var(--ease-out-cubic), border-color 0.35s var(--ease-out-cubic);
+  transition:
+    transform 0.4s var(--ease-out-cubic),
+    box-shadow 0.4s var(--ease-out-cubic),
+    background-color 0.4s var(--ease-out-cubic),
+    border-color 0.4s var(--ease-out-cubic);
 }
 
 .mobile-menu-close::before {
@@ -713,7 +719,7 @@ body.is-hero-inverted .hamburger-menu.active {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 31, 63, 0.85);
   transform: scale(0);
   opacity: 0;
   transition:
@@ -723,13 +729,25 @@ body.is-hero-inverted .hamburger-menu.active {
   z-index: 0;
 }
 
+.mobile-menu-close::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.25), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-cubic);
+  pointer-events: none;
+}
+
 .mobile-menu-close span {
   position: absolute;
   width: 100%;
   height: 2px;
   border-radius: 999px;
   background: currentColor;
-  transition: transform 0.45s cubic-bezier(0.65, 0.05, 0, 1);
+  transition: transform 0.45s cubic-bezier(0.65, 0.05, 0, 1), background 0.4s var(--ease-out-cubic);
+  z-index: 1;
 }
 
 .mobile-menu-close span:nth-child(1) {
@@ -743,25 +761,31 @@ body.is-hero-inverted .hamburger-menu.active {
 .mobile-menu-close:hover,
 .mobile-menu-close:focus-visible {
   transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 18px 42px rgba(0, 31, 63, 0.25);
-  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 18px 42px rgba(0, 31, 63, 0.28);
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
 }
 
 .mobile-menu-close:hover::before,
 .mobile-menu-close:focus-visible::before {
-  transform: scale(1.05);
-  opacity: 0.9;
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+.mobile-menu-close:hover::after,
+.mobile-menu-close:focus-visible::after {
+  opacity: 1;
 }
 
 .mobile-menu-close:hover span,
 .mobile-menu-close:focus-visible span {
-  background: var(--color-navy);
+  background: var(--color-white);
 }
 
 @media (max-width: 720px) {
   .mobile-menu-top {
-    align-items: flex-start;
-    gap: 1.25rem;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .mobile-menu-close {

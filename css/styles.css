@@ -529,7 +529,7 @@ body.is-hero-inverted .hamburger-menu.active {
   background-color: var(--color-navy);
   background-image:
     radial-gradient(circle at 15% 20%, rgba(0, 102, 204, 0.22), transparent 60%),
-    radial-gradient(circle at 85% 78%, rgba(210, 255, 0, 0.16), transparent 55%);
+    radial-gradient(circle at 85% 78%, rgba(30, 144, 255, 0.18), transparent 55%);
   z-index: var(--z-menu);
   display: flex;
   align-items: center;
@@ -807,7 +807,7 @@ body.is-hero-inverted .hamburger-menu.active {
   content: '';
   position: absolute;
   inset: -12% -20% -25% 30%;
-  background: radial-gradient(circle at 0% 50%, rgba(210, 255, 0, 0.12), transparent 70%);
+  background: radial-gradient(circle at 0% 50%, rgba(30, 144, 255, 0.18), transparent 70%);
   opacity: 0.7;
   filter: blur(40px);
   pointer-events: none;
@@ -861,7 +861,7 @@ body.is-hero-inverted .hamburger-menu.active {
   height: 180px;
   bottom: -60px;
   left: -40px;
-  background: radial-gradient(circle, rgba(210, 255, 0, 0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(30, 144, 255, 0.32), transparent 70%);
 }
 
 .mobile-menu-card-badge {
@@ -873,8 +873,8 @@ body.is-hero-inverted .hamburger-menu.active {
   font-size: 0.7rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(0, 31, 63, 0.85);
-  background: rgba(210, 255, 0, 0.85);
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(30, 144, 255, 0.85);
   font-weight: 600;
   position: relative;
   z-index: 1;

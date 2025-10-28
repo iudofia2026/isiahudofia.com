@@ -174,7 +174,7 @@ body {
   font-weight: 400;
   line-height: 1.6;
   color: var(--color-gray-dark);
-  background-color: var(--color-white);
+  background-color: var(--color-navy);
   overflow-x: hidden;
   position: relative;
   -webkit-font-smoothing: antialiased;
@@ -239,29 +239,15 @@ button:focus-visible {
   right: 0;
   z-index: calc(var(--z-menu) + 10);
   padding: var(--spacing-md) var(--spacing-lg);
-  transition: background-color 0.3s var(--ease-out-cubic), color 0.3s var(--ease-out-cubic);
+  pointer-events: none;
 }
 
 .main-nav[data-nav-theme="light"] {
-  background-color: transparent;
   color: var(--color-navy);
 }
 
 .main-nav[data-nav-theme="dark"] {
-  background-color: transparent;
   color: var(--color-white);
-}
-
-.main-nav.scrolled[data-nav-theme="dark"] {
-  background-color: rgba(0, 31, 63, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.main-nav.scrolled[data-nav-theme="light"] {
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .nav-container {
@@ -270,16 +256,22 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  pointer-events: auto;
 }
 
 .nav-brand {
   display: flex;
   align-items: center;
-  transition: opacity 0.3s var(--ease-out-cubic);
+  transition: transform 0.6s var(--ease-lando), opacity 0.3s var(--ease-out-cubic);
+  transform-origin: center;
 }
 
 .nav-brand:hover {
   opacity: 0.8;
+}
+
+.main-nav.scrolled .nav-brand {
+  transform: scale(0.85);
 }
 
 .nav-logo-wrapper {
@@ -357,10 +349,15 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   overflow: hidden;
   z-index: calc(var(--z-menu) + 1);
   transition:
-    transform 0.4s var(--ease-out-cubic),
+    transform 0.6s var(--ease-lando),
     box-shadow 0.4s var(--ease-out-cubic),
     background-color 0.4s var(--ease-out-cubic),
     border-color 0.4s var(--ease-out-cubic);
+  transform-origin: center;
+}
+
+.main-nav.scrolled .hamburger-menu {
+  transform: scale(0.85);
 }
 
 .hamburger-menu::before {
@@ -775,6 +772,8 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   overflow: hidden;
   background-color: var(--color-white);
   transition: background-color 0.45s var(--ease-out-cubic), color 0.45s var(--ease-out-cubic);
+  transform-origin: center center;
+  will-change: transform;
 }
 
 .hero-section.hero-section--inverted {
@@ -930,6 +929,52 @@ body.menu-open .hero-label {
 
 
 
+
+/* ========================================
+   About Section
+   ======================================== */
+
+.about-section {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--color-navy);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  overflow: hidden;
+}
+
+.about-container {
+  max-width: 1200px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+.about-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-white);
+}
+
+.about-content {
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.about-content p {
+  margin-bottom: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .about-section {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+}
 
 /* ========================================
    Split Text Animation

@@ -179,13 +179,19 @@
           // Use fixed closer radius for tracked labels
           radius = labelRadius;
         } else {
-          // Determine which layer this particle belongs to
-          const layer = Math.floor((i / this.pointCount) * numLayers);
-          const layerProgress = (i % (this.pointCount / numLayers)) / (this.pointCount / numLayers);
+          // Create more density in closer regions
+          const randomValue = Math.random();
           
-          // Calculate radius for this layer
-          const baseRadius = centerRadius + (layer * radiusVariation / numLayers);
-          radius = baseRadius + (Math.random() - 0.5) * (radiusVariation / numLayers);
+          if (randomValue < 0.4) {
+            // 40% of nodes in close region (60-100px)
+            radius = 60 + Math.random() * 40;
+          } else if (randomValue < 0.7) {
+            // 30% of nodes in mid region (100-140px)
+            radius = 100 + Math.random() * 40;
+          } else {
+            // 30% of nodes in far region (140-200px)
+            radius = 140 + Math.random() * 60;
+          }
         }
         
         // Generate random spherical coordinates

@@ -89,6 +89,9 @@
       this.labelElements = [];
       this._createLabels();
 
+      // Create set of labeled indices for reduced mouse reactivity
+      this.labeledIndices = new Set(this.trackedLabels.map(label => label.index));
+
       this.tempVector = new THREE.Vector3();
       this.clock = new THREE.Clock();
       this.frameId = null;
@@ -164,14 +167,17 @@
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
 
-        // Apply mouse interaction force
+        // Apply mouse interaction force (reduced for labeled nodes)
         if (this.mouse.isInside) {
           const dx = this.positions[idx] - mouseWorldX;
           const dy = this.positions[idx + 1] - mouseWorldY;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < this.mouseInfluenceRadius && distance > 0) {
-            const force = (1 - distance / this.mouseInfluenceRadius) * this.mouseForce;
+            // Reduce mouse force for nodes with labels to make them easier to click
+            const isLabeled = this.labeledIndices.has(i);
+            const forcMultiplier = isLabeled ? 0.15 : 1.0; // 85% reduction for labeled nodes
+            const force = (1 - distance / this.mouseInfluenceRadius) * this.mouseForce * forcMultiplier;
             this.positions[idx] += (dx / distance) * force * delta;
             this.positions[idx + 1] += (dy / distance) * force * delta;
           }

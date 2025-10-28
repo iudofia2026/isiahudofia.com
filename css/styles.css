@@ -434,6 +434,16 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
   z-index: 1;
 }
 
+/* White hamburger when scrolled */
+.main-nav.scrolled .hamburger-menu {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.main-nav.scrolled .hamburger-line {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 1));
+}
+
 .hamburger-menu:hover .hamburger-line:nth-child(2),
 .hamburger-menu:focus-visible .hamburger-line:nth-child(2) {
   transform: translateX(2px);

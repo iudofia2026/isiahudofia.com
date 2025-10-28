@@ -792,6 +792,11 @@
       }
     });
 
+    const closeButton = document.querySelector('.mobile-menu-close');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => toggleMenu(false));
+    }
+
     // Close menu on escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {

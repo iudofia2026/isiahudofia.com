@@ -488,7 +488,7 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
 
 .hamburger-menu.active:hover,
 .hamburger-menu.active:focus-visible {
-  color: var(--color-navy);
+  color: var(--color-white);
   background: none;
   border: none;
   box-shadow: none;
@@ -508,7 +508,7 @@ body.is-hero-inverted .hamburger-menu:focus-visible {
 
 .hamburger-menu.active:hover .hamburger-line,
 .hamburger-menu.active:focus-visible .hamburger-line {
-  background: linear-gradient(90deg, rgba(0, 31, 63, 0.85), rgba(0, 31, 63, 1));
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
 }
 
 body.is-hero-inverted .hamburger-menu {

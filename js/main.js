@@ -74,31 +74,6 @@
 
       this.setInverted(false);
 
-      this.labelLayer = document.createElement('div');
-      this.labelLayer.className = 'hero-label-layer';
-      this.labelLayer.style.width = '100%';
-      this.labelLayer.style.height = '100%';
-
-      // Append to hero-section instead of hero-background for higher z-index
-      const heroSection = this.container.closest('.hero-section');
-      if (heroSection) {
-        heroSection.appendChild(this.labelLayer);
-      } else {
-        this.container.appendChild(this.labelLayer);
-      }
-
-      // Each entry maps a point index to a clickable label. Adjust to match your sections/links.
-      this.trackedLabels = [
-        { index: 8, text: 'projects', href: '#projects' },
-        { index: 21, text: 'research', href: '#research' },
-        { index: 55, text: 'contact', href: '#contact' }
-      ];
-      this.labelElements = [];
-      this._createLabels();
-
-      // Create set of labeled indices for reduced mouse reactivity
-      this.labeledIndices = new Set(this.trackedLabels.map(label => label.index));
-
       this.tempVector = new THREE.Vector3();
       this.clock = new THREE.Clock();
       this.frameId = null;
@@ -231,19 +206,6 @@
       }
     }
 
-    _createLabels() {
-      this.trackedLabels.forEach((label) => {
-        if (label.index >= this.pointCount) return;
-        const element = document.createElement('a');
-        element.className = 'hero-label';
-        element.textContent = label.text;
-        element.href = label.href || '#';
-        element.setAttribute('data-index', String(label.index));
-        this.labelLayer.appendChild(element);
-        this.labelElements.push({ config: label, element });
-      });
-    }
-
     _updatePositions(delta) {
       // Cap delta to prevent huge jumps when returning to page
       const cappedDelta = Math.min(delta, 3);
@@ -296,10 +258,7 @@
           const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
 
           if (mouseDistance < this.mouseInfluenceRadius && mouseDistance > 0) {
-            // Reduce mouse force for nodes with labels to make them easier to click
-            const isLabeled = this.labeledIndices.has(i);
-            const forcMultiplier = isLabeled ? 0.15 : 1.0; // 85% reduction for labeled nodes
-            const force = (1 - mouseDistance / this.mouseInfluenceRadius) * this.mouseForce * forcMultiplier;
+            const force = (1 - mouseDistance / this.mouseInfluenceRadius) * this.mouseForce;
             this.positions[idx] += (mouseDx / mouseDistance) * force * cappedDelta;
             this.positions[idx + 1] += (mouseDy / mouseDistance) * force * cappedDelta;
           }
@@ -394,41 +353,6 @@
       this.linesGeometry.setDrawRange(0, ptr / 3);
     }
 
-    _updateLabels() {
-      if (!this.labelElements.length) return;
-
-      this.labelElements.forEach(({ config, element }) => {
-        const idx = config.index * 3;
-        if (idx >= this.positions.length) return;
-
-        this.tempVector.fromArray(this.positions, idx);
-        this.pointsMesh.localToWorld(this.tempVector);
-        this.tempVector.project(this.camera);
-
-        if (this.tempVector.z < -1 || this.tempVector.z > 1) {
-          element.style.opacity = '0';
-          return;
-        }
-
-        // Calculate projected position
-        let x = (this.tempVector.x * 0.5 + 0.5) * this.width;
-        let y = (-this.tempVector.y * 0.5 + 0.5) * this.height;
-
-        // Get label dimensions (with fallback if not yet rendered)
-        const labelWidth = element.offsetWidth || 100;
-        const labelHeight = element.offsetHeight || 30;
-
-        // Clamp position to keep label within viewport bounds
-        // Account for label being centered on the point
-        const padding = 10; // Add padding from edges
-        x = Math.max(padding, Math.min(x, this.width - labelWidth - padding));
-        y = Math.max(padding, Math.min(y, this.height - labelHeight - padding));
-
-        element.style.opacity = '1';
-        element.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      });
-    }
-
     setInverted(isInverted) {
       const palette = isInverted ? this.palettes.inverted : this.palettes.default;
       this.pointsMaterial.color.copy(palette.point);
@@ -471,7 +395,6 @@
       const delta = this.clock.getDelta() * 60;
       this._updatePositions(delta);
       this._updateLines();
-      this._updateLabels();
       this.renderer.render(this.scene, this.camera);
     }
 
@@ -491,8 +414,8 @@
       if (this.renderer.domElement.parentNode === this.container) {
         this.container.removeChild(this.renderer.domElement);
       }
-      if (this.labelLayer && this.labelLayer.parentNode) {
-        this.labelLayer.parentNode.removeChild(this.labelLayer);
+      if (window.heroNetwork === this) {
+        window.heroNetwork = null;
       }
     }
   }
@@ -570,8 +493,9 @@
   const loadingScreen = document.getElementById('loading-screen');
   const loadingCircleProgress = document.getElementById('loading-circle-progress');
   const loadingLogoContainer = document.querySelector('.loading-logo-container');
+  const loadingCircle = document.querySelector('.loading-circle');
 
-  // Use GSAP to animate progress circle
+  // Use GSAP to animate progress circle once we kick off the transition
   const circleAnimation = window.gsap && loadingCircleProgress
     ? gsap.to(loadingCircleProgress, {
         strokeDashoffset: 0,
@@ -587,10 +511,6 @@
     if (transitionCompleted) return;
     transitionCompleted = true;
 
-    if (circleAnimation) {
-      circleAnimation.play();
-    }
-
     // Initialize Three.js hero background before transition
     try {
       initTopographyBackground();
@@ -603,73 +523,81 @@
     const heroIconWrapper = document.querySelector('.hero-icon-wrapper');
     const loadingLogo = document.querySelector('.loading-logo');
 
-    // GSAP Timeline for smooth coordinated transition
-    if (window.gsap && heroIconWrapper && loadingLogo) {
-      // Calculate exact position to overlay loading logo on hero logo
-      const loadingLogoRect = loadingLogo.getBoundingClientRect();
-      const heroRect = heroIconWrapper.getBoundingClientRect();
+    const startMainTransition = () => {
+      if (window.gsap) {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            loadingScreen.style.display = 'none';
+          }
+        });
 
-      // Calculate deltas from loading logo to hero logo (center to center)
-      const deltaX = heroRect.left + (heroRect.width / 2) - (loadingLogoRect.left + (loadingLogoRect.width / 2));
-      const deltaY = heroRect.top + (heroRect.height / 2) - (loadingLogoRect.top + (loadingLogoRect.height / 2));
+        if (!circleAnimation && loadingCircleProgress) {
+          tl.to(loadingCircleProgress, {
+            strokeDashoffset: 0,
+            duration: 2.5,
+            ease: "power2.inOut"
+          });
+        }
 
-      // Calculate scale to match hero logo size exactly
-      const scaleRatio = heroRect.width / loadingLogoRect.width;
+        if (loadingCircle) {
+          tl.to(loadingCircle, {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        }
 
-      const tl = gsap.timeline({
-        onComplete: () => {
+        if (heroIconWrapper && loadingLogo) {
+          const loadingLogoRect = loadingLogo.getBoundingClientRect();
+          const heroRect = heroIconWrapper.getBoundingClientRect();
+          const deltaX = heroRect.left + (heroRect.width / 2) - (loadingLogoRect.left + (loadingLogoRect.width / 2));
+          const deltaY = heroRect.top + (heroRect.height / 2) - (loadingLogoRect.top + (loadingLogoRect.height / 2));
+          const scaleRatio = heroRect.width / loadingLogoRect.width;
+
+          tl.to(loadingLogo, {
+            x: deltaX,
+            y: deltaY,
+            scale: scaleRatio,
+            duration: 0.9,
+            ease: "power3.inOut"
+          })
+          .to(loadingScreen, {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            duration: 0.4,
+            ease: "power2.out"
+          }, "-=0.4")
+          .add(() => {
+            if (window.heroNetwork && typeof window.heroNetwork.triggerRipple === 'function') {
+              window.heroNetwork.triggerRipple(0, 0, 12);
+            }
+          }, "-=0.4")
+          .add(() => {
+            document.body.classList.add('page-loaded');
+          }, "+=0.2");
+        } else {
+          tl.to(loadingScreen, {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            duration: 0.4,
+            ease: "power2.out"
+          })
+          .add(() => {
+            document.body.classList.add('page-loaded');
+          });
+        }
+      } else {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
           loadingScreen.style.display = 'none';
-        }
-      });
-
-      tl.add(() => {
-        if (circleAnimation) {
-          circleAnimation.play();
-        }
-      }, 0);
-
-      // Fade out progress circle
-      tl.to('.loading-circle', {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.out"
-      })
-      // Move loading logo to perfectly overlay hero logo position
-      .to(loadingLogo, {
-        x: deltaX,
-        y: deltaY,
-        scale: scaleRatio,
-        duration: 0.9,
-        ease: "power3.inOut"
-      }, "-=0.15")
-      // Fade out white background
-      .to(loadingScreen, {
-        backgroundColor: "rgba(255, 255, 255, 0)",
-        duration: 0.4,
-        ease: "power2.out"
-      }, "-=0.4")
-      // Trigger ripple immediately as logo starts moving
-      .add(() => {
-        // Trigger ripple effect in the background nodes
-        if (window.heroNetwork && typeof window.heroNetwork.triggerRipple === 'function') {
-          // Ripple from center (where logo is positioned)
-          window.heroNetwork.triggerRipple(0, 0, 12);
-        }
-      }, "-=0.9")
-      // Once loading logo is in position, reveal hero logo
-      .add(() => {
-        document.body.classList.add('page-loaded');
-      }, "+=0.8");
-    } else {
-      if (circleAnimation) {
-        circleAnimation.play();
+          document.body.classList.add('page-loaded');
+        }, 500);
       }
-      // Fallback
-      loadingScreen.style.opacity = '0';
-      setTimeout(() => {
-        loadingScreen.style.display = 'none';
-        document.body.classList.add('page-loaded');
-      }, 500);
+    };
+
+    if (circleAnimation) {
+      circleAnimation.eventCallback('onComplete', startMainTransition);
+      circleAnimation.play();
+    } else {
+      startMainTransition();
     }
   }
 

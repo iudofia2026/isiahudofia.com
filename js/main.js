@@ -987,17 +987,18 @@
       function initSmoothZoomEffect() {
         const textCarousel = document.querySelector('.text-carousel');
 
-        // Pin the hero section and zoom it out
+        // Pin the hero section and zoom it out, then move it up and off screen
         gsap.timeline({
           scrollTrigger: {
             trigger: heroSection,
             start: 'top top',
-            end: '+=100%', // Reduced scroll distance
-            scrub: 1.2,
+            end: '+=160%', // Extended to include both zoom and scroll-off
+            scrub: 1.2, // Smooth scrubbing
             pin: true,
-            pinSpacing: false, // Don't create extra space
+            pinSpacing: false, // Don't create extra space - keeps about section close
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            // This makes it work from any scroll position
             toggleActions: 'play none none reset'
           }
         })
@@ -1014,7 +1015,16 @@
           opacity: 1,
           y: 0,
           ease: 'power2.out'
-        }, '<'); // Show about section as zoom happens
+        }, '<') // '<' means start at the same time as previous animation
+        .to(heroSection, {
+          y: -window.innerHeight * 1.2, // Move hero section up faster and further
+          ease: 'power2.inOut'
+        }, '>') // '>' means start after previous animation
+        .to(textCarousel, {
+          y: -window.innerHeight * 1.2, // Move carousel up with hero
+          scale: 0.2, // Continue scaling down dramatically
+          ease: 'power2.inOut'
+        }, '<'); // '<' means start at the same time as previous animation
 
         // Global scroll listener to handle scroll-to-top from anywhere
         let isScrollingToTop = false;

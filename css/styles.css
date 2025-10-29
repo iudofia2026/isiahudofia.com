@@ -1088,6 +1088,24 @@ body.menu-open .hero-label {
   transform: translateY(60px);
   position: relative;
   z-index: var(--z-content);
+  padding: var(--spacing-lg);
+}
+
+.about-content {
+  max-width: 800px;
+  margin-top: var(--spacing-lg);
+}
+
+.about-content p {
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: var(--spacing-md);
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
 }
 
 .about-title {

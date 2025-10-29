@@ -1083,6 +1083,11 @@
           scale: carouselScale,
           ease: 'power2.inOut'
         }, '<')
+        .to(aboutContainer, {
+          opacity: 1,
+          y: 0,
+          ease: 'power2.out'
+        }, '<')
         .to(heroSection, {
           y: -upwardMovement,
           ease: 'power2.inOut'
@@ -1091,13 +1096,7 @@
           y: -upwardMovement,
           scale: carouselFinalScale,
           ease: 'power2.inOut'
-        }, '<')
-        .to(aboutContainer, {
-          opacity: 1,
-          y: 0,
-          ease: 'power2.out',
-          duration: 0.8
-        }, '-=0.3');
+        }, '<');
 
         // Global scroll listener to handle scroll-to-top from anywhere
         let isScrollingToTop = false;

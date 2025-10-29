@@ -887,17 +887,18 @@ body.menu-open .hero-label-layer {
   position: absolute;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.85rem;
-  min-height: 32px; /* Improved touch target */
+  gap: 0.75rem;
+  padding: 0.625rem 1.35rem;
+  min-height: 48px;
   border-radius: 999px;
   font-family: var(--font-body);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: none;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--color-navy);
-  box-shadow: 0 12px 30px rgba(0, 31, 63, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 31, 63, 0.18);
   transform: translate3d(-50%, -50%, 0);
   transition: opacity 0.3s var(--ease-out-cubic), background 0.3s var(--ease-out-cubic), color 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic);
   pointer-events: auto;
@@ -919,18 +920,23 @@ body.menu-open .hero-label {
 
 .hero-label::before {
   content: '';
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--color-navy);
-  box-shadow: 0 0 0 4px rgba(0, 31, 63, 0.12);
+  box-shadow: 0 0 0 5px rgba(0, 31, 63, 0.12);
 }
 
 .hero-label:hover {
-  background: rgba(0, 31, 63, 0.92);
+  background: rgba(0, 31, 63, 0.95);
   color: var(--color-white);
-  transform: translate3d(-50%, -50%, 0) scale(1.05);
-  box-shadow: 0 16px 40px rgba(0, 31, 63, 0.25);
+  transform: translate3d(-50%, -50%, 0) scale(1.08);
+  box-shadow: 0 20px 50px rgba(0, 31, 63, 0.3);
+}
+
+.hero-label:hover::before {
+  background: var(--color-white);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
 .hero-label:active {
@@ -939,11 +945,17 @@ body.menu-open .hero-label {
 
 @media (max-width: 768px) {
   .hero-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    padding: 0.5rem 0.8rem;
-    min-height: 44px; /* Meet accessibility minimum */
-    gap: 0.35rem;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 0.75rem 1.2rem;
+    min-height: 52px;
+    gap: 0.6rem;
+  }
+
+  .hero-label::before {
+    width: 9px;
+    height: 9px;
   }
 }
 
@@ -1406,7 +1418,7 @@ body.menu-open .hero-label {
 
   /* Simplify shadows on mobile */
   .hero-label {
-    box-shadow: 0 8px 20px rgba(0, 31, 63, 0.1);
+    box-shadow: 0 12px 30px rgba(0, 31, 63, 0.15);
   }
 
   .about-image-wrapper {

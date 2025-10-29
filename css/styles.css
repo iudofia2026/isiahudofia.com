@@ -39,13 +39,13 @@
   --font-size-xl: clamp(1.75rem, calc(1.75rem + 1 * var(--fluid-bp)), 2.75rem);
   --font-size-2xl: clamp(2.5rem, calc(2.5rem + 2.5 * var(--fluid-bp)), 5rem);
 
-  /* Spacing */
+  /* Spacing - Mobile-first approach */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
-  --spacing-md: 2rem;
-  --spacing-lg: 4rem;
-  --spacing-xl: 6rem;
-  --spacing-2xl: 8rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 3rem;
+  --spacing-xl: 4rem;
+  --spacing-2xl: 6rem;
 
   /* Animation Curves */
   --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
@@ -384,6 +384,8 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
   justify-content: center;
   align-items: center;
   gap: 6px;
+  min-width: 64px;
+  min-height: 48px;
   width: 64px;
   height: 48px;
   padding: 10px 14px;
@@ -400,6 +402,17 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
     background-color 0.4s var(--ease-out-cubic),
     border-color 0.4s var(--ease-out-cubic);
   transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure touch target meets 44px minimum on all devices */
+@media (max-width: 768px) {
+  .hamburger-menu {
+    min-width: 56px;
+    min-height: 52px;
+    width: 56px;
+    height: 52px;
+  }
 }
 
 .main-nav.scrolled .hamburger-menu {
@@ -659,7 +672,8 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   justify-content: flex-start;
   width: 100%;
   text-align: left;
-  padding: 0.15rem 0;
+  padding: 0.25rem 0; /* Increased for better touch targets */
+  min-height: 48px; /* Ensure touch target minimum */
   color: var(--color-white);
   font-family: var(--font-menu);
   font-variation-settings: 'wght' 660, 'wdth' 92;
@@ -671,6 +685,8 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   transition: color 0.45s var(--ease-lando);
   overflow: visible;
   will-change: color;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* Optimize for touch */
 }
 
 .mobile-menu-link:hover,
@@ -806,9 +822,10 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
 
 @media (max-width: 540px) {
   .mobile-menu-link {
-    font-size: clamp(1.8rem, 16vw, 2.8rem);
+    font-size: clamp(2rem, 14vw, 3rem);
+    padding: 0.4rem 0;
+    min-height: 52px;
   }
-
 }
 
 /* ========================================
@@ -872,6 +889,7 @@ body.menu-open .hero-label-layer {
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.85rem;
+  min-height: 32px; /* Improved touch target */
   border-radius: 999px;
   font-family: var(--font-body);
   font-size: 0.75rem;
@@ -921,9 +939,10 @@ body.menu-open .hero-label {
 
 @media (max-width: 768px) {
   .hero-label {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     letter-spacing: 0.14em;
-    padding: 0.28rem 0.6rem;
+    padding: 0.5rem 0.8rem;
+    min-height: 44px; /* Meet accessibility minimum */
     gap: 0.35rem;
   }
 }
@@ -1269,17 +1288,18 @@ body.menu-open .hero-label {
    Responsive Design
    ======================================== */
 
-@media (max-width: 1024px) {
+@media (min-width: 769px) {
   :root {
-    --spacing-lg: 3rem;
-    --spacing-xl: 4rem;
-    --spacing-2xl: 6rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+    --spacing-2xl: 8rem;
   }
 }
 
 @media (max-width: 768px) {
   :root {
-    --spacing-md: 1.5rem;
+    --spacing-md: 1.25rem;
     --spacing-lg: 2rem;
     --spacing-xl: 3rem;
     --spacing-2xl: 4rem;
@@ -1287,12 +1307,180 @@ body.menu-open .hero-label {
 
   .hero-section {
     padding: var(--spacing-xl) var(--spacing-md);
+    min-height: 100svh; /* Use small viewport height on mobile */
+  }
+
+  .about-section {
+    min-height: 200svh;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2.5rem;
+    --spacing-2xl: 3.5rem;
+  }
+
+  .hero-section {
+    padding: var(--spacing-lg) var(--spacing-sm);
   }
 }
 
 @media (max-width: 480px) {
   .main-nav {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-sm);
+  }
+
+  .nav-logo-wrapper {
+    height: 72px;
+  }
+
+  .nav-logo-wrapper img {
+    height: 72px;
+  }
+
+  .hero-icon-wrapper {
+    width: clamp(160px, 40vw, 240px);
+  }
+}
+
+/* Additional mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Better nav logo sizing */
+  .nav-logo-wrapper {
+    height: 80px;
+  }
+
+  .nav-logo-wrapper img {
+    height: 80px;
+  }
+
+  /* Improved carousel text sizing */
+  .carousel-text {
+    font-size: clamp(3rem, 10vw, 6rem);
+    padding: 0 1rem;
+  }
+
+  /* Better about section spacing */
+  .about-container {
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+
+  /* Improve mobile menu padding */
+  .mobile-menu-inner {
+    margin: clamp(3rem, 6vw, 5rem) auto clamp(1.5rem, 4vw, 3rem);
+    padding: 0 clamp(1rem, 3vw, 2rem);
+  }
+}
+
+/* ========================================
+   Mobile Performance Optimizations
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Force hardware acceleration on mobile */
+  .hero-section,
+  .about-section,
+  .text-carousel,
+  .hero-icon-wrapper,
+  .mobile-menu,
+  .hamburger-menu {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+
+  /* Optimize animations for mobile */
+  .carousel-row[data-direction="left"] .carousel-content {
+    animation-duration: 40s; /* Slower for smoother performance */
+  }
+
+  .carousel-row[data-direction="right"] .carousel-content {
+    animation-duration: 40s;
+  }
+
+  /* Simplify shadows on mobile */
+  .hero-label {
+    box-shadow: 0 8px 20px rgba(0, 31, 63, 0.1);
+  }
+
+  .about-image-wrapper {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Reduce blur effects on mobile */
+  .mobile-menu-grid::before {
+    filter: blur(30px);
+  }
+
+  /* Optimize hero icon for mobile */
+  .hero-icon-wrapper {
+    width: clamp(180px, 35vw, 280px);
+    border-radius: 12px;
+  }
+
+  .hero-icon-wrapper img {
+    border-radius: 12px;
+  }
+
+  /* Better loading screen for mobile */
+  .loading-logo-container {
+    width: clamp(180px, 35vw, 280px);
+    height: clamp(180px, 35vw, 280px);
+  }
+
+  /* Improve about image sizing on mobile */
+  .about-image-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* Better text hierarchy on mobile */
+  .about-title {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .about-content {
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+  }
+
+  /* Optimize page title sizing */
+  .page-title {
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .page-content {
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 375px) {
+  /* Extra small mobile devices - iPhone SE, etc */
+  .hero-icon-wrapper {
+    width: clamp(140px, 38vw, 200px);
+  }
+
+  .loading-logo-container {
+    width: clamp(140px, 38vw, 200px);
+    height: clamp(140px, 38vw, 200px);
+  }
+
+  .about-image-wrapper {
+    width: 160px;
+    height: 160px;
+  }
+
+  .carousel-text {
+    font-size: clamp(2.5rem, 12vw, 4.5rem);
   }
 }
 

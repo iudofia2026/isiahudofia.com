@@ -13,27 +13,43 @@
       this.container = container;
       this.width = container.clientWidth || window.innerWidth;
       this.height = container.clientHeight || window.innerHeight;
-      this.pointCount = 250; // Slightly increased for better density
-      this.maxLinkDistance = 60; // Increased to work with larger bounds
-      this.bounds = { x: 200, y: 120, z: 200 }; // Expanded bounds for better screen coverage
 
-      this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Mobile detection
+      this.isMobile = window.innerWidth <= 768;
+      this.isSmallMobile = window.innerWidth <= 480;
+
+      // Adaptive particle count for performance
+      this.pointCount = this.isSmallMobile ? 80 : (this.isMobile ? 120 : 250);
+      this.maxLinkDistance = this.isMobile ? 50 : 60;
+      this.bounds = this.isMobile ? { x: 120, y: 100, z: 120 } : { x: 200, y: 120, z: 200 };
+
+      // Optimize renderer for mobile
+      this.renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: !this.isMobile, // Disable antialiasing on mobile for performance
+        powerPreference: this.isMobile ? 'low-power' : 'default'
+      });
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1.5 : 2));
       this.renderer.setSize(this.width, this.height);
       this.renderer.domElement.classList.add('hero-canvas');
       this.container.appendChild(this.renderer.domElement);
 
       this.scene = new THREE.Scene();
-      this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
-      this.camera.position.set(0, 0, 220);
+
+      // Adjust camera FOV and position for mobile
+      const fov = this.isMobile ? 50 : 45; // Slightly wider FOV on mobile
+      const cameraZ = this.isMobile ? 180 : 220; // Closer camera on mobile for better fill
+      this.camera = new THREE.PerspectiveCamera(fov, this.width / this.height, 0.1, 1000);
+      this.camera.position.set(0, 0, cameraZ);
 
       this.positions = new Float32Array(this.pointCount * 3);
       this.velocities = new Float32Array(this.pointCount * 3);
       this._initParticles();
 
+      // Smaller particle size on mobile
       this.pointsMaterial = new THREE.PointsMaterial({
         color: 0x001f3f,
-        size: 2.4,
+        size: this.isMobile ? 2.0 : 2.4,
         sizeAttenuation: true
       });
 
@@ -103,10 +119,10 @@
       this.clock = new THREE.Clock();
       this.frameId = null;
 
-      // Mouse interaction
+      // Mouse/Touch interaction - optimized for mobile
       this.mouse = { x: 0, y: 0, isInside: false };
-      this.mouseInfluenceRadius = 80;
-      this.mouseForce = 0.3;
+      this.mouseInfluenceRadius = this.isMobile ? 60 : 80;
+      this.mouseForce = this.isMobile ? 0.15 : 0.3; // Reduced force on mobile for stability
 
       // Orbital settings
       this.centerPoint = { x: 0, y: 0, z: 0 }; // Center of rotation
@@ -128,9 +144,18 @@
       this.handleMouseLeave = this.handleMouseLeave.bind(this);
 
       window.addEventListener('resize', this.handleResize);
-      this.container.addEventListener('mousemove', this.handleMouseMove);
-      this.container.addEventListener('mouseenter', this.handleMouseEnter);
-      this.container.addEventListener('mouseleave', this.handleMouseLeave);
+
+      // Add touch support for mobile
+      if (this.isMobile) {
+        this.container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true });
+        this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+        this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
+      } else {
+        this.container.addEventListener('mousemove', this.handleMouseMove);
+        this.container.addEventListener('mouseenter', this.handleMouseEnter);
+        this.container.addEventListener('mouseleave', this.handleMouseLeave);
+      }
+
       document.addEventListener('visibilitychange', this.handleVisibilityChange);
       this.animate();
     }
@@ -156,6 +181,28 @@
     }
 
     handleMouseLeave() {
+      this.mouse.isInside = false;
+    }
+
+    handleTouchMove(event) {
+      if (!event.touches || event.touches.length === 0) return;
+      const touch = event.touches[0];
+      const rect = this.container.getBoundingClientRect();
+      this.mouse.x = ((touch.clientX - rect.left) / this.width) * 2 - 1;
+      this.mouse.y = -((touch.clientY - rect.top) / this.height) * 2 + 1;
+      this.mouse.isInside = true;
+    }
+
+    handleTouchStart(event) {
+      if (!event.touches || event.touches.length === 0) return;
+      const touch = event.touches[0];
+      const rect = this.container.getBoundingClientRect();
+      this.mouse.x = ((touch.clientX - rect.left) / this.width) * 2 - 1;
+      this.mouse.y = -((touch.clientY - rect.top) / this.height) * 2 + 1;
+      this.mouse.isInside = true;
+    }
+
+    handleTouchEnd() {
       this.mouse.isInside = false;
     }
 
@@ -420,12 +467,13 @@
         let y = (-this.tempVector.y * 0.5 + 0.5) * this.height;
 
         // Get label dimensions (with fallback if not yet rendered)
-        const labelWidth = element.offsetWidth || 100;
-        const labelHeight = element.offsetHeight || 30;
+        const labelWidth = element.offsetWidth || (this.isMobile ? 80 : 100);
+        const labelHeight = element.offsetHeight || (this.isMobile ? 24 : 30);
+
+        // Increased padding on mobile for better visibility
+        const padding = this.isMobile ? 16 : 10;
 
         // Clamp position to keep label within viewport bounds
-        // Account for label being centered on the point
-        const padding = 10; // Add padding from edges
         x = Math.max(padding, Math.min(x, this.width - labelWidth - padding));
         y = Math.max(padding, Math.min(y, this.height - labelHeight - padding));
 
@@ -466,6 +514,19 @@
     handleResize() {
       this.width = this.container.clientWidth || window.innerWidth;
       this.height = this.container.clientHeight || window.innerHeight;
+
+      // Update mobile detection on resize
+      const wasMobile = this.isMobile;
+      this.isMobile = window.innerWidth <= 768;
+      this.isSmallMobile = window.innerWidth <= 480;
+
+      // If device type changed, update renderer settings
+      if (wasMobile !== this.isMobile) {
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1.5 : 2));
+        this.mouseInfluenceRadius = this.isMobile ? 60 : 80;
+        this.mouseForce = this.isMobile ? 0.15 : 0.3;
+      }
+
       this.renderer.setSize(this.width, this.height);
       this.camera.aspect = this.width / this.height;
       this.camera.updateProjectionMatrix();
@@ -700,15 +761,17 @@
   // ========================================
   // Smooth Scrolling with Lenis
   // ========================================
+  const isMobileDevice = window.innerWidth <= 768;
+
   const lenis = new Lenis({
-    duration: 1.2,
+    duration: isMobileDevice ? 1.0 : 1.2, // Faster on mobile
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     direction: 'vertical',
     gestureDirection: 'vertical',
     smooth: true,
     mouseMultiplier: 1,
-    smoothTouch: false,
-    touchMultiplier: 2,
+    smoothTouch: isMobileDevice, // Enable smooth touch scrolling on mobile
+    touchMultiplier: isMobileDevice ? 1.5 : 2, // Adjusted for better mobile feel
     infinite: false,
   });
 
@@ -986,45 +1049,54 @@
 
       function initSmoothZoomEffect() {
         const textCarousel = document.querySelector('.text-carousel');
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+
+        // Mobile-optimized scroll distances and timings
+        const scrollEnd = isSmallMobile ? '+=120%' : (isMobile ? '+=140%' : '+=160%');
+        const scrubSpeed = isMobile ? 1.0 : 1.2; // Faster scrub on mobile
+        const heroScale = isMobile ? 0.7 : 0.6; // Less aggressive zoom on mobile
+        const carouselScale = isMobile ? 0.7 : 0.6;
+        const carouselFinalScale = isMobile ? 0.3 : 0.2;
+        const upwardMovement = window.innerHeight * (isMobile ? 1.0 : 1.2);
 
         // Pin the hero section and zoom it out, then move it up and off screen
         gsap.timeline({
           scrollTrigger: {
             trigger: heroSection,
             start: 'top top',
-            end: '+=160%', // Extended to include both zoom and scroll-off
-            scrub: 1.2, // Smooth scrubbing
+            end: scrollEnd,
+            scrub: scrubSpeed,
             pin: true,
-            pinSpacing: false, // Don't create extra space - keeps about section close
+            pinSpacing: false,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            // This makes it work from any scroll position
             toggleActions: 'play none none reset'
           }
         })
         .to(heroSection, {
-          scale: 0.6,
+          scale: heroScale,
           borderRadius: '0px',
           ease: 'power2.inOut'
         })
         .to(textCarousel, {
-          scale: 0.6,
+          scale: carouselScale,
           ease: 'power2.inOut'
         }, '<')
         .to(aboutContainer, {
           opacity: 1,
           y: 0,
           ease: 'power2.out'
-        }, '<') // '<' means start at the same time as previous animation
+        }, '<')
         .to(heroSection, {
-          y: -window.innerHeight * 1.2, // Move hero section up faster and further
+          y: -upwardMovement,
           ease: 'power2.inOut'
-        }, '>') // '>' means start after previous animation
+        }, '>')
         .to(textCarousel, {
-          y: -window.innerHeight * 1.2, // Move carousel up with hero
-          scale: 0.2, // Continue scaling down dramatically
+          y: -upwardMovement,
+          scale: carouselFinalScale,
           ease: 'power2.inOut'
-        }, '<'); // '<' means start at the same time as previous animation
+        }, '<');
 
         // Global scroll listener to handle scroll-to-top from anywhere
         let isScrollingToTop = false;
@@ -1101,16 +1173,19 @@
       this.row2 = document.querySelector('.carousel-row-2 .carousel-content');
       this.texts = ['ISIAH', 'UDOFIA'];
       this.fonts = [
-        'Montserrat', 'Oswald', 'Archivo Black', 
+        'Montserrat', 'Oswald', 'Archivo Black',
         'Bebas Neue', 'Source Sans Pro'
       ];
-      
-      // Performance settings
-      this.maxElements = 20; // Maximum elements per row
+
+      // Mobile detection
+      this.isMobile = window.innerWidth <= 768;
+
+      // Performance settings - reduced elements on mobile
+      this.maxElements = this.isMobile ? 12 : 20;
       this.viewportWidth = window.innerWidth;
-      this.elementWidth = 200; // Approximate width of each text element
+      this.elementWidth = this.isMobile ? 150 : 200;
       this.elementsPerViewport = Math.ceil(this.viewportWidth / this.elementWidth) + 2;
-      
+
       this.init();
     }
     
@@ -1126,19 +1201,24 @@
     generateRow(container, text) {
       // Clear existing content
       container.innerHTML = '';
-      
-      // Generate enough elements to fill viewport + buffer
-      const totalElements = this.elementsPerViewport * 2;
-      
+
+      // Generate enough elements to fill viewport + buffer (fewer on mobile)
+      const totalElements = Math.min(this.elementsPerViewport * 2, this.maxElements);
+
       for (let i = 0; i < totalElements; i++) {
         const span = document.createElement('span');
         span.className = 'carousel-text';
         span.textContent = text;
-        
+
         // Apply random font for variety
         const fontIndex = i % this.fonts.length;
         span.style.fontFamily = this.fonts[fontIndex];
-        
+
+        // Add will-change for better mobile performance
+        if (this.isMobile) {
+          span.style.willChange = 'transform';
+        }
+
         container.appendChild(span);
       }
     }
@@ -1150,9 +1230,17 @@
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           const newWidth = window.innerWidth;
+          const wasMobile = this.isMobile;
+          this.isMobile = newWidth <= 768;
+
+          // Update element width based on device type
+          this.elementWidth = this.isMobile ? 150 : 200;
+          this.maxElements = this.isMobile ? 12 : 20;
+
           const newElementsPerViewport = Math.ceil(newWidth / this.elementWidth) + 2;
-          
-          if (Math.abs(newElementsPerViewport - this.elementsPerViewport) > 2) {
+
+          // Regenerate if device type changed or elements changed significantly
+          if (wasMobile !== this.isMobile || Math.abs(newElementsPerViewport - this.elementsPerViewport) > 2) {
             this.elementsPerViewport = newElementsPerViewport;
             this.regenerate();
           }
@@ -1197,31 +1285,43 @@
       this.container = container;
       this.width = container.clientWidth || window.innerWidth;
       this.height = container.clientHeight || window.innerHeight;
-      this.pointCount = 120; // Fewer particles for performance
-      this.maxLinkDistance = 80;
-      this.bounds = { x: 150, y: 100, z: 150 };
 
-      this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false }); // No antialiasing for speed
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Cap pixel ratio
+      // Mobile detection for performance optimization
+      this.isMobile = window.innerWidth <= 768;
+      this.isSmallMobile = window.innerWidth <= 480;
+
+      // Aggressive particle reduction on mobile
+      this.pointCount = this.isSmallMobile ? 50 : (this.isMobile ? 80 : 120);
+      this.maxLinkDistance = this.isMobile ? 60 : 80;
+      this.bounds = this.isMobile ? { x: 100, y: 80, z: 100 } : { x: 150, y: 100, z: 150 };
+
+      this.renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: false,
+        powerPreference: this.isMobile ? 'low-power' : 'default'
+      });
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1 : 1.5));
       this.renderer.setSize(this.width, this.height);
       this.renderer.domElement.classList.add('about-canvas');
       this.container.appendChild(this.renderer.domElement);
 
       this.scene = new THREE.Scene();
-      this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
-      this.camera.position.set(0, 0, 200);
+      const fov = this.isMobile ? 50 : 45;
+      const cameraZ = this.isMobile ? 160 : 200;
+      this.camera = new THREE.PerspectiveCamera(fov, this.width / this.height, 0.1, 1000);
+      this.camera.position.set(0, 0, cameraZ);
 
       this.positions = new Float32Array(this.pointCount * 3);
       this.velocities = new Float32Array(this.pointCount * 3);
       this._initParticles();
 
-      // White particles for dark navy background
+      // White particles for dark navy background - smaller on mobile
       this.pointsMaterial = new THREE.PointsMaterial({
         color: 0xffffff,
-        size: 2.0,
+        size: this.isMobile ? 1.6 : 2.0,
         sizeAttenuation: true,
         transparent: true,
-        opacity: 0.6
+        opacity: this.isMobile ? 0.5 : 0.6
       });
 
       this.pointsGeometry = new THREE.BufferGeometry();

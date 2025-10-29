@@ -887,18 +887,18 @@ body.menu-open .hero-label-layer {
   position: absolute;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.625rem 1.35rem;
-  min-height: 48px;
+  gap: 0.6rem;
+  padding: 0.5rem 1.1rem;
+  min-height: 40px;
   border-radius: 999px;
   font-family: var(--font-body);
-  font-size: 1.125rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: none;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.9);
   color: var(--color-navy);
-  box-shadow: 0 16px 40px rgba(0, 31, 63, 0.18);
+  box-shadow: 0 14px 35px rgba(0, 31, 63, 0.15);
   transform: translate3d(-50%, -50%, 0);
   transition: opacity 0.3s var(--ease-out-cubic), background 0.3s var(--ease-out-cubic), color 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic);
   pointer-events: auto;
@@ -920,11 +920,11 @@ body.menu-open .hero-label {
 
 .hero-label::before {
   content: '';
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: var(--color-navy);
-  box-shadow: 0 0 0 5px rgba(0, 31, 63, 0.12);
+  box-shadow: 0 0 0 4px rgba(0, 31, 63, 0.12);
 }
 
 .hero-label:hover {
@@ -945,17 +945,17 @@ body.menu-open .hero-label {
 
 @media (max-width: 768px) {
   .hero-label {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    padding: 0.75rem 1.2rem;
-    min-height: 52px;
-    gap: 0.6rem;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 1rem;
+    min-height: 48px;
+    gap: 0.5rem;
   }
 
   .hero-label::before {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
   }
 }
 

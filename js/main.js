@@ -89,9 +89,9 @@
 
       // Each entry maps a point index to a clickable label. Adjust to match your sections/links.
       this.trackedLabels = [
-        { index: 8, text: 'projects', href: '#projects' },
-        { index: 21, text: 'research', href: '#research' },
-        { index: 55, text: 'contact', href: '#contact' }
+        { index: 8, text: 'projects', href: 'projects.html' },
+        { index: 21, text: 'research', href: 'research.html' },
+        { index: 55, text: 'contact', href: 'contact.html' }
       ];
       this.labelElements = [];
       this._createLabels();

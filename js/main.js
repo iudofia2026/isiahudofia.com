@@ -1437,6 +1437,30 @@
   });
 
   // ========================================
+  // Homepage Background Initialization
+  // ========================================
+  function initHomepageBackground() {
+    if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+      console.log('Initializing homepage background...');
+      try {
+        initTopographyBackground();
+        initSyncedLogoHover();
+        initProceduralCarousel();
+        initAboutNetwork();
+      } catch (error) {
+        console.warn('Homepage background initialization failed:', error);
+      }
+    }
+  }
+
+  // Initialize background when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHomepageBackground);
+  } else {
+    initHomepageBackground();
+  }
+
+  // ========================================
   // Console Easter Egg
   // ========================================
   console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');

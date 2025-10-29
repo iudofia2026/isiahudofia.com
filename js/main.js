@@ -1041,53 +1041,41 @@
         ScrollTrigger.refresh();
       }
 
-      // Premium About Section Animations with SplitType
+      // About Section Animations with GSAP
       function initAboutAnimations() {
-        if (!window.SplitType) {
-          console.warn('SplitType not loaded');
-          return;
-        }
+        const aboutImage = document.querySelector('.about-image-wrapper');
+        const aboutText = document.querySelector('.about-text-wrapper');
 
-        const aboutTitle = document.querySelector('.about-title');
-        const aboutTexts = document.querySelectorAll('.about-text');
-
-        if (aboutTitle) {
-          // Split title into characters
-          const titleSplit = new SplitType(aboutTitle, { types: 'chars' });
-
-          // Animate title on scroll (bidirectional)
-          ScrollTrigger.create({
-            trigger: aboutTitle,
-            start: 'top 80%',
-            end: 'top 20%',
-            onEnter: () => aboutTitle.setAttribute('data-animated', 'true'),
-            onLeave: () => aboutTitle.setAttribute('data-animated', 'false'),
-            onEnterBack: () => aboutTitle.setAttribute('data-animated', 'true'),
-            onLeaveBack: () => aboutTitle.setAttribute('data-animated', 'false')
+        if (aboutImage) {
+          gsap.to(aboutImage, {
+            scrollTrigger: {
+              trigger: aboutImage,
+              start: 'top 85%',
+              end: 'top 60%',
+              scrub: 1,
+              toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power2.out'
           });
         }
 
-        if (aboutTexts.length) {
-          aboutTexts.forEach((text, index) => {
-            // Split text into characters
-            const textSplit = new SplitType(text, { types: 'chars' });
-
-            // Add custom property for staggered delays
-            textSplit.chars.forEach((char, charIndex) => {
-              char.style.setProperty('--char-index', charIndex);
-              char.style.transitionDelay = `${charIndex * 0.015}s`;
-            });
-
-            // Animate text on scroll (bidirectional)
-            ScrollTrigger.create({
-              trigger: text,
+        if (aboutText) {
+          gsap.to(aboutText, {
+            scrollTrigger: {
+              trigger: aboutText,
               start: 'top 85%',
-              end: 'top 15%',
-              onEnter: () => text.setAttribute('data-animated', 'true'),
-              onLeave: () => text.setAttribute('data-animated', 'false'),
-              onEnterBack: () => text.setAttribute('data-animated', 'true'),
-              onLeaveBack: () => text.setAttribute('data-animated', 'false')
-            });
+              end: 'top 60%',
+              scrub: 1,
+              toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power2.out',
+            delay: 0.2
           });
         }
       }

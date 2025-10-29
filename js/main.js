@@ -1442,51 +1442,58 @@
   });
 
   // ========================================
-  // Homepage Background Initialization
+  // Homepage Background Re-initialization
   // ========================================
-  function initHomepageBackground() {
+  function reinitializeHomepageBackground() {
     if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
-      console.log('Initializing homepage background...');
+      console.log('Re-initializing homepage background...');
       
-      // Only initialize if not already initialized
-      if (!heroNetwork) {
-        try {
-          initTopographyBackground();
-        } catch (error) {
-          console.warn('Hero background initialization failed:', error);
-        }
+      // Force reinitialize by destroying existing networks first
+      if (heroNetwork) {
+        heroNetwork.destroy();
+        heroNetwork = null;
+      }
+      if (aboutNetwork) {
+        aboutNetwork.destroy();
+        aboutNetwork = null;
       }
       
-      if (!aboutNetwork) {
-        try {
-          initAboutNetwork();
-        } catch (error) {
-          console.warn('About network initialization failed:', error);
-        }
-      }
-      
-      // Always initialize these as they don't conflict
+      // Reinitialize everything
       try {
+        initTopographyBackground();
         initSyncedLogoHover();
         initProceduralCarousel();
+        initAboutNetwork();
+        console.log('Homepage background re-initialized successfully');
       } catch (error) {
-        console.warn('Other homepage features initialization failed:', error);
+        console.warn('Homepage background re-initialization failed:', error);
       }
     }
   }
 
-  // Initialize background when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHomepageBackground);
-  } else {
-    initHomepageBackground();
-  }
-
-  // Also initialize on page show (when navigating back)
+  // Reinitialize on page show (when navigating back)
   window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-      // Page was loaded from cache, reinitialize
-      initHomepageBackground();
+    // Always reinitialize when returning to homepage
+    reinitializeHomepageBackground();
+  });
+
+  // Also ensure background initializes on first load
+  window.addEventListener('load', () => {
+    if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+      // Add a small delay to ensure the loading transition has completed
+      setTimeout(() => {
+        if (!heroNetwork) {
+          console.log('Initializing background on first load...');
+          try {
+            initTopographyBackground();
+            initSyncedLogoHover();
+            initProceduralCarousel();
+            initAboutNetwork();
+          } catch (error) {
+            console.warn('First load background initialization failed:', error);
+          }
+        }
+      }, 1000);
     }
   });
 

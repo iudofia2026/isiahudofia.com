@@ -466,12 +466,12 @@
         let x = (this.tempVector.x * 0.5 + 0.5) * this.width;
         let y = (-this.tempVector.y * 0.5 + 0.5) * this.height;
 
-        // Get label dimensions (with fallback if not yet rendered)
-        const labelWidth = element.offsetWidth || (this.isMobile ? 80 : 100);
-        const labelHeight = element.offsetHeight || (this.isMobile ? 24 : 30);
+        // Get label dimensions (with fallback if not yet rendered) - updated for 50% larger labels
+        const labelWidth = element.offsetWidth || (this.isMobile ? 140 : 160);
+        const labelHeight = element.offsetHeight || (this.isMobile ? 52 : 48);
 
         // Increased padding on mobile for better visibility
-        const padding = this.isMobile ? 16 : 10;
+        const padding = this.isMobile ? 20 : 16;
 
         // Clamp position to keep label within viewport bounds
         x = Math.max(padding, Math.min(x, this.width - labelWidth - padding));

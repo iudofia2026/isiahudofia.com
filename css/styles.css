@@ -1084,10 +1084,11 @@ body.menu-open .hero-label {
 .about-container {
   position: absolute;
   top: 100vh;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   max-width: 1200px;
-  width: 100%;
+  width: calc(100% - var(--spacing-lg) * 2);
   padding: var(--spacing-2xl) var(--spacing-lg);
   z-index: 20;
   opacity: 1;

@@ -1022,7 +1022,7 @@ body.menu-open .hero-label {
 
 .about-section {
   position: relative;
-  min-height: 150vh;
+  min-height: 200vh;
   background-color: var(--color-carolina-navy);
   color: var(--color-white);
   display: flex;
@@ -1323,7 +1323,7 @@ body.menu-open .hero-label {
   }
 
   .about-section {
-    min-height: 150svh;
+    min-height: 200svh;
   }
 }
 

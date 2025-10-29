@@ -232,6 +232,7 @@
     }
 
     _createLabels() {
+      console.log('Creating hero labels:', this.trackedLabels);
       this.trackedLabels.forEach((label) => {
         if (label.index >= this.pointCount) return;
         const element = document.createElement('a');
@@ -241,6 +242,7 @@
         element.setAttribute('data-index', String(label.index));
         this.labelLayer.appendChild(element);
         this.labelElements.push({ config: label, element });
+        console.log('Created label:', label.text, 'at index:', label.index);
       });
     }
 
@@ -395,7 +397,10 @@
     }
 
     _updateLabels() {
-      if (!this.labelElements.length) return;
+      if (!this.labelElements.length) {
+        console.log('No label elements to update');
+        return;
+      }
 
       this.labelElements.forEach(({ config, element }) => {
         const idx = config.index * 3;
@@ -1442,13 +1447,30 @@
   function initHomepageBackground() {
     if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
       console.log('Initializing homepage background...');
+      
+      // Only initialize if not already initialized
+      if (!heroNetwork) {
+        try {
+          initTopographyBackground();
+        } catch (error) {
+          console.warn('Hero background initialization failed:', error);
+        }
+      }
+      
+      if (!aboutNetwork) {
+        try {
+          initAboutNetwork();
+        } catch (error) {
+          console.warn('About network initialization failed:', error);
+        }
+      }
+      
+      // Always initialize these as they don't conflict
       try {
-        initTopographyBackground();
         initSyncedLogoHover();
         initProceduralCarousel();
-        initAboutNetwork();
       } catch (error) {
-        console.warn('Homepage background initialization failed:', error);
+        console.warn('Other homepage features initialization failed:', error);
       }
     }
   }
@@ -1459,6 +1481,14 @@
   } else {
     initHomepageBackground();
   }
+
+  // Also initialize on page show (when navigating back)
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      // Page was loaded from cache, reinitialize
+      initHomepageBackground();
+    }
+  });
 
   // ========================================
   // Console Easter Egg

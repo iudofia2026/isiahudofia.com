@@ -84,6 +84,45 @@
   opacity: 0;
 }
 
+/* ========================================
+   Simple Page Sections
+   ======================================== */
+
+.page-section {
+  min-height: 100vh;
+  background-color: var(--color-white);
+  color: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.page-container {
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-navy);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+}
+
+.page-content {
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  color: var(--color-gray-dark);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 body.page-loaded .hero-icon-wrapper {
   opacity: 1;
 }

@@ -1355,7 +1355,7 @@
     const aboutSection = document.querySelector('.about-section');
     const aboutContainer = document.querySelector('.about-container');
 
-    if (heroSection && aboutSection && aboutContainer) {
+    if (heroSection && aboutSection) {
       // Wait for page to load
       window.addEventListener('load', () => {
         setTimeout(() => {
@@ -1377,7 +1377,7 @@
         const upwardMovement = window.innerHeight * (isMobile ? 1.0 : 1.2);
 
         // Pin the hero section and zoom it out, then move it up and off screen
-        gsap.timeline({
+        const timeline = gsap.timeline({
           scrollTrigger: {
             trigger: heroSection,
             start: 'top top',
@@ -1398,12 +1398,18 @@
         .to(textCarousel, {
           scale: carouselScale,
           ease: 'power2.inOut'
-        }, '<')
-        .to(aboutContainer, {
-          opacity: 1,
-          y: 0,
-          ease: 'power2.out'
-        }, '<')
+        }, '<');
+        
+        // Only animate aboutContainer if it exists
+        if (aboutContainer) {
+          timeline.to(aboutContainer, {
+            opacity: 1,
+            y: 0,
+            ease: 'power2.out'
+          }, '<');
+        }
+        
+        timeline
         .to(heroSection, {
           y: -upwardMovement,
           ease: 'power2.inOut'

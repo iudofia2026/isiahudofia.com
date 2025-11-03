@@ -105,9 +105,9 @@
 
       // Each entry maps a point index to a clickable label. Adjust to match your sections/links.
       this.trackedLabels = [
-        { index: 8, text: 'projects', href: 'projects.html' },
-        { index: 21, text: 'research', href: 'research.html' },
-        { index: 55, text: 'contact', href: 'contact.html' }
+        { index: 8, text: 'projects', href: '#projects', section: 'projects' },
+        { index: 21, text: 'research', href: '#research', section: 'research' },
+        { index: 55, text: 'contact', href: '#contact', section: 'contact' }
       ];
       this.labelElements = [];
       this._createLabels();
@@ -258,8 +258,8 @@
           }
           
           // Generate random spherical coordinates
-          const theta = Math.random() * Math.PI * 2; // Azimuth angle (0 to 2π)
-          const phi = Math.random() * Math.PI; // Polar angle (0 to π)
+          const theta = Math.random() * Math.PI * 2; // Azimuth angle (0 to 2?)
+          const phi = Math.random() * Math.PI; // Polar angle (0 to ?)
           
           // Convert to Cartesian coordinates
           x = radius * Math.sin(phi) * Math.cos(theta);
@@ -784,17 +784,14 @@
 
   let toggleMenuHandler = null;
 
-  // Anchor link smooth scroll
+  // Anchor link smooth scroll & overlay routing for #projects/#research/#contact
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        lenis.scrollTo(target, {
-          offset: -100,
-          duration: 1.5
-        });
-
+      const href = this.getAttribute('href');
+      const overlayMap = { '#projects': 'section-projects', '#research': 'section-research', '#contact': 'section-contact' };
+      if (overlayMap[href]) {
+        e.preventDefault();
+        showOverlayById(overlayMap[href]);
         // Close mobile menu if open
         const mobileMenu = document.querySelector('.mobile-menu');
         const hamburger = document.querySelector('.hamburger-menu');
@@ -806,7 +803,28 @@
             hamburger.classList.remove('active');
             hamburger.setAttribute('aria-expanded', 'false');
             document.body.classList.remove('menu-open');
-            lenis.start();
+            try { if (lenis) lenis.stop(); } catch (e2) {}
+          }
+        }
+        return;
+      }
+
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        lenis.scrollTo(target, { offset: -100, duration: 1.5 });
+        // Close mobile menu if open
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const hamburger = document.querySelector('.hamburger-menu');
+        if (mobileMenu && mobileMenu.classList.contains('active')) {
+          if (typeof toggleMenuHandler === 'function') {
+            toggleMenuHandler(false);
+          } else {
+            mobileMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('menu-open');
+            try { if (lenis) lenis.start(); } catch (e3) {}
           }
         }
       }
@@ -819,6 +837,12 @@
   const nav = document.querySelector('.main-nav');
   const sections = document.querySelectorAll('section[data-nav-theme]');
 
+  // Initialize nav theme from body (fallback for pages without sections)
+  const bodyTheme = document.body.getAttribute('data-nav-theme');
+  if (bodyTheme && nav && sections.length === 0) {
+    nav.setAttribute('data-nav-theme', bodyTheme);
+  }
+
   const observerOptions = {
     threshold: 0.5,
     rootMargin: '-100px 0px -50% 0px'
@@ -828,12 +852,17 @@
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const theme = entry.target.dataset.navTheme;
-        nav.setAttribute('data-nav-theme', theme);
+        if (nav) {
+          nav.setAttribute('data-nav-theme', theme);
+        }
       }
     });
   }, observerOptions);
 
-  sections.forEach(section => navObserver.observe(section));
+  // Only observe sections if they exist (for SPA pages)
+  if (sections.length > 0) {
+    sections.forEach(section => navObserver.observe(section));
+  }
 
   // Add scrolled class to nav (bidirectional)
   lenis.on('scroll', ({ scroll }) => {
@@ -841,6 +870,293 @@
       nav.classList.add('scrolled');
     } else {
       nav.classList.remove('scrolled');
+    }
+  });
+
+  // ========================================
+  // SPA Overlay Routing
+  // ========================================
+  const routeToOverlayId = (path) => {
+    if (/\/projects(\.html)?$/i.test(path)) return 'section-projects';
+    if (/\/research(\.html)?$/i.test(path)) return 'section-research';
+    if (/\/contact(\.html)?$/i.test(path)) return 'section-contact';
+    return null;
+  };
+
+  const sectionFromOverlayId = (overlayId) => overlayId ? overlayId.replace('section-', '') : null;
+
+  // Scroll lock helpers (locks at current/highest scroll position)
+  function lockScrollAtCurrentPosition() {
+    try {
+      const currentScroll = window.scrollY || document.documentElement.scrollTop || 0;
+      const highestSoFar = parseInt(document.body.dataset.lockMaxScrollY || '0', 10) || 0;
+      const lockY = Math.max(currentScroll, highestSoFar);
+      document.body.dataset.lockMaxScrollY = String(lockY);
+      document.body.dataset.lockScrollY = String(lockY);
+      document.body.style.top = `-${lockY}px`;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.height = '100%';
+    } catch (_) {}
+  }
+
+  function unlockScrollToLockedPosition() {
+    try {
+      const prev = parseInt(document.body.dataset.lockScrollY || '0', 10) || 0;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+      delete document.body.dataset.lockScrollY;
+      window.scrollTo(0, prev);
+    } catch (_) {}
+  }
+
+  function addScrollTrap() {
+    try {
+      const y = parseInt(document.body.dataset.lockScrollY || '0', 10) || (window.scrollY|0);
+      window.__scrollTrapHandler = (e) => {
+        if (window.scrollY !== y) {
+          window.scrollTo(0, y);
+        }
+      };
+      window.addEventListener('scroll', window.__scrollTrapHandler, { passive: true });
+    } catch (_) {}
+  }
+
+  function removeScrollTrap() {
+    try {
+      if (window.__scrollTrapHandler) {
+        window.removeEventListener('scroll', window.__scrollTrapHandler, { passive: true });
+        delete window.__scrollTrapHandler;
+      }
+    } catch (_) {}
+  }
+
+  // Fully restore homepage smooth experience (Lenis + hero layers)
+  function restoreHomeExperience() {
+    try {
+      // Hide any visible overlays immediately
+      document.querySelectorAll('.section-overlay').forEach(o => {
+        o.style.display = 'none';
+        o.style.opacity = '0';
+      });
+
+      // Remove overlay flags
+      document.documentElement.classList.remove('overlay-active');
+      document.body.classList.remove('overlay-active');
+
+      // Unlock scroll and remove traps/blockers
+      try { unlockScrollToLockedPosition(); } catch (_) {}
+      removeScrollTrap();
+
+      // Reset body/document styles in case of manual locks
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+      delete document.body.dataset.lockScrollY;
+      delete document.body.dataset.lockMaxScrollY;
+
+      // Unmute hero layers
+      const heroContent = document.querySelector('.hero-content');
+      const labelLayer = document.querySelector('.hero-label-layer');
+      if (heroContent) {
+        heroContent.style.opacity = '';
+        heroContent.style.pointerEvents = '';
+      }
+      if (labelLayer) {
+        labelLayer.style.opacity = '';
+        labelLayer.style.pointerEvents = '';
+      }
+
+      // Ensure nav visible again
+      const navEl = document.querySelector('.main-nav');
+      if (navEl) {
+        navEl.style.display = '';
+        navEl.style.opacity = '';
+      }
+
+      // Restart Lenis smoothness and ensure RAF loop is running
+      try {
+        if (lenis) {
+          lenis.start();
+        }
+      } catch (_) {}
+
+      // Refresh ScrollTrigger to restore scroll-based animations
+      try {
+        if (window.ScrollTrigger && typeof ScrollTrigger.refresh === 'function') {
+          ScrollTrigger.refresh();
+        }
+      } catch (_) {}
+    } catch (_) {}
+  }
+
+  const showOverlayById = (overlayId) => {
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) return;
+    
+    // New simple lock: add overlay-active flag and stop lenis
+    document.documentElement.classList.add('overlay-active');
+    document.body.classList.add('overlay-active');
+    try { if (lenis) lenis.stop(); } catch (e) {}
+    
+    // Lock scroll at current position
+    lockScrollAtCurrentPosition();
+    addScrollTrap();
+    
+    // Use TransitionController for camera + hero icon + labels when available
+    let cameraAnimationDelay = 0;
+    try {
+      if (window.transitionController && typeof window.transitionController.findNodeIndexBySection === 'function') {
+        const section = sectionFromOverlayId(overlayId);
+        const idx = window.transitionController.findNodeIndexBySection(section);
+        if (idx !== null) {
+          // Let navigateToSection handle hero icon, labels, and camera
+          // Camera animation takes ~1.4s, overlay should fade in partway through
+          window.transitionController.navigateToSection(section, idx);
+          cameraAnimationDelay = 0.6; // Start overlay fade-in mid-camera animation
+        }
+      }
+    } catch (e) {}
+    
+    // Show overlay with smooth fade-in, coordinated with camera animation
+    overlay.style.display = 'flex';
+    gsap.fromTo(overlay, 
+      { opacity: 0 },
+      { 
+        opacity: 1, 
+        duration: 0.6,
+        delay: cameraAnimationDelay,
+        ease: 'power2.out'
+      }
+    );
+  };
+
+  const hideAllOverlays = (animate = true) => {
+    const overlays = document.querySelectorAll('.section-overlay');
+    if (animate && overlays.length > 0) {
+      // Smooth fade-out animation
+      overlays.forEach(o => {
+        if (o.style.opacity !== '0' && o.style.display !== 'none') {
+          gsap.to(o, {
+            opacity: 0,
+            duration: 0.4,
+            ease: 'power2.in',
+            onComplete: () => {
+              o.style.display = 'none';
+            }
+          });
+        } else {
+          o.style.display = 'none';
+          o.style.opacity = '0';
+        }
+      });
+    } else {
+      overlays.forEach(o => {
+        o.style.display = 'none';
+        o.style.opacity = '0';
+      });
+    }
+    
+    restoreHomeExperience();
+  };
+
+  // Hash-based overlay routing (e.g., http://localhost:3001/#research)
+  const hashToOverlayId = (hash) => {
+    if (hash === '#projects') return 'section-projects';
+    if (hash === '#research') return 'section-research';
+    if (hash === '#contact') return 'section-contact';
+    return null;
+  };
+
+  const handleHashRoute = () => {
+    const overlayId = hashToOverlayId(window.location.hash);
+    if (overlayId) {
+      showOverlayById(overlayId);
+    } else {
+      // No overlay target: fully restore homepage state
+      restoreHomeExperience();
+    }
+  };
+
+  // Apply on load and on hash changes
+  handleHashRoute();
+  window.addEventListener('hashchange', handleHashRoute);
+
+  // Nav brand logo: always return to clean homepage root
+  const navBrandLink = document.querySelector('.nav-brand');
+  if (navBrandLink) {
+    navBrandLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Clear hash and navigate to root
+      if (window.history && window.history.pushState) {
+        window.history.pushState(null, '', '/');
+      } else {
+        window.location.href = '/';
+        return;
+      }
+      // Restore homepage experience immediately
+      restoreHomeExperience();
+    });
+  }
+
+  // Delegate back-rail to return home with smooth reverse transition
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('.back-rail');
+    if (target) {
+      e.preventDefault();
+      // Smooth reverse transition via TransitionController if available
+      let returnDuration = 1200;
+      try {
+        if (window.transitionController && typeof window.transitionController.returnHome === 'function') {
+          returnDuration = window.transitionController.timing?.returnHome || 1200;
+          // Hide overlay early, let camera animate over it
+          const overlays = document.querySelectorAll('.section-overlay');
+          overlays.forEach(o => {
+            if (o.style.opacity !== '0' && o.style.display !== 'none') {
+              gsap.to(o, {
+                opacity: 0,
+                duration: 0.5,
+                delay: 0.2,
+                ease: 'power2.in',
+                onComplete: () => {
+                  o.style.display = 'none';
+                }
+              });
+            }
+          });
+          // Start return animation
+          window.transitionController.returnHome();
+        } else {
+          // Fallback: hide immediately if no controller
+          hideAllOverlays(true);
+        }
+      } catch (e2) {
+        hideAllOverlays(true);
+      }
+
+      // Final cleanup after return animation completes
+      if (window.transitionController) {
+        setTimeout(() => {
+          restoreHomeExperience();
+        }, returnDuration + 100);
+      }
+      // Normalize URL without reload (remove hash or path overlays)
+      const hasPathOverlay = !!routeToOverlayId(window.location.pathname);
+      if (window.history && window.history.pushState) {
+        window.history.pushState(null, '', hasPathOverlay ? '/' : window.location.pathname.replace(/#.*/, ''));
+      } else {
+        window.location.hash = '';
+      }
+      // Trigger hashchange handler to clean up state
+      setTimeout(() => {
+        handleHashRoute();
+      }, returnDuration + 100);
     }
   });
 
@@ -1588,7 +1904,7 @@
   // ========================================
   // Console Easter Egg
   // ========================================
-  console.log('%c🏎️ Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');
+  console.log('%c??? Built with inspiration from Lando Norris', 'font-size: 16px; color: #0066cc; font-weight: bold;');
   console.log('%cIsiah Udofia - Yale University 2026', 'font-size: 14px; color: #001f3f;');
   console.log('%cCustom Three.js hero network + Seamless Loading Transition', 'font-size: 12px; color: #6c757d;');
 

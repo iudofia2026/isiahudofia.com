@@ -1497,6 +1497,124 @@ body.menu-open .hero-label {
 }
 
 /* ========================================
+   SPA Section Overlays
+   ======================================== */
+
+/* Disable page scroll when SPA overlays are open */
+html.overlay-active,
+body.overlay-active {
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+/* Hide non-hero content while overlays are active */
+html.overlay-active .text-carousel,
+body.overlay-active .text-carousel,
+html.overlay-active .about-section,
+body.overlay-active .about-section,
+html.overlay-active .page-section,
+body.overlay-active .page-section,
+html.overlay-active .mobile-menu,
+body.overlay-active .mobile-menu,
+html.overlay-active .rotation-prompt,
+body.overlay-active .rotation-prompt {
+  display: none !important;
+}
+
+/* Keep hero background visible; mute hero content during overlay */
+html.overlay-active .hero-content,
+body.overlay-active .hero-content,
+html.overlay-active .hero-label-layer,
+body.overlay-active .hero-label-layer {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.section-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 1200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  opacity: 0;
+  overflow: hidden;
+  perspective: 1200px;
+  pointer-events: none; /* allow clicks to pass through by default */
+}
+
+/* Keep nav above overlays when viewing sub-pages */
+html.overlay-active .main-nav,
+body.overlay-active .main-nav {
+  position: fixed;
+  z-index: 100000 !important;
+  opacity: 1;
+  display: block;
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+/* Ensure overlays remain below the nav during overlay-active */
+html.overlay-active .section-overlay,
+body.overlay-active .section-overlay {
+  z-index: 1000 !important;
+}
+
+/* Back rail remains interactive on top of non-interactive overlay */
+.section-overlay .back-rail {
+  pointer-events: auto;
+}
+
+.back-rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-navy);
+  background: rgba(0, 31, 63, 0.08);
+  border-right: 1px solid rgba(0, 31, 63, 0.15);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  z-index: calc(var(--z-nav) + 5);
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out-cubic), border-color 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic);
+}
+
+.back-rail:hover,
+.back-rail:focus-visible {
+  background: rgba(0, 31, 63, 0.14);
+  border-right-color: rgba(0, 31, 63, 0.25);
+}
+
+.back-rail__icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  transform: translateX(0);
+  transition: transform 0.3s var(--ease-out-cubic);
+}
+
+.back-rail:hover .back-rail__icon,
+.back-rail:focus-visible .back-rail__icon {
+  transform: translateX(-2px);
+}
+
+/* ========================================
    Reduced Motion Support
    ======================================== */
 

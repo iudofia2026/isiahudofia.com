@@ -782,6 +782,14 @@
 
   requestAnimationFrame(raf);
 
+  // ========================================
+  // Maximum Scroll Limit
+  // ========================================
+  // Maximum scroll position will be set by ScrollTrigger animation
+  // This prevents scrolling beyond when hero is fully zoomed out
+  let maxScrollPosition = null;
+  let scrollTriggerEndPosition = null;
+
   let toggleMenuHandler = null;
 
   // Anchor link smooth scroll & overlay routing for #projects/#research/#contact
@@ -1373,10 +1381,11 @@
         const scrubSpeed = isMobile ? 1.0 : 1.2; // Faster scrub on mobile
         const heroScale = isMobile ? 0.7 : 0.6; // Less aggressive zoom on mobile
         const carouselScale = isMobile ? 0.7 : 0.6;
-        const carouselFinalScale = isMobile ? 0.3 : 0.2;
-        const upwardMovement = window.innerHeight * (isMobile ? 1.0 : 1.2);
 
-        // Pin the hero section and zoom it out, then move it up and off screen
+        // Track scroll lock state
+        let scrollTriggerInstance = null;
+
+        // Pin the hero section and zoom it out - keep it on screen (no upward movement)
         const timeline = gsap.timeline({
           scrollTrigger: {
             trigger: heroSection,
@@ -1387,7 +1396,28 @@
             pinSpacing: false,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            toggleActions: 'play none none reset'
+            toggleActions: 'play none none reset',
+            onUpdate: (self) => {
+              // Store reference to ScrollTrigger instance
+              if (!scrollTriggerInstance) {
+                scrollTriggerInstance = self;
+              }
+            },
+            onEnter: (self) => {
+              // Set max scroll position when ScrollTrigger starts
+              if (self.end) {
+                scrollTriggerEndPosition = self.end;
+                maxScrollPosition = self.end;
+                console.log('Max scroll position set to ScrollTrigger end:', maxScrollPosition);
+              }
+            },
+            onRefresh: (self) => {
+              // Update max scroll position when ScrollTrigger refreshes
+              if (self.end) {
+                scrollTriggerEndPosition = self.end;
+                maxScrollPosition = self.end;
+              }
+            }
           }
         })
         .to(heroSection, {
@@ -1409,27 +1439,75 @@
           }, '<');
         }
         
-        timeline
-        .to(heroSection, {
-          y: -upwardMovement,
-          ease: 'power2.inOut'
-        }, '>')
-        .to(textCarousel, {
-          y: -upwardMovement,
-          scale: carouselFinalScale,
-          ease: 'power2.inOut'
-        }, '<');
-
-        // Global scroll listener to handle scroll-to-top from anywhere
-        let isScrollingToTop = false;
-
-        lenis.on('scroll', ({ scroll }) => {
-          // If user scrolls near top (within first section's range)
-          if (scroll < window.innerHeight * 2 && !isScrollingToTop) {
-            // ScrollTrigger will automatically handle the reverse animation
-            // because scrub makes it bidirectional
+        // Set max scroll position after ScrollTrigger is created and refreshed
+        const updateMaxScroll = () => {
+          if (scrollTriggerInstance && scrollTriggerInstance.end) {
+            scrollTriggerEndPosition = scrollTriggerInstance.end;
+            maxScrollPosition = scrollTriggerInstance.end;
+            console.log('Max scroll position updated to:', maxScrollPosition);
           }
+        };
+        
+        // Update immediately after a short delay
+        setTimeout(updateMaxScroll, 100);
+        
+        // Update on window resize (ScrollTrigger will refresh)
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(() => {
+            ScrollTrigger.refresh();
+            setTimeout(updateMaxScroll, 50);
+          }, 100);
         });
+
+        // Prevent scrolling beyond max position (when hero is fully zoomed out)
+        // This ensures hero and carousel stay on screen
+        const maxScrollHandler = ({ scroll, direction }) => {
+          if (maxScrollPosition !== null && scroll > maxScrollPosition) {
+            // Force scroll back to max position
+            requestAnimationFrame(() => {
+              lenis.scrollTo(maxScrollPosition, { immediate: true });
+            });
+          }
+        };
+        
+        lenis.on('scroll', maxScrollHandler);
+
+        // Prevent wheel events from scrolling beyond max
+        const maxScrollWheelHandler = (e) => {
+          if (maxScrollPosition !== null) {
+            const currentScroll = lenis.scroll || window.scrollY || document.documentElement.scrollTop;
+            // If at or past max scroll and trying to scroll down, prevent it
+            if (currentScroll >= maxScrollPosition && e.deltaY > 0) {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            }
+          }
+        };
+        
+        window.addEventListener('wheel', maxScrollWheelHandler, { passive: false });
+        
+        // Prevent touch scrolling beyond max
+        let maxScrollTouchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+          if (maxScrollPosition !== null) {
+            maxScrollTouchStartY = e.touches[0].clientY;
+          }
+        }, { passive: true });
+        
+        window.addEventListener('touchmove', (e) => {
+          if (maxScrollPosition !== null) {
+            const currentScroll = lenis.scroll || window.scrollY || document.documentElement.scrollTop;
+            const touchY = e.touches[0].clientY;
+            // If at max scroll and trying to scroll down (touch moving up), prevent it
+            if (currentScroll >= maxScrollPosition && touchY < maxScrollTouchStartY) {
+              e.preventDefault();
+              return false;
+            }
+          }
+        }, { passive: false });
 
         // Refresh ScrollTrigger
         ScrollTrigger.refresh();

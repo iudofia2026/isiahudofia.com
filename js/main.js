@@ -1157,6 +1157,61 @@
     } catch (_) {}
   }
 
+  // Define sub-page data for networks
+  const subPageData = {
+    'projects': {
+      title: 'projects',
+      labels: [
+        { text: 'Github', href: 'https://github.com/iudofia2026' },
+        { text: 'Demo', href: '#' },
+        { text: 'Code', href: '#' }
+      ]
+    },
+    'research': {
+      title: 'research',
+      labels: [
+        { text: 'Papers', href: '#' },
+        { text: 'Publications', href: '#' },
+        { text: 'Notes', href: '#' }
+      ]
+    },
+    'contact': {
+      title: 'contact',
+      labels: [
+        { text: 'Email', href: 'mailto:isiah.udofia@yale.edu' },
+        { text: 'LinkedIn', href: 'https://linkedin.com/in/isiahudofia' },
+        { text: 'Twitter', href: 'https://twitter.com' }
+      ]
+    }
+  };
+
+  function createSubPageNetwork(section) {
+    // Destroy existing subpage network
+    if (activeSubPageNetwork) {
+      activeSubPageNetwork.destroy();
+      activeSubPageNetwork = null;
+    }
+
+    // Get subpage data
+    const data = subPageData[section];
+    if (!data) {
+      console.warn('No data found for section:', section);
+      return;
+    }
+
+    // Create new subpage network in the body
+    try {
+      activeSubPageNetwork = new SubPageNetwork(
+        document.body,
+        data.title,
+        data.labels
+      );
+      console.log('SubPageNetwork created for', section);
+    } catch (error) {
+      console.error('Failed to create SubPageNetwork:', error);
+    }
+  }
+
   const showOverlayById = (overlayId) => {
     const overlay = document.getElementById(overlayId);
     if (!overlay) return;
@@ -1186,6 +1241,11 @@
       // Overlay fades in AFTER zoom completes to keep background visible
       window.heroNetwork.animateToNode(nodeIndex, 0.8, () => {
         console.log('Camera animation completed for', overlayId);
+        
+        // Create SubPageNetwork after zoom completes
+        const section = sectionFromOverlayId(overlayId);
+        createSubPageNetwork(section);
+        
         // Show overlay content after zoom completes
         if (window.gsap) {
           gsap.to(overlay, {
@@ -1229,6 +1289,12 @@
 
   const hideAllOverlays = (animate = true) => {
     const overlays = document.querySelectorAll('.section-overlay');
+    
+    // Destroy active SubPageNetwork
+    if (activeSubPageNetwork) {
+      activeSubPageNetwork.destroy();
+      activeSubPageNetwork = null;
+    }
     
     // Return camera to home position - quick and reactive
     if (window.heroNetwork && animate) {
@@ -2126,6 +2192,394 @@
   window.addEventListener('beforeunload', () => {
     if (aboutNetwork) aboutNetwork.destroy();
   });
+
+  // ========================================
+  // SubPage Network - For Projects/Research/Contact
+  // ========================================
+  class SubPageNetwork {
+    constructor(container, pageTitle, pageLabels = []) {
+      this.container = container;
+      this.pageTitle = pageTitle;
+      this.pageLabels = pageLabels;
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+
+      // Mobile detection
+      this.isMobile = window.innerWidth <= 768;
+      this.isSmallMobile = window.innerWidth <= 480;
+
+      // Smaller network for sub-pages
+      this.pointCount = this.isSmallMobile ? 30 : (this.isMobile ? 50 : 80);
+      this.maxLinkDistance = this.isMobile ? 40 : 50;
+      this.bounds = this.isMobile ? { x: 60, y: 50, z: 60 } : { x: 80, y: 60, z: 80 };
+
+      this.renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: !this.isMobile,
+        powerPreference: this.isMobile ? 'low-power' : 'default'
+      });
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1.5 : 2));
+      this.renderer.setSize(this.width, this.height);
+      this.renderer.domElement.classList.add('subpage-canvas');
+      this.renderer.domElement.style.position = 'fixed';
+      this.renderer.domElement.style.top = '0';
+      this.renderer.domElement.style.left = '0';
+      this.renderer.domElement.style.width = '100%';
+      this.renderer.domElement.style.height = '100%';
+      this.renderer.domElement.style.zIndex = '1';
+      this.renderer.domElement.style.pointerEvents = 'none';
+      this.container.appendChild(this.renderer.domElement);
+
+      this.scene = new THREE.Scene();
+      const fov = this.isMobile ? 50 : 45;
+      const cameraZ = this.isMobile ? 100 : 120;
+      this.camera = new THREE.PerspectiveCamera(fov, this.width / this.height, 0.1, 1000);
+      this.camera.position.set(0, 0, cameraZ);
+
+      this.positions = new Float32Array(this.pointCount * 3);
+      this.velocities = new Float32Array(this.pointCount * 3);
+      this._initParticles();
+
+      // Navy particles for white background
+      this.pointsMaterial = new THREE.PointsMaterial({
+        color: 0x001f3f,
+        size: this.isMobile ? 1.8 : 2.2,
+        sizeAttenuation: true,
+        transparent: true,
+        opacity: 0.7
+      });
+
+      this.pointsGeometry = new THREE.BufferGeometry();
+      this.pointsGeometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+      this.pointsMesh = new THREE.Points(this.pointsGeometry, this.pointsMaterial);
+      this.scene.add(this.pointsMesh);
+
+      const maxSegments = this.pointCount * this.pointCount * 2;
+      const lineArray = new Float32Array(maxSegments * 3);
+      this.linesGeometry = new THREE.BufferGeometry();
+      this.linesGeometry.setAttribute('position', new THREE.BufferAttribute(lineArray, 3));
+      this.linesGeometry.setDrawRange(0, 0);
+      this.linesMaterial = new THREE.LineBasicMaterial({
+        color: 0x001f3f,
+        transparent: true,
+        opacity: 0.2
+      });
+      this.linesMesh = new THREE.LineSegments(this.linesGeometry, this.linesMaterial);
+      this.scene.add(this.linesMesh);
+
+      this.renderer.setClearColor(0x000000, 0);
+
+      // Create circular text label in center
+      this.labelLayer = document.createElement('div');
+      this.labelLayer.className = 'subpage-label-layer';
+      this.labelLayer.style.position = 'fixed';
+      this.labelLayer.style.top = '0';
+      this.labelLayer.style.left = '0';
+      this.labelLayer.style.width = '100%';
+      this.labelLayer.style.height = '100%';
+      this.labelLayer.style.zIndex = '2';
+      this.labelLayer.style.pointerEvents = 'none';
+      this.container.appendChild(this.labelLayer);
+
+      this._createCenterLabel();
+      this._createOrbitingLabels();
+
+      this.clock = new THREE.Clock();
+      this.frameId = null;
+
+      // Orbital settings - same as homepage
+      this.centerPoint = { x: 0, y: 0, z: 0 };
+      this.orbitalForce = 0.000002;
+      this.rotationSpeed = 0.0008;
+      this.randomMovementStrength = 0.005;
+      this.randomMovementFrequency = 1.0;
+
+      this.handleResize = this.handleResize.bind(this);
+      this.animate = this.animate.bind(this);
+
+      window.addEventListener('resize', this.handleResize);
+      this.animate();
+    }
+
+    _initParticles() {
+      // Create spherical distribution around center
+      for (let i = 0; i < this.pointCount; i += 1) {
+        const idx = i * 3;
+
+        // Spherical distribution
+        const radius = 30 + Math.random() * 50; // Smaller radius for tighter network
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+
+        this.positions[idx] = radius * Math.sin(phi) * Math.cos(theta);
+        this.positions[idx + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        this.positions[idx + 2] = radius * Math.cos(phi);
+
+        this.velocities[idx] = (Math.random() - 0.5) * 0.3;
+        this.velocities[idx + 1] = (Math.random() - 0.5) * 0.2;
+        this.velocities[idx + 2] = (Math.random() - 0.5) * 0.3;
+      }
+    }
+
+    _createCenterLabel() {
+      const centerLabel = document.createElement('div');
+      centerLabel.className = 'subpage-center-label';
+      centerLabel.style.position = 'absolute';
+      centerLabel.style.top = '50%';
+      centerLabel.style.left = '50%';
+      centerLabel.style.transform = 'translate(-50%, -50%)';
+      centerLabel.style.fontSize = this.isMobile ? '4rem' : '6rem';
+      centerLabel.style.fontFamily = "'Outfit', sans-serif";
+      centerLabel.style.fontWeight = '800';
+      centerLabel.style.color = '#001f3f';
+      centerLabel.style.textTransform = 'lowercase';
+      centerLabel.style.letterSpacing = '-0.03em';
+      centerLabel.style.opacity = '0';
+      centerLabel.style.textAlign = 'center';
+      centerLabel.style.lineHeight = '1';
+      
+      // Create circular text effect by repeating if needed
+      const repeatCount = this.pageTitle.length < 8 ? 2 : 1;
+      centerLabel.textContent = Array(repeatCount).fill(this.pageTitle).join(' • ');
+      
+      this.labelLayer.appendChild(centerLabel);
+      this.centerLabel = centerLabel;
+
+      // Fade in center label
+      if (window.gsap) {
+        gsap.to(centerLabel, {
+          opacity: 1,
+          duration: 0.6,
+          delay: 0.2,
+          ease: 'power2.out'
+        });
+      }
+    }
+
+    _createOrbitingLabels() {
+      this.orbitingLabelElements = [];
+      
+      // Create orbiting labels around center title
+      this.pageLabels.forEach((labelData, index) => {
+        const label = document.createElement('a');
+        label.className = 'subpage-orbiting-label';
+        label.textContent = labelData.text;
+        label.href = labelData.href || '#';
+        label.style.position = 'absolute';
+        label.style.fontSize = this.isMobile ? '0.85rem' : '0.9rem';
+        label.style.fontFamily = "'Inter', sans-serif";
+        label.style.fontWeight = '500';
+        label.style.color = '#001f3f';
+        label.style.background = 'rgba(255, 255, 255, 0.9)';
+        label.style.padding = this.isMobile ? '0.6rem 1rem' : '0.5rem 1.1rem';
+        label.style.borderRadius = '999px';
+        label.style.boxShadow = '0 8px 24px rgba(0, 31, 63, 0.12)';
+        label.style.letterSpacing = '0.05em';
+        label.style.textDecoration = 'none';
+        label.style.opacity = '0';
+        label.style.pointerEvents = 'auto';
+        label.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+        label.style.cursor = 'pointer';
+        label.style.userSelect = 'none';
+        label.style.webkitUserSelect = 'none';
+        label.style.webkitTapHighlightColor = 'transparent';
+        
+        // Hover effect
+        label.addEventListener('mouseenter', () => {
+          label.style.transform = 'translate(-50%, -50%) scale(1.05)';
+          label.style.boxShadow = '0 12px 32px rgba(0, 31, 63, 0.2)';
+        });
+        label.addEventListener('mouseleave', () => {
+          label.style.transform = 'translate(-50%, -50%)';
+          label.style.boxShadow = '0 8px 24px rgba(0, 31, 63, 0.12)';
+        });
+        
+        this.labelLayer.appendChild(label);
+        this.orbitingLabelElements.push({
+          element: label,
+          data: labelData,
+          angle: (index / this.pageLabels.length) * Math.PI * 2,
+          radius: this.isMobile ? 120 : 150
+        });
+
+        // Fade in orbiting labels
+        if (window.gsap) {
+          gsap.to(label, {
+            opacity: 1,
+            duration: 0.4,
+            delay: 0.4 + index * 0.1,
+            ease: 'power2.out'
+          });
+        }
+      });
+    }
+
+    _updatePositions(delta) {
+      const cappedDelta = Math.min(delta, 3);
+
+      for (let i = 0; i < this.pointCount; i += 1) {
+        const idx = i * 3;
+
+        // Calculate distance from center point
+        const dx = this.positions[idx] - this.centerPoint.x;
+        const dy = this.positions[idx + 1] - this.centerPoint.y;
+
+        // Apply orbital/tangential force for rotation
+        if (this.orbitalForce > 0) {
+          const orbitalX = -dy;
+          const orbitalY = dx;
+          const orbitalLength = Math.sqrt(orbitalX * orbitalX + orbitalY * orbitalY);
+
+          if (orbitalLength > 0) {
+            this.velocities[idx] += (orbitalX / orbitalLength) * this.orbitalForce;
+            this.velocities[idx + 1] += (orbitalY / orbitalLength) * this.orbitalForce;
+          }
+        }
+
+        // Apply random movement
+        if (Math.random() < this.randomMovementFrequency) {
+          this.velocities[idx] += (Math.random() - 0.5) * this.randomMovementStrength;
+          this.velocities[idx + 1] += (Math.random() - 0.5) * this.randomMovementStrength;
+          this.velocities[idx + 2] += (Math.random() - 0.5) * this.randomMovementStrength;
+        }
+
+        // Apply damping
+        const damping = 0.98;
+        this.velocities[idx] *= damping;
+        this.velocities[idx + 1] *= damping;
+        this.velocities[idx + 2] *= damping;
+
+        this.positions[idx] += this.velocities[idx] * cappedDelta;
+        this.positions[idx + 1] += this.velocities[idx + 1] * cappedDelta;
+        this.positions[idx + 2] += this.velocities[idx + 2] * cappedDelta;
+
+        // Rotation
+        if (this.rotationSpeed) {
+          const angle = this.rotationSpeed * cappedDelta;
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+
+          const relX = this.positions[idx];
+          const relY = this.positions[idx + 1];
+
+          this.positions[idx] = relX * cos - relY * sin;
+          this.positions[idx + 1] = relX * sin + relY * cos;
+
+          const velX = this.velocities[idx];
+          const velY = this.velocities[idx + 1];
+
+          this.velocities[idx] = velX * cos - velY * sin;
+          this.velocities[idx + 1] = velX * sin + velY * cos;
+        }
+
+        // Boundary bounce
+        const limitX = this.bounds.x;
+        const limitY = this.bounds.y;
+        const limitZ = this.bounds.z;
+
+        if (this.positions[idx] > limitX || this.positions[idx] < -limitX) {
+          this.velocities[idx] *= -1;
+          this.positions[idx] = Math.max(-limitX, Math.min(limitX, this.positions[idx]));
+        }
+        if (this.positions[idx + 1] > limitY || this.positions[idx + 1] < -limitY) {
+          this.velocities[idx + 1] *= -1;
+          this.positions[idx + 1] = Math.max(-limitY, Math.min(limitY, this.positions[idx + 1]));
+        }
+        if (this.positions[idx + 2] > limitZ || this.positions[idx + 2] < -limitZ) {
+          this.velocities[idx + 2] *= -1;
+          this.positions[idx + 2] = Math.max(-limitZ, Math.min(limitZ, this.positions[idx + 2]));
+        }
+      }
+
+      this.pointsGeometry.attributes.position.needsUpdate = true;
+    }
+
+    _updateLines() {
+      const linePositions = this.linesGeometry.attributes.position.array;
+      let ptr = 0;
+
+      for (let i = 0; i < this.pointCount; i += 1) {
+        const ix = i * 3;
+        for (let j = i + 1; j < this.pointCount; j += 1) {
+          const jx = j * 3;
+          const dx = this.positions[ix] - this.positions[jx];
+          const dy = this.positions[ix + 1] - this.positions[jx + 1];
+          const dz = this.positions[ix + 2] - this.positions[jx + 2];
+          const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+          if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
+            linePositions[ptr] = this.positions[ix];
+            linePositions[ptr + 1] = this.positions[ix + 1];
+            linePositions[ptr + 2] = this.positions[ix + 2];
+            linePositions[ptr + 3] = this.positions[jx];
+            linePositions[ptr + 4] = this.positions[jx + 1];
+            linePositions[ptr + 5] = this.positions[jx + 2];
+            ptr += 6;
+          }
+        }
+      }
+
+      this.linesGeometry.attributes.position.needsUpdate = true;
+      this.linesGeometry.setDrawRange(0, ptr / 3);
+    }
+
+    _updateOrbitingLabels() {
+      if (!this.orbitingLabelElements || !this.orbitingLabelElements.length) return;
+
+      const time = Date.now() * 0.0003; // Slow rotation
+
+      this.orbitingLabelElements.forEach((labelObj, index) => {
+        // Calculate orbiting position
+        const angle = labelObj.angle + time;
+        const x = Math.cos(angle) * labelObj.radius;
+        const y = Math.sin(angle) * labelObj.radius;
+
+        // Position at center of screen + offset
+        const centerX = this.width / 2;
+        const centerY = this.height / 2;
+
+        labelObj.element.style.left = `${centerX + x}px`;
+        labelObj.element.style.top = `${centerY + y}px`;
+        labelObj.element.style.transform = 'translate(-50%, -50%)';
+      });
+    }
+
+    handleResize() {
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      this.renderer.setSize(this.width, this.height);
+      this.camera.aspect = this.width / this.height;
+      this.camera.updateProjectionMatrix();
+    }
+
+    animate() {
+      this.frameId = requestAnimationFrame(this.animate);
+      const delta = this.clock.getDelta() * 60;
+      this._updatePositions(delta);
+      this._updateLines();
+      this._updateOrbitingLabels();
+      this.renderer.render(this.scene, this.camera);
+    }
+
+    destroy() {
+      cancelAnimationFrame(this.frameId);
+      window.removeEventListener('resize', this.handleResize);
+      this.renderer.dispose();
+      this.pointsGeometry.dispose();
+      this.linesGeometry.dispose();
+      this.pointsMaterial.dispose();
+      this.linesMaterial.dispose();
+      if (this.renderer.domElement.parentNode === this.container) {
+        this.container.removeChild(this.renderer.domElement);
+      }
+      if (this.labelLayer && this.labelLayer.parentNode) {
+        this.labelLayer.parentNode.removeChild(this.labelLayer);
+      }
+    }
+  }
+
+  // Store active subpage network
+  let activeSubPageNetwork = null;
 
   // ========================================
   // Homepage Background Re-initialization

@@ -672,14 +672,14 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   justify-content: flex-start;
   width: 100%;
   text-align: left;
-  padding: 0.25rem 0; /* Increased for better touch targets */
+  padding: 0.5rem 0; /* Increased padding to prevent text cutoff */
   min-height: 48px; /* Ensure touch target minimum */
   color: var(--color-white);
   font-family: var(--font-menu);
   font-variation-settings: 'wght' 660, 'wdth' 92;
   font-size: clamp(2.6rem, 8vw, 5rem);
   letter-spacing: 0.02em;
-  line-height: 0.92;
+  line-height: 1.1; /* Increased from 0.92 to prevent text cutoff */
   text-transform: lowercase;
   text-decoration: none;
   transition: color 0.45s var(--ease-lando);
@@ -750,7 +750,7 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   gap: 0.015em;
   position: relative;
   z-index: 1;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to visible to prevent text cutoff */
 }
 
 .mobile-menu-link.split-text .char {
@@ -758,7 +758,7 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   transform: translateY(100%);
   transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
   will-change: transform;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to visible to prevent text cutoff */
 }
 
 .mobile-menu-link.split-text:hover .char,
@@ -794,6 +794,8 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   flex-direction: column;
   gap: clamp(0.35rem, 1.2vw, 0.8rem);
   z-index: 1;
+  overflow: visible; /* Ensure text isn't cut off */
+  padding-bottom: 1rem; /* Add bottom padding to prevent last item cutoff */
 }
 
 .mobile-menu-aside {
@@ -1538,7 +1540,9 @@ body.overlay-active .hero-label-layer {
   left: 0;
   width: 100%;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.85); /* More opaque to show content but still see background */
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   z-index: 1200;
   display: none;
   align-items: center;

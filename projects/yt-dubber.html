@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YT Dubber — Isiah Udofia | Yale University</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/yale.svg" />
+    <meta name="theme-color" content="#dc2626" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+  <body data-page="projects" class="ytdubber-theme">
+    <header class="site-header" data-animate="fade">
+      <nav class="nav-shell">
+        <a class="nav-brand" href="../index.html">Isiah Udofia</a>
+        <div class="nav-links" id="site-menu">
+          <a href="../index.html" data-nav="home">Home</a>
+          <a href="../projects.html" data-nav="projects">Projects</a>
+          <a href="../about.html" data-nav="about">About</a>
+          <a href="../contact.html" data-nav="contact">Contact</a>
+          <a href="../resume.html" data-nav="resume">Resume</a>
+        </div>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-menu">☰</button>
+      </nav>
+    </header>
+
+    <main class="page-wrap">
+      <!-- Hero Section -->
+      <section class="section">
+        <div class="ytdubber-hero-professional">
+          <div class="hero-wrapper">
+            <div class="hero-content">
+              <div class="hero-logo">
+                <img src="../assets/ytdubber-logo.png" alt="YT Dubber" class="project-hero-logo" />
+              </div>
+              <h1 class="hero-title">YT Dubber</h1>
+              <p class="hero-description">AI-powered video dubbing platform that empowers international creators to reach global audiences. Transform your content across 12 languages with professional-grade voice synthesis and real-time processing.</p>
+
+              <div class="hero-stats">
+                <div class="stat-item">
+                  <div class="stat-number">12</div>
+                  <div class="stat-label">Languages</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number">Real-time</div>
+                  <div class="stat-label">Processing</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-number">AI-Native</div>
+                  <div class="stat-label">Pipeline</div>
+                </div>
+              </div>
+
+              <div class="hero-cta">
+                <a class="cta-button ytdubber-cta" href="https://youtubedubber-com.vercel.app/" target="_blank" rel="noopener">
+                  Launch Platform
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="scroll-indicator">
+          <div class="scroll-text">Scroll to learn more</div>
+          <div class="scroll-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Content -->
+      <section class="section">
+        <!-- Overview Section -->
+        <div class="ytdubber-overview reveal">
+          <div class="ytdubber-overview-content">
+            <h2><i data-feather="globe" class="section-icon"></i>Breaking Language Barriers for Creators</h2>
+            <p class="ytdubber-overview-text">Content creators lose 80% of potential viewership when limited to one language. Traditional dubbing is expensive, slow, and requires multiple vendors. International creators need a scalable solution to reach global markets without sacrificing quality or breaking their budget.</p>
+
+            <div class="ytdubber-solution">
+              <h3><i data-feather="play-circle" class="solution-icon"></i>The Solution</h3>
+              <p>YT Dubber democratizes professional dubbing with an end-to-end AI pipeline. Upload once, deploy globally. Creators can expand into Spanish, French, German, Japanese, and 8 other markets with one-click dubbing that preserves their content's emotion and timing.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Target Market -->
+        <div class="ytdubber-market reveal">
+          <h2><i data-feather="users" class="section-icon"></i>Built for Global Creators</h2>
+
+          <div class="market-segments">
+            <div class="market-segment">
+              <div class="segment-icon">
+                <i data-feather="gamepad-2"></i>
+              </div>
+              <h3>Gaming Creators</h3>
+              <p>Expand gaming tutorials and let's plays into Spanish, Japanese, and Korean markets for massive audience growth</p>
+            </div>
+
+            <div class="market-segment">
+              <div class="segment-icon">
+                <i data-feather="book-open"></i>
+              </div>
+              <h3>Educational Channels</h3>
+              <p>Share knowledge globally with course content that reaches students in their native languages across Europe and Asia</p>
+            </div>
+
+            <div class="market-segment">
+              <div class="segment-icon">
+                <i data-feather="briefcase"></i>
+              </div>
+              <h3>Business Content</h3>
+              <p>Scale marketing videos and company content for international teams and global customer bases</p>
+            </div>
+
+            <div class="market-segment">
+              <div class="segment-icon">
+                <i data-feather="film"></i>
+              </div>
+              <h3>Entertainment</h3>
+              <p>Bring comedy, vlogs, and creative content to new cultural markets with localized audio that resonates</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technical Pipeline -->
+        <div class="ytdubber-technical reveal">
+          <h2><i data-feather="cpu" class="section-icon"></i>AI-Native Architecture</h2>
+
+          <div class="ytdubber-flow">
+            <div class="ytdubber-flow-step">
+              <div class="flow-number">1</div>
+              <div class="flow-content">
+                <h3><i data-feather="upload" class="flow-icon"></i>Video Upload & Processing</h3>
+                <p>Secure upload with automatic audio extraction and scene detection. Files are processed in our FastAPI backend with job queuing for scalable handling.</p>
+              </div>
+            </div>
+
+            <div class="ytdubber-flow-step">
+              <div class="flow-number">2</div>
+              <div class="flow-content">
+                <h3><i data-feather="mic" class="flow-icon"></i>Speech-to-Text Transcription</h3>
+                <p>Deepgram Nova-3 converts speech to text with timestamp precision and speaker diarization for accurate dialogue mapping.</p>
+              </div>
+            </div>
+
+            <div class="ytdubber-flow-step">
+              <div class="flow-number">3</div>
+              <div class="flow-content">
+                <h3><i data-feather="globe" class="flow-icon"></i>Neural Translation</h3>
+                <p>OpenAI GPT-4 translates content with context awareness, preserving tone, humor, and cultural nuances for natural localization.</p>
+              </div>
+            </div>
+
+            <div class="ytdubber-flow-step">
+              <div class="flow-number">4</div>
+              <div class="flow-content">
+                <h3><i data-feather="volume-2" class="flow-icon"></i>Voice Synthesis & Audio Merge</h3>
+                <p>Advanced TTS generates natural speech, then audio is synchronized with original video timing for seamless dubbing output.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full-Stack Implementation -->
+        <div class="ytdubber-implementation reveal">
+          <h2><i data-feather="layers" class="section-icon"></i>Full-Stack Implementation</h2>
+          <div class="implementation-grid">
+            <div class="implementation-section">
+              <h3>Frontend (Next.js)</h3>
+              <ul>
+                <li>React-based dashboard with real-time job tracking</li>
+                <li>Drag-and-drop upload with progress indicators</li>
+                <li>Multi-language selection interface</li>
+                <li>Responsive design for desktop and mobile</li>
+                <li>Secure authentication and user management</li>
+              </ul>
+            </div>
+
+            <div class="implementation-section">
+              <h3>Backend (FastAPI)</h3>
+              <ul>
+                <li>Async job processing with database persistence</li>
+                <li>RESTful API with automatic documentation</li>
+                <li>Worker polling system for background tasks</li>
+                <li>File storage management and cleanup</li>
+                <li>Rate limiting and error handling</li>
+              </ul>
+            </div>
+
+            <div class="implementation-section">
+              <h3>AI Integration</h3>
+              <ul>
+                <li>Deepgram API for speech recognition</li>
+                <li>OpenAI GPT-4 for context-aware translation</li>
+                <li>Advanced TTS for natural voice synthesis</li>
+                <li>Audio processing and video synchronization</li>
+                <li>Quality validation and output optimization</li>
+              </ul>
+            </div>
+
+            <div class="implementation-section">
+              <h3>Production Infrastructure</h3>
+              <ul>
+                <li>Vercel deployment with edge optimization</li>
+                <li>Database persistence for job state</li>
+                <li>Cloud storage for video processing</li>
+                <li>Monitoring and error tracking</li>
+                <li>Scalable worker architecture</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance & Scale -->
+        <div class="ytdubber-performance reveal">
+          <h2><i data-feather="trending-up" class="section-icon"></i>Performance & Scale</h2>
+          <div class="ytdubber-performance-grid">
+            <div class="performance-metric">
+              <div class="metric-value">5-15min</div>
+              <div class="metric-label">Processing Time</div>
+            </div>
+            <div class="performance-metric">
+              <div class="metric-value">100%</div>
+              <div class="metric-label">Success Rate</div>
+            </div>
+            <div class="performance-metric">
+              <div class="metric-value">12</div>
+              <div class="metric-label">Supported Languages</div>
+            </div>
+            <div class="performance-metric">
+              <div class="metric-value">Real-time</div>
+              <div class="metric-label">Status Updates</div>
+            </div>
+          </div>
+
+          <div class="ytdubber-scale">
+            <h3>Designed for Scale</h3>
+            <p>Built with production-ready architecture that can handle multiple concurrent jobs. The worker system scales horizontally, and the frontend provides real-time feedback on processing status. Quality validation ensures professional output for every video.</p>
+          </div>
+        </div>
+
+        <!-- Current Status -->
+        <div class="ytdubber-status reveal">
+          <h2><i data-feather="activity" class="section-icon"></i>Production Ready & Live</h2>
+          <div class="status-content">
+            <div class="status-main">
+              <p>Fully operational production platform deployed at <a href="https://youtubedubber-com.vercel.app/" target="_blank" rel="noopener" class="ytdubber-link">youtubedubber-com.vercel.app</a>. Complete end-to-end pipeline from upload to dubbed video download.</p>
+            </div>
+
+            <div class="status-roadmap">
+              <div class="roadmap-item">
+                <h3>Market Impact</h3>
+                <p>Democratizing global content creation for independent creators who previously couldn't afford professional dubbing services</p>
+              </div>
+              <div class="roadmap-item">
+                <h3>Technical Achievement</h3>
+                <p>Seamless integration of multiple AI services into a cohesive product that handles the entire dubbing workflow</p>
+              </div>
+              <div class="roadmap-item">
+                <h3>Future Vision</h3>
+                <p>Expanding language support, improving voice quality, and building creator community features for global collaboration</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>© <span id="year">2025</span> Isiah Udofia</div>
+        <div class="footer-links">
+          <a href="mailto:isiah.udofia@yale.edu">isiah.udofia@yale.edu</a>
+          <span>973-303-6883</span>
+          <a href="https://github.com/iudofia2026" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/isiah-udofia/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/main.js" defer></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Initialize Feather icons
+      feather.replace();
+    </script>
+  </body>
+</html>

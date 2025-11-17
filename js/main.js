@@ -1182,37 +1182,48 @@
     
     // Animate camera to zoom into the specific node
     if (nodeIndex !== undefined && window.heroNetwork) {
-      // Camera animation takes ~0.8s (quick and reactive), overlay fades in during animation
+      // Camera animation takes ~0.8s (quick and reactive)
+      // Overlay fades in AFTER zoom completes to keep background visible
       window.heroNetwork.animateToNode(nodeIndex, 0.8, () => {
         console.log('Camera animation completed for', overlayId);
-      });
-      cameraAnimationDelay = 0.3; // Start overlay fade-in mid-camera animation
-    }
-    
-    // Hide hero labels during transition
-    const heroLabels = document.querySelectorAll('.hero-label');
-    if (heroLabels.length > 0 && window.gsap) {
-      gsap.to(heroLabels, {
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.out'
-      });
-    }
-    
-    // Show overlay with quick fade-in, coordinated with camera animation
-    overlay.style.display = 'flex';
-    if (window.gsap) {
-      gsap.fromTo(overlay, 
-        { opacity: 0 },
-        { 
-          opacity: 1, 
-          duration: 0.4,
-          delay: cameraAnimationDelay,
-          ease: 'power3.out'
+        // Show overlay content after zoom completes
+        if (window.gsap) {
+          gsap.to(overlay, {
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power2.out'
+          });
         }
-      );
+      });
+      
+      // Hide hero labels immediately during transition
+      const heroLabels = document.querySelectorAll('.hero-label');
+      if (heroLabels.length > 0 && window.gsap) {
+        gsap.to(heroLabels, {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.out'
+        });
+      }
+      
+      // Show overlay container immediately but keep it transparent during zoom
+      overlay.style.display = 'flex';
+      overlay.style.opacity = '0';
     } else {
-      overlay.style.opacity = '1';
+      // Fallback if no camera animation
+      overlay.style.display = 'flex';
+      if (window.gsap) {
+        gsap.fromTo(overlay, 
+          { opacity: 0 },
+          { 
+            opacity: 1, 
+            duration: 0.4,
+            ease: 'power3.out'
+          }
+        );
+      } else {
+        overlay.style.opacity = '1';
+      }
     }
   };
 

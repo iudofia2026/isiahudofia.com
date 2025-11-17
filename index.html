@@ -50,6 +50,7 @@
             />
             <div class="hero-text">
               <h1 class="hero-title">Isiah Udofia</h1>
+              <p class="hero-sub" style="color: #FFD700; margin-top: 0.25rem; margin-bottom: 0.25rem; font-size: 0.85em; font-weight: 400;" id="countdown-message">Site rebuild in progress!</p>
               <p class="hero-sub">
                 Senior, Cognitive Science @ <span class="hero-sub__yale">Yale</span>
               </p>
@@ -88,5 +89,57 @@
     </main>
 
     <script src="js/main.js" defer></script>
+    <script>
+      function updateCountdown() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+
+        // Thanksgiving is the 4th Thursday of November
+        // Find the first Thursday of November, then add 21 days (3 weeks)
+        const november1 = new Date(currentYear, 10, 1); // Month 10 = November
+        const firstThursday = new Date(currentYear, 10, 1 + (4 - november1.getDay() + 7) % 7);
+        const thanksgiving = new Date(firstThursday.getTime() + (21 * 24 * 60 * 60 * 1000));
+
+        // If Thanksgiving has passed this year, target next year
+        if (now > thanksgiving) {
+          const nextYear = currentYear + 1;
+          const november1NextYear = new Date(nextYear, 10, 1);
+          const firstThursdayNextYear = new Date(nextYear, 10, 1 + (4 - november1NextYear.getDay() + 7) % 7);
+          thanksgiving.setTime(firstThursdayNextYear.getTime() + (21 * 24 * 60 * 60 * 1000));
+        }
+
+        const timeDiff = thanksgiving - now;
+
+        if (timeDiff > 0) {
+          const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+          let countdownText = "New site launches ";
+          if (days > 0) {
+            countdownText += `in ${days} day${days !== 1 ? 's' : ''}`;
+            if (hours > 0) {
+              countdownText += `, ${hours} hour${hours !== 1 ? 's' : ''}`;
+            }
+          } else if (hours > 0) {
+            countdownText += `in ${hours} hour${hours !== 1 ? 's' : ''}`;
+            if (minutes > 0) {
+              countdownText += `, ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            }
+          } else {
+            countdownText += `in ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+          }
+          countdownText += " (Thanksgiving Day)!";
+
+          document.getElementById('countdown-message').textContent = countdownText;
+        } else {
+          document.getElementById('countdown-message').textContent = "New site is live!";
+        }
+      }
+
+      // Update immediately and then every minute
+      updateCountdown();
+      setInterval(updateCountdown, 60000);
+    </script>
   </body>
 </html>

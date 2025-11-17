@@ -2228,7 +2228,22 @@
       this.renderer.domElement.style.height = '100%';
       this.renderer.domElement.style.zIndex = '1';
       this.renderer.domElement.style.pointerEvents = 'none';
+      this.renderer.domElement.style.opacity = '0';
       this.container.appendChild(this.renderer.domElement);
+      
+      // Fade in canvas
+      if (window.gsap) {
+        gsap.to(this.renderer.domElement, {
+          opacity: 1,
+          duration: 0.4,
+          delay: 0.1,
+          ease: 'power2.out'
+        });
+      } else {
+        this.renderer.domElement.style.opacity = '1';
+      }
+      
+      console.log('SubPageNetwork canvas created for:', pageTitle);
 
       this.scene = new THREE.Scene();
       const fov = this.isMobile ? 50 : 45;

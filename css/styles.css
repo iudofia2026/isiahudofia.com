@@ -104,12 +104,17 @@
   text-align: center;
 }
 
-/* Page container inside overlay - add background for readability */
+/* Page container inside overlay - semi-transparent to show network behind */
 .section-overlay .page-container {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: var(--spacing-2xl);
   border-radius: 24px;
   box-shadow: 0 20px 60px rgba(0, 31, 63, 0.15);
+  position: relative;
+  z-index: 60;
+  pointer-events: auto;
 }
 
 .page-title {
@@ -1519,18 +1524,55 @@ body.overlay-active {
   touch-action: none;
 }
 
-/* Hide non-hero content while overlays are active */
+/* Hide non-hero content while overlays are active (except page-section which is in overlay) */
 html.overlay-active .text-carousel,
 body.overlay-active .text-carousel,
 html.overlay-active .about-section,
 body.overlay-active .about-section,
-html.overlay-active .page-section,
-body.overlay-active .page-section,
 html.overlay-active .mobile-menu,
 body.overlay-active .mobile-menu,
 html.overlay-active .rotation-prompt,
 body.overlay-active .rotation-prompt {
   display: none !important;
+}
+
+/* Page sections inside overlays should remain visible */
+.section-overlay .page-section {
+  display: flex !important;
+  opacity: 1 !important;
+}
+
+/* SubPageNetwork canvas and labels - must be visible above hero */
+.subpage-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
+.subpage-label-layer {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
+.subpage-center-label {
+  pointer-events: none !important;
+  display: block !important;
+}
+
+.subpage-orbiting-label {
+  pointer-events: auto !important;
+  display: block !important;
 }
 
 /* Keep hero section and background fully visible during overlay transitions */
@@ -1545,6 +1587,15 @@ html.overlay-active .hero-background,
 body.overlay-active .hero-background {
   display: block !important;
   opacity: 1 !important;
+}
+
+/* Ensure hero canvas stays visible */
+html.overlay-active .hero-canvas,
+body.overlay-active .hero-canvas,
+.hero-canvas {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 /* Mute hero content (icon/labels) during overlay */
@@ -1563,13 +1614,13 @@ body.overlay-active .hero-label-layer {
   width: 100%;
   height: 100vh;
   background: transparent; /* Fully transparent to keep 3D background visible */
-  z-index: 1200;
+  z-index: 50; /* Lower z-index to allow networks to show */
   display: none;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-2xl) var(--spacing-lg);
   opacity: 0;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to allow networks to be visible */
   perspective: 1200px;
   pointer-events: none; /* allow clicks to pass through by default */
 }
@@ -1585,15 +1636,16 @@ body.overlay-active .main-nav {
   isolation: isolate;
 }
 
-/* Ensure overlays remain below the nav during overlay-active */
+/* Ensure overlays remain below other elements */
 html.overlay-active .section-overlay,
 body.overlay-active .section-overlay {
-  z-index: 1000 !important;
+  z-index: 50 !important;
 }
 
-/* Back rail remains interactive on top of non-interactive overlay */
+/* Back rail remains interactive on top of everything except nav */
 .section-overlay .back-rail {
   pointer-events: auto;
+  z-index: 1000;
 }
 
 .back-rail {
@@ -1610,7 +1662,7 @@ body.overlay-active .section-overlay {
   border-right: 1px solid rgba(0, 31, 63, 0.15);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  z-index: calc(var(--z-nav) + 5);
+  z-index: 1000;
   cursor: pointer;
   transition: background 0.3s var(--ease-out-cubic), border-color 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic);
 }

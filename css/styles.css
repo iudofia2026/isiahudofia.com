@@ -104,6 +104,14 @@
   text-align: center;
 }
 
+/* Page container inside overlay - add background for readability */
+.section-overlay .page-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: var(--spacing-2xl);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 31, 63, 0.15);
+}
+
 .page-title {
   font-family: var(--font-display);
   font-size: clamp(3rem, 8vw, 6rem);
@@ -1525,7 +1533,21 @@ body.overlay-active .rotation-prompt {
   display: none !important;
 }
 
-/* Keep hero background visible; mute hero content during overlay */
+/* Keep hero section and background fully visible during overlay transitions */
+html.overlay-active .hero-section,
+body.overlay-active .hero-section {
+  display: flex !important;
+  opacity: 1 !important;
+  z-index: 1 !important; /* Below overlay but visible */
+}
+
+html.overlay-active .hero-background,
+body.overlay-active .hero-background {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* Mute hero content (icon/labels) during overlay */
 html.overlay-active .hero-content,
 body.overlay-active .hero-content,
 html.overlay-active .hero-label-layer,
@@ -1540,9 +1562,7 @@ body.overlay-active .hero-label-layer {
   left: 0;
   width: 100%;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.85); /* More opaque to show content but still see background */
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  background: transparent; /* Fully transparent to keep 3D background visible */
   z-index: 1200;
   display: none;
   align-items: center;

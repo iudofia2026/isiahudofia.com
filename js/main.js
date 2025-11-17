@@ -41,6 +41,12 @@
       const cameraZ = this.isMobile ? 180 : 220; // Closer camera on mobile for better fill
       this.camera = new THREE.PerspectiveCamera(fov, this.width / this.height, 0.1, 1000);
       this.camera.position.set(0, 0, cameraZ);
+      
+      // Store original camera position for return animations
+      this.originalCameraPosition = new THREE.Vector3(0, 0, cameraZ);
+      this.originalCameraFov = fov;
+      this.isAnimating = false;
+      this.currentAnimation = null;
 
       this.positions = new Float32Array(this.pointCount * 3);
       this.velocities = new Float32Array(this.pointCount * 3);
@@ -509,6 +515,153 @@
           this.velocities[idx + 1] += (dy / distance) * force;
         }
       }
+    }
+
+    // Animate camera to zoom into a specific node - dramatic zoom towards viewer
+    animateToNode(nodeIndex, duration = 0.8, onComplete = null) {
+      if (this.isAnimating && this.currentAnimation) {
+        this.currentAnimation.kill();
+      }
+
+      if (nodeIndex < 0 || nodeIndex >= this.pointCount) {
+        console.warn('Invalid node index for camera animation:', nodeIndex);
+        return;
+      }
+
+      this.isAnimating = true;
+
+      // Get the target node position
+      const idx = nodeIndex * 3;
+      const targetX = this.positions[idx];
+      const targetY = this.positions[idx + 1];
+      const targetZ = this.positions[idx + 2];
+
+      // Get current camera position for perspective calculation
+      const startX = this.camera.position.x;
+      const startY = this.camera.position.y;
+      const startZ = this.camera.position.z;
+
+      // Calculate direction vector from camera to target node
+      const dirX = targetX - startX;
+      const dirY = targetY - startY;
+      const dirZ = targetZ - startZ;
+      const distance = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
+
+      // Normalize direction
+      const normDirX = dirX / distance;
+      const normDirY = dirY / distance;
+      const normDirZ = dirZ / distance;
+
+      // Move camera THROUGH the node and beyond to create zoom-through effect
+      // This makes all other nodes appear to zoom past the viewer
+      const zoomThroughDistance = this.isMobile ? 150 : 200; // Distance to travel through
+      const targetCameraX = targetX + normDirX * zoomThroughDistance;
+      const targetCameraY = targetY + normDirY * zoomThroughDistance;
+      const targetCameraZ = targetZ + normDirZ * zoomThroughDistance;
+
+      // Target FOV (zoom in dramatically by reducing FOV significantly)
+      const targetFov = this.isMobile ? 20 : 15;
+
+      // Use GSAP to animate camera - faster and more dramatic
+      if (window.gsap) {
+        this.currentAnimation = gsap.to(this.camera.position, {
+          x: targetCameraX,
+          y: targetCameraY,
+          z: targetCameraZ,
+          duration: duration,
+          ease: 'power3.inOut', // More aggressive easing
+          onUpdate: () => {
+            // Calculate look-at point that moves with camera for smooth perspective
+            // Look slightly ahead in the direction of movement
+            const progress = this.currentAnimation.progress();
+            const lookAheadDistance = 50;
+            const lookX = this.camera.position.x + normDirX * lookAheadDistance;
+            const lookY = this.camera.position.y + normDirY * lookAheadDistance;
+            const lookZ = this.camera.position.z + normDirZ * lookAheadDistance;
+            
+            this.camera.lookAt(lookX, lookY, lookZ);
+            this.camera.updateProjectionMatrix();
+          },
+          onComplete: () => {
+            this.isAnimating = false;
+            this.currentAnimation = null;
+            if (onComplete) onComplete();
+          }
+        });
+
+        // Animate FOV for dramatic zoom effect
+        gsap.to(this.camera, {
+          fov: targetFov,
+          duration: duration,
+          ease: 'power3.inOut',
+          onUpdate: () => {
+            this.camera.updateProjectionMatrix();
+          }
+        });
+      } else {
+        // Fallback if GSAP not available
+        console.warn('GSAP not available for camera animation');
+        this.isAnimating = false;
+        if (onComplete) onComplete();
+      }
+    }
+
+    // Return camera to home position - fast and reactive
+    returnToHome(duration = 0.7, onComplete = null) {
+      if (this.isAnimating && this.currentAnimation) {
+        this.currentAnimation.kill();
+      }
+
+      this.isAnimating = true;
+
+      // Use GSAP to animate camera back - quick zoom out effect
+      if (window.gsap) {
+        this.currentAnimation = gsap.to(this.camera.position, {
+          x: this.originalCameraPosition.x,
+          y: this.originalCameraPosition.y,
+          z: this.originalCameraPosition.z,
+          duration: duration,
+          ease: 'power3.inOut', // Match the zoom-in easing
+          onUpdate: () => {
+            // Look at center during return
+            this.camera.lookAt(0, 0, 0);
+            this.camera.updateProjectionMatrix();
+          },
+          onComplete: () => {
+            this.isAnimating = false;
+            this.currentAnimation = null;
+            if (onComplete) onComplete();
+          }
+        });
+
+        // Animate FOV back to original
+        gsap.to(this.camera, {
+          fov: this.originalCameraFov,
+          duration: duration,
+          ease: 'power3.inOut',
+          onUpdate: () => {
+            this.camera.updateProjectionMatrix();
+          }
+        });
+      } else {
+        // Fallback if GSAP not available
+        console.warn('GSAP not available for camera animation');
+        this.isAnimating = false;
+        if (onComplete) onComplete();
+      }
+    }
+
+    // Get node position by index
+    getNodePosition(nodeIndex) {
+      if (nodeIndex < 0 || nodeIndex >= this.pointCount) {
+        return null;
+      }
+      const idx = nodeIndex * 3;
+      return {
+        x: this.positions[idx],
+        y: this.positions[idx + 1],
+        z: this.positions[idx + 2]
+      };
     }
 
     handleResize() {
@@ -1017,36 +1170,77 @@
     lockScrollAtCurrentPosition();
     addScrollTrap();
     
-    // Use TransitionController for camera + hero icon + labels when available
-    let cameraAnimationDelay = 0;
-    try {
-      if (window.transitionController && typeof window.transitionController.findNodeIndexBySection === 'function') {
-        const section = sectionFromOverlayId(overlayId);
-        const idx = window.transitionController.findNodeIndexBySection(section);
-        if (idx !== null) {
-          // Let navigateToSection handle hero icon, labels, and camera
-          // Camera animation takes ~1.4s, overlay should fade in partway through
-          window.transitionController.navigateToSection(section, idx);
-          cameraAnimationDelay = 0.6; // Start overlay fade-in mid-camera animation
-        }
-      }
-    } catch (e) {}
+    // Map overlay IDs to node indices
+    const overlayToNodeIndex = {
+      'section-projects': 8,
+      'section-research': 21,
+      'section-contact': 55
+    };
     
-    // Show overlay with smooth fade-in, coordinated with camera animation
-    overlay.style.display = 'flex';
-    gsap.fromTo(overlay, 
-      { opacity: 0 },
-      { 
-        opacity: 1, 
-        duration: 0.6,
-        delay: cameraAnimationDelay,
+    const nodeIndex = overlayToNodeIndex[overlayId];
+    let cameraAnimationDelay = 0;
+    
+    // Animate camera to zoom into the specific node
+    if (nodeIndex !== undefined && window.heroNetwork) {
+      // Camera animation takes ~0.8s (quick and reactive), overlay fades in during animation
+      window.heroNetwork.animateToNode(nodeIndex, 0.8, () => {
+        console.log('Camera animation completed for', overlayId);
+      });
+      cameraAnimationDelay = 0.3; // Start overlay fade-in mid-camera animation
+    }
+    
+    // Hide hero labels during transition
+    const heroLabels = document.querySelectorAll('.hero-label');
+    if (heroLabels.length > 0 && window.gsap) {
+      gsap.to(heroLabels, {
+        opacity: 0,
+        duration: 0.3,
         ease: 'power2.out'
-      }
-    );
+      });
+    }
+    
+    // Show overlay with quick fade-in, coordinated with camera animation
+    overlay.style.display = 'flex';
+    if (window.gsap) {
+      gsap.fromTo(overlay, 
+        { opacity: 0 },
+        { 
+          opacity: 1, 
+          duration: 0.4,
+          delay: cameraAnimationDelay,
+          ease: 'power3.out'
+        }
+      );
+    } else {
+      overlay.style.opacity = '1';
+    }
   };
 
   const hideAllOverlays = (animate = true) => {
     const overlays = document.querySelectorAll('.section-overlay');
+    
+    // Return camera to home position - quick and reactive
+    if (window.heroNetwork && animate) {
+      window.heroNetwork.returnToHome(0.7, () => {
+        console.log('Camera returned to home');
+      });
+    }
+    
+    // Show hero labels again
+    const heroLabels = document.querySelectorAll('.hero-label');
+    if (heroLabels.length > 0 && window.gsap && animate) {
+      gsap.to(heroLabels, {
+        opacity: 1,
+        duration: 0.3,
+        delay: 0.2,
+        ease: 'power2.out'
+      });
+    } else if (heroLabels.length > 0) {
+      heroLabels.forEach(label => {
+        label.style.opacity = '1';
+      });
+    }
+    
     if (animate && overlays.length > 0) {
       // Smooth fade-out animation
       overlays.forEach(o => {
@@ -1118,42 +1312,35 @@
     const target = e.target.closest('.back-rail');
     if (target) {
       e.preventDefault();
-      // Smooth reverse transition via TransitionController if available
-      let returnDuration = 1200;
-      try {
-        if (window.transitionController && typeof window.transitionController.returnHome === 'function') {
-          returnDuration = window.transitionController.timing?.returnHome || 1200;
-          // Hide overlay early, let camera animate over it
-          const overlays = document.querySelectorAll('.section-overlay');
-          overlays.forEach(o => {
-            if (o.style.opacity !== '0' && o.style.display !== 'none') {
-              gsap.to(o, {
-                opacity: 0,
-                duration: 0.5,
-                delay: 0.2,
-                ease: 'power2.in',
-                onComplete: () => {
-                  o.style.display = 'none';
-                }
-              });
-            }
-          });
-          // Start return animation
-          window.transitionController.returnHome();
-        } else {
-          // Fallback: hide immediately if no controller
-          hideAllOverlays(true);
-        }
-      } catch (e2) {
-        hideAllOverlays(true);
+      // Use hideAllOverlays which handles camera return animation
+      const returnDuration = 700; // 0.7s camera animation (quick and reactive)
+      
+      // Hide overlay early, let camera animate over it
+      const overlays = document.querySelectorAll('.section-overlay');
+      if (window.gsap) {
+        overlays.forEach(o => {
+          if (o.style.opacity !== '0' && o.style.display !== 'none') {
+            gsap.to(o, {
+              opacity: 0,
+              duration: 0.3,
+              delay: 0.1,
+              ease: 'power3.in',
+              onComplete: () => {
+                o.style.display = 'none';
+              }
+            });
+          }
+        });
       }
+      
+      // Hide overlays and return camera
+      hideAllOverlays(true);
 
       // Final cleanup after return animation completes
-      if (window.transitionController) {
-        setTimeout(() => {
-          restoreHomeExperience();
-        }, returnDuration + 100);
-      }
+      setTimeout(() => {
+        restoreHomeExperience();
+      }, returnDuration + 100);
+      
       // Normalize URL without reload (remove hash or path overlays)
       const hasPathOverlay = !!routeToOverlayId(window.location.pathname);
       if (window.history && window.history.pushState) {

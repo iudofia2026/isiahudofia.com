@@ -196,10 +196,22 @@ a.is-disabled {
   .card-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 }
 
 @media (min-width: 1100px) {
-  .card-grid {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .card-grid:not(.projects-grid) {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -2092,6 +2104,320 @@ small {
   }
 }
 
+/* YT Dubber Theme Styling */
+.ytdubber-theme {
+  --ytdubber-red: #dc2626;
+  --ytdubber-red-dark: #991b1b;
+  --ytdubber-black: #0f0f0f;
+  --ytdubber-dark-gray: #1a1a1a;
+  --ytdubber-light-gray: #666666;
+  --ytdubber-white: #ffffff;
+  background: linear-gradient(135deg, var(--ytdubber-black) 0%, var(--ytdubber-dark-gray) 100%);
+  color: var(--ytdubber-white);
+  position: relative;
+  min-height: 100vh;
+}
+
+.ytdubber-theme::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 70%, rgba(220, 38, 38, 0.08), transparent 60%),
+              radial-gradient(circle at 80% 20%, rgba(220, 38, 38, 0.05), transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.ytdubber-hero-professional {
+  min-height: 75vh;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 12vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.ytdubber-hero-professional .hero-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.ytdubber-hero-professional .hero-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ytdubber-theme .hero-title {
+  color: var(--ytdubber-white);
+  font-size: clamp(3rem, 8vw, 5rem);
+  background: linear-gradient(135deg, var(--ytdubber-white), var(--ytdubber-red));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ytdubber-theme .hero-description {
+  color: var(--ytdubber-light-gray);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.project-hero-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 12px rgba(220, 38, 38, 0.3));
+}
+
+.ytdubber-cta {
+  background: linear-gradient(135deg, var(--ytdubber-red), var(--ytdubber-red-dark));
+  color: var(--ytdubber-white);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.ytdubber-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.4);
+}
+
+.ytdubber-theme .stat-number {
+  color: var(--ytdubber-red);
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.ytdubber-theme .stat-label {
+  color: var(--ytdubber-light-gray);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ytdubber-overview,
+.ytdubber-market,
+.ytdubber-technical,
+.ytdubber-implementation,
+.ytdubber-performance,
+.ytdubber-status {
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.ytdubber-theme h2 {
+  color: var(--ytdubber-white);
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ytdubber-theme h3 {
+  color: var(--ytdubber-red);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ytdubber-theme .section-icon,
+.ytdubber-theme .solution-icon,
+.ytdubber-theme .flow-icon {
+  color: var(--ytdubber-red);
+  width: 32px;
+  height: 32px;
+}
+
+.ytdubber-overview-text,
+.ytdubber-theme p,
+.ytdubber-theme li {
+  color: var(--ytdubber-light-gray);
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.ytdubber-solution {
+  background: rgba(220, 38, 38, 0.05);
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--ytdubber-red);
+  margin-top: 2rem;
+}
+
+.market-segments {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.market-segment {
+  background: rgba(15, 15, 15, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  transition: all 0.3s ease;
+}
+
+.market-segment:hover {
+  transform: translateY(-4px);
+  border-color: rgba(220, 38, 38, 0.3);
+  background: rgba(15, 15, 15, 0.6);
+}
+
+.segment-icon {
+  color: var(--ytdubber-red);
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ytdubber-flow {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.ytdubber-flow-step {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  background: rgba(15, 15, 15, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.flow-number {
+  background: linear-gradient(135deg, var(--ytdubber-red), var(--ytdubber-red-dark));
+  color: var(--ytdubber-white);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.implementation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.implementation-section {
+  background: rgba(15, 15, 15, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.implementation-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.implementation-section li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+.implementation-section li:last-child {
+  border-bottom: none;
+}
+
+.implementation-section li::before {
+  content: '▶';
+  color: var(--ytdubber-red);
+  margin-right: 0.5rem;
+}
+
+.ytdubber-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.ytdubber-theme .performance-metric {
+  background: rgba(15, 15, 15, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.ytdubber-theme .metric-value {
+  color: var(--ytdubber-red);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.ytdubber-theme .metric-label {
+  color: var(--ytdubber-light-gray);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ytdubber-scale {
+  background: rgba(220, 38, 38, 0.05);
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--ytdubber-red);
+}
+
+.status-roadmap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.roadmap-item {
+  background: rgba(15, 15, 15, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+.ytdubber-link {
+  color: var(--ytdubber-red);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.ytdubber-link:hover {
+  color: var(--ytdubber-white);
+  text-decoration: underline;
+}
+
 /* Ensure better touch targets for mobile */
 @media (max-width: 768px) {
   .btn {
@@ -3429,6 +3755,11 @@ small {
 
 .cover-thesis {
   background: radial-gradient(circle at 20% 20%, rgba(240,94,40,0.45), rgba(96,24,12,0.85));
+}
+
+.cover-ytdubber {
+  background: linear-gradient(135deg, rgba(245,246,250,0.15), rgba(226,232,240,0.08)),
+              radial-gradient(circle at 30% 30%, rgba(59,130,246,0.12), rgba(29,78,216,0.06));
 }
 
 /* Animated gradient link */

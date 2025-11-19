@@ -3470,9 +3470,14 @@
         this.connectionLines.material.opacity = 0.25 + Math.sin(time * 0.8) * 0.1;
       }
       
-      // Sync background nodes Y-axis rotation ONLY when user is dragging
-      if (this.isDragging && window.heroNetwork && window.heroNetwork.scene) {
-        window.heroNetwork.scene.rotation.y = this.globeGroup.rotation.y;
+      // Rotate background nodes in 2D plane (flat disc) when user drags globe
+      if (this.isDragging && window.heroNetwork && window.heroNetwork.pointsMesh) {
+        // Rotate the points and lines meshes on Z-axis for 2D rotation
+        const rotation = this.globeGroup.rotation.y;
+        window.heroNetwork.pointsMesh.rotation.z = rotation;
+        if (window.heroNetwork.linesMesh) {
+          window.heroNetwork.linesMesh.rotation.z = rotation;
+        }
       }
 
       this.renderer.render(this.scene, this.camera);

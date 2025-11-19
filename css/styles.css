@@ -1071,10 +1071,16 @@ body.menu-open .hero-label {
 .hero-icon-wrapper {
   position: relative;
   display: inline-block;
-  width: clamp(200px, 30vw, 500px);
+  width: clamp(250px, 45vw, 500px); /* Larger on mobile (45vw vs 30vw) */
   cursor: pointer;
   border-radius: 16px;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .hero-icon-wrapper {
+    width: clamp(300px, 60vw, 400px); /* Even larger on mobile */
+  }
 }
 
 .hero-icon-wrapper img {

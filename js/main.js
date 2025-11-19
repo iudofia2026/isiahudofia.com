@@ -20,7 +20,7 @@
 
       // Adaptive particle count for performance - increased for more visibility
       this.pointCount = this.isSmallMobile ? 80 : (this.isMobile ? 120 : 250);
-      this.maxLinkDistance = this.isMobile ? 70 : 90; // Increased for more connections
+      this.maxLinkDistance = this.isMobile ? 50 : 60;
       this.bounds = this.isMobile ? { x: 120, y: 100, z: 120 } : { x: 200, y: 120, z: 200 };
 
       // Optimize renderer for mobile
@@ -134,8 +134,8 @@
 
       // Mouse/Touch interaction - optimized for mobile
       this.mouse = { x: 0, y: 0, isInside: false };
-      this.mouseInfluenceRadius = this.isMobile ? 25 : 35; // Further reduced influence radius
-      this.mouseForce = this.isMobile ? 0.02 : 0.05; // Much lower force for minimal reactivity
+      this.mouseInfluenceRadius = this.isMobile ? 60 : 80;
+      this.mouseForce = this.isMobile ? 0.15 : 0.3;
 
       // Orbital settings
       this.centerPoint = { x: 0, y: 0, z: 0 }; // Center of rotation

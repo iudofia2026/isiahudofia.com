@@ -996,15 +996,13 @@
           
           console.log('Building globe with', cityMarkers.length, 'cities and', projectMarkers.length, 'projects');
           
-          // Create Saturn ring effect - push nodes to orbit around globe
+          // Create Saturn ring effect - only push nodes actually colliding with globe
           if (window.heroNetwork) {
             const heroNetwork = window.heroNetwork;
             const positions = heroNetwork.positions;
-            const globeRadius = 90; // Globe inner boundary
-            const minOrbitRadius = 110; // Minimum orbit distance (just outside globe)
-            const maxOrbitRadius = 180; // Maximum orbit distance (keep on screen)
+            const globeRadius = 70; // Actual globe collision boundary (smaller)
             
-            console.log('Creating Saturn rings around globe...');
+            console.log('Pushing only colliding nodes away from globe...');
             
             for (let i = 0; i < heroNetwork.pointCount; i++) {
               const idx = i * 3;
@@ -1012,21 +1010,23 @@
               const y = positions[idx + 1];
               const z = positions[idx + 2];
               
-              // Calculate distance from center (XY plane only for ring effect)
-              const xyDistance = Math.sqrt(x * x + y * y);
+              // Calculate actual 3D distance from center
+              const distance = Math.sqrt(x * x + y * y + z * z);
               
-              // If node is within globe area or behind it, push to orbit
-              if (xyDistance < minOrbitRadius || z < -50) {
-                // Place in random orbit ring
-                const targetRadius = minOrbitRadius + Math.random() * (maxOrbitRadius - minOrbitRadius);
+              // Only push if actually colliding with globe OR behind it
+              if (distance < globeRadius || z < -30) {
+                // Push to just outside globe, maintaining direction
+                const targetDistance = globeRadius + 20; // Just outside globe
+                const scale = targetDistance / (distance || 1);
                 
-                // Keep the angular position but adjust radius
-                const angle = Math.atan2(y, x);
-                const newX = targetRadius * Math.cos(angle);
-                const newY = targetRadius * Math.sin(angle);
+                let newX = x * scale;
+                let newY = y * scale;
+                let newZ = z * scale;
                 
-                // Keep Z in front of globe (positive) with some variation
-                const newZ = Math.abs(z) < 50 ? 20 + Math.random() * 80 : Math.abs(z);
+                // If behind globe, flip to front
+                if (newZ < 0) {
+                  newZ = Math.abs(newZ) + 30;
+                }
                 
                 // Animate to new position
                 gsap.to(positions, {

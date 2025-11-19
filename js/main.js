@@ -18,9 +18,9 @@
       this.isMobile = window.innerWidth <= 768;
       this.isSmallMobile = window.innerWidth <= 480;
 
-      // Adaptive particle count for performance
+      // Adaptive particle count for performance - increased for more visibility
       this.pointCount = this.isSmallMobile ? 80 : (this.isMobile ? 120 : 250);
-      this.maxLinkDistance = this.isMobile ? 50 : 60;
+      this.maxLinkDistance = this.isMobile ? 70 : 90; // Increased for more connections
       this.bounds = this.isMobile ? { x: 120, y: 100, z: 120 } : { x: 200, y: 120, z: 200 };
 
       // Optimize renderer for mobile
@@ -79,22 +79,29 @@
 
       this.palettes = {
         default: {
-          point: new THREE.Color(0x001f3f),
-          line: new THREE.Color(0x001f3f),
-          lineOpacity: 0.25,
+          point: new THREE.Color(0xffffff),
+          line: new THREE.Color(0xffffff),
+          lineOpacity: 0.3,
           clearColor: 0x000000,
           clearAlpha: 0
         },
         inverted: {
-          point: new THREE.Color(0xffffff),
-          line: new THREE.Color(0xffffff),
-          lineOpacity: 0.4,
+          point: new THREE.Color(0x001f3f),
+          line: new THREE.Color(0x001f3f),
+          lineOpacity: 0.25,
           clearColor: 0x001f3f,
           clearAlpha: 1
         }
       };
 
-      this.setInverted(false);
+      // Initialize with default (white) palette manually since setInverted is paused
+      const palette = this.palettes.default;
+      this.pointsMaterial.color.copy(palette.point);
+      this.linesMaterial.color.copy(palette.line);
+      this.linesMaterial.opacity = palette.lineOpacity;
+      this.renderer.setClearColor(palette.clearColor, palette.clearAlpha);
+      this.pointsMaterial.needsUpdate = true;
+      this.linesMaterial.needsUpdate = true;
 
       this.labelLayer = document.createElement('div');
       this.labelLayer.className = 'hero-label-layer';
@@ -127,8 +134,8 @@
 
       // Mouse/Touch interaction - optimized for mobile
       this.mouse = { x: 0, y: 0, isInside: false };
-      this.mouseInfluenceRadius = this.isMobile ? 60 : 80;
-      this.mouseForce = this.isMobile ? 0.15 : 0.3; // Reduced force on mobile for stability
+      this.mouseInfluenceRadius = this.isMobile ? 25 : 35; // Further reduced influence radius
+      this.mouseForce = this.isMobile ? 0.02 : 0.05; // Much lower force for minimal reactivity
 
       // Orbital settings
       this.centerPoint = { x: 0, y: 0, z: 0 }; // Center of rotation
@@ -253,14 +260,14 @@
           const randomValue = Math.random();
           
           if (randomValue < 0.2) {
-            // 20% of nodes in close region (60-100px)
-            radius = 60 + Math.random() * 40;
+            // 20% of nodes in close region - adjusted to avoid globe space
+            radius = 100 + Math.random() * 40; // Minimum 100px to stay outside globe area
           } else if (randomValue < 0.5) {
-            // 30% of nodes in mid region (100-140px)
-            radius = 100 + Math.random() * 40;
+            // 30% of nodes in mid region
+            radius = 140 + Math.random() * 40;
           } else {
-            // 50% of nodes in far region (140-200px)
-            radius = 140 + Math.random() * 60;
+            // 50% of nodes in far region
+            radius = 180 + Math.random() * 60;
           }
           
           // Generate random spherical coordinates
@@ -434,13 +441,26 @@
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
           if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
-            linePositions[ptr] = this.positions[ix];
-            linePositions[ptr + 1] = this.positions[ix + 1];
-            linePositions[ptr + 2] = this.positions[ix + 2];
-            linePositions[ptr + 3] = this.positions[jx];
-            linePositions[ptr + 4] = this.positions[jx + 1];
-            linePositions[ptr + 5] = this.positions[jx + 2];
-            ptr += 6;
+            // Check if connection passes beneath the globe (avoid lines under the globe)
+            const point1Y = this.positions[ix + 1];
+            const point2Y = this.positions[jx + 1];
+            const globeCenter = 0; // Globe is at center
+            const globeRadius = 100; // Approximate globe exclusion zone
+
+            // Skip connections where both points are beneath the globe center
+            // or where the line would pass through the lower hemisphere
+            const bothBelowGlobe = point1Y < globeCenter - globeRadius * 0.3 &&
+                                  point2Y < globeCenter - globeRadius * 0.3;
+
+            if (!bothBelowGlobe) {
+              linePositions[ptr] = this.positions[ix];
+              linePositions[ptr + 1] = this.positions[ix + 1];
+              linePositions[ptr + 2] = this.positions[ix + 2];
+              linePositions[ptr + 3] = this.positions[jx];
+              linePositions[ptr + 4] = this.positions[jx + 1];
+              linePositions[ptr + 5] = this.positions[jx + 2];
+              ptr += 6;
+            }
           }
         }
       }
@@ -489,6 +509,9 @@
     }
 
     setInverted(isInverted) {
+      // TEMPORARY: Pause color inversion for now - remove this return to restore
+      return;
+
       const palette = isInverted ? this.palettes.inverted : this.palettes.default;
       this.pointsMaterial.color.copy(palette.point);
       this.linesMaterial.color.copy(palette.line);
@@ -810,6 +833,7 @@
     try {
       initTopographyBackground();
       initSyncedLogoHover();
+      initInteractiveGlobe();
     } catch (error) {
       console.warn('Hero initialization failed:', error);
     }
@@ -849,23 +873,23 @@
             ease: "power3.inOut"
           })
           .to(loadingScreen, {
-            backgroundColor: "rgba(255, 255, 255, 0)",
-            duration: 0.4,
-            ease: "power2.out"
-          }, "-=0.4")
+            backgroundColor: "rgba(0, 31, 63, 0)", // Navy transparent instead of white
+            duration: 0.6,
+            ease: "power2.out",
+            delay: 0.8 // Wait for globe to appear before fading
+          }, "-=0.2")
           .add(() => {
+            document.body.classList.add('page-loaded'); // Trigger globe growth immediately
             if (window.heroNetwork && typeof window.heroNetwork.triggerRipple === 'function') {
               window.heroNetwork.triggerRipple(0, 0, 12);
             }
-          }, "-=0.4")
-          .add(() => {
-            document.body.classList.add('page-loaded');
-          }, "+=0.2");
+          }, "-=0.4");
         } else {
           tl.to(loadingScreen, {
-            backgroundColor: "rgba(255, 255, 255, 0)",
-            duration: 0.4,
-            ease: "power2.out"
+            backgroundColor: "rgba(0, 31, 63, 0)", // Navy transparent
+            duration: 0.6,
+            ease: "power2.out",
+            delay: 0.8
           })
           .add(() => {
             document.body.classList.add('page-loaded');
@@ -2114,13 +2138,26 @@
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
           if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
-            linePositions[ptr] = this.positions[ix];
-            linePositions[ptr + 1] = this.positions[ix + 1];
-            linePositions[ptr + 2] = this.positions[ix + 2];
-            linePositions[ptr + 3] = this.positions[jx];
-            linePositions[ptr + 4] = this.positions[jx + 1];
-            linePositions[ptr + 5] = this.positions[jx + 2];
-            ptr += 6;
+            // Check if connection passes beneath the globe (avoid lines under the globe)
+            const point1Y = this.positions[ix + 1];
+            const point2Y = this.positions[jx + 1];
+            const globeCenter = 0; // Globe is at center
+            const globeRadius = 100; // Approximate globe exclusion zone
+
+            // Skip connections where both points are beneath the globe center
+            // or where the line would pass through the lower hemisphere
+            const bothBelowGlobe = point1Y < globeCenter - globeRadius * 0.3 &&
+                                  point2Y < globeCenter - globeRadius * 0.3;
+
+            if (!bothBelowGlobe) {
+              linePositions[ptr] = this.positions[ix];
+              linePositions[ptr + 1] = this.positions[ix + 1];
+              linePositions[ptr + 2] = this.positions[ix + 2];
+              linePositions[ptr + 3] = this.positions[jx];
+              linePositions[ptr + 4] = this.positions[jx + 1];
+              linePositions[ptr + 5] = this.positions[jx + 2];
+              ptr += 6;
+            }
           }
         }
       }
@@ -2523,13 +2560,26 @@
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
           if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
-            linePositions[ptr] = this.positions[ix];
-            linePositions[ptr + 1] = this.positions[ix + 1];
-            linePositions[ptr + 2] = this.positions[ix + 2];
-            linePositions[ptr + 3] = this.positions[jx];
-            linePositions[ptr + 4] = this.positions[jx + 1];
-            linePositions[ptr + 5] = this.positions[jx + 2];
-            ptr += 6;
+            // Check if connection passes beneath the globe (avoid lines under the globe)
+            const point1Y = this.positions[ix + 1];
+            const point2Y = this.positions[jx + 1];
+            const globeCenter = 0; // Globe is at center
+            const globeRadius = 100; // Approximate globe exclusion zone
+
+            // Skip connections where both points are beneath the globe center
+            // or where the line would pass through the lower hemisphere
+            const bothBelowGlobe = point1Y < globeCenter - globeRadius * 0.3 &&
+                                  point2Y < globeCenter - globeRadius * 0.3;
+
+            if (!bothBelowGlobe) {
+              linePositions[ptr] = this.positions[ix];
+              linePositions[ptr + 1] = this.positions[ix + 1];
+              linePositions[ptr + 2] = this.positions[ix + 2];
+              linePositions[ptr + 3] = this.positions[jx];
+              linePositions[ptr + 4] = this.positions[jx + 1];
+              linePositions[ptr + 5] = this.positions[jx + 2];
+              ptr += 6;
+            }
           }
         }
       }
@@ -2612,11 +2662,16 @@
         aboutNetwork.destroy();
         aboutNetwork = null;
       }
+      if (interactiveGlobe) {
+        interactiveGlobe.destroy();
+        interactiveGlobe = null;
+      }
       
       // Reinitialize everything
       try {
         initTopographyBackground();
         initSyncedLogoHover();
+        initInteractiveGlobe();
         initProceduralCarousel();
         initAboutNetwork();
         console.log('Homepage background re-initialized successfully');
@@ -2642,6 +2697,7 @@
           try {
             initTopographyBackground();
             initSyncedLogoHover();
+            initInteractiveGlobe();
             initProceduralCarousel();
             initAboutNetwork();
           } catch (error) {
@@ -2651,6 +2707,485 @@
       }, 1000);
     }
   });
+
+  // ========================================
+  // Professional Interactive Globe Component
+  // ========================================
+  class InteractiveGlobe {
+    constructor(container) {
+      this.container = container;
+      this.width = container.clientWidth;
+      this.height = container.clientHeight;
+
+      // Mobile detection for performance optimization
+      this.isMobile = window.innerWidth <= 768;
+
+      // Scene setup
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.PerspectiveCamera(50, this.width / this.height, 0.1, 1000);
+      this.renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: !this.isMobile,
+        powerPreference: this.isMobile ? 'low-power' : 'default'
+      });
+
+      this.renderer.setSize(this.width, this.height);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1.5 : 2));
+      this.container.appendChild(this.renderer.domElement);
+
+      // Globe properties
+      this.globeRadius = 5; // Increased size
+      this.majorCities = this.getMajorCities();
+      this.projectNodes = this.getProjectNodes();
+
+      // Interaction properties
+      this.isDragging = false;
+      this.previousMousePosition = { x: 0, y: 0 };
+      this.rotationVelocity = { x: 0, y: 0 };
+      this.autoRotation = { x: 0, y: 0.003 };
+      this.currentRotation = { x: 0, y: 0 };
+
+      // Initialize
+      this.init();
+      this.setupEventListeners();
+      this.animate();
+    }
+
+    getMajorCities() {
+      return [
+        { name: "New York", lat: 40.7128, lng: -74.0060 },
+        { name: "London", lat: 51.5074, lng: -0.1278 },
+        { name: "Tokyo", lat: 35.6762, lng: 139.6503 },
+        { name: "Sydney", lat: -33.8688, lng: 151.2093 },
+        { name: "Paris", lat: 48.8566, lng: 2.3522 },
+        { name: "Dubai", lat: 25.2048, lng: 55.2708 },
+        { name: "Singapore", lat: 1.3521, lng: 103.8198 },
+        { name: "Los Angeles", lat: 34.0522, lng: -118.2437 },
+        { name: "São Paulo", lat: -23.5558, lng: -46.6396 },
+        { name: "Mumbai", lat: 19.0760, lng: 72.8777 },
+        { name: "Beijing", lat: 39.9042, lng: 116.4074 },
+        { name: "Cairo", lat: 30.0444, lng: 31.2357 },
+        { name: "Moscow", lat: 55.7558, lng: 37.6176 },
+        { name: "Cape Town", lat: -33.9249, lng: 18.4241 },
+        { name: "Mexico City", lat: 19.4326, lng: -99.1332 }
+      ];
+    }
+
+    getProjectNodes() {
+      return [
+        {
+          name: "projects",
+          lat: 41.8781, // Chicago area
+          lng: -87.6298,
+          type: "projects",
+          color: 0xffffff // White for navy background
+        },
+        {
+          name: "research",
+          lat: 55.7558, // Moscow area
+          lng: 37.6176,
+          type: "research",
+          color: 0xffffff // White for navy background
+        },
+        {
+          name: "contact",
+          lat: -33.8688, // Sydney area
+          lng: 151.2093,
+          type: "contact",
+          color: 0xffffff // White for navy background
+        }
+      ];
+    }
+
+    latLngToVector3(lat, lng, radius) {
+      const phi = (lat * Math.PI) / 180;
+      const theta = ((lng - 180) * Math.PI) / 180;
+
+      const x = -radius * Math.cos(phi) * Math.cos(theta);
+      const y = radius * Math.sin(phi);
+      const z = radius * Math.cos(phi) * Math.sin(theta);
+
+      return new THREE.Vector3(x, y, z);
+    }
+
+    init() {
+      // Create globe group
+      this.globeGroup = new THREE.Group();
+      this.scene.add(this.globeGroup);
+
+      // Create earth sphere with wireframe
+      this.createEarthSphere();
+
+      // Create translucent inner layer
+      this.createTranslucentLayer();
+
+      // Create city markers
+      this.createCityMarkers();
+
+      // Create project nodes
+      this.createProjectNodes();
+
+      // Create connection lines between cities and project nodes
+      this.createConnectionLines();
+
+      // Position camera (adjusted for larger globe)
+      this.camera.position.set(0, 0, 14);
+
+      // Add subtle lighting
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+      this.scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(1, 1, 1);
+      this.scene.add(directionalLight);
+    }
+
+    createEarthSphere() {
+      // Create wireframe sphere
+      const sphereGeometry = new THREE.SphereGeometry(this.globeRadius, 32, 16);
+
+      // Create wireframe material
+      const wireframeMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff, // White for navy background
+        wireframe: true,
+        transparent: true,
+        opacity: 0.2
+      });
+
+      this.wireframeSphere = new THREE.Mesh(sphereGeometry, wireframeMaterial);
+      this.globeGroup.add(this.wireframeSphere);
+
+      // Create continent outlines using lines
+      this.createContinentOutlines();
+    }
+
+    createContinentOutlines() {
+      // Simplified continent data points
+      const continents = [
+        // North America
+        { lat: 60, lng: -100 }, { lat: 45, lng: -75 }, { lat: 25, lng: -80 }, { lat: 20, lng: -100 }, { lat: 30, lng: -115 }, { lat: 50, lng: -125 },
+        // South America
+        { lat: 10, lng: -60 }, { lat: -10, lng: -50 }, { lat: -30, lng: -60 }, { lat: -50, lng: -70 }, { lat: -20, lng: -80 }, { lat: 0, lng: -75 },
+        // Europe
+        { lat: 70, lng: 20 }, { lat: 60, lng: 10 }, { lat: 50, lng: 0 }, { lat: 40, lng: 20 }, { lat: 60, lng: 30 },
+        // Africa
+        { lat: 30, lng: 0 }, { lat: 0, lng: 20 }, { lat: -30, lng: 25 }, { lat: -35, lng: 20 }, { lat: 10, lng: 10 },
+        // Asia
+        { lat: 60, lng: 100 }, { lat: 50, lng: 80 }, { lat: 30, lng: 75 }, { lat: 20, lng: 100 }, { lat: 40, lng: 120 }, { lat: 60, lng: 140 },
+        // Australia
+        { lat: -20, lng: 130 }, { lat: -35, lng: 140 }, { lat: -40, lng: 150 }, { lat: -25, lng: 115 }
+      ];
+
+      const lineGeometry = new THREE.BufferGeometry();
+      const positions = [];
+
+      // Create curved lines between continent points
+      for (let i = 0; i < continents.length - 1; i++) {
+        const start = this.latLngToVector3(continents[i].lat, continents[i].lng, this.globeRadius + 0.01);
+        const end = this.latLngToVector3(continents[i + 1].lat, continents[i + 1].lng, this.globeRadius + 0.01);
+
+        positions.push(start.x, start.y, start.z);
+        positions.push(end.x, end.y, end.z);
+      }
+
+      lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
+      const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0xffffff, // White for navy background
+        transparent: true,
+        opacity: 0.3
+      });
+
+      this.continentLines = new THREE.LineSegments(lineGeometry, lineMaterial);
+      this.globeGroup.add(this.continentLines);
+    }
+
+    createTranslucentLayer() {
+      // Create a white translucent inner sphere for depth - same size as globe
+      const innerSphereGeometry = new THREE.SphereGeometry(this.globeRadius, 32, 16);
+      const innerSphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff, // White
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.BackSide // Render from inside
+      });
+
+      this.innerSphere = new THREE.Mesh(innerSphereGeometry, innerSphereMaterial);
+      this.globeGroup.add(this.innerSphere);
+    }
+
+    createCityMarkers() {
+      this.cityMarkers = [];
+
+      const markerGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+      const markerMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff, // White nodes for navy background
+        transparent: true,
+        opacity: 0.9
+      });
+
+      this.majorCities.forEach(city => {
+        const position = this.latLngToVector3(city.lat, city.lng, this.globeRadius + 0.05);
+        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+        marker.position.copy(position);
+        marker.userData = city;
+
+        this.globeGroup.add(marker);
+        this.cityMarkers.push(marker);
+      });
+    }
+
+    createProjectNodes() {
+      this.projectMarkers = [];
+      this.projectLabels = [];
+
+      this.projectNodes.forEach(node => {
+        // Create larger, more prominent markers for project nodes
+        const nodeGeometry = new THREE.SphereGeometry(0.12, 12, 12);
+        const nodeMaterial = new THREE.MeshBasicMaterial({
+          color: node.color,
+          transparent: true,
+          opacity: 0.9
+        });
+
+        const position = this.latLngToVector3(node.lat, node.lng, this.globeRadius + 0.15);
+        const marker = new THREE.Mesh(nodeGeometry, nodeMaterial);
+        marker.position.copy(position);
+        marker.userData = node;
+
+        this.globeGroup.add(marker);
+        this.projectMarkers.push(marker);
+
+        // Create extended connection lines from project nodes
+        const extendedPosition = this.latLngToVector3(node.lat, node.lng, this.globeRadius + 2);
+        const lineGeometry = new THREE.BufferGeometry();
+        const linePositions = [
+          position.x, position.y, position.z,
+          extendedPosition.x, extendedPosition.y, extendedPosition.z
+        ];
+        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+
+        const lineMaterial = new THREE.LineBasicMaterial({
+          color: node.color,
+          transparent: true,
+          opacity: 0.6
+        });
+
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        this.globeGroup.add(line);
+
+        // Create floating label at the end of the line
+        const labelGeometry = new THREE.SphereGeometry(0.08, 8, 8);
+        const labelMaterial = new THREE.MeshBasicMaterial({
+          color: node.color,
+          transparent: true,
+          opacity: 0.9
+        });
+
+        const label = new THREE.Mesh(labelGeometry, labelMaterial);
+        label.position.copy(extendedPosition);
+        label.userData = { ...node, isLabel: true };
+
+        this.globeGroup.add(label);
+        this.projectLabels.push(label);
+      });
+    }
+
+    createConnectionLines() {
+      const lineGeometry = new THREE.BufferGeometry();
+      const positions = [];
+
+      // Create connections between nearby cities
+      for (let i = 0; i < this.majorCities.length; i++) {
+        for (let j = i + 1; j < this.majorCities.length; j++) {
+          const city1 = this.majorCities[i];
+          const city2 = this.majorCities[j];
+
+          // Calculate distance and only connect nearby cities
+          const distance = this.calculateDistance(city1.lat, city1.lng, city2.lat, city2.lng);
+
+          if (distance < 8000) { // Connect cities within 8000km
+            const pos1 = this.latLngToVector3(city1.lat, city1.lng, this.globeRadius + 0.02);
+            const pos2 = this.latLngToVector3(city2.lat, city2.lng, this.globeRadius + 0.02);
+
+            positions.push(pos1.x, pos1.y, pos1.z);
+            positions.push(pos2.x, pos2.y, pos2.z);
+          }
+        }
+      }
+
+      lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
+      const connectionMaterial = new THREE.LineBasicMaterial({
+        color: 0xffffff, // White for navy background
+        transparent: true,
+        opacity: 0.25
+      });
+
+      this.connectionLines = new THREE.LineSegments(lineGeometry, connectionMaterial);
+      this.globeGroup.add(this.connectionLines);
+    }
+
+    calculateDistance(lat1, lng1, lat2, lng2) {
+      const R = 6371; // Earth's radius in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    setupEventListeners() {
+      const canvas = this.renderer.domElement;
+
+      // Mouse events
+      canvas.addEventListener('mousedown', (event) => {
+        this.isDragging = true;
+        this.previousMousePosition.x = event.clientX;
+        this.previousMousePosition.y = event.clientY;
+      });
+
+      canvas.addEventListener('mousemove', (event) => {
+        if (!this.isDragging) return;
+
+        const deltaX = event.clientX - this.previousMousePosition.x;
+        const deltaY = event.clientY - this.previousMousePosition.y;
+
+        this.rotationVelocity.y = deltaX * 0.002;
+        this.rotationVelocity.x = -deltaY * 0.002;
+
+        this.previousMousePosition.x = event.clientX;
+        this.previousMousePosition.y = event.clientY;
+      });
+
+      canvas.addEventListener('mouseup', () => {
+        this.isDragging = false;
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        this.isDragging = false;
+      });
+
+      // Touch events for mobile
+      canvas.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        if (event.touches.length === 1) {
+          this.isDragging = true;
+          this.previousMousePosition.x = event.touches[0].clientX;
+          this.previousMousePosition.y = event.touches[0].clientY;
+        }
+      }, { passive: false });
+
+      canvas.addEventListener('touchmove', (event) => {
+        event.preventDefault();
+        if (!this.isDragging || event.touches.length !== 1) return;
+
+        const deltaX = event.touches[0].clientX - this.previousMousePosition.x;
+        const deltaY = event.touches[0].clientY - this.previousMousePosition.y;
+
+        this.rotationVelocity.y = deltaX * 0.002;
+        this.rotationVelocity.x = -deltaY * 0.002;
+
+        this.previousMousePosition.x = event.touches[0].clientX;
+        this.previousMousePosition.y = event.touches[0].clientY;
+      }, { passive: false });
+
+      canvas.addEventListener('touchend', (event) => {
+        event.preventDefault();
+        this.isDragging = false;
+      }, { passive: false });
+
+      // Resize handler
+      window.addEventListener('resize', () => this.handleResize());
+    }
+
+    handleResize() {
+      this.width = this.container.clientWidth;
+      this.height = this.container.clientHeight;
+
+      this.camera.aspect = this.width / this.height;
+      this.camera.updateProjectionMatrix();
+
+      this.renderer.setSize(this.width, this.height);
+    }
+
+    animate() {
+      requestAnimationFrame(() => this.animate());
+
+      // Apply rotation
+      if (!this.isDragging) {
+        // Auto rotation when not dragging
+        this.currentRotation.y += this.autoRotation.y;
+        this.globeGroup.rotation.y = this.currentRotation.y;
+      } else {
+        // User interaction rotation
+        this.currentRotation.x += this.rotationVelocity.x;
+        this.currentRotation.y += this.rotationVelocity.y;
+
+        // Constrain x rotation
+        this.currentRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.currentRotation.x));
+
+        this.globeGroup.rotation.x = this.currentRotation.x;
+        this.globeGroup.rotation.y = this.currentRotation.y;
+      }
+
+      // No damping for frictionless feel - globe will continue spinning
+      // this.rotationVelocity.x *= 0.98;
+      // this.rotationVelocity.y *= 0.98;
+
+      // Animate city markers
+      const time = Date.now() * 0.002;
+      this.cityMarkers.forEach((marker, index) => {
+        const offset = index * 0.5;
+        const scale = 1 + Math.sin(time + offset) * 0.15;
+        marker.scale.setScalar(scale);
+      });
+
+      // Animate project markers with more prominent pulsing
+      if (this.projectMarkers) {
+        this.projectMarkers.forEach((marker, index) => {
+          const offset = index * 1.0;
+          const scale = 1 + Math.sin(time * 1.5 + offset) * 0.3;
+          marker.scale.setScalar(scale);
+        });
+      }
+
+      // Animate project labels
+      if (this.projectLabels) {
+        this.projectLabels.forEach((label, index) => {
+          const offset = index * 1.0;
+          const scale = 1 + Math.sin(time * 1.2 + offset) * 0.25;
+          label.scale.setScalar(scale);
+        });
+      }
+
+      // Animate connection lines opacity
+      if (this.connectionLines) {
+        this.connectionLines.material.opacity = 0.25 + Math.sin(time * 0.8) * 0.1;
+      }
+
+      this.renderer.render(this.scene, this.camera);
+    }
+
+    destroy() {
+      if (this.renderer) {
+        this.container.removeChild(this.renderer.domElement);
+        this.renderer.dispose();
+      }
+    }
+  }
+
+  // Initialize Interactive Globe
+  let interactiveGlobe = null;
+
+  function initInteractiveGlobe() {
+    const globeContainer = document.getElementById('interactive-globe');
+    if (globeContainer && !interactiveGlobe) {
+      interactiveGlobe = new InteractiveGlobe(globeContainer);
+    }
+  }
 
   // ========================================
   // Console Easter Egg

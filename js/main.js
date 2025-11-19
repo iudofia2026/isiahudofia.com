@@ -1015,7 +1015,7 @@
               
               // Only push if extremely close (within 80px)
               if (distance < pushRadius) {
-                const pushDistance = pushRadius + 10; // Push slightly beyond
+                const pushDistance = Math.min(pushRadius + 10, 120); // Push slightly beyond but cap at 120px to keep on screen
                 const scale = pushDistance / distance;
                 
                 // Animate to new position

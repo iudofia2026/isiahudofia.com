@@ -426,22 +426,23 @@ body.is-hero-inverted .hamburger-menu .hamburger-line {
 /* Hero background icon behind globe */
 .hero-background-icon {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%; /* Make smaller than globe */
+  height: 60%; /* Make smaller than globe */
+  z-index: 0; /* Behind the globe */
   pointer-events: none; /* Make it non-interactive */
   border-radius: 16px;
   overflow: hidden;
   opacity: 0;
-  transition: opacity 1.5s ease;
+  transition: opacity 0.2s ease;
 }
 
-/* Background icon fades in with globe */
+/* Background icon appears immediately when loading completes */
 body.page-loaded .hero-background-icon {
   opacity: 1;
-  transition-delay: 0.3s; /* Start fading in same time as globe */
+  transition-delay: 0s; /* No delay - appear immediately */
 }
 
 .hero-background-icon-img {
@@ -1119,7 +1120,7 @@ body.menu-open .hero-label {
   position: relative;
   border-radius: 16px;
   overflow: visible; /* Allow nodes to extend outside */
-  z-index: 2; /* Above background icon */
+  z-index: 1; /* Above background icon */
   transform: scale(0); /* Start small */
   transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }

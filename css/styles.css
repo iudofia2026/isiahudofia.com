@@ -70,7 +70,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: var(--color-white);
+  background-color: var(--color-navy);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -83,6 +83,8 @@
 .hero-icon-wrapper {
   opacity: 0;
 }
+
+/* Globe starts small and grows in during transition - moved to main globe styles */
 
 /* ========================================
    Simple Page Sections
@@ -167,13 +169,13 @@ body.page-loaded .hero-icon-wrapper {
 
 .loading-circle-bg {
   fill: none;
-  stroke: rgba(0, 31, 63, 0.08);
+  stroke: rgba(255, 255, 255, 0.1);
   stroke-width: 3;
 }
 
 .loading-circle-progress {
   fill: none;
-  stroke: var(--color-navy);
+  stroke: var(--color-white);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-dasharray: 565.48;
@@ -185,6 +187,7 @@ body.page-loaded .hero-icon-wrapper {
   height: 65%;
   position: relative;
   z-index: 2;
+  filter: brightness(0) invert(1); /* Make loading logo white */
 }
 
 /* ========================================
@@ -345,12 +348,6 @@ button:focus-visible {
 }
 
 .nav-logo-default {
-  opacity: 1;
-  position: relative;
-  transition: opacity 0.4s var(--ease-out-cubic);
-}
-
-.nav-logo-hover {
   opacity: 0;
   position: absolute;
   top: 0;
@@ -358,16 +355,102 @@ button:focus-visible {
   transition: opacity 0.4s var(--ease-out-cubic);
 }
 
+.nav-logo-hover {
+  opacity: 1;
+  position: relative;
+  transition: opacity 0.4s var(--ease-out-cubic);
+}
+
 .nav-brand:hover .nav-logo-default,
-.nav-logo-wrapper.synced-hover .nav-logo-default,
+.nav-logo-wrapper.synced-hover .nav-logo-default {
+  opacity: 1;
+}
+
+.nav-brand:hover .nav-logo-hover,
+.nav-logo-wrapper.synced-hover .nav-logo-hover {
+  opacity: 0;
+}
+
+/* Keep white logo (nav-logo-hover) visible when scrolled since we have navy background */
 .main-nav.scrolled .nav-logo-default {
   opacity: 0;
 }
 
-.nav-brand:hover .nav-logo-hover,
-.nav-logo-wrapper.synced-hover .nav-logo-hover,
 .main-nav.scrolled .nav-logo-hover {
   opacity: 1;
+}
+
+/* ========================================
+   TEMPORARY: Pause Color-Changing Hover Effects
+   Remove this section later to restore hover effects
+   ======================================== */
+
+/* Disable logo hover color changes */
+.nav-brand:hover .nav-logo-default,
+.nav-logo-wrapper.synced-hover .nav-logo-default {
+  opacity: 0 !important; /* Keep original state */
+}
+
+.nav-brand:hover .nav-logo-hover,
+.nav-logo-wrapper.synced-hover .nav-logo-hover {
+  opacity: 1 !important; /* Keep original state */
+}
+
+/* Disable hero section background color changes */
+.hero-section.hero-section--inverted {
+  background-color: var(--color-navy) !important; /* Keep navy background */
+  color: var(--color-white) !important; /* Keep white text */
+}
+
+/* Disable any theme inversion effects */
+body.is-hero-inverted .main-nav,
+body.is-hero-inverted .hamburger-menu,
+body.is-hero-inverted .hamburger-menu .hamburger-line {
+  /* Override inversion - maintain current white theme */
+  color: var(--color-white) !important;
+}
+
+/* Ensure hamburger menu is white by default (for navy background) */
+.hamburger-menu {
+  color: var(--color-white) !important;
+}
+
+.hamburger-line {
+  background: var(--color-white) !important;
+}
+
+/* ========================================
+   End of temporary hover pause section
+   ======================================== */
+
+/* Hero background icon behind globe */
+.hero-background-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none; /* Make it non-interactive */
+  border-radius: 16px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* Background icon fades in with globe */
+body.page-loaded .hero-background-icon {
+  opacity: 1;
+  transition-delay: 0.3s; /* Start fading in same time as globe */
+}
+
+.hero-background-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0) invert(1); /* Make the icon white */
+  opacity: 1.0; /* Full opacity */
+  border-radius: 16px;
 }
 
 .nav-brand:hover .nav-logo-wrapper img,
@@ -856,7 +939,8 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
   justify-content: center;
   padding: var(--spacing-2xl) var(--spacing-lg);
   overflow: hidden;
-  background-color: var(--color-white);
+  background-color: var(--color-navy);
+  color: var(--color-white);
   transition: background-color 0.45s var(--ease-out-cubic), color 0.45s var(--ease-out-cubic);
   transform-origin: center center;
   will-change: transform;
@@ -864,8 +948,8 @@ body.is-hero-inverted .hamburger-menu.active:focus-visible .hamburger-line {
 }
 
 .hero-section.hero-section--inverted {
-  background-color: var(--color-navy);
-  color: var(--color-white);
+  background-color: var(--color-white);
+  color: var(--color-navy);
 }
 
 .hero-section.hero-section--inverted .hero-label {
@@ -1025,6 +1109,39 @@ body.menu-open .hero-label {
 .hero-icon-wrapper:hover img,
 .hero-icon-wrapper.synced-hover img {
   transform: scale(1.02);
+}
+
+/* Interactive Globe Styles */
+.interactive-globe-container {
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%; /* Maintains aspect ratio */
+  position: relative;
+  border-radius: 16px;
+  overflow: visible; /* Allow nodes to extend outside */
+  z-index: 2; /* Above background icon */
+  transform: scale(0); /* Start small */
+  transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Globe grows to full size after loading - with slight delay for seamless transition */
+body.page-loaded .interactive-globe-container {
+  transform: scale(1);
+  transition-delay: 0.3s; /* Start growing 0.3s after page-loaded class is added */
+}
+
+.interactive-globe-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 16px;
+  cursor: grab;
+}
+
+.interactive-globe-container canvas:active {
+  cursor: grabbing;
 }
 
 
@@ -1448,6 +1565,15 @@ body.menu-open .hero-label {
   /* Optimize hero icon for mobile */
   .hero-icon-wrapper {
     width: clamp(180px, 35vw, 280px);
+    border-radius: 12px;
+  }
+
+  /* Optimize interactive globe for mobile performance */
+  .interactive-globe-container {
+    border-radius: 12px;
+  }
+
+  .interactive-globe-container canvas {
     border-radius: 12px;
   }
 

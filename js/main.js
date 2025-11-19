@@ -19,7 +19,7 @@
       this.isSmallMobile = window.innerWidth <= 480;
 
       // Adaptive particle count for performance - heavily increased for screen fill
-      this.pointCount = this.isSmallMobile ? 150 : (this.isMobile ? 250 : 500);
+      this.pointCount = this.isSmallMobile ? 300 : (this.isMobile ? 400 : 500);
       this.maxLinkDistance = this.isMobile ? 50 : 60;
       this.bounds = this.isMobile ? { x: 120, y: 100, z: 120 } : { x: 200, y: 120, z: 200 };
 
@@ -3038,7 +3038,7 @@
       this.container.appendChild(this.renderer.domElement);
 
       // Globe properties
-      this.globeRadius = 5; // Increased size
+      this.globeRadius = this.isMobile ? 7 : 5; // Larger on mobile for better visibility
       this.majorCities = this.getMajorCities();
       this.projectNodes = this.getProjectNodes();
 

@@ -996,13 +996,15 @@
           
           console.log('Building globe with', cityMarkers.length, 'cities and', projectMarkers.length, 'projects');
           
-          // Push background nodes away from globe area - only if extremely close
+          // Create Saturn ring effect - push nodes to orbit around globe
           if (window.heroNetwork) {
             const heroNetwork = window.heroNetwork;
-            const pushRadius = 80; // Only push nodes extremely close to globe center
             const positions = heroNetwork.positions;
+            const globeRadius = 90; // Globe inner boundary
+            const minOrbitRadius = 110; // Minimum orbit distance (just outside globe)
+            const maxOrbitRadius = 180; // Maximum orbit distance (keep on screen)
             
-            console.log('Pushing extremely close background nodes away from globe...');
+            console.log('Creating Saturn rings around globe...');
             
             for (let i = 0; i < heroNetwork.pointCount; i++) {
               const idx = i * 3;
@@ -1010,21 +1012,29 @@
               const y = positions[idx + 1];
               const z = positions[idx + 2];
               
-              // Calculate distance from center
-              const distance = Math.sqrt(x * x + y * y + z * z);
+              // Calculate distance from center (XY plane only for ring effect)
+              const xyDistance = Math.sqrt(x * x + y * y);
               
-              // Only push if extremely close (within 80px)
-              if (distance < pushRadius) {
-                const pushDistance = Math.min(pushRadius + 10, 120); // Push slightly beyond but cap at 120px to keep on screen
-                const scale = pushDistance / distance;
+              // If node is within globe area or behind it, push to orbit
+              if (xyDistance < minOrbitRadius || z < -50) {
+                // Place in random orbit ring
+                const targetRadius = minOrbitRadius + Math.random() * (maxOrbitRadius - minOrbitRadius);
+                
+                // Keep the angular position but adjust radius
+                const angle = Math.atan2(y, x);
+                const newX = targetRadius * Math.cos(angle);
+                const newY = targetRadius * Math.sin(angle);
+                
+                // Keep Z in front of globe (positive) with some variation
+                const newZ = Math.abs(z) < 50 ? 20 + Math.random() * 80 : Math.abs(z);
                 
                 // Animate to new position
                 gsap.to(positions, {
-                  duration: 0.6,
-                  ease: "back.out(2)",
-                  [idx]: x * scale,
-                  [idx + 1]: y * scale,
-                  [idx + 2]: z * scale,
+                  duration: 0.8,
+                  ease: "back.out(1.5)",
+                  [idx]: newX,
+                  [idx + 1]: newY,
+                  [idx + 2]: newZ,
                   onUpdate: () => {
                     heroNetwork.pointsGeometry.attributes.position.needsUpdate = true;
                   }

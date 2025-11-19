@@ -3038,7 +3038,7 @@
       this.container.appendChild(this.renderer.domElement);
 
       // Globe properties
-      this.globeRadius = this.isMobile ? 7 : 5; // Larger on mobile for better visibility
+      this.globeRadius = this.isMobile ? 4 : 5; // Smaller on mobile to fit in container
       this.majorCities = this.getMajorCities();
       this.projectNodes = this.getProjectNodes();
 

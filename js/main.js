@@ -3469,6 +3469,11 @@
       if (this.connectionLines) {
         this.connectionLines.material.opacity = 0.25 + Math.sin(time * 0.8) * 0.1;
       }
+      
+      // Sync background nodes Y-axis rotation ONLY when user is dragging
+      if (this.isDragging && window.heroNetwork && window.heroNetwork.scene) {
+        window.heroNetwork.scene.rotation.y = this.globeGroup.rotation.y;
+      }
 
       this.renderer.render(this.scene, this.camera);
     }

@@ -259,14 +259,14 @@
           // Create balanced density across all regions
           const randomValue = Math.random();
           
-          if (randomValue < 0.15) {
-            // 15% of nodes in close region - just outside globe
+          if (randomValue < 0.1) {
+            // 10% of nodes in close region - just outside globe
             radius = 110 + Math.random() * 15; // 110-125px
-          } else if (randomValue < 0.65) {
-            // 50% of nodes in mid region - where research/contact/etc are
+          } else if (randomValue < 0.8) {
+            // 70% of nodes in mid region - where research/contact/etc are
             radius = 125 + Math.random() * 20; // 125-145px
           } else {
-            // 35% of nodes in far region - still close enough to see
+            // 20% of nodes in far region - still close enough to see
             radius = 145 + Math.random() * 25; // 145-170px
           }
           

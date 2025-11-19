@@ -225,8 +225,8 @@
       const radiusVariation = 80; // Variation in radius (increased)
       const numLayers = 4; // Number of concentric layers
       
-      // Special radius for tracked labels (closer to center)
-      const labelRadius = 60; // Fixed radius for contact, research, projects
+      // Special radius for tracked labels - very close on fixed plane
+      const labelRadius = 70; // Fixed radius for contact, research, projects (very close)
       const trackedLabelIndices = [8, 21, 55]; // Indices for tracked labels
       
       // Pre-calculate evenly spaced positions for tracked labels
@@ -260,14 +260,14 @@
           const randomValue = Math.random();
           
           if (randomValue < 0.2) {
-            // 20% of nodes in close region - adjusted to avoid globe space
-            radius = 100 + Math.random() * 40; // Minimum 100px to stay outside globe area
+            // 20% of nodes in close region - just outside globe
+            radius = 110 + Math.random() * 15; // 110-125px
           } else if (randomValue < 0.5) {
-            // 30% of nodes in mid region
-            radius = 140 + Math.random() * 40;
+            // 30% of nodes in mid region - very close
+            radius = 125 + Math.random() * 20; // 125-145px
           } else {
-            // 50% of nodes in far region
-            radius = 180 + Math.random() * 60;
+            // 50% of nodes in far region - still close enough to see
+            radius = 145 + Math.random() * 25; // 145-170px
           }
           
           // Generate random spherical coordinates
@@ -972,11 +972,18 @@
         }
       });
 
-      // Hide loading circle and show globe building
-      tl.to(loadingCircle, { opacity: 0, duration: 0.4, ease: "power2.out" })
-        // Fade out loading logo to make globe more visible
-        .to(loadingLogo, { opacity: 0.3, duration: 0.3, ease: "power2.out" }, "-=0.2")
-        // Make globe canvas visible and animate globe build
+      // Keep loading circle visible and morph it into the globe
+      tl.add(() => {
+          // Start fading out the loading circle fill, keep stroke
+          gsap.to(loadingCircleProgress, { 
+            opacity: 0.3, 
+            duration: 0.5, 
+            ease: "power2.out" 
+          });
+        })
+        // Fade out loading logo to see globe clearly
+        .to(loadingLogo, { opacity: 0, duration: 0.4, ease: "power2.out" }, "-=0.3")
+        // Transform circle into globe position and start building
         .add(() => {
           console.log('Starting dramatic globe buildout...');
           
@@ -989,19 +996,82 @@
           
           console.log('Building globe with', cityMarkers.length, 'cities and', projectMarkers.length, 'projects');
           
+          // Push background nodes away from globe area (137.5px radius on screen)
+          if (window.heroNetwork) {
+            const heroNetwork = window.heroNetwork;
+            const pushRadius = 140; // Slightly larger than canvas radius (275px / 2)
+            const positions = heroNetwork.positions;
+            
+            console.log('Pushing background nodes away from globe...');
+            
+            for (let i = 0; i < heroNetwork.pointCount; i++) {
+              const idx = i * 3;
+              const x = positions[idx];
+              const y = positions[idx + 1];
+              const z = positions[idx + 2];
+              
+              // Calculate distance from center
+              const distance = Math.sqrt(x * x + y * y + z * z);
+              
+              // If node is within push radius, push it out
+              if (distance < pushRadius) {
+                const pushDistance = pushRadius + 10; // Push slightly beyond
+                const scale = pushDistance / distance;
+                
+                // Animate to new position
+                gsap.to(positions, {
+                  duration: 0.6,
+                  ease: "back.out(2)",
+                  [idx]: x * scale,
+                  [idx + 1]: y * scale,
+                  [idx + 2]: z * scale,
+                  onUpdate: () => {
+                    heroNetwork.pointsGeometry.attributes.position.needsUpdate = true;
+                  }
+                });
+              }
+            }
+          }
+          
           // Start globe sphere invisible
           if (globeMesh && globeMesh.material) {
             globeMesh.material.opacity = 0;
           }
           
-          // Fade in globe sphere first
+          // Fade in globe sphere first - make it more visible
           if (globeMesh && globeMesh.material) {
             gsap.to(globeMesh.material, {
-              opacity: 0.03,
-              duration: 0.8,
+              opacity: 0.08,
+              duration: 1.0,
               ease: "power2.out"
             });
           }
+          
+          // Move loading circle to homepage hero (remove from loading screen)
+          const heroRect = heroIconWrapper.getBoundingClientRect();
+          
+          // Clone the circle and move it to hero section
+          const circleClone = loadingLogoContainer.cloneNode(true);
+          circleClone.style.cssText = `
+            position: fixed;
+            left: ${heroRect.left + (heroRect.width / 2)}px;
+            top: ${heroRect.top + (heroRect.height / 2)}px;
+            transform: translate(-50%, -50%);
+            width: ${heroRect.width}px;
+            height: ${heroRect.height}px;
+            z-index: 2;
+            pointer-events: none;
+          `;
+          
+          // Add to hero section
+          document.body.appendChild(circleClone);
+          
+          // Store for later animation
+          window.heroCircle = circleClone;
+          window.heroCircleProgress = circleClone.querySelector('.loading-circle-progress');
+          
+          // Hide original circle
+          loadingLogoContainer.style.opacity = '0';
           
           // Hide all nodes initially
           cityMarkers.forEach(marker => {
@@ -1108,28 +1178,58 @@
             }
           });
         })
-        // Wait for full build to complete
-        .to({}, { duration: 3.5 })
-        // Trigger page loaded state
+        // Wait longer for full globe build to be visible
+        .to({}, { duration: 4.5 })
+        // Start subtle loading screen fade while globe is still visible
+        .to(loadingScreen, {
+          backgroundColor: "rgba(0, 31, 63, 0)",
+          duration: 1.2,
+          ease: "power1.out"
+        })
+        // Trigger page loaded state during fade
         .add(() => {
           console.log('Globe build complete, transitioning to homepage');
           document.body.classList.add('page-loaded');
-        })
-        // Fade out loading screen background
+        }, "-=0.8")
+        // Very subtle opacity fade - almost imperceptible
         .to(loadingScreen, {
-          backgroundColor: "rgba(0, 31, 63, 0)",
+          opacity: 0,
           duration: 0.8,
-          ease: "power2.out"
-        }, "+=0.3")
-        // Finally hide loading screen completely
-        .to(loadingScreen, {
+          ease: "power1.inOut",
+          onComplete: () => {
+            loadingScreen.style.display = 'none';
+          }
+        }, "-=0.4")
+        // Animate hero circle reverse - full white to nothing (clockwise unravel)
+        .add(() => {
+          const heroCircleProgress = window.heroCircleProgress;
+          if (!heroCircleProgress) return;
+          
+          // Make circle fully opaque white
+          gsap.to(heroCircleProgress, {
+            opacity: 1,
+            strokeDashoffset: 0, // Full circle
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        }, "-=1.5")
+        // Unravel clockwise (increase strokeDashoffset in opposite direction)
+        .to(window.heroCircleProgress, {
+          strokeDashoffset: -565.48, // Negative for clockwise
+          duration: 2.0,
+          ease: "power2.inOut"
+        }, "+=0.5")
+        // Fade out the circle container after unravel
+        .to(window.heroCircle, {
           opacity: 0,
           duration: 0.4,
           ease: "power2.out",
           onComplete: () => {
-            loadingScreen.style.display = 'none';
+            if (window.heroCircle) {
+              window.heroCircle.remove();
+            }
           }
-        });
+        }, "-=0.3");
     };
 
     if (circleAnimation) {

@@ -18,8 +18,8 @@
       this.isMobile = window.innerWidth <= 768;
       this.isSmallMobile = window.innerWidth <= 480;
 
-      // Adaptive particle count for performance - increased for more visibility
-      this.pointCount = this.isSmallMobile ? 80 : (this.isMobile ? 120 : 250);
+      // Adaptive particle count for performance - heavily increased for screen fill
+      this.pointCount = this.isSmallMobile ? 150 : (this.isMobile ? 250 : 500);
       this.maxLinkDistance = this.isMobile ? 50 : 60;
       this.bounds = this.isMobile ? { x: 120, y: 100, z: 120 } : { x: 200, y: 120, z: 200 };
 

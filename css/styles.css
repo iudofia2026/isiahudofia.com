@@ -153,11 +153,18 @@ body.page-loaded .hero-icon-wrapper {
 
 .loading-logo-container {
   position: relative;
-  width: clamp(200px, 30vw, 400px);
-  height: clamp(200px, 30vw, 400px);
+  width: clamp(250px, 45vw, 500px); /* Match hero icon size */
+  height: clamp(250px, 45vw, 500px);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .loading-logo-container {
+    width: clamp(300px, 60vw, 400px); /* Match hero icon mobile size */
+    height: clamp(300px, 60vw, 400px);
+  }
 }
 
 .loading-circle {

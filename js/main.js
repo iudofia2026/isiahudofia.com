@@ -846,11 +846,17 @@
         }
 
         if (heroIconWrapper && loadingLogo) {
+          // Calculate position to stay in center of hero area
           const loadingLogoRect = loadingLogo.getBoundingClientRect();
           const heroRect = heroIconWrapper.getBoundingClientRect();
+
+          // Keep logo centered in hero area without going off screen
           const deltaX = heroRect.left + (heroRect.width / 2) - (loadingLogoRect.left + (loadingLogoRect.width / 2));
           const deltaY = heroRect.top + (heroRect.height / 2) - (loadingLogoRect.top + (loadingLogoRect.height / 2));
-          const scaleRatio = heroRect.width / loadingLogoRect.width;
+
+          // Ensure scaling doesn't cause overflow - limit to reasonable bounds
+          const targetWidth = heroRect.width * 0.6; // Background icon size
+          const scaleRatio = Math.min(targetWidth / loadingLogoRect.width, 2); // Cap scale to prevent huge sizes
 
           tl.to(loadingLogo, {
             x: deltaX,
@@ -859,18 +865,19 @@
             duration: 0.9,
             ease: "power3.inOut"
           })
-          .to(loadingScreen, {
-            backgroundColor: "rgba(0, 31, 63, 0)", // Navy transparent instead of white
-            duration: 0.6,
-            ease: "power2.out",
-            delay: 0.8 // Wait for globe to appear before fading
-          }, "-=0.2")
           .add(() => {
-            document.body.classList.add('page-loaded'); // Trigger globe growth immediately
+            document.body.classList.add('page-loaded'); // Trigger background icon and globe growth
             if (window.heroNetwork && typeof window.heroNetwork.triggerRipple === 'function') {
               window.heroNetwork.triggerRipple(0, 0, 12);
             }
-          }, "-=0.4");
+          }, 0) // Trigger at the end of logo transition
+          .to(loadingScreen, {
+            backgroundColor: "rgba(0, 31, 63, 0)", // Navy transparent
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            delay: 0.2 // Brief pause to ensure background icon is visible
+          });
         } else {
           tl.to(loadingScreen, {
             backgroundColor: "rgba(0, 31, 63, 0)", // Navy transparent

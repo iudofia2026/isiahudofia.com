@@ -996,13 +996,13 @@
           
           console.log('Building globe with', cityMarkers.length, 'cities and', projectMarkers.length, 'projects');
           
-          // Push background nodes away from globe area - only if super close
+          // Push background nodes away from globe area - only if extremely close
           if (window.heroNetwork) {
             const heroNetwork = window.heroNetwork;
-            const pushRadius = 100; // Only push nodes very close to globe center
+            const pushRadius = 80; // Only push nodes extremely close to globe center
             const positions = heroNetwork.positions;
             
-            console.log('Pushing super close background nodes away from globe...');
+            console.log('Pushing extremely close background nodes away from globe...');
             
             for (let i = 0; i < heroNetwork.pointCount; i++) {
               const idx = i * 3;
@@ -1013,9 +1013,9 @@
               // Calculate distance from center
               const distance = Math.sqrt(x * x + y * y + z * z);
               
-              // Only push if super close (within 100px)
+              // Only push if extremely close (within 80px)
               if (distance < pushRadius) {
-                const pushDistance = pushRadius + 15; // Push slightly beyond
+                const pushDistance = pushRadius + 10; // Push slightly beyond
                 const scale = pushDistance / distance;
                 
                 // Animate to new position

@@ -801,20 +801,53 @@
   const loadingLogoContainer = document.querySelector('.loading-logo-container');
   const loadingCircle = document.querySelector('.loading-circle');
 
-  const circleAnimation = window.gsap && loadingCircleProgress
-    ? gsap.to(loadingCircleProgress, {
-        strokeDashoffset: 0,
-        duration: 2.5,
-        ease: "power2.inOut",
-        paused: true
-      })
-    : null;
+  // Initialize circle animation with proper starting state
+  let circleAnimation = null;
+  
+  function initCircleAnimation() {
+    if (!window.gsap) {
+      console.log('GSAP not loaded yet');
+      return false;
+    }
+    if (!loadingCircleProgress) {
+      console.log('loadingCircleProgress not found');
+      return false;
+    }
+    
+    console.log('Initializing circle animation...');
+    // Set initial state - circle should be "empty" (fully offset)
+    gsap.set(loadingCircleProgress, { strokeDashoffset: 565.48 });
+    
+    // Create animation to fill the circle
+    circleAnimation = gsap.to(loadingCircleProgress, {
+      strokeDashoffset: 0,
+      duration: 2.5,
+      ease: "power2.inOut",
+      paused: true
+    });
+    console.log('Circle animation created:', circleAnimation);
+    return true;
+  }
+  
+  // Try to initialize immediately
+  if (!initCircleAnimation()) {
+    // If failed, wait for GSAP to load
+    console.log('Waiting for GSAP...');
+    const checkGsap = setInterval(() => {
+      if (initCircleAnimation()) {
+        clearInterval(checkGsap);
+      }
+    }, 100);
+  }
 
   // Function to complete loading screen transition
   let transitionCompleted = false;
   function completeLoadingTransition() {
     if (transitionCompleted) return;
     transitionCompleted = true;
+    
+    console.log('completeLoadingTransition called');
+    console.log('circleAnimation exists:', !!circleAnimation);
 
     // Initialize Three.js hero background before transition
     try {
@@ -898,24 +931,217 @@
       }
     };
 
-    const fadeCircleThenStart = () => {
-      if (window.gsap && loadingCircle) {
-        gsap.to(loadingCircle, {
-          opacity: 0,
-          duration: 0.3,
-          ease: "power2.out",
-          onComplete: startMainTransition
-        });
-      } else {
+    const startNodesTransition = () => {
+      if (!window.gsap || !window.interactiveGlobe) {
         startMainTransition();
+        return;
       }
+
+      console.log('Starting globe build transition...');
+      
+      // Move the globe to loading screen temporarily
+      const globeContainer = document.querySelector('#interactive-globe');
+      const loadingContent = document.querySelector('.loading-content');
+      
+      if (!globeContainer || !loadingContent) {
+        console.warn('Globe container or loading content not found');
+        startMainTransition();
+        return;
+      }
+      
+      // Get the hero position for proper placement
+      const heroRect = heroIconWrapper.getBoundingClientRect();
+      
+      // Position globe container on loading screen at hero position
+      globeContainer.style.cssText = `
+        position: fixed;
+        left: ${heroRect.left}px;
+        top: ${heroRect.top}px;
+        width: ${heroRect.width}px;
+        height: ${heroRect.height}px;
+        z-index: 10001;
+        pointer-events: none;
+      `;
+      loadingScreen.appendChild(globeContainer);
+      
+      // Animate the transition
+      const tl = gsap.timeline({
+        onComplete: () => {
+          console.log('Globe build complete, starting main transition');
+          startMainTransition();
+        }
+      });
+
+      // Hide loading circle and show globe building
+      tl.to(loadingCircle, { opacity: 0, duration: 0.4, ease: "power2.out" })
+        // Fade out loading logo to make globe more visible
+        .to(loadingLogo, { opacity: 0.3, duration: 0.3, ease: "power2.out" }, "-=0.2")
+        // Make globe canvas visible and animate globe build
+        .add(() => {
+          console.log('Starting dramatic globe buildout...');
+          
+          const globe = window.interactiveGlobe;
+          const cityMarkers = globe.cityMarkers || [];
+          const projectMarkers = globe.projectMarkers || [];
+          const projectLabels = globe.projectLabels || [];
+          const connectionLines = globe.connectionLines ? [globe.connectionLines] : [];
+          const globeMesh = globe.globeMesh;
+          
+          console.log('Building globe with', cityMarkers.length, 'cities and', projectMarkers.length, 'projects');
+          
+          // Start globe sphere invisible
+          if (globeMesh && globeMesh.material) {
+            globeMesh.material.opacity = 0;
+          }
+          
+          // Fade in globe sphere first
+          if (globeMesh && globeMesh.material) {
+            gsap.to(globeMesh.material, {
+              opacity: 0.03,
+              duration: 0.8,
+              ease: "power2.out"
+            });
+          }
+          
+          // Hide all nodes initially
+          cityMarkers.forEach(marker => {
+            if (marker.material) {
+              marker.material.opacity = 0;
+              marker.scale.set(0, 0, 0);
+            }
+          });
+          
+          projectMarkers.forEach(marker => {
+            if (marker.material) {
+              marker.material.opacity = 0;
+              marker.scale.set(0, 0, 0);
+            }
+          });
+          
+          projectLabels.forEach(label => {
+            if (label.material) {
+              label.material.opacity = 0;
+              label.scale.set(0, 0, 0);
+            }
+          });
+          
+          connectionLines.forEach(line => {
+            if (line && line.material) {
+              line.material.opacity = 0;
+            }
+          });
+          
+          // Animate city markers with pronounced popout effect
+          cityMarkers.forEach((marker, i) => {
+            if (marker.material) {
+              const delay = 0.4 + (i * 0.08); // Sequential with spacing
+              
+              gsap.to(marker.scale, {
+                x: 1, y: 1, z: 1,
+                duration: 0.6,
+                delay: delay,
+                ease: "back.out(3)"
+              });
+              
+              gsap.to(marker.material, {
+                opacity: 1,
+                duration: 0.4,
+                delay: delay,
+                ease: "power2.out"
+              });
+            }
+          });
+          
+          // Animate project markers after cities
+          const projectDelay = 0.4 + (cityMarkers.length * 0.08);
+          projectMarkers.forEach((marker, i) => {
+            if (marker.material) {
+              const delay = projectDelay + (i * 0.1);
+              
+              gsap.to(marker.scale, {
+                x: 1, y: 1, z: 1,
+                duration: 0.7,
+                delay: delay,
+                ease: "back.out(3)"
+              });
+              
+              gsap.to(marker.material, {
+                opacity: 0.9,
+                duration: 0.4,
+                delay: delay,
+                ease: "power2.out"
+              });
+            }
+          });
+          
+          // Animate project labels with markers
+          projectLabels.forEach((label, i) => {
+            if (label.material) {
+              const delay = projectDelay + (i * 0.1);
+              
+              gsap.to(label.scale, {
+                x: 1, y: 1, z: 1,
+                duration: 0.7,
+                delay: delay,
+                ease: "back.out(3)"
+              });
+              
+              gsap.to(label.material, {
+                opacity: 0.9,
+                duration: 0.4,
+                delay: delay,
+                ease: "power2.out"
+              });
+            }
+          });
+          
+          // Connection lines appear last
+          const linesDelay = projectDelay + (projectMarkers.length * 0.1);
+          connectionLines.forEach(line => {
+            if (line && line.material) {
+              gsap.to(line.material, {
+                opacity: 0.15,
+                duration: 1.0,
+                delay: linesDelay,
+                ease: "power2.out"
+              });
+            }
+          });
+        })
+        // Wait for full build to complete
+        .to({}, { duration: 3.5 })
+        // Trigger page loaded state
+        .add(() => {
+          console.log('Globe build complete, transitioning to homepage');
+          document.body.classList.add('page-loaded');
+        })
+        // Fade out loading screen background
+        .to(loadingScreen, {
+          backgroundColor: "rgba(0, 31, 63, 0)",
+          duration: 0.8,
+          ease: "power2.out"
+        }, "+=0.3")
+        // Finally hide loading screen completely
+        .to(loadingScreen, {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          onComplete: () => {
+            loadingScreen.style.display = 'none';
+          }
+        });
     };
 
     if (circleAnimation) {
-      circleAnimation.eventCallback('onComplete', fadeCircleThenStart);
+      console.log('Playing circle animation...');
+      circleAnimation.eventCallback('onComplete', () => {
+        console.log('Circle animation complete');
+        startNodesTransition();
+      });
       circleAnimation.play();
     } else {
-      fadeCircleThenStart();
+      console.log('No circle animation, starting nodes transition immediately');
+      startNodesTransition();
     }
   }
 

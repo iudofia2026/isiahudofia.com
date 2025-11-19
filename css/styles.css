@@ -79,9 +79,9 @@
   visibility: visible;
 }
 
-/* Hide hero logo until loading completes */
+/* Hero icon visible during loading (behind loading screen) */
 .hero-icon-wrapper {
-  opacity: 0;
+  opacity: 1;
 }
 
 /* Globe starts small and grows in during transition - moved to main globe styles */
@@ -1121,14 +1121,7 @@ body.menu-open .hero-label {
   border-radius: 16px;
   overflow: visible; /* Allow nodes to extend outside */
   z-index: 1; /* Above background icon */
-  transform: scale(0); /* Start small */
-  transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* Globe grows to full size after loading - with slight delay for seamless transition */
-body.page-loaded .interactive-globe-container {
-  transform: scale(1);
-  transition-delay: 0.3s; /* Start growing 0.3s after page-loaded class is added */
+  transform: scale(1); /* Full size always - no animation */
 }
 
 .interactive-globe-container canvas {

@@ -996,13 +996,13 @@
           
           console.log('Building globe with', cityMarkers.length, 'cities and', projectMarkers.length, 'projects');
           
-          // Create Saturn ring effect - only push nodes actually colliding with globe
+          // Minimal push - only nodes incredibly close to globe get tiny spacing
           if (window.heroNetwork) {
             const heroNetwork = window.heroNetwork;
             const positions = heroNetwork.positions;
-            const globeRadius = 70; // Actual globe collision boundary (smaller)
+            const globeRadius = 60; // Very tight collision boundary
             
-            console.log('Pushing only colliding nodes away from globe...');
+            console.log('Creating minimal spacing for very close nodes...');
             
             for (let i = 0; i < heroNetwork.pointCount; i++) {
               const idx = i * 3;
@@ -1013,19 +1013,19 @@
               // Calculate actual 3D distance from center
               const distance = Math.sqrt(x * x + y * y + z * z);
               
-              // Only push if actually colliding with globe OR behind it
-              if (distance < globeRadius || z < -30) {
-                // Push to just outside globe, maintaining direction
-                const targetDistance = globeRadius + 20; // Just outside globe
+              // Only push if incredibly close (within 60px) OR behind globe
+              if (distance < globeRadius || z < -20) {
+                // Push to just outside with tiny spacing
+                const targetDistance = globeRadius + 15; // Minimal spacing
                 const scale = targetDistance / (distance || 1);
                 
                 let newX = x * scale;
                 let newY = y * scale;
                 let newZ = z * scale;
                 
-                // If behind globe, flip to front
+                // If behind globe, flip to front with minimal adjustment
                 if (newZ < 0) {
-                  newZ = Math.abs(newZ) + 30;
+                  newZ = Math.abs(newZ) + 20;
                 }
                 
                 // Animate to new position

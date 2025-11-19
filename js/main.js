@@ -441,26 +441,13 @@
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
           if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
-            // Check if connection passes beneath the globe (avoid lines under the globe)
-            const point1Y = this.positions[ix + 1];
-            const point2Y = this.positions[jx + 1];
-            const globeCenter = 0; // Globe is at center
-            const globeRadius = 100; // Approximate globe exclusion zone
-
-            // Skip connections where both points are beneath the globe center
-            // or where the line would pass through the lower hemisphere
-            const bothBelowGlobe = point1Y < globeCenter - globeRadius * 0.3 &&
-                                  point2Y < globeCenter - globeRadius * 0.3;
-
-            if (!bothBelowGlobe) {
-              linePositions[ptr] = this.positions[ix];
-              linePositions[ptr + 1] = this.positions[ix + 1];
-              linePositions[ptr + 2] = this.positions[ix + 2];
-              linePositions[ptr + 3] = this.positions[jx];
-              linePositions[ptr + 4] = this.positions[jx + 1];
-              linePositions[ptr + 5] = this.positions[jx + 2];
-              ptr += 6;
-            }
+            linePositions[ptr] = this.positions[ix];
+            linePositions[ptr + 1] = this.positions[ix + 1];
+            linePositions[ptr + 2] = this.positions[ix + 2];
+            linePositions[ptr + 3] = this.positions[jx];
+            linePositions[ptr + 4] = this.positions[jx + 1];
+            linePositions[ptr + 5] = this.positions[jx + 2];
+            ptr += 6;
           }
         }
       }
@@ -2138,26 +2125,13 @@
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
           if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
-            // Check if connection passes beneath the globe (avoid lines under the globe)
-            const point1Y = this.positions[ix + 1];
-            const point2Y = this.positions[jx + 1];
-            const globeCenter = 0; // Globe is at center
-            const globeRadius = 100; // Approximate globe exclusion zone
-
-            // Skip connections where both points are beneath the globe center
-            // or where the line would pass through the lower hemisphere
-            const bothBelowGlobe = point1Y < globeCenter - globeRadius * 0.3 &&
-                                  point2Y < globeCenter - globeRadius * 0.3;
-
-            if (!bothBelowGlobe) {
-              linePositions[ptr] = this.positions[ix];
-              linePositions[ptr + 1] = this.positions[ix + 1];
-              linePositions[ptr + 2] = this.positions[ix + 2];
-              linePositions[ptr + 3] = this.positions[jx];
-              linePositions[ptr + 4] = this.positions[jx + 1];
-              linePositions[ptr + 5] = this.positions[jx + 2];
-              ptr += 6;
-            }
+            linePositions[ptr] = this.positions[ix];
+            linePositions[ptr + 1] = this.positions[ix + 1];
+            linePositions[ptr + 2] = this.positions[ix + 2];
+            linePositions[ptr + 3] = this.positions[jx];
+            linePositions[ptr + 4] = this.positions[jx + 1];
+            linePositions[ptr + 5] = this.positions[jx + 2];
+            ptr += 6;
           }
         }
       }
@@ -2560,26 +2534,13 @@
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
           if (distance <= this.maxLinkDistance && ptr + 6 <= linePositions.length) {
-            // Check if connection passes beneath the globe (avoid lines under the globe)
-            const point1Y = this.positions[ix + 1];
-            const point2Y = this.positions[jx + 1];
-            const globeCenter = 0; // Globe is at center
-            const globeRadius = 100; // Approximate globe exclusion zone
-
-            // Skip connections where both points are beneath the globe center
-            // or where the line would pass through the lower hemisphere
-            const bothBelowGlobe = point1Y < globeCenter - globeRadius * 0.3 &&
-                                  point2Y < globeCenter - globeRadius * 0.3;
-
-            if (!bothBelowGlobe) {
-              linePositions[ptr] = this.positions[ix];
-              linePositions[ptr + 1] = this.positions[ix + 1];
-              linePositions[ptr + 2] = this.positions[ix + 2];
-              linePositions[ptr + 3] = this.positions[jx];
-              linePositions[ptr + 4] = this.positions[jx + 1];
-              linePositions[ptr + 5] = this.positions[jx + 2];
-              ptr += 6;
-            }
+            linePositions[ptr] = this.positions[ix];
+            linePositions[ptr + 1] = this.positions[ix + 1];
+            linePositions[ptr + 2] = this.positions[ix + 2];
+            linePositions[ptr + 3] = this.positions[jx];
+            linePositions[ptr + 4] = this.positions[jx + 1];
+            linePositions[ptr + 5] = this.positions[jx + 2];
+            ptr += 6;
           }
         }
       }

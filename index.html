@@ -92,23 +92,28 @@
     <script>
       function updateCountdown() {
         const now = new Date();
-        const currentYear = now.getFullYear();
-
-        // Thanksgiving is the 4th Thursday of November
-        // Find the first Thursday of November, then add 21 days (3 weeks)
-        const november1 = new Date(currentYear, 10, 1); // Month 10 = November
-        const firstThursday = new Date(currentYear, 10, 1 + (4 - november1.getDay() + 7) % 7);
-        const thanksgiving = new Date(firstThursday.getTime() + (21 * 24 * 60 * 60 * 1000));
-
-        // If Thanksgiving has passed this year, target next year
-        if (now > thanksgiving) {
-          const nextYear = currentYear + 1;
-          const november1NextYear = new Date(nextYear, 10, 1);
-          const firstThursdayNextYear = new Date(nextYear, 10, 1 + (4 - november1NextYear.getDay() + 7) % 7);
-          thanksgiving.setTime(firstThursdayNextYear.getTime() + (21 * 24 * 60 * 60 * 1000));
+        
+        // Calculate next Monday
+        // Monday is day 1 (0 = Sunday, 1 = Monday, etc.)
+        const dayOfWeek = now.getDay();
+        let daysUntilMonday;
+        
+        if (dayOfWeek === 0) {
+          // If Sunday, next Monday is 1 day away
+          daysUntilMonday = 1;
+        } else if (dayOfWeek === 1) {
+          // If Monday, target next Monday (7 days away)
+          daysUntilMonday = 7;
+        } else {
+          // Otherwise, calculate days until next Monday
+          daysUntilMonday = 8 - dayOfWeek;
         }
+        
+        const nextMonday = new Date(now);
+        nextMonday.setDate(now.getDate() + daysUntilMonday);
+        nextMonday.setHours(0, 0, 0, 0); // Set to midnight
 
-        const timeDiff = thanksgiving - now;
+        const timeDiff = nextMonday - now;
 
         if (timeDiff > 0) {
           const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
@@ -129,7 +134,7 @@
           } else {
             countdownText += `in ${minutes} minute${minutes !== 1 ? 's' : ''}`;
           }
-          countdownText += " (Thanksgiving Day)!";
+          countdownText += " (Monday)!";
 
           document.getElementById('countdown-message').textContent = countdownText;
         } else {

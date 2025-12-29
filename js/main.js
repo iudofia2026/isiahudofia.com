@@ -226,18 +226,21 @@
       const numLayers = 4; // Number of concentric layers
       
       // Special radius for tracked labels - very close on fixed plane
-      const labelRadius = 70; // Fixed radius for contact, research, projects (very close)
+      this.labelRadius = 70; // Fixed radius for contact, research, projects (very close)
       const trackedLabelIndices = [8, 21, 55]; // Indices for tracked labels
       
-      // Pre-calculate evenly spaced positions for tracked labels
-      const labelPositions = [];
+      // Pre-calculate evenly spaced positions for tracked labels (relative to center, not absolute)
+      this.labelPositions = [];
       for (let i = 0; i < trackedLabelIndices.length; i++) {
         const angle = (i / trackedLabelIndices.length) * Math.PI * 2; // Evenly spaced around circle
         const phi = Math.PI / 2; // Keep them at same height level
-        labelPositions.push({
-          x: labelRadius * Math.sin(phi) * Math.cos(angle),
-          y: labelRadius * Math.sin(phi) * Math.sin(angle),
-          z: labelRadius * Math.cos(phi)
+        this.labelPositions.push({
+          index: trackedLabelIndices[i],
+          angle: angle,
+          phi: phi,
+          x: this.labelRadius * Math.sin(phi) * Math.cos(angle), // Relative to center
+          y: this.labelRadius * Math.sin(phi) * Math.sin(angle), // Relative to center
+          z: this.labelRadius * Math.cos(phi) // Relative to center
         });
       }
       
@@ -247,13 +250,12 @@
         let x, y, z;
         
         // Check if this is a tracked label node
-        if (trackedLabelIndices.includes(i)) {
-          // Use pre-calculated evenly spaced position
-          const labelIndex = trackedLabelIndices.indexOf(i);
-          const pos = labelPositions[labelIndex];
-          x = pos.x;
-          y = pos.y;
-          z = pos.z;
+        const labelPos = this.labelPositions.find(lp => lp.index === i);
+        if (labelPos) {
+          // Use pre-calculated evenly spaced position (relative to centerPoint)
+          x = labelPos.x + this.centerPoint.x;
+          y = labelPos.y + this.centerPoint.y;
+          z = labelPos.z + this.centerPoint.z;
         } else {
           let radius;
           // Create balanced density across all regions
@@ -320,6 +322,47 @@
 
       for (let i = 0; i < this.pointCount; i += 1) {
         const idx = i * 3;
+        
+        // Check if this is a tracked label node - lock it to fixed radius
+        const labelPos = this.labelPositions.find(lp => lp.index === i);
+        if (labelPos) {
+          // Lock labeled nodes to their fixed radius position
+          // Apply rotation to maintain position on circle
+          if (this.rotationSpeed) {
+            const rotationAngle = this.rotationSpeed * cappedDelta;
+            if (rotationAngle !== 0) {
+              // Update the angle for this label
+              labelPos.angle += rotationAngle;
+              
+              // Recalculate position from fixed radius and updated angle
+              this.positions[idx] = this.labelRadius * Math.sin(labelPos.phi) * Math.cos(labelPos.angle) + this.centerPoint.x;
+              this.positions[idx + 1] = this.labelRadius * Math.sin(labelPos.phi) * Math.sin(labelPos.angle) + this.centerPoint.y;
+              this.positions[idx + 2] = this.labelRadius * Math.cos(labelPos.phi) + this.centerPoint.z;
+            } else {
+              // No rotation, maintain exact fixed position
+              this.positions[idx] = labelPos.x + this.centerPoint.x;
+              this.positions[idx + 1] = labelPos.y + this.centerPoint.y;
+              this.positions[idx + 2] = labelPos.z + this.centerPoint.z;
+            }
+            
+            // Zero out velocities for labeled nodes
+            this.velocities[idx] = 0;
+            this.velocities[idx + 1] = 0;
+            this.velocities[idx + 2] = 0;
+            continue; // Skip all other physics for labeled nodes
+          } else {
+            // No rotation, maintain exact fixed position
+            this.positions[idx] = labelPos.x + this.centerPoint.x;
+            this.positions[idx + 1] = labelPos.y + this.centerPoint.y;
+            this.positions[idx + 2] = labelPos.z + this.centerPoint.z;
+            
+            // Zero out velocities for labeled nodes
+            this.velocities[idx] = 0;
+            this.velocities[idx + 1] = 0;
+            this.velocities[idx + 2] = 0;
+            continue; // Skip all other physics for labeled nodes
+          }
+        }
 
         // Calculate distance from center point
         const dx = this.positions[idx] - this.centerPoint.x;
@@ -1255,7 +1298,15 @@
     }
   }
 
-  window.addEventListener('load', completeLoadingTransition);
+  window.addEventListener('load', () => {
+    completeLoadingTransition();
+    // Initialize text roll after loading transition
+    setTimeout(() => {
+      if (window.initTextRoll) {
+        window.initTextRoll();
+      }
+    }, 1000);
+  });
 
   // Failsafe: Force loading screen to complete after 5 seconds maximum
   setTimeout(() => {
@@ -1264,6 +1315,28 @@
       completeLoadingTransition();
     }
   }, 5000);
+  
+  // Additional failsafe: Hide loading screen if it's still visible after 6 seconds
+  setTimeout(() => {
+    if (loadingScreen && loadingScreen.style.display !== 'none') {
+      console.warn('Force hiding loading screen');
+      loadingScreen.style.display = 'none';
+      loadingScreen.style.opacity = '0';
+      loadingScreen.style.visibility = 'hidden';
+      document.body.classList.add('page-loaded');
+      // Ensure hero content is visible
+      try {
+        if (!window.heroNetwork) {
+          initTopographyBackground();
+        }
+        if (!document.querySelector('#interactive-globe').hasChildNodes()) {
+          initInteractiveGlobe();
+        }
+      } catch (error) {
+        console.error('Failed to initialize hero content:', error);
+      }
+    }
+  }, 6000);
 
   // ========================================
   // Smooth Scrolling with Lenis
@@ -1297,7 +1370,6 @@
   let maxScrollPosition = null;
   let scrollTriggerEndPosition = null;
 
-  let toggleMenuHandler = null;
 
   // Anchor link smooth scroll & overlay routing for #projects/#research/#contact
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1308,19 +1380,6 @@
         e.preventDefault();
         showOverlayById(overlayMap[href]);
         // Close mobile menu if open
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const hamburger = document.querySelector('.hamburger-menu');
-        if (mobileMenu && mobileMenu.classList.contains('active')) {
-          if (typeof toggleMenuHandler === 'function') {
-            toggleMenuHandler(false);
-          } else {
-            mobileMenu.classList.remove('active');
-            hamburger.classList.remove('active');
-            hamburger.setAttribute('aria-expanded', 'false');
-            document.body.classList.remove('menu-open');
-            try { if (lenis) lenis.stop(); } catch (e2) {}
-          }
-        }
         return;
       }
 
@@ -1329,19 +1388,6 @@
       if (target) {
         lenis.scrollTo(target, { offset: -100, duration: 1.5 });
         // Close mobile menu if open
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const hamburger = document.querySelector('.hamburger-menu');
-        if (mobileMenu && mobileMenu.classList.contains('active')) {
-          if (typeof toggleMenuHandler === 'function') {
-            toggleMenuHandler(false);
-          } else {
-            mobileMenu.classList.remove('active');
-            hamburger.classList.remove('active');
-            hamburger.setAttribute('aria-expanded', 'false');
-            document.body.classList.remove('menu-open');
-            try { if (lenis) lenis.start(); } catch (e3) {}
-          }
-        }
       }
     });
   });
@@ -1786,54 +1832,6 @@
     }
   });
 
-  // ========================================
-  // Hamburger Menu
-  // ========================================
-  const hamburger = document.querySelector('.hamburger-menu');
-  const mobileMenu = document.querySelector('.mobile-menu');
-
-  if (hamburger && mobileMenu) {
-    const toggleMenu = (forceState) => {
-      const isOpen = typeof forceState === 'boolean'
-        ? forceState
-        : !hamburger.classList.contains('active');
-
-      hamburger.classList.toggle('active', isOpen);
-      mobileMenu.classList.toggle('active', isOpen);
-      hamburger.setAttribute('aria-expanded', String(isOpen));
-      document.body.classList.toggle('menu-open', isOpen);
-
-      if (isOpen) {
-        lenis.stop();
-        // Ensure split text is applied to menu items when menu opens
-        ensureMenuSplitText();
-      } else {
-        lenis.start();
-      }
-
-      return isOpen;
-    };
-
-    toggleMenuHandler = toggleMenu;
-
-    hamburger.addEventListener('click', () => {
-      toggleMenu();
-    });
-
-    // Close menu when clicking outside
-    mobileMenu.addEventListener('click', (e) => {
-      if (e.target === mobileMenu) {
-        toggleMenu(false);
-      }
-    });
-
-    // Close menu on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-        toggleMenu(false);
-      }
-    });
-  }
 
   // ========================================
   // Split Text Animation
@@ -3038,14 +3036,11 @@
       this.container.appendChild(this.renderer.domElement);
 
       // Globe properties
-      this.globeRadius = this.isMobile ? 5.5 : 5; // Slightly larger on mobile
+      this.globeRadius = this.isMobile ? 4.95 : 4.5; // 10% smaller (was 5.5/5)
       this.majorCities = this.getMajorCities();
       this.projectNodes = this.getProjectNodes();
 
-      // Interaction properties
-      this.isDragging = false;
-      this.previousMousePosition = { x: 0, y: 0 };
-      this.rotationVelocity = { x: 0, y: 0 };
+      // Auto rotation only (no manual interaction)
       this.autoRotation = { x: 0, y: 0.003 };
       this.currentRotation = { x: 0, y: 0 };
 
@@ -3342,66 +3337,7 @@
     }
 
     setupEventListeners() {
-      const canvas = this.renderer.domElement;
-
-      // Mouse events
-      canvas.addEventListener('mousedown', (event) => {
-        this.isDragging = true;
-        this.previousMousePosition.x = event.clientX;
-        this.previousMousePosition.y = event.clientY;
-      });
-
-      canvas.addEventListener('mousemove', (event) => {
-        if (!this.isDragging) return;
-
-        const deltaX = event.clientX - this.previousMousePosition.x;
-        const deltaY = event.clientY - this.previousMousePosition.y;
-
-        this.rotationVelocity.y = deltaX * 0.002;
-        this.rotationVelocity.x = -deltaY * 0.002;
-
-        this.previousMousePosition.x = event.clientX;
-        this.previousMousePosition.y = event.clientY;
-      });
-
-      canvas.addEventListener('mouseup', () => {
-        this.isDragging = false;
-      });
-
-      canvas.addEventListener('mouseleave', () => {
-        this.isDragging = false;
-      });
-
-      // Touch events for mobile
-      canvas.addEventListener('touchstart', (event) => {
-        event.preventDefault();
-        if (event.touches.length === 1) {
-          this.isDragging = true;
-          this.previousMousePosition.x = event.touches[0].clientX;
-          this.previousMousePosition.y = event.touches[0].clientY;
-        }
-      }, { passive: false });
-
-      canvas.addEventListener('touchmove', (event) => {
-        event.preventDefault();
-        if (!this.isDragging || event.touches.length !== 1) return;
-
-        const deltaX = event.touches[0].clientX - this.previousMousePosition.x;
-        const deltaY = event.touches[0].clientY - this.previousMousePosition.y;
-
-        this.rotationVelocity.y = deltaX * 0.002;
-        this.rotationVelocity.x = -deltaY * 0.002;
-
-        this.previousMousePosition.x = event.touches[0].clientX;
-        this.previousMousePosition.y = event.touches[0].clientY;
-      }, { passive: false });
-
-      canvas.addEventListener('touchend', (event) => {
-        event.preventDefault();
-        this.isDragging = false;
-      }, { passive: false });
-
-      // Resize handler
+      // Only resize handler - no manual rotation interaction
       window.addEventListener('resize', () => this.handleResize());
     }
 
@@ -3418,26 +3354,9 @@
     animate() {
       requestAnimationFrame(() => this.animate());
 
-      // Apply rotation
-      if (!this.isDragging) {
-        // Auto rotation when not dragging
-        this.currentRotation.y += this.autoRotation.y;
-        this.globeGroup.rotation.y = this.currentRotation.y;
-      } else {
-        // User interaction rotation
-        this.currentRotation.x += this.rotationVelocity.x;
-        this.currentRotation.y += this.rotationVelocity.y;
-
-        // Constrain x rotation
-        this.currentRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.currentRotation.x));
-
-        this.globeGroup.rotation.x = this.currentRotation.x;
-        this.globeGroup.rotation.y = this.currentRotation.y;
-      }
-
-      // No damping for frictionless feel - globe will continue spinning
-      // this.rotationVelocity.x *= 0.98;
-      // this.rotationVelocity.y *= 0.98;
+      // Auto rotation only (no manual interaction)
+      this.currentRotation.y += this.autoRotation.y;
+      this.globeGroup.rotation.y = this.currentRotation.y;
 
       // Animate city markers
       const time = Date.now() * 0.002;
@@ -3469,16 +3388,6 @@
       if (this.connectionLines) {
         this.connectionLines.material.opacity = 0.25 + Math.sin(time * 0.8) * 0.1;
       }
-      
-      // Rotate background nodes in 2D plane (flat disc) when user drags globe
-      if (this.isDragging && window.heroNetwork && window.heroNetwork.pointsMesh) {
-        // Rotate the points and lines meshes on Z-axis for 2D rotation
-        const rotation = this.globeGroup.rotation.y;
-        window.heroNetwork.pointsMesh.rotation.z = rotation;
-        if (window.heroNetwork.linesMesh) {
-          window.heroNetwork.linesMesh.rotation.z = rotation;
-        }
-      }
 
       this.renderer.render(this.scene, this.camera);
     }
@@ -3499,6 +3408,257 @@
     if (globeContainer && !interactiveGlobe) {
       interactiveGlobe = new InteractiveGlobe(globeContainer);
     }
+  }
+
+  // ========================================
+  // Text Roll Animation (Hover Effect)
+  // ========================================
+  
+  const STAGGER = 0.035;
+  
+  function createTextRoll(element, center = false) {
+    // Get text content
+    const text = element.textContent.trim();
+    if (!text) return;
+    
+    // Check if element only has text nodes (no complex children)
+    const hasOnlyTextNodes = Array.from(element.childNodes).every(node => 
+      node.nodeType === Node.TEXT_NODE || 
+      (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BR')
+    );
+    
+    // If element has complex children, skip it (would break structure)
+    if (!hasOnlyTextNodes) {
+      return;
+    }
+    
+    // Store original display style if needed
+    const originalDisplay = window.getComputedStyle(element).display;
+    
+    // Clear existing content
+    element.textContent = '';
+    element.classList.add('text-roll');
+    
+    // Create top layer (slides up on hover)
+    const topDiv = document.createElement('div');
+    topDiv.className = 'text-roll__top';
+    
+    // Create bottom layer (slides in from bottom)
+    const bottomDiv = document.createElement('div');
+    bottomDiv.className = 'text-roll__bottom';
+    
+    // Split text into characters and create spans
+    const chars = text.split('');
+    chars.forEach((char, i) => {
+      const delay = center
+        ? STAGGER * Math.abs(i - (chars.length - 1) / 2)
+        : STAGGER * i;
+      
+      // Top layer character
+      const topChar = document.createElement('span');
+      topChar.className = 'text-roll__char';
+      topChar.textContent = char === ' ' ? '\u00A0' : char; // Non-breaking space
+      topChar.style.transitionDelay = `${delay}s`;
+      topDiv.appendChild(topChar);
+      
+      // Bottom layer character
+      const bottomChar = document.createElement('span');
+      bottomChar.className = 'text-roll__char';
+      bottomChar.textContent = char === ' ' ? '\u00A0' : char;
+      bottomChar.style.transitionDelay = `${delay}s`;
+      bottomDiv.appendChild(bottomChar);
+    });
+    
+    element.appendChild(topDiv);
+    element.appendChild(bottomDiv);
+  }
+  
+  function initTextRoll() {
+    // Select text elements to apply the effect - be selective to avoid conflicts
+    // Include nav-brand and mobile-menu-link even if they have split-text
+    const selectors = [
+      'a:not(.text-roll)',
+      'button:not(.text-roll):not(.hamburger-menu)',
+      'h1:not(.text-roll)',
+      'h2:not(.text-roll)',
+      'h3:not(.text-roll)',
+      'h4:not(.text-roll)',
+      'h5:not(.text-roll)',
+      'h6:not(.text-roll)',
+      'p:not(.text-roll)',
+      'span:not(.text-roll)',
+      '.nav-brand:not(.text-roll)',
+      '.nav-brand-text:not(.text-roll)',
+      '.hero-label:not(.text-roll)'
+    ];
+    
+    let processedCount = 0;
+    
+    selectors.forEach(selector => {
+      try {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+          // Skip if already processed or inside excluded containers
+          if (el.classList.contains('text-roll') || 
+              el.closest('.text-carousel') ||
+              el.closest('.text-roll') ||
+              !el.textContent.trim() ||
+              el.offsetParent === null) { // Skip hidden elements
+            return;
+          }
+          
+          // For nav-brand, apply to the text span inside it instead
+          if (el.classList.contains('nav-brand')) {
+            const textSpan = el.querySelector('.nav-brand-text');
+            if (textSpan && textSpan.textContent.trim() && !textSpan.classList.contains('text-roll')) {
+              // Apply roll effect to the text span, not the nav-brand itself
+              const center = true;
+              createTextRoll(textSpan, center);
+              if (textSpan.classList.contains('text-roll')) {
+                processedCount++;
+              }
+            }
+            return; // Skip processing nav-brand itself (we handle the text span)
+          }
+          
+          // For nav-brand-text, use center stagger
+          if (el.classList.contains('nav-brand-text')) {
+            const center = true;
+            createTextRoll(el, center);
+            if (el.classList.contains('text-roll')) {
+              processedCount++;
+            }
+            return;
+          }
+          
+          // For hero-label, apply text roll with center stagger
+          if (el.classList.contains('hero-label')) {
+            // Check if element has only images and no text
+            const hasOnlyImages = Array.from(el.children).every(child => 
+              child.tagName === 'IMG' || 
+              (child.tagName === 'DIV' && Array.from(child.children).every(grandchild => grandchild.tagName === 'IMG'))
+            );
+            if (hasOnlyImages && !el.textContent.trim()) {
+              return; // Skip if has only images
+            }
+            
+            // Apply text roll with center stagger
+            const center = true;
+            createTextRoll(el, center);
+            if (el.classList.contains('text-roll')) {
+              processedCount++;
+            }
+            return; // Skip further processing
+          }
+          
+          // Determine if center stagger should be used
+          const center = false;
+          
+          createTextRoll(el, center);
+          if (el.classList.contains('text-roll')) {
+            processedCount++;
+          }
+        });
+      } catch (e) {
+        console.warn('Text roll init error:', e);
+      }
+    });
+    
+    console.log(`Text roll effect applied to ${processedCount} elements`);
+  }
+  
+  // Make functions available globally for manual triggering
+  window.initTextRoll = initTextRoll;
+  window.createTextRoll = createTextRoll;
+  
+  // Initialize after page is fully loaded
+  function initTextRollWhenReady() {
+    if (document.readyState === 'complete') {
+      // Wait a bit for any dynamic content
+      setTimeout(initTextRoll, 500);
+    } else {
+      window.addEventListener('load', () => {
+        setTimeout(initTextRoll, 500);
+      });
+    }
+  }
+  
+  // Also try on DOMContentLoaded as fallback
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(initTextRoll, 300);
+    });
+  } else {
+    setTimeout(initTextRoll, 300);
+  }
+  
+    // Initialize after loading screen transition completes
+  initTextRollWhenReady();
+  
+  // Also initialize after a longer delay to catch any late-loading content
+  setTimeout(initTextRoll, 1500);
+  
+  // Re-initialize text roll when hero labels are created (they're created dynamically)
+  const originalHeroNetworkInit = window.initTopographyBackground;
+  if (originalHeroNetworkInit) {
+    window.initTopographyBackground = function() {
+      const result = originalHeroNetworkInit.apply(this, arguments);
+      // Apply text roll to hero labels after they're created
+      setTimeout(() => {
+        const heroLabels = document.querySelectorAll('.hero-label:not(.text-roll)');
+        heroLabels.forEach(label => {
+          if (label.textContent.trim()) {
+            createTextRoll(label, true);
+          }
+        });
+      }, 100);
+      return result;
+    };
+  }
+  
+  // Also watch for hero labels being added dynamically
+  const heroLabelObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.classList && node.classList.contains('hero-label') && !node.classList.contains('text-roll')) {
+            if (node.textContent.trim()) {
+              createTextRoll(node, true);
+            }
+          }
+          // Also check children
+          const heroLabels = node.querySelectorAll && node.querySelectorAll('.hero-label:not(.text-roll)');
+          if (heroLabels) {
+            heroLabels.forEach(label => {
+              if (label.textContent.trim()) {
+                createTextRoll(label, true);
+              }
+            });
+          }
+        }
+      });
+    });
+  });
+  
+  // Observe the hero label layer (it's created dynamically, so try multiple times)
+  function setupHeroLabelObserver() {
+    const heroLabelLayer = document.querySelector('.hero-label-layer');
+    if (heroLabelLayer) {
+      heroLabelObserver.observe(heroLabelLayer, { childList: true, subtree: true });
+      return true;
+    }
+    return false;
+  }
+  
+  // Try to set up observer immediately
+  if (!setupHeroLabelObserver()) {
+    // If not found, try after a delay
+    setTimeout(() => {
+      if (!setupHeroLabelObserver()) {
+        // Try one more time after hero network is initialized
+        setTimeout(setupHeroLabelObserver, 500);
+      }
+    }, 200);
   }
 
   // ========================================

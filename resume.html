@@ -490,8 +490,8 @@ button:focus-visible,
 
 /* Section animations */
 .resume_section {
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 1; /* Show immediately - no fade in delay */
+  transform: translateY(0); /* No initial offset */
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
@@ -502,8 +502,8 @@ button:focus-visible,
 
 /* Staggered animations for content within sections */
 .resume_section > h3 {
-  opacity: 0;
-  transform: translateX(-20px);
+  opacity: 1; /* Show immediately */
+  transform: translateX(0); /* No initial offset */
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 
@@ -515,8 +515,8 @@ button:focus-visible,
 
 /* Education entry animations */
 .resume_section .resume_entry {
-  opacity: 0;
-  transform: translateY(20px);
+  opacity: 1; /* Show immediately */
+  transform: translateY(0); /* No initial offset */
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
@@ -540,6 +540,7 @@ button:focus-visible,
 /* Unique animations for different elements */
 .resume_section > h3 {
   position: relative;
+  border-bottom: none !important; /* Override inline gray border */
 }
 
 .resume_section > h3::after {
@@ -547,7 +548,7 @@ button:focus-visible,
   position: absolute;
   bottom: -1px;
   left: 0;
-  width: 0;
+  width: 100%; /* Show blue line immediately */
   height: 1px;
   background: #4B9CD3;
   transition: width 0.6s ease-out;
@@ -726,6 +727,9 @@ button:focus-visible,
 
     const resumeSections = document.querySelectorAll('.resume_section');
     resumeSections.forEach(section => {
+      // Immediately add is-visible class to ensure formatting works
+      section.classList.add('is-visible');
+      // Also observe for scroll animations
       sectionObserver.observe(section);
     });
   }
@@ -737,10 +741,36 @@ button:focus-visible,
     init();
   }
 
-  // Re-initialize on Barba page transitions
+  // Re-initialize on Barba page transitions - CRITICAL for first load
   if (typeof Barba !== 'undefined') {
+    // Run IMMEDIATELY when new content enters (before transition completes)
+    Barba.hooks.afterEnter(() => {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        init();
+        
+        // Re-initialize Webflow scripts if available
+        if (typeof window.Webflow !== 'undefined') {
+          try {
+            if (window.Webflow.ready) {
+              window.Webflow.ready();
+            }
+            if (window.Webflow.require && window.Webflow.require('ix2')) {
+              window.Webflow.require('ix2').init();
+            }
+          } catch(e) {
+            console.log('Webflow re-init:', e);
+          }
+        }
+        
+        // Trigger resize event to re-initialize any scripts listening to it
+        window.dispatchEvent(new Event('resize'));
+      }, 10);
+    });
+    
+    // Also run after transition completes as backup
     Barba.hooks.after(() => {
-      init();
+      setTimeout(init, 50);
     });
   }
 })();

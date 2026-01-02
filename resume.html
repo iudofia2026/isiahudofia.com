@@ -743,34 +743,111 @@ button:focus-visible,
 
   // Re-initialize on Barba page transitions - CRITICAL for first load
   if (typeof Barba !== 'undefined') {
-    // Run IMMEDIATELY when new content enters (before transition completes)
-    Barba.hooks.afterEnter(() => {
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        init();
-        
-        // Re-initialize Webflow scripts if available
+    function reinitializeEverything() {
+      // Initialize resume structure
+      init();
+      
+      // Re-initialize Webflow scripts - multiple attempts
+      function tryWebflowInit() {
         if (typeof window.Webflow !== 'undefined') {
           try {
+            // Try multiple Webflow initialization methods
             if (window.Webflow.ready) {
               window.Webflow.ready();
             }
-            if (window.Webflow.require && window.Webflow.require('ix2')) {
-              window.Webflow.require('ix2').init();
+            if (window.Webflow.require) {
+              try {
+                if (window.Webflow.require('ix2')) {
+                  window.Webflow.require('ix2').init();
+                }
+              } catch(e) {}
+            }
+            // Try to destroy and re-init if available
+            if (window.Webflow.destroy) {
+              window.Webflow.destroy();
+            }
+            if (window.Webflow.ready) {
+              window.Webflow.ready();
             }
           } catch(e) {
-            console.log('Webflow re-init:', e);
+            console.log('Webflow re-init attempt:', e);
           }
         }
-        
-        // Trigger resize event to re-initialize any scripts listening to it
+      }
+      
+      // Try Webflow init immediately
+      tryWebflowInit();
+      
+      // Trigger events that scripts might be listening to
+      try {
         window.dispatchEvent(new Event('resize'));
-      }, 10);
+        window.dispatchEvent(new Event('load'));
+        if (document.createEvent) {
+          const evt = document.createEvent('Event');
+          evt.initEvent('DOMContentLoaded', true, true);
+          document.dispatchEvent(evt);
+        }
+      } catch(e) {}
+      
+      // Manually trigger shuffle animations if Shuffle is available
+      if (typeof window.Shuffle !== 'undefined') {
+        try {
+          const shuffleElements = document.querySelectorAll('[data-shuffle-load]');
+          shuffleElements.forEach(el => {
+            try {
+              el.dispatchEvent(new Event('shuffle-init', { bubbles: true }));
+            } catch(e) {}
+          });
+        } catch(e) {}
+      }
+    }
+    
+    // Run on BEFORE transition to prepare
+    Barba.hooks.before(() => {
+      // Small prep work
+    });
+    
+    // Run IMMEDIATELY when new content enters
+    Barba.hooks.afterEnter((data) => {
+      // Check if we're on the resume page
+      const isResumePage = document.querySelector('[data-barba-namespace="resume"]') !== null;
+      
+      if (isResumePage) {
+        // Check if this is first time loading resume page via Barba
+        const resumeFirstLoadKey = 'resume-first-load-via-barba';
+        const hasLoadedBefore = sessionStorage.getItem(resumeFirstLoadKey);
+        
+        // On first load via Barba, force a full page reload to ensure proper initialization
+        // This ensures bundle.js and all Webflow scripts execute correctly
+        if (!hasLoadedBefore) {
+          sessionStorage.setItem(resumeFirstLoadKey, 'true');
+          // Small delay to let content render, then reload
+          setTimeout(() => {
+            window.location.reload();
+          }, 50);
+          return; // Exit early, reload will happen
+        }
+        
+        // If already loaded before, do normal re-initialization
+        requestAnimationFrame(() => {
+          reinitializeEverything();
+        });
+        
+        setTimeout(reinitializeEverything, 10);
+        setTimeout(reinitializeEverything, 50);
+        setTimeout(reinitializeEverything, 100);
+        setTimeout(reinitializeEverything, 200);
+      } else {
+        // Not resume page, just do normal init
+        reinitializeEverything();
+      }
     });
     
     // Also run after transition completes as backup
     Barba.hooks.after(() => {
-      setTimeout(init, 50);
+      setTimeout(reinitializeEverything, 10);
+      setTimeout(reinitializeEverything, 100);
+      setTimeout(reinitializeEverything, 300);
     });
   }
 })();

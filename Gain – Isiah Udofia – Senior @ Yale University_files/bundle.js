@@ -3381,24 +3381,33 @@ const Q = {
       }), e;
     },
     parseLineHeight(n, e) {
-      const t = window.getComputedStyle(n).lineHeight, s = parseFloat(window.getComputedStyle(n).fontSize);
+      const s = window.getComputedStyle(n), t = s.lineHeight, i = parseFloat(s.fontSize) || 16;
       if (!t || t === "normal") {
-        return s * 1.2;
+        return i * 1.2;
       }
-      if (t.endsWith("px")) {
-        const i = parseFloat(t);
-        return isNaN(i) ? s * 1.2 : i;
+      let r = parseFloat(t);
+      if (!isNaN(r) && r > 0) {
+        if (t.endsWith("px")) {
+          return r;
+        }
+        if (t.endsWith("em")) {
+          return r * i;
+        }
+        if (t.endsWith("%")) {
+          return (r / 100) * i;
+        }
+        if (r < i) {
+          return r * i;
+        }
+        return r;
       }
-      if (t.endsWith("em")) {
-        const i = parseFloat(t);
-        return isNaN(i) ? s * 1.2 : i * s;
-      }
-      if (t.endsWith("%")) {
-        const i = parseFloat(t);
-        return isNaN(i) ? s * 1.2 : (i / 100) * s;
-      }
-      const i = parseFloat(t);
-      return isNaN(i) ? s * 1.2 : i;
+      const o = document.createElement("span");
+      o.style.cssText = `position: absolute; visibility: hidden; white-space: nowrap; font-family: ${s.fontFamily}; font-size: ${s.fontSize}; line-height: ${s.lineHeight};`;
+      o.textContent = "M";
+      document.body.appendChild(o);
+      const l = o.offsetHeight;
+      document.body.removeChild(o);
+      return l > 0 ? l : i * 1.2;
     },
     initializeMulti() {
       bo({

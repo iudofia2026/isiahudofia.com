@@ -3380,6 +3380,26 @@ const Q = {
         }
       }), e;
     },
+    parseLineHeight(n, e) {
+      const t = window.getComputedStyle(n).lineHeight, s = parseFloat(window.getComputedStyle(n).fontSize);
+      if (!t || t === "normal") {
+        return s * 1.2;
+      }
+      if (t.endsWith("px")) {
+        const i = parseFloat(t);
+        return isNaN(i) ? s * 1.2 : i;
+      }
+      if (t.endsWith("em")) {
+        const i = parseFloat(t);
+        return isNaN(i) ? s * 1.2 : i * s;
+      }
+      if (t.endsWith("%")) {
+        const i = parseFloat(t);
+        return isNaN(i) ? s * 1.2 : (i / 100) * s;
+      }
+      const i = parseFloat(t);
+      return isNaN(i) ? s * 1.2 : i;
+    },
     initializeMulti() {
       bo({
         target: '[data-shuffle-load="multi"]',
@@ -3388,7 +3408,7 @@ const Q = {
       }).forEach((e) => {
         const t = e.el, i = window.getComputedStyle(t).display;
         t.setAttribute("data-shuffle-processed", "true"), window.getComputedStyle(t).position === "static" && (t.style.position = "relative");
-        const s = window.getComputedStyle(t), r = parseInt(s.lineHeight);
+        const s = window.getComputedStyle(t), r = this.parseLineHeight(t, s);
         let a = 0;
         const o = t.offsetWidth;
         t.style.width = `${o}px`, t.classList.add("shuffle-container"), e.lines.forEach((l, c) => {

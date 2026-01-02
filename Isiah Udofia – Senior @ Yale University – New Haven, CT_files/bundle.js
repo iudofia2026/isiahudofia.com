@@ -33082,7 +33082,7 @@ function Z_() {
   const n = document.querySelectorAll("[data-time]");
   if (!n?.length) return;
   const e = {
-    timeZone: "Europe/Vienna",
+    timeZone: "America/New_York",
     hour12: !1,
     hour: "2-digit",
     minute: "2-digit",
@@ -33169,9 +33169,9 @@ const eu = {
             [this.elements.heroTitleLine1, "Isiah"],
             [this.elements.heroTitleLine2, "Udofia"],
             [this.elements.infoLine1, " "],
-            [this.elements.infoLine2, "Designer &"],
-            [this.elements.infoLine3, "Developer"],
-            [this.elements.locationElement, "Vienna, AT"]
+            [this.elements.infoLine2, "Senior @"],
+            [this.elements.infoLine3, "Yale University"],
+            [this.elements.locationElement, "New Haven, CT"]
           ].forEach(([s, r]) => {
             s && r !== void 0 && Q.shuffleWords(s.textContent, r, s, 50, !0);
           }), this.toggleTimeAndYear(this.elements.timeElement, this.elements.yearElement, !1), this.removeHoverEffects();

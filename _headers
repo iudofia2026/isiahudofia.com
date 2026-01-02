@@ -1,4 +1,0 @@
-/assets/*.pdf
-  Content-Type: application/pdf
-  X-Content-Type-Options: nosniff
-  Cache-Control: public, max-age=31536000, immutable

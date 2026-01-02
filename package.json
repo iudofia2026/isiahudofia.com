@@ -1,0 +1,12 @@
+{
+  "name": "rylan-phillips-portfolio",
+  "version": "1.0.0",
+  "description": "Rylan Phillips - Designer & Developer Portfolio",
+  "scripts": {
+    "dev": "npx http-server -p 3000 -o",
+    "start": "npx http-server -p 3000"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

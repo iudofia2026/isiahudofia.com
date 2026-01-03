@@ -1,12 +1,16 @@
 {
-  "name": "rylan-phillips-portfolio",
+  "name": "isiahudofia-portfolio",
   "version": "1.0.0",
-  "description": "Rylan Phillips - Designer & Developer Portfolio",
+  "description": "Isiah Udofia - AI-Native Designer & Developer Portfolio",
+  "type": "module",
   "scripts": {
-    "dev": "npx http-server -p 3000 -o",
-    "start": "npx http-server -p 3000"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview --port 3000"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "vite": "^7.3.0"
   }
 }

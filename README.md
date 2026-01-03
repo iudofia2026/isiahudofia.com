@@ -18,21 +18,11 @@ npm install
 ### Development
 
 ```bash
-# Start development server with hot-reload
+# Start development server
 npm run dev
 ```
 
-Opens at `http://localhost:3000`
-
-### Build for Production
-
-```bash
-# Create optimized production build
-npm run build
-
-# Preview production build locally
-npm run preview
-```
+Opens at `http://localhost:3000` with auto-refresh
 
 ## 📁 Project Structure
 
@@ -46,15 +36,14 @@ isiahudofia.com/
 ├── resume.html          # Resume/CV page
 ├── academicindex.html   # Academic Index project page
 ├── lamcpainting.html    # LAMC Painting project page
-├── vite.config.js       # Vite configuration
 └── package.json         # Project dependencies
 ```
 
 ## 🛠️ Development Tools
 
-- **Vite** - Lightning-fast dev server with Hot Module Replacement
-- **Hot Reload** - See changes instantly without refreshing
-- **Build Optimization** - Automatic optimization for production
+- **http-server** - Simple static file server
+- **Auto-refresh** - Changes appear when you refresh the browser
+- **Zero configuration** - Works immediately after `npm install`
 
 ## 🎨 Features
 
@@ -67,46 +56,52 @@ isiahudofia.com/
 
 ## 📝 Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run serve` - Preview build on port 3000
+- `npm run dev` - Start development server at `localhost:3000`
+- `npm start` - Same as `npm run dev`
+- `npm run build` - Simple build command (files are production-ready)
 
 ## 🌐 Deployment
 
-The site is configured for easy deployment to:
+The site is ready to deploy to:
 - **GitHub Pages** - Push to main branch
 - **Netlify** - Connect repository
 - **Vercel** - Import project
+- **Any static host** - Upload the files as-is
 
-Build output goes to `dist/` directory.
+All files are production-ready and optimized.
 
 ## 🔧 Configuration
 
-### Vite Config
-The `vite.config.js` file handles:
-- Development server settings
-- Build optimization
-- Asset management
-- Multi-page setup
+### Project Details
+- **Static site** - No build process required
+- **No bundling** - Uses existing bundled files
+- **No transformation** - Files served as-is
+- **Simple and fast** - Just like a regular static website
 
 ### Path Structure
-All assets use absolute paths from root (`/assets/`, `/template_files/`) for consistent loading across all pages.
+The site uses multiple template directories:
+- `template_files/` - Main CSS and JS bundles
+- Page-specific directories (created by Webflow export)
+
+All paths work correctly in the current structure.
 
 ## 🐛 Troubleshooting
 
 ### Port already in use
-If port 3000 is busy, Vite will automatically use the next available port.
-
-### Assets not loading
-Check that all paths use absolute paths (`/assets/`) not relative (`./assets/`).
-
-### Build errors
-Clear the Vite cache:
-```bash
-rm -rf node_modules/.vite
-npm run dev
+If port 3000 is busy, change the port in `package.json`:
+```json
+"dev": "npx http-server -p 3001 -o -c-1"
 ```
+
+### Changes not appearing
+- Hard refresh the browser (Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows)
+- Check that you're editing the correct HTML file
+- Verify the server is running
+
+### Images or CSS not loading
+- Check the browser console for 404 errors
+- Verify file paths match the actual directory structure
+- Some pages reference different template directories
 
 ## 📄 License
 

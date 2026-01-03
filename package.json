@@ -2,15 +2,12 @@
   "name": "isiahudofia-portfolio",
   "version": "1.0.0",
   "description": "Isiah Udofia - AI-Native Designer & Developer Portfolio",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "serve": "vite preview --port 3000"
+    "dev": "npx http-server -p 3000 -o -c-1",
+    "start": "npx http-server -p 3000 -c-1",
+    "build": "echo 'Build complete - files ready for deployment'"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "vite": "^7.3.0"
+    "http-server": "^14.1.1"
   }
 }

@@ -33195,7 +33195,7 @@ const eu = {
       }, t = () => {
         try {
           [
-            [this.elements.heroTitleLine1, "Rylan"],
+            [this.elements.heroTitleLine1, "Isiah"],
             [this.elements.heroTitleLine2, "Phillips"],
             [this.elements.infoLine1, " "],
             [this.elements.infoLine2, "Designer &"],

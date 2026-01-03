@@ -1,3 +1,4 @@
+assets/videos/*.mov filter=lfs diff=lfs merge=lfs -text
 assets/videos/lamc-homepage-demo.mov filter=lfs diff=lfs merge=lfs -text
 assets/videos/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
 assets/videos/**/*.jpg filter=lfs diff=lfs merge=lfs -text

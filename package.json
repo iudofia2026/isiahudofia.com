@@ -4,8 +4,7 @@
   "description": "Isiah Udofia - AI-Native Designer & Developer Portfolio",
   "scripts": {
     "dev": "npx http-server -p 3000 -o -c-1",
-    "start": "npx http-server -p 3000 -c-1",
-    "build": "echo 'Build complete - files ready for deployment'"
+    "start": "npx http-server -p 3000 -c-1"
   },
   "devDependencies": {
     "http-server": "^14.1.1"

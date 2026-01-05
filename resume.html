@@ -598,12 +598,7 @@ button:focus-visible,
   transition: color 0.2s ease-out;
 }
 
-/* Mobile - reduce spacing between contact buttons */
-@media (max-width: 768px) {
-  .resume-contact-buttons {
-    gap: 8px !important;
-  }
-}
+/* Mobile spacing handled by inline style (gap: 0) */
 </style>
 
 <script>
@@ -816,7 +811,7 @@ button:focus-visible,
     </div>
   </div>
   <div class="resume_header" style="margin-bottom: 30px; text-align: left;">
-    <div class="resume-contact-buttons" style="display: flex; align-items: center; gap: 20px; margin-bottom: 5px; flex-wrap: wrap;">
+    <div class="resume-contact-buttons" style="display: flex; align-items: center; gap: 0; margin-bottom: 5px; flex-wrap: wrap;">
       <div data-clipboard="(973) 303-6883" data-shuffle="button" class="contact_link u-vflex-left-top u-gap-xsmall" style="display: inline-flex;">
         <div class="contact_link_name u-hflex-left-center u-gap-xsmall">
           <p aria-hidden="true" data-shuffle-load="single" class="contact_link_name_text u-text-medium" style="opacity: 1; font-size: 12px;">Phone</p>

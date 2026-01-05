@@ -613,7 +613,7 @@ button:focus-visible,
     });
   }
 
-  // Advanced contact link functionality matching info.html
+  // Advanced contact link functionality - clipboard only (shuffle handled by bundle.js)
   function initContactLinks() {
     // Handle clipboard functionality
     document.addEventListener('click', function(e) {
@@ -650,34 +650,7 @@ button:focus-visible,
       }
     });
 
-    // Handle hover effects for text changes
-    document.addEventListener('mouseover', function(e) {
-      const contactLink = e.target.closest('.contact_link');
-      if (!contactLink) return;
-
-      const textElement = contactLink.querySelector('[data-shuffle-hover]');
-      if (textElement) {
-        const hoverText = textElement.getAttribute('data-shuffle-hover');
-        if (hoverText) {
-          textElement.setAttribute('data-original-text', textElement.textContent);
-          textElement.textContent = hoverText;
-        }
-      }
-    });
-
-    document.addEventListener('mouseout', function(e) {
-      const contactLink = e.target.closest('.contact_link');
-      if (!contactLink) return;
-
-      const textElement = contactLink.querySelector('[data-shuffle-hover]');
-      if (textElement) {
-        const originalText = textElement.getAttribute('data-original-text');
-        if (originalText) {
-          textElement.textContent = originalText;
-          textElement.removeAttribute('data-original-text');
-        }
-      }
-    });
+    // Note: Shuffle hover effects are handled by bundle.js which supports both desktop and mobile
   }
 
   function handleClipboardSuccess(contactLink) {

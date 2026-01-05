@@ -599,6 +599,17 @@ button:focus-visible,
 }
 
 /* Mobile spacing handled by inline style (gap: 0) */
+
+/* Mobile - ensure tight vertical stacking with no extra margins */
+@media (max-width: 768px) {
+  .resume-contact-buttons > * {
+    margin: 0 !important;
+  }
+
+  .resume-contact-buttons {
+    row-gap: 0 !important;
+  }
+}
 </style>
 
 <script>

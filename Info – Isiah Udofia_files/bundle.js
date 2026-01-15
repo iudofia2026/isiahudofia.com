@@ -33197,10 +33197,10 @@ const eu = {
           [
             [this.elements.heroTitleLine1, "Isiah"],
             [this.elements.heroTitleLine2, "Udofia"],
-            [this.elements.infoLine1, " "],
-            [this.elements.infoLine2, "Designer &"],
-            [this.elements.infoLine3, "Developer"],
-            [this.elements.locationElement, "Vienna, AT"]
+            [this.elements.infoLine1, "Senior @"],
+            [this.elements.infoLine2, "Yale"],
+            [this.elements.infoLine3, "University"],
+            [this.elements.locationElement, "New Haven, CT"]
           ].forEach(([s, r]) => {
             s && r !== void 0 && Q.shuffleWords(s.textContent, r, s, 50, !0);
           }), this.toggleTimeAndYear(this.elements.timeElement, this.elements.yearElement, !1), this.removeHoverEffects();

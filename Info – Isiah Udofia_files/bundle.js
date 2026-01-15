@@ -33111,7 +33111,7 @@ function Z_() {
   const n = document.querySelectorAll("[data-time]");
   if (!n?.length) return;
   const e = {
-    timeZone: "Europe/Vienna",
+    timeZone: "America/New_York",
     hour12: !1,
     hour: "2-digit",
     minute: "2-digit",

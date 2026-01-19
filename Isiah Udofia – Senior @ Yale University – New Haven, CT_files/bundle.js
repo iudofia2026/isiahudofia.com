@@ -33259,24 +33259,28 @@ const J_ = {
       return;
     }
     sessionStorage.setItem("hasVisited", "true");
-    const n = document.querySelector(".loader_wrap"), e = document.querySelector('[data-load="title2"]'), t = document.querySelector('[data-load="subtitle"]'), i = document.querySelectorAll('[data-image="desktop"]'), s = document.querySelectorAll('[data-image="mobile"]'), r = document.querySelectorAll('[data-image="desktop"], [data-image="mobile"]');
-    if (!n || !e || !t) {
+    const n = document.querySelector(".loader_wrap"), title1 = document.querySelector('[data-load="title"]'), e = document.querySelector('[data-load="title2"]'), t = document.querySelector('[data-load="subtitle"]'), i = document.querySelectorAll('[data-image="desktop"]'), s = document.querySelectorAll('[data-image="mobile"]'), r = document.querySelectorAll('[data-image="desktop"], [data-image="mobile"]');
+    if (!n || !title1 || !e || !t) {
       console.warn("Load animation elements not found, falling back to normal initialization"), Q.initializeSingle(), Q.initializeMulti();
       return;
     }
-    me.set(r, { opacity: 0, filter: "blur(12px)" }), me.set([e, t], { opacity: 0 });
+    me.set(r, { opacity: 0, filter: "blur(12px)" }), me.set([title1, e, t], { opacity: 0 });
     const a = document.querySelectorAll("[data-shuffle-load], [data-preloader]");
     me.set(a, { opacity: 0 });
     const o = 1300, c = Math.max(0, o - 100), u = e.textContent, d = t.textContent;
-    me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("Welcome", e, 50, !1), setTimeout(() => {
-      me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(d, t, 50, !1);
+    me.to(title1, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("Welcome", title1, 50, !1), setTimeout(() => {
+      me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("back", e, 50, !1);
     }, 100), setTimeout(() => {
-      Q.shuffleWords(e.textContent || u, u, e, 50, !1), setTimeout(() => {
-        Q.shuffleWords(t.textContent || d, d, t, 50, !1);
+      me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(d, t, 50, !1);
+    }, 200), setTimeout(() => {
+      Q.shuffleWords(title1.textContent || "Welcome", "Welcome", title1, 50, !1), setTimeout(() => {
+        Q.shuffleWords(e.textContent || "back", "back", e, 50, !1), setTimeout(() => {
+          Q.shuffleWords(t.textContent || d, d, t, 50, !1);
+        }, 0);
       }, 0);
     }, c), setTimeout(() => {
       const f = me.timeline();
-      f.set(n, { display: "none" }), me.set([e, t], { opacity: 0 }), f.set(a, { opacity: 1 }), f.add(() => {
+      f.set(n, { display: "none" }), me.set([title1, e, t], { opacity: 0 }), f.set(a, { opacity: 1 }), f.add(() => {
         Q.loadAnimations.initializeSingle(), Q.loadAnimations.initializeMulti();
       }), f.to(i, {
         opacity: 1,

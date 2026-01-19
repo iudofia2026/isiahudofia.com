@@ -33254,11 +33254,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 const J_ = {
   initializeFirstLoad() {
-    if (sessionStorage.getItem("hasVisited")) {
+    console.log("initializeFirstLoad called, hasVisited:", sessionStorage.getItem("hasVisited"));
+    console.log("localStorage hasVisited:", localStorage.getItem("hasVisited"));
+
+    // Check both session and local storage for more reliable detection
+    const hasVisitedSession = sessionStorage.getItem("hasVisited");
+    const hasVisitedLocal = localStorage.getItem("hasVisited");
+
+    if (hasVisitedSession || hasVisitedLocal) {
+      console.log("Calling initializeReturnVisit (detected return visit)");
       this.initializeReturnVisit();
       return;
     }
+    console.log("First time visitor, setting hasVisited to true");
     sessionStorage.setItem("hasVisited", "true");
+    localStorage.setItem("hasVisited", "true");
+    console.log("Session storage after setting:", sessionStorage.getItem("hasVisited"));
+    console.log("Local storage after setting:", localStorage.getItem("hasVisited"));
     const n = document.querySelector(".loader_wrap"), title1 = document.querySelector('[data-load="title"]'), e = document.querySelector('[data-load="title2"]'), t = document.querySelector('[data-load="subtitle"]'), i = document.querySelectorAll('[data-image="desktop"]'), s = document.querySelectorAll('[data-image="mobile"]'), r = document.querySelectorAll('[data-image="desktop"], [data-image="mobile"]');
     if (!n || !title1 || !e || !t) {
       console.warn("Load animation elements not found, falling back to normal initialization"), Q.initializeSingle(), Q.initializeMulti();
@@ -33269,12 +33281,12 @@ const J_ = {
     me.set(a, { opacity: 0 });
     const o = 1300, c = Math.max(0, o - 100), u = e.textContent, d = t.textContent;
     me.to(title1, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("Welcome", title1, 50, !1), setTimeout(() => {
-      me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("back", e, 50, !1);
+      me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("", e, 50, !1);
     }, 100), setTimeout(() => {
       me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(d, t, 50, !1);
     }, 200), setTimeout(() => {
       Q.shuffleWords(title1.textContent || "Welcome", "Welcome", title1, 50, !1), setTimeout(() => {
-        Q.shuffleWords(e.textContent || "back", "back", e, 50, !1), setTimeout(() => {
+        Q.shuffleWords(e.textContent || "", "", e, 50, !1), setTimeout(() => {
           Q.shuffleWords(t.textContent || d, d, t, 50, !1);
         }, 0);
       }, 0);
@@ -33298,22 +33310,28 @@ const J_ = {
     }, o);
   },
   initializeReturnVisit() {
+    console.log("initializeReturnVisit called");
     const n = document.querySelector(".loader_wrap"), e = document.querySelector('[data-load="title"]'), t = document.querySelector('[data-load="title2"]'), i = document.querySelector('[data-load="subtitle"]'), s = document.querySelectorAll('[data-image="desktop"]'), r = document.querySelectorAll('[data-image="mobile"]'), a = document.querySelectorAll('[data-image="icon"]'), o = document.querySelectorAll('[data-image="desktop"], [data-image="mobile"], [data-image="icon"]');
-    if (!n || !e || !i) {
+    console.log("Elements found:", {loader: !!n, title: !!e, title2: !!t, subtitle: !!i});
+    if (!n || !e || !t || !i) {
       console.warn("Return visit animation elements not found, falling back to normal initialization"), Q.loadAnimations.initializeSingle(), Q.loadAnimations.initializeMulti();
       return;
     }
+    console.log("Starting return visit animation: Welcome + back");
     me.set(o, { opacity: 0, filter: "blur(12px)" }), me.set([e, t, i], { opacity: 0 });
     const l = document.querySelectorAll("[data-shuffle-load], [data-preloader]");
     me.set(l, { opacity: 0 });
     const c = 800, d = Math.max(0, c - 100), f = i.textContent;
+    console.log("Animating Welcome text:", e);
     me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("Welcome", e, 50, !1), setTimeout(() => {
-      t && (me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("back", t, 50, !1));
-    }), setTimeout(() => {
-      me.to(i, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(f, i, 50, !1);
+      console.log("Animating 'back' text:", t);
+      me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("back", t, 50, !1);
     }, 100), setTimeout(() => {
+      console.log("Animating subtitle:", i, "with text:", f);
+      me.to(i, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(f, i, 50, !1);
+    }, 200), setTimeout(() => {
       Q.shuffleWords(e.textContent || "Welcome", "Welcome", e, 50, !1), setTimeout(() => {
-        t && Q.shuffleWords(t.textContent || "back", "back", t, 50, !1);
+        Q.shuffleWords(t.textContent || "back", "back", t, 50, !1);
       }, 50), setTimeout(() => {
         Q.shuffleWords(i.textContent || f, f, i, 50, !1);
       }, 100);

@@ -6,8 +6,10 @@
 <body>
     <h1>Resetting Preloader...</h1>
     <script>
-        // Clear session storage to reset preloader
+        // Clear both session and local storage to reset preloader
         sessionStorage.removeItem("hasVisited");
+        localStorage.removeItem("hasVisited");
+        console.log("Cleared both storages - next visit will be first-time visitor");
 
         // Redirect back to homepage
         window.location.href = "index.html";

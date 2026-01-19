@@ -33257,13 +33257,18 @@ const J_ = {
     console.log("initializeFirstLoad called, hasVisited:", sessionStorage.getItem("hasVisited"));
     console.log("localStorage hasVisited:", localStorage.getItem("hasVisited"));
 
+    // Get name parameter from URL if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const customName = urlParams.get('name');
+    console.log("Custom name from URL:", customName);
+
     // Check both session and local storage for more reliable detection
     const hasVisitedSession = sessionStorage.getItem("hasVisited");
     const hasVisitedLocal = localStorage.getItem("hasVisited");
 
     if (hasVisitedSession || hasVisitedLocal) {
       console.log("Calling initializeReturnVisit (detected return visit)");
-      this.initializeReturnVisit();
+      this.initializeReturnVisit(customName);
       return;
     }
     console.log("First time visitor, setting hasVisited to true");
@@ -33280,8 +33285,11 @@ const J_ = {
     const a = document.querySelectorAll("[data-shuffle-load], [data-preloader]");
     me.set(a, { opacity: 0 });
     const o = 1300, c = Math.max(0, o - 100), u = e.textContent, d = t.textContent;
-    me.to(title1, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("Welcome", title1, 50, !1), setTimeout(() => {
-      me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("", e, 50, !1);
+    const welcomeText = customName ? `Welcome ${customName}` : "Welcome";
+    const secondLineText = customName ? "" : "";  // For custom names, keep second line empty on first visit
+
+    me.to(title1, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(welcomeText, title1, 50, !1), setTimeout(() => {
+      me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(secondLineText, e, 50, !1);
     }, 100), setTimeout(() => {
       me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(d, t, 50, !1);
     }, 200), setTimeout(() => {
@@ -33309,29 +33317,32 @@ const J_ = {
       }, 0.2);
     }, o);
   },
-  initializeReturnVisit() {
-    console.log("initializeReturnVisit called");
+  initializeReturnVisit(customName = null) {
+    console.log("initializeReturnVisit called with name:", customName);
     const n = document.querySelector(".loader_wrap"), e = document.querySelector('[data-load="title"]'), t = document.querySelector('[data-load="title2"]'), i = document.querySelector('[data-load="subtitle"]'), s = document.querySelectorAll('[data-image="desktop"]'), r = document.querySelectorAll('[data-image="mobile"]'), a = document.querySelectorAll('[data-image="icon"]'), o = document.querySelectorAll('[data-image="desktop"], [data-image="mobile"], [data-image="icon"]');
     console.log("Elements found:", {loader: !!n, title: !!e, title2: !!t, subtitle: !!i});
     if (!n || !e || !t || !i) {
       console.warn("Return visit animation elements not found, falling back to normal initialization"), Q.loadAnimations.initializeSingle(), Q.loadAnimations.initializeMulti();
       return;
     }
-    console.log("Starting return visit animation: Welcome + back");
+    console.log("Starting return visit animation with custom name:", customName);
     me.set(o, { opacity: 0, filter: "blur(12px)" }), me.set([e, t, i], { opacity: 0 });
     const l = document.querySelectorAll("[data-shuffle-load], [data-preloader]");
     me.set(l, { opacity: 0 });
     const c = 800, d = Math.max(0, c - 100), f = i.textContent;
-    console.log("Animating Welcome text:", e);
-    me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("Welcome", e, 50, !1), setTimeout(() => {
-      console.log("Animating 'back' text:", t);
-      me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn("back", t, 50, !1);
+    const returnWelcomeText = customName ? `Welcome` : "Welcome";
+    const returnSecondText = customName ? `${customName}` : "back";
+
+    console.log("Animating Welcome text:", e, "with text:", returnWelcomeText);
+    me.to(e, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(returnWelcomeText, e, 50, !1), setTimeout(() => {
+      console.log("Animating second line:", t, "with text:", returnSecondText);
+      me.to(t, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(returnSecondText, t, 50, !1);
     }, 100), setTimeout(() => {
       console.log("Animating subtitle:", i, "with text:", f);
       me.to(i, { opacity: 1, duration: 0.3, ease: "power3.out" }), Q.shuffleIn(f, i, 50, !1);
     }, 200), setTimeout(() => {
-      Q.shuffleWords(e.textContent || "Welcome", "Welcome", e, 50, !1), setTimeout(() => {
-        Q.shuffleWords(t.textContent || "back", "back", t, 50, !1);
+      Q.shuffleWords(e.textContent || returnWelcomeText, returnWelcomeText, e, 50, !1), setTimeout(() => {
+        Q.shuffleWords(t.textContent || returnSecondText, returnSecondText, t, 50, !1);
       }, 50), setTimeout(() => {
         Q.shuffleWords(i.textContent || f, f, i, 50, !1);
       }, 100);

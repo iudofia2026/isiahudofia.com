@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Link Generator - Isiah Udofia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #404040;
+        }
+        h1 {
+            text-align: center;
+            color: #00ff88;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #404040;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: white;
+            font-size: 16px;
+        }
+        button {
+            background: #00ff88;
+            color: #1a1a1a;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: #00dd77;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 5px;
+            border: 1px solid #404040;
+        }
+        .link {
+            word-break: break-all;
+            color: #00ff88;
+            font-family: monospace;
+        }
+        .copy-btn {
+            background: #404040;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: auto;
+        }
+        .preview {
+            margin-top: 15px;
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Custom Portfolio Link Generator</h1>
+        <p>Create personalized links that show custom greetings in the preloader.</p>
+
+        <label for="nameInput">Enter the person's name:</label>
+        <input type="text" id="nameInput" placeholder="e.g., John, Sarah, Alex..." maxlength="20">
+
+        <button onclick="generateLink()">Generate Custom Link</button>
+
+        <div id="result" class="result" style="display: none;">
+            <h3>Your Custom Link:</h3>
+            <div class="link" id="customLink"></div>
+            <button class="copy-btn" onclick="copyLink()">📋 Copy Link</button>
+
+            <div class="preview">
+                <strong>Preview:</strong><br>
+                • First visit: "Welcome <span id="previewName1"></span>" + "[Digital Archive]"<br>
+                • Return visit: "Welcome" + "<span id="previewName2"></span>" + "[Digital Archive]"
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateLink() {
+            const name = document.getElementById('nameInput').value.trim();
+
+            if (!name) {
+                alert('Please enter a name!');
+                return;
+            }
+
+            // Get current domain and protocol
+            const currentDomain = window.location.origin;
+            const customLink = `${currentDomain}/?name=${encodeURIComponent(name)}`;
+
+            // Show result
+            document.getElementById('customLink').textContent = customLink;
+            document.getElementById('previewName1').textContent = name;
+            document.getElementById('previewName2').textContent = name;
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function copyLink() {
+            const linkText = document.getElementById('customLink').textContent;
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(linkText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#00ff88';
+                btn.style.color = '#1a1a1a';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#404040';
+                    btn.style.color = 'white';
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = linkText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Link copied to clipboard!');
+            });
+        }
+
+        // Generate link when Enter is pressed
+        document.getElementById('nameInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateLink();
+            }
+        });
+    </script>
+</body>
+</html>

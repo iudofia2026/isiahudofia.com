@@ -105,5 +105,49 @@ Applied the same `data-barba-prevent="true"` fix to project card links in index.
 - All media elements initialize correctly
 - Consistent user experience across all pages
 
+## Back Navigation Fix
+
+### Issue with Name Animation Reset
+When navigating back from project pages to the homepage via the mobile "Work" back button, the name "Isiah Udofia" wasn't fully resetting - it stayed partially visible instead of doing the complete shuffle animation from scratch.
+
+### Solution for Back Navigation
+Applied `data-barba-prevent="true"` to the back navigation links in project pages:
+
+**Project page back buttons:**
+```html
+<!-- Academic Index -->
+<a href="../" data-barba-prevent="true" class="project_header_wrap u-hflex-left-center w-inline-block">
+<svg>...</svg>
+<p data-shuffle-load="single" class="project_subtitle_text u-text-main">Work</p>
+<svg>...</svg>
+</a>
+
+<!-- LAMC Painting -->
+<a href="../" data-barba-prevent="true" class="project_header_wrap u-hflex-left-center w-inline-block">
+<svg>...</svg>
+<p data-shuffle-load="single" class="project_subtitle_text u-text-main">Work</p>
+<svg>...</svg>
+</a>
+```
+
+### Results
+- Homepage animations now reset completely when returning from project pages
+- Name shuffle animation plays properly from the beginning
+- Consistent animation behavior across all navigation paths
+
+## Mobile Header Enhancement
+
+### Mobile Header Clarity
+Updated mobile header in index.html to always show "Isiah Udofia" instead of "DIGITAL ARCHIVE" since "[Digital Archive]" appears directly below it, providing better branding clarity.
+
+**Change made:**
+```html
+<!-- Before -->
+<p data-shuffle="text" data-shuffle-hover="DIGITAL ARCHIVE" data-shuffle-load="single" class="header_name_text u-text-main">DIGITAL ARCHIVE</p>
+
+<!-- After -->
+<p data-shuffle="text" data-shuffle-hover="Isiah Udofia" data-shuffle-load="single" class="header_name_text u-text-main">Isiah Udofia</p>
+```
+
 ## Future Considerations
 If other pages have similar complex initialization requirements, consider applying the same `data-barba-prevent="true"` approach to their navigation links as well.

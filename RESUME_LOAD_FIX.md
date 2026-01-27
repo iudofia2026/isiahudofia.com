@@ -69,5 +69,41 @@ After implementing this fix:
 - Background grid positioning is correct
 - No JavaScript errors or timing issues
 
+## Additional Applications
+
+### Project Pages Issue
+The same issue occurred with project pages (academicindex.html, lamcpainting.html) when navigating via project cards from the index page. Videos and interactive elements wouldn't load properly without a page refresh.
+
+### Solution for Project Cards
+Applied the same `data-barba-prevent="true"` fix to project card links in index.html:
+
+**Desktop showcase links:**
+```html
+<!-- Academic Index -->
+<a href="./academicindex.html" data-barba-prevent="true" class="showcase_link w-inline-block">
+<div class="u-sr-only">View this project</div>
+</a>
+
+<!-- LAMC Painting -->
+<a href="./lamcpainting.html" data-barba-prevent="true" class="showcase_link w-inline-block">
+<div class="u-sr-only">View this project</div>
+</a>
+```
+
+**Mobile slider links:**
+```html
+<!-- Academic Index -->
+<a data-image="mobile" href="./academicindex.html" data-barba-prevent="true" class="slider_item u-image-wrapper w-inline-block">
+
+<!-- LAMC Painting -->
+<a data-image="mobile" href="./lamcpainting.html" data-barba-prevent="true" class="slider_item u-image-wrapper w-inline-block">
+```
+
+### Results
+- Videos now load immediately when navigating to project pages
+- No need to refresh the page
+- All media elements initialize correctly
+- Consistent user experience across all pages
+
 ## Future Considerations
 If other pages have similar complex initialization requirements, consider applying the same `data-barba-prevent="true"` approach to their navigation links as well.

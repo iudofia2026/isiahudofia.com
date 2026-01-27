@@ -47,6 +47,23 @@
 
 
 <style>
+  /* Fix background grid positioning */
+  .info_main {
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  .info_main .bg_grid_wrap {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding-left: var(--padding-horizontal--main) !important;
+    padding-right: var(--padding-horizontal--main) !important;
+    z-index: -1 !important;
+  }
+
   /* Footer positioning under resume content */
   html, body {
     height: 100%;

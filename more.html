@@ -49,16 +49,27 @@
 
 <section class="gallery">
   <div class="container">
+    <div class="gallery-title-wrap">
+      <a href="#" class="nav_link" data-shuffle="button">
+        <div class="link_bracket_wrap is-left">
+          <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+        </div>
+        <p data-shuffle="text" data-shuffle-hover="Photo Gallery" data-shuffle-load="single" class="info_title_text u-display">photo gallery</p>
+        <div class="link_bracket_wrap is-right">
+          <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+        </div>
+      </a>
+    </div>
     <div class="grid">
       <div class="column-xs-12 column-md-2-4">
         <figure class="img-container">
           <img src="/assets/photos/england/oxford/IMG_0040.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Oxford Green</h2>
+            <h2 class="title">Oxford</h2>
             <h3 class="category">England</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Oxford Green</h2>
+            <h2 class="title">Oxford</h2>
             <h3 class="category">England</h3>
           </span>
         </figure>
@@ -67,12 +78,12 @@
         <figure class="img-container">
           <img src="/assets/photos/paris/IMG_5309.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Paris Nights</h2>
-            <h3 class="category">Paris</h3>
+            <h2 class="title">Paris</h2>
+            <h3 class="category">France</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Paris Nights</h2>
-            <h3 class="category">Paris</h3>
+            <h2 class="title">Paris</h2>
+            <h3 class="category">France</h3>
           </span>
         </figure>
       </div>
@@ -80,12 +91,12 @@
         <figure class="img-container">
           <img src="/assets/photos/nyc/IMG_9452.JPG">
           <figcaption class="img-content">
-            <h2 class="title">NYC Rooftop</h2>
-            <h3 class="category">New York</h3>
+            <h2 class="title">New York</h2>
+            <h3 class="category">USA</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">NYC Rooftop</h2>
-            <h3 class="category">New York</h3>
+            <h2 class="title">New York</h2>
+            <h3 class="category">USA</h3>
           </span>
         </figure>
       </div>
@@ -93,12 +104,12 @@
         <figure class="img-container">
           <img src="/assets/photos/catalunya/barcelona/IMG_4696.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Infinity Pool</h2>
-            <h3 class="category">Barcelona</h3>
+            <h2 class="title">Barcelona</h2>
+            <h3 class="category">Spain</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Infinity Pool</h2>
-            <h3 class="category">Barcelona</h3>
+            <h2 class="title">Barcelona</h2>
+            <h3 class="category">Spain</h3>
           </span>
         </figure>
       </div>
@@ -353,100 +364,30 @@ button:focus-visible,
     clear: both;
   }
 
-  .gallery-header {
-    margin-bottom: 2rem;
+  .info_title {
+    margin-bottom: 0;
   }
 
-  .portfolio-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: #f5f5f5;
-    font-size: clamp(32px, 6vw, 72px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    text-transform: lowercase;
-    mix-blend-mode: exclusion;
-    position: relative;
-    overflow: hidden;
-    padding: 0.2rem 0rem 0.2rem 0.5rem;
-    transition: color 300ms ease;
-    cursor: pointer;
-  }
-
-  .gallery-label {
-    font-size: clamp(16px, 2.5vw, 24px);
-    font-weight: 500;
-    color: #f5f5f5;
-    padding: 0.2rem 0.5rem;
-    letter-spacing: 0.02em;
-    text-transform: lowercase;
-    mix-blend-mode: difference;
-    transition: opacity 300ms ease;
-    opacity: 1;
-  }
-
-  .gallery-title-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-
-  .gallery-title.u-display {
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    color: #f5f5f5;
-    text-transform: lowercase;
-    position: relative;
-    z-index: 1;
-  }
-
-  .portfolio-hover-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .gallery-title-wrap {
+    margin-bottom: 0;
     width: 100%;
-    height: 100%;
-    background: #000;
-    z-index: 0;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 100%;
+    padding-top: 1rem;
   }
 
-  /* Hover effects */
-  .portfolio-nav-link:hover .portfolio-hover-overlay {
-    transform: scaleX(1);
-    transform-origin: right;
+  .gallery-title-wrap .info_title_text.u-display {
+    font-size: 2rem;
+    display: inline !important;
+    width: auto !important;
+    white-space: nowrap !important;
   }
 
-  .portfolio-nav-link:hover .gallery-title.u-display {
-    mix-blend-mode: exclusion;
+  .gallery-title-wrap .link_bracket_text {
+    font-size: 2rem;
   }
 
-  .portfolio-arrow {
-    display: inline-flex;
-    align-items: center;
-    transform: translateX(-5px);
-    opacity: 0.8;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-    font-size: clamp(24px, 4vw, 48px);
-    line-height: 1;
-    color: #f5f5f5;
-    mix-blend-mode: normal;
-  }
-
-  /* Hover effects */
-  .portfolio-nav-link:hover .gallery-label {
-    opacity: 0.6;
-  }
-
-  .portfolio-nav-link:hover .portfolio-arrow {
-    transform: translateX(5px);
-    opacity: 1;
+  .gallery-title-wrap .nav_link:hover .info_title_text.u-display {
+    color: white !important;
   }
 
   .img-container {

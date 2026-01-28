@@ -272,6 +272,9 @@ button:focus-visible,
   transform: translateX(30%);
   transition: 1s cubic-bezier(0.19, 1, 0.22, 1) 0.2s;
   filter: grayscale(100%);
+  /* Performance optimizations */
+  content-visibility: auto;
+  will-change: transform;
 }
 
 .photo:hover .photo__image img {
@@ -310,7 +313,7 @@ button:focus-visible,
 
 @media (min-width: 950px) {
   .gallery {
-    height: calc(100vh - 80px);
+    height: 150vh;
     margin-top: 80px;
     overflow: hidden;
   }
@@ -360,10 +363,10 @@ button:focus-visible,
 
 @keyframes move-down {
   0% {
-    transform: translateY(0);
+    transform: translateY(-50%);
   }
   100% {
-    transform: translateY(50%);
+    transform: translateY(0);
   }
 }
 </style>
@@ -412,25 +415,25 @@ button:focus-visible,
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-kyoto.jpeg" alt="Kyoto">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-kyoto.jpeg" alt="Kyoto">
         </div>
         <div class="photo__name">Kyoto</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-austria.jpeg" alt="Halstatt">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-austria.jpeg" alt="Halstatt">
         </div>
         <div class="photo__name">Halstatt</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-peru.jpeg" alt="Peru">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-peru.jpeg" alt="Peru">
         </div>
         <div class="photo__name">Peru</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rio.jpeg" alt="Rio">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rio.jpeg" alt="Rio">
         </div>
         <div class="photo__name">Rio</div>
       </div>
@@ -465,25 +468,25 @@ button:focus-visible,
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-italy.jpeg" alt="Italy">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-italy.jpeg" alt="Italy">
         </div>
         <div class="photo__name">Italy</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-osaka.jpeg" alt="Osaka">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-osaka.jpeg" alt="Osaka">
         </div>
         <div class="photo__name">Osaka</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali.jpeg" alt="Bali">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali.jpeg" alt="Bali">
         </div>
         <div class="photo__name">Bali</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris2.jpg" alt="Paris">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris2.jpg" alt="Paris">
         </div>
         <div class="photo__name">Paris</div>
       </div>
@@ -518,25 +521,25 @@ button:focus-visible,
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-cusco.jpeg" alt="Cusco">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-cusco.jpeg" alt="Cusco">
         </div>
         <div class="photo__name">Cusco</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rome.jpeg" alt="Rome">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rome.jpeg" alt="Rome">
         </div>
         <div class="photo__name">Rome</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris.jpeg" alt="Paris">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris.jpeg" alt="Paris">
         </div>
         <div class="photo__name">Paris</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali2.jpeg" alt="Bali">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali2.jpeg" alt="Bali">
         </div>
         <div class="photo__name">Bali</div>
       </div>
@@ -571,25 +574,25 @@ button:focus-visible,
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-milan.jpeg" alt="Milan">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-milan.jpeg" alt="Milan">
         </div>
         <div class="photo__name">Milan</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-budapest.jpg" alt="Budapest">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-budapest.jpg" alt="Budapest">
         </div>
         <div class="photo__name">Budapest</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-vienna.jpg" alt="Vienna">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-vienna.jpg" alt="Vienna">
         </div>
         <div class="photo__name">Vienna</div>
       </div>
       <div class="photo">
         <div class="photo__image">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-mexico.jpg" alt="Mexico">
+          <img loading="lazy" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-mexico.jpg" alt="Mexico">
         </div>
         <div class="photo__name">Mexico</div>
       </div>

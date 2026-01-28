@@ -1241,12 +1241,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Auto-scroll every 2 seconds in the current direction
   function startAutoScroll() {
-    autoScrollInterval = setInterval(() => {
+    // Clear any existing timers first
+    stopAutoScroll();
+    // Use timeout to wait 2 seconds before first scroll, then continue
+    autoScrollInterval = setTimeout(() => {
       scrollCarousel(scrollDirection);
+      // After first scroll, set up interval for continuous scrolling
+      autoScrollInterval = setInterval(() => {
+        scrollCarousel(scrollDirection);
+      }, 2000);
     }, 2000);
   }
 
   function stopAutoScroll() {
+    clearTimeout(autoScrollInterval);
     clearInterval(autoScrollInterval);
   }
 

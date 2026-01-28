@@ -598,18 +598,68 @@ button:focus-visible,
     background: transparent;
     border: none;
     padding: 0;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     color: white;
     opacity: 0.6;
+  }
+
+  .carousel-arrow svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 0px rgba(75, 156, 211, 0));
+    transition: all 0.1s ease;
   }
 
   .carousel-arrow:hover {
     opacity: 1;
   }
 
-  .carousel-arrow svg {
-    width: 100%;
-    height: 100%;
+  .carousel-arrow:hover svg {
+    animation: arrowGlitch 0.6s ease forwards;
+    filter: drop-shadow(0 0 3px rgba(75, 156, 211, 0.6));
+  }
+
+  @keyframes arrowGlitch {
+    0%, 100% {
+      transform: translate(0, 0);
+      clip-path: inset(0 0 0 0);
+    }
+    10% {
+      transform: translate(-2px, 1px);
+      clip-path: inset(20% 0 60% 0);
+    }
+    20% {
+      transform: translate(2px, -1px);
+      clip-path: inset(60% 0 20% 0);
+    }
+    30% {
+      transform: translate(-1px, 2px);
+      clip-path: inset(40% 0 40% 0);
+    }
+    40% {
+      transform: translate(1px, -2px);
+      clip-path: inset(10% 0 80% 0);
+    }
+    50% {
+      transform: translate(-2px, 0px);
+      clip-path: inset(80% 0 10% 0);
+    }
+    60% {
+      transform: translate(0px, 2px);
+      clip-path: inset(30% 0 30% 0);
+    }
+    70% {
+      transform: translate(2px, 1px);
+      clip-path: inset(70% 0 20% 0);
+    }
+    80% {
+      transform: translate(-1px, -1px);
+      clip-path: inset(0 0 0 0);
+    }
+    90% {
+      transform: translate(0px, 0px);
+      clip-path: inset(50% 0 50% 0);
+    }
   }
 
   .carousel-arrow-left {
@@ -618,47 +668,6 @@ button:focus-visible,
 
   .carousel-arrow-right {
     right: 0;
-  }
-
-  /* Bracket styling for arrows */
-  .carousel-arrow::before,
-  .carousel-arrow::after {
-    content: '[';
-    position: absolute;
-    color: #4B9CD3;
-    font-size: 1.2rem;
-    line-height: 1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: inherit;
-  }
-
-  .carousel-arrow::after {
-    content: ']';
-  }
-
-  .carousel-arrow:hover::before,
-  .carousel-arrow:hover::after {
-    opacity: 1;
-  }
-
-  .carousel-arrow-left::before {
-    left: -12px;
-  }
-
-  .carousel-arrow-left::after {
-    right: -12px;
-  }
-
-  .carousel-arrow-right::before {
-    left: -12px;
-  }
-
-  .carousel-arrow-right::after {
-    right: -12px;
   }
 
   .carousel-track {
@@ -885,15 +894,31 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
   const carousel = document.querySelector('.gallery-carousel');
   const track = carousel.querySelector('.carousel-items');
-  const items = carousel.querySelectorAll('.carousel-item');
+  const items = Array.from(carousel.querySelectorAll('.carousel-item'));
   const leftArrow = carousel.querySelector('.carousel-arrow-left');
   const rightArrow = carousel.querySelector('.carousel-arrow-right');
 
   if (!carousel || !track || !items.length) return;
 
+  // Shuffle items randomly on load
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Randomize carousel items on load
+  const shuffledItems = shuffleArray([...items]);
+  track.innerHTML = '';
+  shuffledItems.forEach(item => {
+    track.appendChild(item);
+  });
+
   let currentIndex = 0;
   let autoScrollInterval;
-  const totalItems = items.length;
+  const totalItems = shuffledItems.length;
 
   // Calculate items visible based on viewport
   function getVisibleItems() {

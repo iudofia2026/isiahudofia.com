@@ -233,6 +233,134 @@ button:focus-visible,
 </style>
 
 <style>
+/* Scrolling Gallery Styles */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.gallery__strip {
+  min-height: 100vh;
+}
+
+.gallery__strip__wrapper {
+  flex: 0 0 100%;
+  background: transparent;
+  border-right: 2px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.photo {
+  position: relative;
+  text-align: right;
+  padding: 0 2rem 3rem 0;
+}
+
+.photo__image {
+  overflow: hidden;
+  position: relative;
+}
+
+.photo__image img {
+  width: 90%;
+  display: block;
+  transform: translateX(30%);
+  transition: 1s cubic-bezier(0.19, 1, 0.22, 1) 0.2s;
+  filter: grayscale(100%);
+}
+
+.photo:hover .photo__image img {
+  transform: translateX(0%);
+  filter: grayscale(0%);
+}
+
+.photo__name {
+  text-transform: uppercase;
+  font-size: 40px;
+  letter-spacing: 2px;
+  color: transparent;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+  margin-top: -25px;
+  transition: 0.4s ease-in-out 0.4s;
+  position: relative;
+  width: 100%;
+  font-weight: 300;
+}
+
+.photo:hover .photo__name {
+  color: #fff;
+}
+
+@media (min-width: 500px) {
+  .gallery__strip__wrapper {
+    flex: 0 0 50%;
+  }
+}
+
+@media (min-width: 950px) {
+  .gallery {
+    height: auto;
+    min-height: calc(100vh - 80px);
+  }
+
+  .gallery__strip.one {
+    animation: 60s move-it ease alternate infinite 5s;
+    transform: translateY(2%);
+  }
+
+  .gallery__strip.three {
+    animation: 70s move-it ease alternate infinite 6s;
+    transform: translateY(2%);
+  }
+
+  .gallery__strip.two {
+    animation: 58s move-it-2 ease alternate infinite 5s;
+    transform: translateY(-50%);
+  }
+
+  .gallery__strip.four {
+    animation: 65s move-it-2 ease alternate infinite 5.5s;
+    transform: translateY(-50%);
+  }
+
+  .gallery__strip:hover {
+    animation-play-state: paused;
+  }
+
+  .gallery__strip__wrapper {
+    flex: 0 0 25%;
+  }
+}
+
+@keyframes move-it {
+  0%,
+  90%,
+  100% {
+    transform: translateY(2%);
+  }
+  45% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes move-it-2 {
+  0%,
+  90%,
+  100% {
+    transform: translateY(-50%);
+  }
+  45% {
+    transform: translateY(5%);
+  }
+}
+</style>
+
+<style>
   /* Fix background grid positioning */
   .info_main .bg_grid_wrap {
     position: fixed !important;
@@ -245,7 +373,125 @@ button:focus-visible,
     z-index: -1 !important;
   }
 </style>
-</div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><!-- YOUR CONTENT GOES HERE --></div></div><script src="./Info – Isiah Udofia_files/jquery-3.5.1.min.dc5e7f18c8.js" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
+</div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><!-- YOUR CONTENT GOES HERE --></div></div>
+
+<div class="gallery">
+  <div class="gallery__strip__wrapper">
+    <div class="gallery__strip one">
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-kyoto.jpeg" alt="Kyoto">
+        </div>
+        <div class="photo__name">Kyoto</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-austria.jpeg" alt="Halstatt">
+        </div>
+        <div class="photo__name">Halstatt</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-peru.jpeg" alt="Peru">
+        </div>
+        <div class="photo__name">Peru</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rio.jpeg" alt="Rio">
+        </div>
+        <div class="photo__name">Rio</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery__strip__wrapper">
+    <div class="gallery__strip two">
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-italy.jpeg" alt="Italy">
+        </div>
+        <div class="photo__name">Italy</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-osaka.jpeg" alt="Osaka">
+        </div>
+        <div class="photo__name">Osaka</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali.jpeg" alt="Bali">
+        </div>
+        <div class="photo__name">Bali</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris2.jpg" alt="Paris">
+        </div>
+        <div class="photo__name">Paris</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery__strip__wrapper">
+    <div class="gallery__strip three">
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-cusco.jpeg" alt="Cusco">
+        </div>
+        <div class="photo__name">Cusco</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rome.jpeg" alt="Rome">
+        </div>
+        <div class="photo__name">Rome</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris.jpeg" alt="Paris">
+        </div>
+        <div class="photo__name">Paris</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali2.jpeg" alt="Bali">
+        </div>
+        <div class="photo__name">Bali</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery__strip__wrapper">
+    <div class="gallery__strip four">
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-milan.jpeg" alt="Milan">
+        </div>
+        <div class="photo__name">Milan</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-budapest.jpg" alt="Budapest">
+        </div>
+        <div class="photo__name">Budapest</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-vienna.jpg" alt="Vienna">
+        </div>
+        <div class="photo__name">Vienna</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-mexico.jpg" alt="Mexico">
+        </div>
+        <div class="photo__name">Mexico</div>
+      </div>
+    </div>
+  </div>
+</div><script src="./Info – Isiah Udofia_files/jquery-3.5.1.min.dc5e7f18c8.js" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
 <script>
 // Favicon preservation during page transitions
 (function() {

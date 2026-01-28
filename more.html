@@ -626,11 +626,14 @@ button:focus-visible,
     content: '[';
     position: absolute;
     color: #4B9CD3;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    line-height: 1;
     opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.3s ease;
     pointer-events: none;
-    font-family: monospace;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: inherit;
   }
 
   .carousel-arrow::after {
@@ -643,39 +646,19 @@ button:focus-visible,
   }
 
   .carousel-arrow-left::before {
-    left: -8px;
-    transform: translateX(-5px);
+    left: -12px;
   }
 
   .carousel-arrow-left::after {
-    right: -8px;
-    transform: translateX(5px);
-  }
-
-  .carousel-arrow-left:hover::before {
-    transform: translateX(0);
-  }
-
-  .carousel-arrow-left:hover::after {
-    transform: translateX(0);
+    right: -12px;
   }
 
   .carousel-arrow-right::before {
-    left: -8px;
-    transform: translateX(-5px);
+    left: -12px;
   }
 
   .carousel-arrow-right::after {
-    right: -8px;
-    transform: translateX(5px);
-  }
-
-  .carousel-arrow-right:hover::before {
-    transform: translateX(0);
-  }
-
-  .carousel-arrow-right:hover::after {
-    transform: translateX(0);
+    right: -12px;
   }
 
   .carousel-track {

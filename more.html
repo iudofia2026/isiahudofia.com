@@ -49,81 +49,76 @@
       <h1 data-shuffle="text" data-shuffle-load="single" class="gallery-title u-display">Photo Gallery</h1>
     </div>
     <div class="grid">
-      <div class="column-xs-12 column-md-4">
+      <!-- First Row -->
+      <div class="gallery-row">
         <figure class="img-container">
-          <img src="https://assets.codepen.io/1159990/smart-watch.jpg" />
+          <img src="/assets/photos/paris/IMG_6544.JPG" />
           <figcaption class="img-content">
-            <h2 class="title">Smart Watch</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Olympics Crowd</h2>
+            <h3 class="category">Paris 2024</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Smart Watch</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Olympics Crowd</h2>
+            <h3 class="category">Paris 2024</h3>
+          </span>
+        </figure>
+        <figure class="img-container">
+          <img src="/assets/photos/paris/IMG_5946.jpeg" />
+          <figcaption class="img-content">
+            <h2 class="title">Seine Sunset</h2>
+            <h3 class="category">Paris</h3>
+          </figcaption>
+          <span class="img-content-hover">
+            <h2 class="title">Seine Sunset</h2>
+            <h3 class="category">Paris</h3>
+          </span>
+        </figure>
+        <figure class="img-container">
+          <img src="/assets/photos/nyc/IMG_9452.JPG">
+          <figcaption class="img-content">
+            <h2 class="title">NYC Rooftop</h2>
+            <h3 class="category">New York</h3>
+          </figcaption>
+          <span class="img-content-hover">
+            <h2 class="title">NYC Rooftop</h2>
+            <h3 class="category">New York</h3>
           </span>
         </figure>
       </div>
-      <div class="column-xs-12 column-md-4">
+
+      <!-- Second Row -->
+      <div class="gallery-row">
         <figure class="img-container">
-          <img src="https://assets.codepen.io/1159990/camera-film.jpg" />
+          <img src="/assets/photos/catalunya/barcelona/IMG_4696.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Camera Film</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Infinity Pool</h2>
+            <h3 class="category">Barcelona</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Camera Film</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Infinity Pool</h2>
+            <h3 class="category">Barcelona</h3>
           </span>
         </figure>
-      </div>
-      <div class="column-xs-12 column-md-4">
         <figure class="img-container">
-          <img src="https://assets.codepen.io/1159990/coffee.jpg">
+          <img src="/assets/photos/san francisco/lombard st.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Coffee</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Lombard Street</h2>
+            <h3 class="category">San Francisco</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Coffee</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Lombard Street</h2>
+            <h3 class="category">San Francisco</h3>
           </span>
         </figure>
-      </div>
-      <div class="column-xs-12 column-md-6">
         <figure class="img-container">
-          <img src="https://assets.codepen.io/1159990/phone.jpg" />
+          <img src="/assets/photos/new haven/IMG_1567.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Phone</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Yale in Snow</h2>
+            <h3 class="category">New Haven</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Phone</h2>
-            <h3 class="category">Showcase</h3>
-          </span>
-        </figure>
-      </div>
-      <div class="column-xs-12 column-md-6">
-        <figure class="img-container">
-          <img src="https://assets.codepen.io/1159990/keyboard.jpg" />
-          <figcaption class="img-content">
-            <h2 class="title">Keyboard</h2>
-            <h3 class="category">Showcase</h3>
-          </figcaption>
-          <span class="img-content-hover">
-            <h2 class="title">Keyboard</h2>
-            <h3 class="category">Showcase</h3>
-          </span>
-        </figure>
-      </div>
-      <div class="column-xs-12">
-        <figure class="img-container">
-          <img src="https://assets.codepen.io/1159990/wrist-watch.jpg" />
-          <figcaption class="img-content">
-            <h2 class="title">Wrist Watch</h2>
-            <h3 class="category">Showcase</h3>
-          </figcaption>
-          <span class="img-content-hover">
-            <h2 class="title">Wrist Watch</h2>
-            <h3 class="category">Showcase</h3>
+            <h2 class="title">Yale in Snow</h2>
+            <h3 class="category">New Haven</h3>
           </span>
         </figure>
       </div>
@@ -437,13 +432,16 @@ button:focus-visible,
   }
 
   .gallery .grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
-  .column-xs-12 {
-    grid-column: span 12;
+  .gallery-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 
   @media (min-width: 768px) {
@@ -456,20 +454,8 @@ button:focus-visible,
       padding: 0 2rem;
     }
 
-    .column-md-10 {
-      grid-column: span 10;
-    }
-
-    .column-md-2 {
-      grid-column: span 2;
-    }
-
-    .column-md-4 {
-      grid-column: span 4;
-    }
-
-    .column-md-6 {
-      grid-column: span 6;
+    .gallery-row {
+      gap: 1.5rem;
     }
   }
 
@@ -557,6 +543,60 @@ button:focus-visible,
 
 // Gallery Mouse Tracking for Hover Tooltips
 document.addEventListener('DOMContentLoaded', function() {
+  // Tooltip shuffle animation function
+  function triggerTooltipShuffle(container) {
+    const shuffleElements = container.querySelectorAll('[data-shuffle="text"]');
+
+    shuffleElements.forEach(element => {
+      const originalText = element.textContent;
+      const chars = '!<>-_\\/[]{}—=+*^?#________';
+
+      // Store original text
+      element.setAttribute('data-original-text', originalText);
+
+      // Start shuffle animation
+      let step = 0;
+      const steps = 8; // Number of shuffle steps
+      const interval = setInterval(() => {
+        if (step >= steps) {
+          element.textContent = originalText;
+          clearInterval(interval);
+          return;
+        }
+
+        // Generate shuffled version
+        let shuffled = '';
+        for (let i = 0; i < originalText.length; i++) {
+          const char = originalText[i];
+          if (char === ' ') {
+            shuffled += ' ';
+          } else if (Math.random() < 0.3 + (step * 0.1)) {
+            shuffled += char;
+          } else {
+            shuffled += chars[Math.floor(Math.random() * chars.length)];
+          }
+        }
+
+        element.textContent = shuffled;
+        step++;
+      }, 50);
+
+      // Store interval for cleanup
+      element.shuffleInterval = interval;
+    });
+  }
+
+  // Cleanup tooltip shuffle animations
+  function cleanupTooltipShuffle(container) {
+    const shuffleElements = container.querySelectorAll('[data-shuffle="text"]');
+    shuffleElements.forEach(element => {
+      if (element.shuffleInterval) {
+        clearInterval(element.shuffleInterval);
+        delete element.shuffleInterval;
+      }
+    });
+  }
+
   const imgContainers = document.querySelectorAll('.img-container');
   const gallery = document.querySelector('.gallery');
 
@@ -581,6 +621,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Hide tooltip when mouse leaves the entire gallery
   gallery.addEventListener('mouseleave', function() {
+    cleanupTooltipShuffle(tooltip);
     tooltip.style.display = 'none';
   });
 
@@ -598,6 +639,9 @@ document.addEventListener('DOMContentLoaded', function() {
       tooltip.style.display = 'block';
       tooltip.style.left = e.clientX + 'px';
       tooltip.style.top = e.clientY + 'px';
+
+      // Trigger shuffle animation for the tooltip content
+      triggerTooltipShuffle(tooltip);
     });
 
     container.addEventListener('mouseleave', function() {
@@ -605,6 +649,7 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         const hoveredElement = document.elementFromPoint(event.clientX, event.clientY);
         if (!hoveredElement || !hoveredElement.closest('.img-container')) {
+          cleanupTooltipShuffle(tooltip);
           tooltip.style.display = 'none';
         }
       }, 10);

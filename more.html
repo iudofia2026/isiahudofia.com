@@ -6,8 +6,8 @@
     color: #4B9CD3 !important;
   }
 
-  .is-archive .nav_btn_text, .is-archive .nav_btn_text:hover, .is-archive .nav_link:hover .nav_btn_text {
-    color: #4B9CD3 !important;
+  .nav_btn_text.u-text-main {
+    color: white !important;
   }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}</style><title>More – Isiah Udofia</title><meta content="I'm Isiah Udofia, a product-minded engineer at Yale University designing end-to-end user experiences. I integrate video, photo, and animation into my design work." name="description"><meta content="More – Isiah Udofia" property="og:title"><meta content="I'm Isiah Udofia, a product-minded engineer at Yale University designing end-to-end user experiences. I integrate video, photo, and animation into my design work." property="og:description"><meta content="More – Isiah Udofia" property="twitter:title"><meta content="I'm Isiah Udofia, a product-minded engineer at Yale University designing end-to-end user experiences. I integrate video, photo, and animation into my design work." property="twitter:description"><meta property="og:type" content="website"><meta content="summary_large_image" name="twitter:card"><meta content="width=device-width, initial-scale=1" name="viewport">
@@ -49,22 +49,21 @@
 
 <section class="gallery">
   <div class="container">
-    <div class="gallery-header">
-      <a href="#" class="portfolio-nav-link" data-shuffle="button">
-        <span class="gallery-label">[more]</span>
-        <span class="gallery-title-wrapper">
-          <h1 data-shuffle="text" data-shuffle-load="single" class="gallery-title u-display">photo gallery</h1>
-          <span class="portfolio-hover-overlay"></span>
-        </span>
-        <span class="portfolio-arrow">
-          <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor">
-            <polygon points="17.414 12 8.707 3.293 7.293 4.707 14.586 12 7.293 19.293 8.707 20.707 17.414 12"/>
-          </svg>
-        </span>
-      </a>
-    </div>
     <div class="grid">
-      <div class="column-xs-12 column-md-4">
+      <div class="column-xs-12 column-md-2-4">
+        <figure class="img-container">
+          <img src="/assets/photos/england/oxford/IMG_0040.jpeg" />
+          <figcaption class="img-content">
+            <h2 class="title">Oxford Green</h2>
+            <h3 class="category">England</h3>
+          </figcaption>
+          <span class="img-content-hover">
+            <h2 class="title">Oxford Green</h2>
+            <h3 class="category">England</h3>
+          </span>
+        </figure>
+      </div>
+      <div class="column-xs-12 column-md-2-4">
         <figure class="img-container">
           <img src="/assets/photos/paris/IMG_6544.JPG" />
           <figcaption class="img-content">
@@ -77,20 +76,7 @@
           </span>
         </figure>
       </div>
-      <div class="column-xs-12 column-md-4">
-        <figure class="img-container">
-          <img src="/assets/photos/paris/IMG_5946.jpeg" />
-          <figcaption class="img-content">
-            <h2 class="title">Seine Sunset</h2>
-            <h3 class="category">Paris</h3>
-          </figcaption>
-          <span class="img-content-hover">
-            <h2 class="title">Seine Sunset</h2>
-            <h3 class="category">Paris</h3>
-          </span>
-        </figure>
-      </div>
-      <div class="column-xs-12 column-md-4">
+      <div class="column-xs-12 column-md-2-4">
         <figure class="img-container">
           <img src="/assets/photos/nyc/IMG_9452.JPG">
           <figcaption class="img-content">
@@ -103,7 +89,7 @@
           </span>
         </figure>
       </div>
-      <div class="column-xs-12 column-md-6">
+      <div class="column-xs-12 column-md-2-4">
         <figure class="img-container">
           <img src="/assets/photos/catalunya/barcelona/IMG_4696.jpeg" />
           <figcaption class="img-content">
@@ -116,29 +102,16 @@
           </span>
         </figure>
       </div>
-      <div class="column-xs-12 column-md-6">
+      <div class="column-xs-12 column-md-2-4">
         <figure class="img-container">
-          <img src="/assets/photos/san francisco/lombard st.jpeg" />
+          <img src="/assets/photos/england/cambridge/IMG_0113.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Lombard Street</h2>
-            <h3 class="category">San Francisco</h3>
+            <h2 class="title">Cambridge</h2>
+            <h3 class="category">England</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Lombard Street</h2>
-            <h3 class="category">San Francisco</h3>
-          </span>
-        </figure>
-      </div>
-      <div class="column-xs-12">
-        <figure class="img-container">
-          <img src="/assets/photos/new haven/IMG_1567.jpeg" />
-          <figcaption class="img-content">
-            <h2 class="title">Yale Snow</h2>
-            <h3 class="category">New Haven</h3>
-          </figcaption>
-          <span class="img-content-hover">
-            <h2 class="title">Yale Snow</h2>
-            <h3 class="category">New Haven</h3>
+            <h2 class="title">Cambridge</h2>
+            <h3 class="category">England</h3>
           </span>
         </figure>
       </div>
@@ -478,7 +451,7 @@ button:focus-visible,
 
   .img-container {
     width: 100%;
-    height: 500px;
+    height: 250px;
     cursor: pointer;
     overflow: hidden;
     position: relative;
@@ -487,7 +460,7 @@ button:focus-visible,
 
   .gallery img {
     width: 100%;
-    height: 500px;
+    height: 250px;
     object-fit: cover;
     display: block;
     transform: scale(1);
@@ -541,20 +514,16 @@ button:focus-visible,
 
   .gallery .grid {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-gap: 1rem;
   }
 
   .column-xs-12 {
-    grid-column: span 12;
+    grid-column: span 5;
   }
 
-  .column-md-4 {
-    grid-column: span 4;
-  }
-
-  .column-md-6 {
-    grid-column: span 6;
+  .column-md-2-4 {
+    grid-column: span 1;
   }
 
   @media (min-width: 768px) {
@@ -590,6 +559,10 @@ button:focus-visible,
 
     .gallery .grid {
       grid-template-columns: 1fr;
+    }
+
+    .column-xs-12 {
+      grid-column: span 1;
     }
 
     .img-container {

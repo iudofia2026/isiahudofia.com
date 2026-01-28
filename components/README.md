@@ -1,15 +1,18 @@
-# Showcase Components
+# Reusable Components
 
-This directory contains reusable components for the portfolio showcase cards.
+This directory contains reusable components for the site.
 
 ## Directory Structure
 
 ```
 components/
 ├── README.md (this file)
-└── showcase/
-    ├── coming-soon-hover.html
-    └── view-project-hover.html
+├── showcase/
+│   ├── coming-soon-hover.html
+│   └── view-project-hover.html
+└── gallery/
+    ├── katherine-kato-gallery.html
+    └── README.md
 ```
 
 ## Available Components

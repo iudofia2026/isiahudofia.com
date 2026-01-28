@@ -45,6 +45,9 @@
 
 <section class="gallery">
   <div class="container">
+    <div class="gallery-header">
+      <h1 data-shuffle="text" data-shuffle-load="single" class="gallery-title u-display">Photo Gallery</h1>
+    </div>
     <div class="grid">
       <div class="column-xs-12 column-md-4">
         <figure class="img-container">
@@ -362,6 +365,15 @@ button:focus-visible,
     clear: both;
   }
 
+  .gallery-header {
+    margin-bottom: 2rem;
+  }
+
+  .gallery-title.u-display {
+    margin: 0;
+    font-weight: 500;
+  }
+
   .img-container {
     width: 100%;
     height: 500px;
@@ -416,10 +428,11 @@ button:focus-visible,
     display: none;
   }
 
-  /* Grid System for Katherine Kato Gallery */
+  /* Grid System for Gallery */
   .gallery .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
     padding: 0 1rem;
   }
 
@@ -439,6 +452,10 @@ button:focus-visible,
       margin-top: 0;
     }
 
+    .gallery .container {
+      padding: 0 2rem;
+    }
+
     .column-md-10 {
       grid-column: span 10;
     }
@@ -456,6 +473,12 @@ button:focus-visible,
     }
   }
 
+  @media (min-width: 1200px) {
+    .gallery .container {
+      padding: 0 3rem;
+    }
+  }
+
   @media screen and (max-width: 767px) {
     .gallery {
       padding: 1.5rem 0 3rem 0;
@@ -464,6 +487,10 @@ button:focus-visible,
 
     .gallery .container {
       padding: 0 1rem;
+    }
+
+    .gallery-header {
+      margin-bottom: 1.5rem;
     }
   }
 
@@ -545,10 +572,10 @@ document.addEventListener('DOMContentLoaded', function() {
     background: #000;
     font-weight: 400;
     pointer-events: none;
-    border-radius: 4px;
+    border-radius: 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     transform: translate(-50%, calc(-100% - 10px));
-    font-family: inherit;
+    font-family: var(--font--primary-family);
   `;
   document.body.appendChild(tooltip);
 
@@ -565,8 +592,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     container.addEventListener('mouseenter', function(e) {
       tooltip.innerHTML = `
-        <h2 style="color: #fff; font-size: 1rem; font-weight: 500; margin: 0; font-family: inherit;">${title}</h2>
-        <h3 style="font-size: 0.875rem; color: #999; margin: 0; font-family: inherit;">${category}</h3>
+        <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1rem; font-weight: 500; margin: 0; font-family: var(--font--primary-family);">${title}</h2>
+        <h3 data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.875rem; color: #999; margin: 0; font-family: var(--font--primary-family);">${category}</h3>
       `;
       tooltip.style.display = 'block';
       tooltip.style.left = e.clientX + 'px';

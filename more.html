@@ -987,15 +987,17 @@ button:focus-visible,
   @media screen and (max-width: 768px) {
     .carousel-item {
       flex: 0 0 calc(33.333% - 0.67rem); /* Show 3 items on mobile but center one */
+      transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
     }
 
-    .carousel-item:nth-child(2) {
+    .carousel-item.focused {
       /* Center item is fully visible */
-      opacity: 1;
-      transform: scale(1);
+      opacity: 1 !important;
+      transform: scale(1) !important;
+      filter: none !important;
     }
 
-    .carousel-item:not(:nth-child(2)) {
+    .carousel-item.unfocused {
       /* Side items are faded out */
       opacity: 0.3;
       transform: scale(0.9);
@@ -1229,6 +1231,34 @@ document.addEventListener('DOMContentLoaded', function() {
     return 5; // Desktop
   }
 
+  // Update mobile focus states
+  function updateMobileFocus() {
+    const width = window.innerWidth;
+    if (width > 768) return; // Only apply to mobile
+
+    // Remove all focus states
+    currentItems.forEach(item => {
+      item.classList.remove('focused', 'unfocused');
+    });
+
+    // Get visible items (3 on mobile)
+    const visibleItems = getVisibleItems() + 1; // +1 because we show 3 items but only 1 is "visible" in calculations
+
+    // Find which items are currently visible
+    for (let i = 0; i < currentItems.length; i++) {
+      if (i >= currentIndex && i < currentIndex + 3) {
+        // This is a visible item
+        if (i === currentIndex + 1) {
+          // Middle item is focused
+          currentItems[i].classList.add('focused');
+        } else {
+          // Side items are unfocused
+          currentItems[i].classList.add('unfocused');
+        }
+      }
+    }
+  }
+
   // Scroll carousel by one item with continuous loop
   function scrollCarousel(direction) {
     const visibleItems = getVisibleItems();
@@ -1243,6 +1273,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const itemWidth = currentItems[0].offsetWidth;
         const gap = 16;
         track.style.transform = `translateX(0px)`;
+        // Update mobile focus immediately for seamless reset
+        updateMobileFocus();
         // Re-enable transition after a brief delay
         setTimeout(() => {
           track.style.transition = 'transform 0.5s ease-in-out';
@@ -1259,6 +1291,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const gap = 16;
         const translateX = -(currentIndex * (itemWidth + gap));
         track.style.transform = `translateX(${translateX}px)`;
+        // Update mobile focus immediately for seamless reset
+        updateMobileFocus();
         // Re-enable transition after a brief delay
         setTimeout(() => {
           track.style.transition = 'transform 0.5s ease-in-out';
@@ -1272,6 +1306,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const gap = 16; // 1rem gap
     const translateX = -(currentIndex * (itemWidth + gap));
     track.style.transform = `translateX(${translateX}px)`;
+
+    // Update mobile focus states after scroll
+    updateMobileFocus();
   }
 
   // Auto-scroll every 2 seconds in the current direction
@@ -1326,8 +1363,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const gap = 16;
       const translateX = -(currentIndex * (itemWidth + gap));
       track.style.transform = `translateX(${translateX}px)`;
+      // Update mobile focus after resize
+      updateMobileFocus();
     }, 250);
   });
+
+  // Initialize mobile focus states
+  updateMobileFocus();
 
   // Start auto-scroll
   startAutoScroll();

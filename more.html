@@ -46,22 +46,25 @@
 <section class="gallery">
   <div class="container">
     <div class="gallery-header">
-      <h1 data-shuffle="text" data-shuffle-load="single" class="gallery-title u-display">Photo Gallery</h1>
+      <a href="#" class="gallery-title-link" data-shuffle="button">
+        <h1 data-shuffle="text" data-shuffle-load="single" class="gallery-title u-display">Photo Gallery</h1>
+      </a>
     </div>
     <div class="grid">
-      <!-- First Row -->
-      <div class="gallery-row">
+      <div class="column-xs-12 column-md-4">
         <figure class="img-container">
           <img src="/assets/photos/paris/IMG_6544.JPG" />
           <figcaption class="img-content">
             <h2 class="title">Olympics Crowd</h2>
-            <h3 class="category">Paris 2024</h3>
+            <h3 class="category">Paris</h3>
           </figcaption>
           <span class="img-content-hover">
             <h2 class="title">Olympics Crowd</h2>
-            <h3 class="category">Paris 2024</h3>
+            <h3 class="category">Paris</h3>
           </span>
         </figure>
+      </div>
+      <div class="column-xs-12 column-md-4">
         <figure class="img-container">
           <img src="/assets/photos/paris/IMG_5946.jpeg" />
           <figcaption class="img-content">
@@ -73,6 +76,8 @@
             <h3 class="category">Paris</h3>
           </span>
         </figure>
+      </div>
+      <div class="column-xs-12 column-md-4">
         <figure class="img-container">
           <img src="/assets/photos/nyc/IMG_9452.JPG">
           <figcaption class="img-content">
@@ -85,9 +90,7 @@
           </span>
         </figure>
       </div>
-
-      <!-- Second Row -->
-      <div class="gallery-row">
+      <div class="column-xs-12 column-md-6">
         <figure class="img-container">
           <img src="/assets/photos/catalunya/barcelona/IMG_4696.jpeg" />
           <figcaption class="img-content">
@@ -99,6 +102,8 @@
             <h3 class="category">Barcelona</h3>
           </span>
         </figure>
+      </div>
+      <div class="column-xs-12 column-md-6">
         <figure class="img-container">
           <img src="/assets/photos/san francisco/lombard st.jpeg" />
           <figcaption class="img-content">
@@ -110,14 +115,16 @@
             <h3 class="category">San Francisco</h3>
           </span>
         </figure>
+      </div>
+      <div class="column-xs-12">
         <figure class="img-container">
           <img src="/assets/photos/new haven/IMG_1567.jpeg" />
           <figcaption class="img-content">
-            <h2 class="title">Yale in Snow</h2>
+            <h2 class="title">Yale Snow</h2>
             <h3 class="category">New Haven</h3>
           </figcaption>
           <span class="img-content-hover">
-            <h2 class="title">Yale in Snow</h2>
+            <h2 class="title">Yale Snow</h2>
             <h3 class="category">New Haven</h3>
           </span>
         </figure>
@@ -369,6 +376,16 @@ button:focus-visible,
     font-weight: 500;
   }
 
+  .gallery-title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .gallery-title-link:hover {
+    opacity: 0.7;
+  }
+
   .img-container {
     width: 100%;
     height: 500px;
@@ -382,6 +399,7 @@ button:focus-visible,
     width: 100%;
     height: 500px;
     object-fit: cover;
+    display: block;
     transform: scale(1);
     transition: all 0.3s ease-in-out;
   }
@@ -432,16 +450,21 @@ button:focus-visible,
   }
 
   .gallery .grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 1rem;
   }
 
-  .gallery-row {
-    display: flex;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: flex-start;
+  .column-xs-12 {
+    grid-column: span 12;
+  }
+
+  .column-md-4 {
+    grid-column: span 4;
+  }
+
+  .column-md-6 {
+    grid-column: span 6;
   }
 
   @media (min-width: 768px) {
@@ -452,10 +475,6 @@ button:focus-visible,
 
     .gallery .container {
       padding: 0 2rem;
-    }
-
-    .gallery-row {
-      gap: 1.5rem;
     }
   }
 
@@ -477,6 +496,14 @@ button:focus-visible,
 
     .gallery-header {
       margin-bottom: 1.5rem;
+    }
+
+    .gallery .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .img-container {
+      height: 100%;
     }
   }
 
@@ -645,14 +672,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     container.addEventListener('mouseleave', function() {
-      // Only hide if we're not moving to another container
-      setTimeout(() => {
-        const hoveredElement = document.elementFromPoint(event.clientX, event.clientY);
-        if (!hoveredElement || !hoveredElement.closest('.img-container')) {
-          cleanupTooltipShuffle(tooltip);
-          tooltip.style.display = 'none';
-        }
-      }, 10);
+      // Hide immediately when leaving this specific container
+      cleanupTooltipShuffle(tooltip);
+      tooltip.style.display = 'none';
     });
 
     container.addEventListener('mousemove', function(e) {

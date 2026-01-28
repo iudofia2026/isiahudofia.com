@@ -72,7 +72,7 @@
         <div class="link_bracket_wrap is-left">
           <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
         </div>
-        <p data-shuffle="text" data-shuffle-hover="photo gallery" data-shuffle-load="single" class="info_title_text u-display">photo gallery</p>
+        <p data-shuffle="text" data-shuffle-hover="photography" data-shuffle-load="single" class="info_title_text u-display">photography</p>
         <div class="link_bracket_wrap is-right">
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
@@ -732,6 +732,12 @@ button:focus-visible,
     padding-top: 1rem;
   }
 
+  @media (min-width: 769px) {
+    .gallery-title-wrap {
+      padding-bottom: 0.25rem;
+    }
+  }
+
   .gallery-title-wrap .info_title_text.u-display {
     font-size: 2rem;
     display: inline !important;
@@ -882,7 +888,17 @@ button:focus-visible,
 
     .img-content {
       display: block;
-      padding: 1rem 0;
+      padding: 0.5rem 0;
+      text-align: center;
+    }
+
+    .gallery .img-content .title {
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .gallery .img-content .category {
+      font-size: 0.75rem;
     }
   }
 
@@ -970,16 +986,35 @@ button:focus-visible,
 
   @media screen and (max-width: 768px) {
     .carousel-item {
-      flex: 0 0 calc(50% - 0.5rem); /* Show 2 items on mobile */
+      flex: 0 0 calc(33.333% - 0.67rem); /* Show 3 items on mobile but center one */
+    }
+
+    .carousel-item:nth-child(2) {
+      /* Center item is fully visible */
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .carousel-item:not(:nth-child(2)) {
+      /* Side items are faded out */
+      opacity: 0.3;
+      transform: scale(0.9);
+      filter: blur(2px);
+    }
+
+    .carousel-item .img-container {
+      flex-direction: column;
+      height: auto;
     }
 
     .gallery-carousel {
-      padding: 0 20px;
+      padding: 0 15px; /* Reduced padding for better side item visibility */
     }
 
     .carousel-arrow {
       width: 18px;
       height: 18px;
+      z-index: 15; /* Ensure arrows appear above faded items */
     }
 
     .carousel-arrow::before,
@@ -1189,7 +1224,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Calculate items visible based on viewport
   function getVisibleItems() {
     const width = window.innerWidth;
-    if (width <= 768) return 2; // Mobile
+    if (width <= 768) return 1; // Mobile - show 1 centered item
     if (width <= 1024) return 3; // Tablet
     return 5; // Desktop
   }

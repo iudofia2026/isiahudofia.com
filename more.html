@@ -244,7 +244,7 @@ button:focus-visible,
 }
 
 .gallery__strip {
-  min-height: 100vh;
+  min-height: auto;
 }
 
 .gallery__strip__wrapper {
@@ -306,26 +306,23 @@ button:focus-visible,
   .gallery {
     height: auto;
     min-height: calc(100vh - 80px);
+    margin-top: 80px;
   }
 
   .gallery__strip.one {
-    animation: 60s move-it ease alternate infinite 5s;
-    transform: translateY(2%);
+    animation: 30s move-up linear infinite;
   }
 
   .gallery__strip.three {
-    animation: 70s move-it ease alternate infinite 6s;
-    transform: translateY(2%);
+    animation: 35s move-up linear infinite;
   }
 
   .gallery__strip.two {
-    animation: 58s move-it-2 ease alternate infinite 5s;
-    transform: translateY(-50%);
+    animation: 29s move-down linear infinite;
   }
 
   .gallery__strip.four {
-    animation: 65s move-it-2 ease alternate infinite 5.5s;
-    transform: translateY(-50%);
+    animation: 32s move-down linear infinite;
   }
 
   .gallery__strip:hover {
@@ -337,25 +334,21 @@ button:focus-visible,
   }
 }
 
-@keyframes move-it {
-  0%,
-  90%,
-  100% {
-    transform: translateY(2%);
+@keyframes move-up {
+  0% {
+    transform: translateY(0);
   }
-  45% {
+  100% {
     transform: translateY(-50%);
   }
 }
 
-@keyframes move-it-2 {
-  0%,
-  90%,
-  100% {
-    transform: translateY(-50%);
+@keyframes move-down {
+  0% {
+    transform: translateY(0);
   }
-  45% {
-    transform: translateY(5%);
+  100% {
+    transform: translateY(50%);
   }
 }
 </style>
@@ -378,6 +371,30 @@ button:focus-visible,
 <div class="gallery">
   <div class="gallery__strip__wrapper">
     <div class="gallery__strip one">
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-kyoto.jpeg" alt="Kyoto">
+        </div>
+        <div class="photo__name">Kyoto</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-austria.jpeg" alt="Halstatt">
+        </div>
+        <div class="photo__name">Halstatt</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-peru.jpeg" alt="Peru">
+        </div>
+        <div class="photo__name">Peru</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rio.jpeg" alt="Rio">
+        </div>
+        <div class="photo__name">Rio</div>
+      </div>
       <div class="photo">
         <div class="photo__image">
           <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-kyoto.jpeg" alt="Kyoto">
@@ -431,6 +448,30 @@ button:focus-visible,
         </div>
         <div class="photo__name">Paris</div>
       </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-italy.jpeg" alt="Italy">
+        </div>
+        <div class="photo__name">Italy</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-osaka.jpeg" alt="Osaka">
+        </div>
+        <div class="photo__name">Osaka</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali.jpeg" alt="Bali">
+        </div>
+        <div class="photo__name">Bali</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris2.jpg" alt="Paris">
+        </div>
+        <div class="photo__name">Paris</div>
+      </div>
     </div>
   </div>
 
@@ -460,11 +501,59 @@ button:focus-visible,
         </div>
         <div class="photo__name">Bali</div>
       </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-cusco.jpeg" alt="Cusco">
+        </div>
+        <div class="photo__name">Cusco</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-rome.jpeg" alt="Rome">
+        </div>
+        <div class="photo__name">Rome</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-paris.jpeg" alt="Paris">
+        </div>
+        <div class="photo__name">Paris</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-bali2.jpeg" alt="Bali">
+        </div>
+        <div class="photo__name">Bali</div>
+      </div>
     </div>
   </div>
 
   <div class="gallery__strip__wrapper">
     <div class="gallery__strip four">
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-milan.jpeg" alt="Milan">
+        </div>
+        <div class="photo__name">Milan</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-budapest.jpg" alt="Budapest">
+        </div>
+        <div class="photo__name">Budapest</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-vienna.jpg" alt="Vienna">
+        </div>
+        <div class="photo__name">Vienna</div>
+      </div>
+      <div class="photo">
+        <div class="photo__image">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-mexico.jpg" alt="Mexico">
+        </div>
+        <div class="photo__name">Mexico</div>
+      </div>
       <div class="photo">
         <div class="photo__image">
           <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/gg-milan.jpeg" alt="Milan">

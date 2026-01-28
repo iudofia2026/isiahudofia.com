@@ -241,6 +241,7 @@ button:focus-visible,
   overflow: hidden;
   position: relative;
   z-index: 1;
+  padding-top: 60px;
 }
 
 .gallery__strip {
@@ -296,6 +297,11 @@ button:focus-visible,
   color: #fff;
 }
 
+/* Hide duplicate photos on mobile (for seamless loop on desktop only) */
+.gallery__strip .photo:nth-child(n+5) {
+  display: none;
+}
+
 @media (min-width: 500px) {
   .gallery__strip__wrapper {
     flex: 0 0 50%;
@@ -304,9 +310,18 @@ button:focus-visible,
 
 @media (min-width: 950px) {
   .gallery {
-    height: auto;
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - 80px);
     margin-top: 80px;
+    overflow: hidden;
+  }
+
+  .gallery__strip__wrapper {
+    overflow: hidden;
+  }
+
+  /* Show duplicate photos on desktop for seamless scrolling */
+  .gallery__strip .photo:nth-child(n+5) {
+    display: block;
   }
 
   .gallery__strip.one {

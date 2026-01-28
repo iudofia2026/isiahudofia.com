@@ -72,7 +72,7 @@
         <div class="link_bracket_wrap is-left">
           <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
         </div>
-        <p data-shuffle="text" data-shuffle-hover="photography" data-shuffle-load="single" class="info_title_text u-display">photography</p>
+        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display">photography</p>
         <div class="link_bracket_wrap is-right">
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
@@ -988,13 +988,15 @@ button:focus-visible,
     .carousel-item {
       flex: 0 0 calc(33.333% - 0.67rem); /* Show 3 items on mobile but center one */
       transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+      margin-bottom: 1rem; /* Add bottom spacing for captions */
     }
 
     .carousel-item.focused {
-      /* Center item is fully visible */
+      /* Center item is fully visible and enlarged */
       opacity: 1 !important;
-      transform: scale(1) !important;
+      transform: scale(1.15) !important;
       filter: none !important;
+      z-index: 10; /* Ensure focused item appears above others */
     }
 
     .carousel-item.unfocused {
@@ -1007,10 +1009,23 @@ button:focus-visible,
     .carousel-item .img-container {
       flex-direction: column;
       height: auto;
+      min-height: 200px; /* Ensure minimum height for image */
+      display: flex;
+    }
+
+    .carousel-item .img-container img {
+      height: 180px; /* Fixed height for images */
+      object-fit: cover;
+      margin-bottom: 0.5rem; /* Space between image and caption */
+    }
+
+    .carousel-track {
+      padding-bottom: 2rem; /* Extra padding at bottom for captions */
     }
 
     .gallery-carousel {
       padding: 0 15px; /* Reduced padding for better side item visibility */
+      overflow: visible; /* Allow captions to be fully visible */
     }
 
     .carousel-arrow {

@@ -1149,6 +1149,11 @@ button:focus-visible,
     font-family: inherit;
   }
 
+  /* Show hover tooltip on desktop */
+  .img-container:hover .img-content-hover {
+    display: block;
+  }
+
   .gallery .title {
     color: #fff;
     font-size: 1rem;
@@ -1577,6 +1582,31 @@ document.addEventListener('DOMContentLoaded', function() {
   // Handle multiple carousels
   const carousels = document.querySelectorAll('.gallery-carousel');
 
+  // Shuffle animation function (global scope for use outside carousel loop)
+  function triggerShuffleAnimation(element) {
+    const originalText = element.textContent;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let iterations = 0;
+
+    const interval = setInterval(() => {
+      element.textContent = originalText
+        .split('')
+        .map((letter, index) => {
+          if (index < iterations) {
+            return originalText[index];
+          }
+          return chars[Math.floor(Math.random() * chars.length)];
+        })
+        .join('');
+
+      if (iterations >= originalText.length) {
+        clearInterval(interval);
+      }
+
+      iterations += 1 / 2; // Faster: was 1/3, now 1/2
+    }, 20); // Faster: was 30ms, now 20ms
+  }
+
   carousels.forEach(carousel => {
     const track = carousel.querySelector('.carousel-items');
     const items = Array.from(carousel.querySelectorAll('.carousel-item'));
@@ -1629,6 +1659,11 @@ document.addEventListener('DOMContentLoaded', function() {
       // Desktop: Hover to play
       container.addEventListener('mouseenter', () => {
         if (!isMobile) {
+          // Check if videos are globally muted
+          const muteToggle = document.getElementById('muteToggle');
+          const isGloballyMuted = muteToggle ? muteToggle._isMuted !== false : true;
+
+          video.muted = isGloballyMuted;
           video.play().catch(e => console.log('Video play failed:', e));
         }
       });
@@ -1713,31 +1748,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    // Shuffle animation function
-    function triggerShuffleAnimation(element) {
-      const originalText = element.textContent;
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let iterations = 0;
-
-      const interval = setInterval(() => {
-        element.textContent = originalText
-          .split('')
-          .map((letter, index) => {
-            if (index < iterations) {
-              return originalText[index];
-            }
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join('');
-
-        if (iterations >= originalText.length) {
-          clearInterval(interval);
-        }
-
-        iterations += 1 / 3;
-      }, 30);
-    }
-
     // Scroll carousel function
     function scrollCarousel(direction) {
       const visibleItems = getVisibleItems();
@@ -1809,6 +1819,32 @@ document.addEventListener('DOMContentLoaded', function() {
     updateMobileFocus();
   }); // End of forEach loop for carousels
 
+  // Hover tooltip shuffle animation and mouse tracking for all gallery items
+  const allImgContainers = document.querySelectorAll('.img-container');
+  allImgContainers.forEach(container => {
+    const hoverContent = container.querySelector('.img-content-hover');
+    if (!hoverContent) return;
+
+    container.addEventListener('mouseenter', (e) => {
+      const titleElement = hoverContent.querySelector('.title');
+      const categoryElement = hoverContent.querySelector('.category');
+      if (titleElement) triggerShuffleAnimation(titleElement);
+      if (categoryElement) triggerShuffleAnimation(categoryElement);
+
+      // Position tooltip at mouse position
+      updateTooltipPosition(e);
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      updateTooltipPosition(e);
+    });
+
+    function updateTooltipPosition(e) {
+      hoverContent.style.left = e.clientX + 'px';
+      hoverContent.style.top = e.clientY + 'px';
+    }
+  });
+
   // Mute toggle functionality - initialize after carousels are set up
   const muteToggle = document.getElementById('muteToggle');
   if (muteToggle) {
@@ -1842,17 +1878,26 @@ document.addEventListener('DOMContentLoaded', function() {
       currentText = isMuted ? 'Sound' : 'Mute';
       shuffle(currentText, buttonText);
 
+      // Store state on the element for other functions to access
+      muteToggle._isMuted = isMuted;
+
       // Get all videos fresh on each click to ensure we get the current DOM state
       const allVideos = document.querySelectorAll('.carousel-video');
       allVideos.forEach(video => {
         video.muted = isMuted;
-        // On desktop, pause videos when unmuted
-        if (window.innerWidth > 1024 && !isMuted) {
-          video.pause();
-          video.currentTime = 0;
-        }
       });
+
+      // On mobile, restart the focused video if it was playing
+      if (window.innerWidth <= 1024 && !isMuted) {
+        const focusedVideo = document.querySelector('.carousel-item.focused .carousel-video');
+        if (focusedVideo) {
+          focusedVideo.play().catch(e => console.log('Video play failed:', e));
+        }
+      }
     });
+
+    // Initialize state on the element
+    muteToggle._isMuted = true;
 
     // Initialize all videos as muted on page load
     setTimeout(() => {

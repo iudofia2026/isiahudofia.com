@@ -1628,7 +1628,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!carousel || !track || !items.length) return;
 
-    // Shuffle items randomly on load
+    // Check if this is a video carousel (has video elements)
+    const hasVideos = carousel.querySelectorAll('.carousel-video').length > 0;
+
+    // Shuffle items randomly on load (only for video carousel)
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -1637,14 +1640,16 @@ document.addEventListener('DOMContentLoaded', function() {
       return array;
     }
 
-    // Randomize carousel items on load
-    const shuffledItems = shuffleArray([...items]);
-    track.innerHTML = '';
-    shuffledItems.forEach(item => {
-      track.appendChild(item);
-    });
+    // Only shuffle video carousels
+    if (hasVideos) {
+      const shuffledItems = shuffleArray([...items]);
+      track.innerHTML = '';
+      shuffledItems.forEach(item => {
+        track.appendChild(item);
+      });
+    }
 
-    // Update items to reference the new shuffled DOM order
+    // Update items to reference the DOM order
     const currentItems = Array.from(track.querySelectorAll('.carousel-item'));
     let currentIndex = 0;
     const totalItems = currentItems.length;
@@ -1805,6 +1810,33 @@ document.addEventListener('DOMContentLoaded', function() {
     rightArrow.addEventListener('click', () => {
       scrollCarousel('next');
     });
+
+    // Auto-scroll only for photography carousels (no videos)
+    if (!hasVideos) {
+      let autoScrollInterval;
+
+      function startAutoScroll() {
+        // Clear any existing timer
+        stopAutoScroll();
+        autoScrollInterval = setInterval(() => {
+          scrollCarousel('next');
+        }, 3000); // Auto-scroll every 3 seconds
+      }
+
+      function stopAutoScroll() {
+        if (autoScrollInterval) {
+          clearInterval(autoScrollInterval);
+          autoScrollInterval = null;
+        }
+      }
+
+      // Start auto-scroll
+      startAutoScroll();
+
+      // Pause auto-scroll on hover
+      carousel.addEventListener('mouseenter', stopAutoScroll);
+      carousel.addEventListener('mouseleave', startAutoScroll);
+    }
 
     // Handle window resize
     let resizeTimeout;

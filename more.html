@@ -1498,6 +1498,34 @@ button:focus-visible,
     .carousel-arrow::after {
       font-size: 0.75rem;
     }
+
+    /* Video gallery only: show one item at a time on mobile */
+    .gallery:not(.photography-gallery) .carousel-item {
+      flex: 0 0 100%; /* Show only one video at a time */
+    }
+
+    .gallery:not(.photography-gallery) .carousel-item.unfocused {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Video containers maintain aspect ratio and fit properly */
+    .gallery:not(.photography-gallery) .carousel-item .video-hover-container {
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+      height: auto !important;
+    }
+
+    .gallery:not(.photography-gallery) .carousel-item .video-hover-container .carousel-video,
+    .gallery:not(.photography-gallery) .carousel-item .video-hover-container .video-thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 
   /* Freelance disclaimer styles */
@@ -1832,8 +1860,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const width = window.innerWidth;
       if (width > 768) return; // Only apply to mobile
 
-      // Get visible items (3 on mobile - 1 on each side of focused)
-      const visibleCount = 3; // We show 3 items total on mobile
       let previousFocusedIndex = -1;
 
       // Find previously focused item
@@ -1848,24 +1874,40 @@ document.addEventListener('DOMContentLoaded', function() {
         item.classList.remove('focused', 'unfocused');
       });
 
-      // Find which items are currently visible based on scroll position
-      for (let i = 0; i < currentItems.length; i++) {
-        if (i >= currentIndex && i < currentIndex + visibleCount) {
-          // This is a visible item
-          if (i === currentIndex + 1) {
-            // Middle item is focused
-            currentItems[i].classList.add('focused');
+      // For video gallery (showing 1 item at a time) vs photo gallery (showing 3 items)
+      if (isVideoGallery) {
+        // Video gallery: focus on current item only
+        currentItems[currentIndex].classList.add('focused');
 
-            // Trigger shuffle animation on the newly focused item's caption
-            if (i !== previousFocusedIndex) {
-              const titleElement = currentItems[i].querySelector('.title');
-              const categoryElement = currentItems[i].querySelector('.category');
-              if (titleElement) triggerShuffleAnimation(titleElement);
-              if (categoryElement) triggerShuffleAnimation(categoryElement);
+        // Trigger shuffle animation on the newly focused item's caption
+        if (currentIndex !== previousFocusedIndex) {
+          const titleElement = currentItems[currentIndex].querySelector('.title');
+          const categoryElement = currentItems[currentIndex].querySelector('.category');
+          if (titleElement) triggerShuffleAnimation(titleElement);
+          if (categoryElement) triggerShuffleAnimation(categoryElement);
+        }
+      } else {
+        // Photo gallery: show 3 items with middle one focused
+        const visibleCount = 3;
+
+        for (let i = 0; i < currentItems.length; i++) {
+          if (i >= currentIndex && i < currentIndex + visibleCount) {
+            // This is a visible item
+            if (i === currentIndex + 1) {
+              // Middle item is focused
+              currentItems[i].classList.add('focused');
+
+              // Trigger shuffle animation on the newly focused item's caption
+              if (i !== previousFocusedIndex) {
+                const titleElement = currentItems[i].querySelector('.title');
+                const categoryElement = currentItems[i].querySelector('.category');
+                if (titleElement) triggerShuffleAnimation(titleElement);
+                if (categoryElement) triggerShuffleAnimation(categoryElement);
+              }
+            } else {
+              // Side items are unfocused
+              currentItems[i].classList.add('unfocused');
             }
-          } else {
-            // Side items are unfocused
-            currentItems[i].classList.add('unfocused');
           }
         }
       }

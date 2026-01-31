@@ -525,7 +525,7 @@
           <div class="link_bracket_wrap is-left">
             <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
           </div>
-          <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: center;">Sound</p>
+          <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: center;">Mute</p>
           <div class="link_bracket_wrap is-right">
             <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
           </div>
@@ -1875,7 +1875,9 @@ document.addEventListener('DOMContentLoaded', function() {
       isMuted = !isMuted;
 
       // Determine new text based on state
-      const newText = isMuted ? 'Sound' : 'Mute';
+      // When muted is true, show "Mute" (videos are muted, clicking will keep them muted)
+      // When muted is false, show "Sound" (videos have sound, clicking will mute them)
+      const newText = !isMuted ? 'Mute' : 'Sound';
 
       // Trigger shuffle animation to new text
       if (buttonText) {

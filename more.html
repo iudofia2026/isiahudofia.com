@@ -1646,15 +1646,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update items to reference the new shuffled DOM order
     const currentItems = Array.from(track.querySelectorAll('.carousel-item'));
-
-    // Video hover functionality for this carousel
-    const videoContainers = carousel.querySelectorAll('.video-hover-container');
+    let currentIndex = 0;
+    const totalItems = currentItems.length;
     let isMobile = window.innerWidth <= 1024;
 
     // Update mobile status on resize
     window.addEventListener('resize', () => {
       isMobile = window.innerWidth <= 1024;
     });
+
+    // Video hover functionality for this carousel
+    const videoContainers = carousel.querySelectorAll('.video-hover-container');
 
     videoContainers.forEach(container => {
       const video = container.querySelector('.carousel-video');
@@ -1663,37 +1665,32 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!video) return;
 
       // Desktop: Hover to play
-      if (!isMobile) {
-        container.addEventListener('mouseenter', () => {
+      container.addEventListener('mouseenter', () => {
+        if (!isMobile) {
           video.play().catch(e => console.log('Video play failed:', e));
-          // Pause carousel when hovering on video
-          if (carousel._stopAutoScroll) {
-            carousel._stopAutoScroll();
-          }
-        });
+        }
+      });
 
-        container.addEventListener('mouseleave', () => {
+      container.addEventListener('mouseleave', () => {
+        if (!isMobile) {
           video.pause();
           video.currentTime = 0;
-          // Resume carousel when leaving video
-          if (carousel._startAutoScroll) {
-            carousel._startAutoScroll();
-          }
-        });
-      }
+        }
+      });
 
       // Mobile: Handle focus/active state
-      if (isMobile && carouselItem) {
-        // Use Intersection Observer to detect when item is in view
+      if (carouselItem) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && isMobile) {
               carouselItem.classList.add('is-focused');
               video.play().catch(e => console.log('Video play failed:', e));
             } else {
               carouselItem.classList.remove('is-focused');
-              video.pause();
-              video.currentTime = 0;
+              if (isMobile) {
+                video.pause();
+                video.currentTime = 0;
+              }
             }
           });
         }, { threshold: 0.5 });
@@ -1701,11 +1698,6 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(carouselItem);
       }
     });
-
-    let currentIndex = 0;
-    let autoScrollInterval;
-    let scrollDirection = 'next'; // Track current auto-scroll direction
-    const totalItems = currentItems.length;
 
     // Calculate items visible based on viewport
     function getVisibleItems() {
@@ -1805,140 +1797,14 @@ document.addEventListener('DOMContentLoaded', function() {
       updateMobileFocus();
     }
 
-    // Auto-scroll every 2 seconds in the current direction
-    function startAutoScroll() {
-      console.log('Starting auto-scroll in direction:', scrollDirection);
-      // Clear any existing timers first
-      stopAutoScroll();
-
-      // Function to check if sound is enabled (any video unmuted)
-      function isSoundEnabled() {
-        if (window.innerWidth > 1024) return false; // Only applies to mobile
-        return Array.from(carouselVideos).some(video => !video.muted);
-      }
-
-      // Function to play focused video with sound and wait for it to finish
-      function playFocusedVideoAndWait() {
-        const focusedVideo = carousel.querySelector('.carousel-item.focused .carousel-video');
-        if (!focusedVideo) {
-          // No video found, scroll immediately
-          scrollAndScheduleNext();
-          return;
-        }
-
-        // Ensure video is unmuted and playing
-        focusedVideo.muted = false;
-        focusedVideo.currentTime = 0;
-
-        focusedVideo.play().then(() => {
-          console.log('Playing focused video with sound, waiting for it to finish');
-        }).catch(e => {
-          console.log('Video play failed:', e);
-          // If play fails, just scroll
-          scrollAndScheduleNext();
-          return;
-        });
-
-        // Wait for video to end, then scroll
-        const onVideoEnded = () => {
-          focusedVideo.removeEventListener('ended', onVideoEnded);
-          console.log('Video finished, scrolling to next');
-          scrollAndScheduleNext();
-        };
-
-        focusedVideo.addEventListener('ended', onVideoEnded);
-
-        // Safety timeout in case video doesn't end (30 seconds max)
-        autoScrollInterval = setTimeout(() => {
-          focusedVideo.removeEventListener('ended', onVideoEnded);
-          console.log('Video timeout, scrolling to next');
-          scrollAndScheduleNext();
-        }, 30000);
-      }
-
-      // Function to scroll and schedule the next action
-      function scrollAndScheduleNext() {
-        scrollCarousel(scrollDirection);
-
-        // Check if sound is still enabled after scroll
-        if (isSoundEnabled()) {
-          // Still unmuted, play next video
-          autoScrollInterval = setTimeout(() => {
-            playFocusedVideoAndWait();
-          }, 500); // Small delay for smooth transition
-        } else {
-          // Sound muted, return to fast scrolling
-          startFastScrolling();
-        }
-      }
-
-      // Function to start fast 2-second scrolling
-      function startFastScrolling() {
-        console.log('Starting fast scrolling (2 second intervals)');
-        autoScrollInterval = setInterval(() => {
-          // Check if sound was enabled
-          if (isSoundEnabled()) {
-            // Sound enabled, stop fast scrolling and switch to video mode
-            stopAutoScroll();
-            playFocusedVideoAndWait();
-          } else {
-            // Continue fast scrolling
-            scrollCarousel(scrollDirection);
-          }
-        }, 2000);
-      }
-
-      // Initial start - check if sound is enabled
-      if (isSoundEnabled()) {
-        // Sound enabled, start playing focused video
-        setTimeout(() => {
-          playFocusedVideoAndWait();
-        }, 500);
-      } else {
-        // Sound muted, start fast scrolling
-        setTimeout(() => {
-          startFastScrolling();
-        }, 2000);
-      }
-    }
-
-    // Stop auto-scroll
-    function stopAutoScroll() {
-      if (autoScrollInterval) {
-        clearTimeout(autoScrollInterval);
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
-      }
-    }
-
-    // Store functions on carousel element for external access
-    carousel._stopAutoScroll = stopAutoScroll;
-    carousel._startAutoScroll = startAutoScroll;
-
     // Manual navigation with arrows
     leftArrow.addEventListener('click', () => {
-      stopAutoScroll(); // Clear existing timer
-      scrollDirection = 'prev'; // Change direction to backward
       scrollCarousel('prev');
-      startAutoScroll(); // Start fresh 2-second timer with new direction
     });
 
     rightArrow.addEventListener('click', () => {
-      stopAutoScroll(); // Clear existing timer
-      scrollDirection = 'next'; // Change direction to forward
       scrollCarousel('next');
-      startAutoScroll(); // Start fresh 2-second timer with new direction
     });
-
-    // Only add hover pause events for desktop devices
-    if (window.matchMedia('(min-width: 769px)').matches) {
-      carousel.addEventListener('mouseenter', () => {
-        stopAutoScroll();
-      });
-      carousel.addEventListener('mouseleave', () => {
-        startAutoScroll();
-      });
-    }
 
     // Handle window resize
     let resizeTimeout;
@@ -1956,15 +1822,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize mobile focus states
     updateMobileFocus();
-
-    // Start auto-scroll - ensure it works on all devices
-    // Delay slightly to ensure DOM is fully ready
-    setTimeout(() => {
-      startAutoScroll();
-    }, 100);
-
-    // Debug: Log that auto-scroll has started
-    console.log('Carousel auto-scroll initialized');
   }); // End of forEach loop for carousels
 
   // Mute toggle functionality
@@ -2003,12 +1860,8 @@ document.addEventListener('DOMContentLoaded', function() {
       shuffle(currentText, buttonText);
       allVideos.forEach(video => video.muted = isMuted);
 
-      if (window.innerWidth <= 1024) {
-        carousels.forEach(carousel => {
-          if (carousel._stopAutoScroll) carousel._stopAutoScroll();
-          if (carousel._startAutoScroll) setTimeout(() => carousel._startAutoScroll(), 100);
-        });
-      } else if (!isMuted) {
+      // On desktop, pause videos when unmuted
+      if (window.innerWidth > 1024 && !isMuted) {
         allVideos.forEach(video => { video.pause(); video.currentTime = 0; });
       }
     });

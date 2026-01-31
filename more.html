@@ -18,16 +18,16 @@
     color: white !important;
   }
 
-  /* Add padding above photography title on desktop to clear fixed header */
+  /* Add padding above gallery title on desktop to clear fixed header */
   @media screen and (min-width: 768px) {
-    .gallery-title-wrap .info_title_text {
+    .gallery-title-wrap {
       padding-top: 3rem !important;
     }
   }
 
-  /* Add padding above photography title on mobile to clear fixed header */
+  /* Add padding above gallery title on mobile to clear fixed header */
   @media screen and (max-width: 767px) {
-    .gallery-title-wrap .info_title_text {
+    .gallery-title-wrap {
       padding-top: 2rem !important;
     }
   }
@@ -519,7 +519,18 @@
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
-      <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
+      <div class="gallery-subtitle-wrap">
+        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
+        <button id="muteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle mute">
+          <div class="link_bracket_wrap is-left">
+            <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+          </div>
+          <p data-shuffle="text" data-shuffle-hover="Sound" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: left;">Mute</p>
+          <div class="link_bracket_wrap is-right">
+            <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+          </div>
+        </button>
+      </div>
     </div>
     <div class="gallery-carousel">
       <div class="carousel-arrow carousel-arrow-left">
@@ -957,6 +968,69 @@ button:focus-visible,
     padding-bottom: 1rem;
     font-family: inherit;
     line-height: 1.4;
+  }
+
+  /* Gallery subtitle wrapper for mute toggle */
+  .gallery-subtitle-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .gallery-subtitle-wrap .gallery-subtitle {
+    flex: 1;
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+
+  /* Mute toggle button styles */
+  .mute-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .mute-toggle:hover {
+    transform: scale(1.05);
+  }
+
+  .mute-toggle:active {
+    transform: scale(0.95);
+  }
+
+  .mute-toggle .link_bracket_wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  .mute-toggle .link_bracket_text {
+    font-size: 0.875rem;
+  }
+
+  .mute-toggle .nav_btn_text {
+    font-size: 0.875rem;
+    min-width: 42px;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-subtitle-wrap {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .mute-toggle {
+      align-self: flex-end;
+    }
   }
 
   .gallery-title-wrap .link_bracket_text {
@@ -1725,6 +1799,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // Debug: Log that auto-scroll has started
     console.log('Carousel auto-scroll initialized');
   }); // End of forEach loop for carousels
+
+  // Mute toggle functionality
+  const muteToggle = document.getElementById('muteToggle');
+  if (muteToggle) {
+    let isMuted = true;
+
+    // Set initial state
+    const buttonText = muteToggle.querySelector('.nav_btn_text');
+    const hoverText = muteToggle.querySelector('[data-shuffle-hover]');
+
+    // Initialize all videos as muted
+    const allVideos = document.querySelectorAll('.carousel-video');
+    allVideos.forEach(video => {
+      video.muted = true;
+    });
+
+    muteToggle.addEventListener('click', () => {
+      isMuted = !isMuted;
+
+      // Update button text
+      if (buttonText) {
+        buttonText.textContent = isMuted ? 'Mute' : 'Sound';
+      }
+      if (hoverText) {
+        hoverText.setAttribute('data-shuffle-hover', isMuted ? 'Sound' : 'Mute');
+      }
+
+      // Update all video muted states
+      allVideos.forEach(video => {
+        video.muted = isMuted;
+      });
+
+      // If unmuting, pause all videos first to prevent autoplay with sound
+      if (!isMuted) {
+        allVideos.forEach(video => {
+          video.pause();
+          video.currentTime = 0;
+        });
+      }
+    });
+  }
 });
 </script>
 <script src="./Isiah Udofia – Senior @ Yale University – New Haven, CT_files/bundle.js" defer></script><script src="./shuffle-cleanup.js" defer></script></body></html>

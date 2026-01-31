@@ -963,6 +963,11 @@ button:focus-visible,
       padding-bottom: 0.25rem;
       padding-top: 0;
     }
+
+    /* Remove top padding from video editing gallery title on desktop */
+    .gallery:not(.photography-gallery) .gallery-title-wrap {
+      padding-top: 0 !important;
+    }
   }
 
   .gallery-title-wrap .info_title_text.u-display {
@@ -1288,6 +1293,17 @@ button:focus-visible,
 
     .mute-toggle {
       display: none !important;
+    }
+
+    /* Remove top padding from video editing gallery on mobile */
+    .gallery:not(.photography-gallery) {
+      padding: 0 0 3rem 0 !important;
+      margin-top: 0 !important;
+    }
+
+    /* Remove bottom padding from photography gallery on mobile */
+    .gallery.photography-gallery {
+      padding: 1.5rem 0 0 0 !important;
     }
 
     .gallery {

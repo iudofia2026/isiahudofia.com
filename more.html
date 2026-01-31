@@ -25,10 +25,10 @@
     }
   }
 
-  /* Add padding above gallery title on mobile to clear fixed header */
+  /* Remove padding from top of gallery title on mobile */
   @media screen and (max-width: 767px) {
     .gallery-title-wrap {
-      padding-top: 2rem !important;
+      padding-top: 0 !important;
     }
   }
 
@@ -1080,6 +1080,7 @@ button:focus-visible,
   }
 
   .video-hover-container:hover .carousel-video {
+    opacity: 1;
     transform: scale(1.03);
   }
 

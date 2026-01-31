@@ -521,11 +521,11 @@
       </a>
       <div class="gallery-subtitle-wrap">
         <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
-        <button id="muteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle mute">
+        <button id="muteToggle" class="mute-toggle nav_link" aria-label="Toggle mute">
           <div class="link_bracket_wrap is-left">
             <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
           </div>
-          <p data-shuffle="text" data-shuffle-hover="Mute" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: left;">Sound</p>
+          <p data-shuffle="text" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: left;">Sound</p>
           <div class="link_bracket_wrap is-right">
             <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
           </div>
@@ -981,7 +981,7 @@ button:focus-visible,
 
   .gallery-subtitle-wrap .gallery-subtitle {
     flex: 1;
-    margin-left: 0;
+    margin-left: 0.8rem;
     margin-bottom: 0;
   }
 
@@ -1807,7 +1807,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Set initial state
     const buttonText = muteToggle.querySelector('.nav_btn_text');
-    const hoverText = muteToggle.querySelector('[data-shuffle-hover]');
 
     // Initialize all videos as muted
     const allVideos = document.querySelectorAll('.carousel-video');
@@ -1819,9 +1818,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (buttonText) {
       buttonText.textContent = 'Sound';
     }
-    if (hoverText) {
-      hoverText.setAttribute('data-shuffle-hover', 'Mute');
-    }
 
     muteToggle.addEventListener('click', () => {
       isMuted = !isMuted;
@@ -1829,9 +1825,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // Update button text - show what will happen when clicked
       if (buttonText) {
         buttonText.textContent = isMuted ? 'Sound' : 'Mute';
-      }
-      if (hoverText) {
-        hoverText.setAttribute('data-shuffle-hover', isMuted ? 'Mute' : 'Sound');
       }
 
       // Update all video muted states

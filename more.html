@@ -525,7 +525,7 @@
           <div class="link_bracket_wrap is-left">
             <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
           </div>
-          <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: center;">Mute</p>
+          <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">Sound</p>
           <div class="link_bracket_wrap is-right">
             <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
           </div>
@@ -1810,8 +1810,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Function to check if sound is enabled (any video unmuted)
       function isSoundEnabled() {
         if (window.innerWidth > 1024) return false; // Only applies to mobile
-        const allVideos = carousel.querySelectorAll('.carousel-video');
-        return Array.from(allVideos).some(video => !video.muted);
+        return Array.from(carouselVideos).some(video => !video.muted);
       }
 
       // Function to play focused video with sound and wait for it to finish
@@ -1968,82 +1967,45 @@ document.addEventListener('DOMContentLoaded', function() {
   const muteToggle = document.getElementById('muteToggle');
   if (muteToggle) {
     let isMuted = true;
-
-    // Set initial state
     const buttonText = muteToggle.querySelector('.nav_btn_text');
-
-    // Initialize all videos as muted
     const allVideos = document.querySelectorAll('.carousel-video');
-    allVideos.forEach(video => {
-      video.muted = true;
+    allVideos.forEach(video => video.muted = true);
+
+    // Store current text for hover restoration
+    let currentText = 'Sound';
+
+    // Simple shuffle function
+    const shuffle = (text, el) => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let i = 0;
+      const interval = setInterval(() => {
+        el.textContent = text.split('').map((c, j) => j < i ? c : chars[Math.floor(Math.random() * chars.length)]).join('');
+        if (i >= text.length) clearInterval(interval);
+        i += 1/3;
+      }, 30);
+    };
+
+    muteToggle.addEventListener('mouseenter', () => {
+      shuffle('Switch', buttonText);
     });
 
-    // Shuffle animation function
-    function triggerShuffleAnimation(element, newText) {
-      const originalText = newText;
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let iterations = 0;
-
-      const interval = setInterval(() => {
-        element.textContent = originalText
-          .split('')
-          .map((letter, index) => {
-            if (index < iterations) {
-              return originalText[index];
-            }
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join('');
-
-        if (iterations >= originalText.length) {
-          clearInterval(interval);
-        }
-
-        iterations += 1 / 3;
-      }, 30);
-    }
+    muteToggle.addEventListener('mouseleave', () => {
+      shuffle(currentText, buttonText);
+    });
 
     muteToggle.addEventListener('click', () => {
       isMuted = !isMuted;
+      currentText = isMuted ? 'Sound' : 'Mute';
+      shuffle(currentText, buttonText);
+      allVideos.forEach(video => video.muted = isMuted);
 
-      // Determine new text based on state
-      // When muted is true, show "Sound" (clicking will enable sound)
-      // When muted is false, show "Mute" (clicking will mute)
-      const newText = isMuted ? 'Sound' : 'Mute';
-
-      // Trigger shuffle animation to new text
-      if (buttonText) {
-        triggerShuffleAnimation(buttonText, newText);
-      }
-
-      // Update hover text to show "Switch" option
-      const hoverAttr = buttonText.getAttribute('data-shuffle-hover');
-      if (hoverAttr !== 'Switch') {
-        buttonText.setAttribute('data-shuffle-hover', 'Switch');
-      }
-
-      // Update all video muted states
-      allVideos.forEach(video => {
-        video.muted = isMuted;
-      });
-
-      // Handle mobile carousel restart
       if (window.innerWidth <= 1024) {
-        // On mobile, restart carousel to apply new mode
         carousels.forEach(carousel => {
-          const stopFn = carousel._stopAutoScroll;
-          const startFn = carousel._startAutoScroll;
-          if (stopFn) stopFn();
-          if (startFn) setTimeout(() => startFn(), 100);
+          if (carousel._stopAutoScroll) carousel._stopAutoScroll();
+          if (carousel._startAutoScroll) setTimeout(() => carousel._startAutoScroll(), 100);
         });
-      } else {
-        // On desktop, pause all videos when unmuting to prevent autoplay with sound
-        if (!isMuted) {
-          allVideos.forEach(video => {
-            video.pause();
-            video.currentTime = 0;
-          });
-        }
+      } else if (!isMuted) {
+        allVideos.forEach(video => { video.pause(); video.currentTime = 0; });
       }
     });
   }

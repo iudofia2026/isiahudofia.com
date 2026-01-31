@@ -550,11 +550,11 @@
                    alt="Corporate Promo Video"
                    class="video-thumbnail">
               <figcaption class="img-content">
-                <h2 class="title">Callie Reiff</h2>
+                <h2 class="title">※ Callie Reiff</h2>
                 <h3 class="category">[Producer]</h3>
               </figcaption>
               <span class="img-content-hover">
-                <h2 class="title">Callie Reiff</h2>
+                <h2 class="title">※ Callie Reiff</h2>
                 <h3 class="category">[Producer]</h3>
               </span>
             </figure>
@@ -569,11 +569,11 @@
                    alt="Wedding Highlight Video"
                    class="video-thumbnail">
               <figcaption class="img-content">
-                <h2 class="title">Cam Rao</h2>
+                <h2 class="title">※ Cam Rao</h2>
                 <h3 class="category">[Artist]</h3>
               </figcaption>
               <span class="img-content-hover">
-                <h2 class="title">Cam Rao</h2>
+                <h2 class="title">※ Cam Rao</h2>
                 <h3 class="category">[Artist]</h3>
               </span>
             </figure>
@@ -588,11 +588,11 @@
                    alt="Social Media Campaign Video"
                    class="video-thumbnail">
               <figcaption class="img-content">
-                <h2 class="title">Laurel Road Studios</h2>
+                <h2 class="title">※ Laurel Road Studios</h2>
                 <h3 class="category">[Studio Content]</h3>
               </figcaption>
               <span class="img-content-hover">
-                <h2 class="title">Laurel Road Studios</h2>
+                <h2 class="title">※ Laurel Road Studios</h2>
                 <h3 class="category">[Studio Content]</h3>
               </span>
             </figure>
@@ -607,11 +607,11 @@
                    alt="Documentary Video"
                    class="video-thumbnail">
               <figcaption class="img-content">
-                <h2 class="title">Nightclub promo</h2>
+                <h2 class="title">※ Nightclub promo</h2>
                 <h3 class="category">[Virgo Nightclub]</h3>
               </figcaption>
               <span class="img-content-hover">
-                <h2 class="title">Nightclub promo</h2>
+                <h2 class="title">※ Nightclub promo</h2>
                 <h3 class="category">[Virgo Nightclub]</h3>
               </span>
             </figure>
@@ -626,11 +626,11 @@
                    alt="Music Video"
                    class="video-thumbnail">
               <figcaption class="img-content">
-                <h2 class="title">Xiaivian Lee</h2>
+                <h2 class="title">Xaivian Lee</h2>
                 <h3 class="category">[NCAA]</h3>
               </figcaption>
               <span class="img-content-hover">
-                <h2 class="title">Xiaivian Lee</h2>
+                <h2 class="title">Xaivian Lee</h2>
                 <h3 class="category">[NCAA]</h3>
               </span>
             </figure>
@@ -683,12 +683,12 @@
                    alt="Scent Routine Video"
                    class="video-thumbnail">
               <figcaption class="img-content">
-                <h2 class="title">Scent Routine</h2>
-                <h3 class="category">[Lifestyle]</h3>
+                <h2 class="title">※ Studio Rose</h2>
+                <h3 class="category">[Perfumery]</h3>
               </figcaption>
               <span class="img-content-hover">
-                <h2 class="title">Scent Routine</h2>
-                <h3 class="category">[Lifestyle]</h3>
+                <h2 class="title">※ Studio Rose</h2>
+                <h3 class="category">[Perfumery]</h3>
               </span>
             </figure>
           </div></div>
@@ -698,6 +698,9 @@
           <path fill-rule="evenodd" clip-rule="evenodd" d="M9.86001 0.0668945L9.76698 7.41621L8.76706 7.40356L8.83804 1.79597L0.707107 9.9269L0 9.21979L8.13093 1.08886L2.52334 1.15984L2.51069 0.159924L9.86001 0.0668945Z" fill="currentColor"></path>
         </svg>
       </div>
+    </div>
+    <div class="freelance-disclaimer">
+      <p class="disclaimer-text">※ = Hired by <a href="https://zendigital.dev/" target="_blank" data-shuffle="button" class="project_info_link u-hflex-left-center u-gap-small w-inline-block disclaimer-link-inline"><p data-shuffle-load="single" data-shuffle-infinite="text" data-shuffle="text" data-shuffle-hover="Visit Studio" class="project_info_text u-text-main" style="opacity: 1;">Zen Studio</p><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 10" fill="none" data-image="desktop" class="project_link_icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.86001 0.0668945L9.76698 7.41621L8.76706 7.40356L8.83804 1.79597L0.707107 9.9269L0 9.21979L8.13093 1.08886L2.52334 1.15984L2.51069 0.159924L9.86001 0.0668945Z" fill="currentColor"></path></svg></a></p>
     </div>
   </div>
 </section>
@@ -1210,7 +1213,7 @@ button:focus-visible,
     }
 
     .page_wrap {
-      padding-top: 10rem !important;
+      padding-top: 0 !important;
     }
 
     .gallery {
@@ -1405,6 +1408,39 @@ button:focus-visible,
     .carousel-arrow::after {
       font-size: 0.75rem;
     }
+  }
+
+  /* Freelance disclaimer styles */
+  .freelance-disclaimer {
+    margin-top: 1rem;
+    text-align: left;
+    padding-left: 0;
+  }
+
+  .disclaimer-text {
+    font-size: 0.75rem;
+    color: #787878;
+    margin: 0;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .disclaimer-link-inline {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .project_info_link:hover .project_link_icon {
+    transform: translate(0.15rem,-0.15rem);
+    color: #4B9CD3;
+  }
+
+  .project_link_icon {
+    width: 10px;
+    height: 10px;
+    transition: transform 0.3s ease, color 0.3s ease;
   }
 </style>
 </div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><!-- YOUR CONTENT GOES HERE --></div></div></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>

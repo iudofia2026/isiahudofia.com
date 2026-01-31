@@ -527,7 +527,7 @@
             <div class="link_bracket_wrap is-left">
               <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
             </div>
-            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">Sound</p>
+            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">unmute</p>
             <div class="link_bracket_wrap is-right">
               <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
             </div>
@@ -1978,7 +1978,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Store current text for hover restoration
-    let currentText = 'Sound';
+    let currentText = 'unmute';
 
     // Update slider visual fill
     function updateSliderFill() {
@@ -2013,7 +2013,7 @@ document.addEventListener('DOMContentLoaded', function() {
       isMuted = !isMuted;
 
       if (isMuted) {
-        currentText = 'Sound';
+        currentText = 'unmute';
         previousVolume = volumeSlider.value;
         volumeSlider.value = 0;
         allVideos.forEach(video => {
@@ -2021,7 +2021,7 @@ document.addEventListener('DOMContentLoaded', function() {
           video.volume = 0;
         });
       } else {
-        currentText = 'Mute';
+        currentText = 'mute';
         volumeSlider.value = previousVolume > 0 ? previousVolume : 100;
         allVideos.forEach(video => {
           video.muted = false;
@@ -2053,11 +2053,11 @@ document.addEventListener('DOMContentLoaded', function() {
       // Update mute state based on volume
       if (volume == 0) {
         isMuted = true;
-        currentText = 'Sound';
+        currentText = 'unmute';
         shuffle(currentText, buttonText);
       } else if (isMuted && volume > 0) {
         isMuted = false;
-        currentText = 'Mute';
+        currentText = 'mute';
         shuffle(currentText, buttonText);
       }
     });

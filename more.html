@@ -1019,9 +1019,14 @@ button:focus-visible,
     font-size: 0.875rem;
     min-width: 42px;
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+  }
+
+  /* Ensure shuffle animation stays centered */
+  .mute-toggle .nav_btn_text[data-shuffle] {
+    text-align: center !important;
   }
 
   @media (max-width: 768px) {
@@ -1046,7 +1051,7 @@ button:focus-visible,
 
   .img-container {
     width: 100%;
-    height: 250px;
+    height: 350px;
     cursor: pointer;
     overflow: hidden;
     position: relative;
@@ -1067,21 +1072,24 @@ button:focus-visible,
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
     z-index: 1;
+  }
+
+  .video-hover-container:hover .carousel-video {
+    transform: scale(1.03);
   }
 
   .video-hover-container .video-thumbnail {
     position: relative;
     z-index: 0;
     transition: opacity 0.3s ease;
-  }
-
-  .video-hover-container:hover .carousel-video {
-    opacity: 1;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
   }
 
   .video-hover-container:hover .video-thumbnail {
@@ -1304,7 +1312,7 @@ button:focus-visible,
   }
 
   .carousel-item .img-container {
-    height: 250px;
+    height: 350px;
   }
 
   @media screen and (max-width: 1024px) {
@@ -1330,9 +1338,9 @@ button:focus-visible,
     }
 
     .carousel-item.focused {
-      /* Center item is fully visible and enlarged */
+      /* Center item is fully visible and slightly enlarged */
       opacity: 1 !important;
-      transform: scale(1.15) !important;
+      transform: scale(1.05) !important;
       filter: none !important;
       z-index: 10; /* Ensure focused item appears above others */
     }

@@ -521,15 +521,18 @@
       </a>
       <div class="gallery-subtitle-wrap">
         <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
-        <button id="muteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle mute">
-          <div class="link_bracket_wrap is-left">
-            <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
-          </div>
-          <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">Sound</p>
-          <div class="link_bracket_wrap is-right">
-            <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
-          </div>
-        </button>
+        <div class="volume-controls-wrapper">
+          <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Volume" tabindex="0">
+          <button id="muteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle mute">
+            <div class="link_bracket_wrap is-left">
+              <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+            </div>
+            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">Sound</p>
+            <div class="link_bracket_wrap is-right">
+              <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
     <div class="gallery-carousel">
@@ -1038,11 +1041,101 @@ button:focus-visible,
     text-align: center !important;
   }
 
+  /* Volume controls wrapper - desktop only */
+  .volume-controls-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* Volume slider - minimalist and elegant */
+  .volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 1px;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s ease, width 0.3s ease;
+    position: relative;
+  }
+
+  .volume-slider:hover {
+    background: rgba(255, 255, 255, 0.5);
+    width: 100px;
+  }
+
+  /* Volume slider track - WebKit */
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .volume-slider:hover::-webkit-slider-thumb {
+    opacity: 1;
+  }
+
+  .volume-slider:active::-webkit-slider-thumb {
+    transform: scale(1.2);
+  }
+
+  /* Volume slider track - Firefox */
+  .volume-slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .volume-slider:hover::-moz-range-thumb {
+    opacity: 1;
+  }
+
+  .volume-slider:active::-moz-range-thumb {
+    transform: scale(1.2);
+  }
+
+  /* Volume slider track - Firefox */
+  .volume-slider::-moz-range-track {
+    background: transparent;
+  }
+
+  /* Focus state for accessibility */
+  .volume-slider:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 4px;
+  }
+
   @media (max-width: 768px) {
     .gallery-subtitle-wrap {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.5rem;
+    }
+
+    .volume-controls-wrapper {
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    .volume-slider {
+      display: none !important;
     }
 
     .mute-toggle {
@@ -1864,13 +1957,19 @@ document.addEventListener('DOMContentLoaded', function() {
     updateMobileFocus();
   }); // End of forEach loop for carousels
 
-  // Mute toggle functionality
+  // Volume controls functionality
   const muteToggle = document.getElementById('muteToggle');
-  if (muteToggle) {
+  const volumeSlider = document.getElementById('volumeSlider');
+
+  if (muteToggle && volumeSlider) {
     let isMuted = true;
+    let previousVolume = 100;
     const buttonText = muteToggle.querySelector('.nav_btn_text');
     const allVideos = document.querySelectorAll('.carousel-video');
-    allVideos.forEach(video => video.muted = true);
+    allVideos.forEach(video => {
+      video.muted = true;
+      video.volume = 1;
+    });
 
     // Store current text for hover restoration
     let currentText = 'Sound';
@@ -1896,14 +1995,82 @@ document.addEventListener('DOMContentLoaded', function() {
 
     muteToggle.addEventListener('click', () => {
       isMuted = !isMuted;
-      currentText = isMuted ? 'Sound' : 'Mute';
+
+      if (isMuted) {
+        currentText = 'Sound';
+        previousVolume = volumeSlider.value;
+        volumeSlider.value = 0;
+        allVideos.forEach(video => {
+          video.muted = true;
+          video.volume = 0;
+        });
+      } else {
+        currentText = 'Mute';
+        volumeSlider.value = previousVolume > 0 ? previousVolume : 100;
+        allVideos.forEach(video => {
+          video.muted = false;
+          video.volume = volumeSlider.value / 100;
+        });
+      }
+
       shuffle(currentText, buttonText);
-      allVideos.forEach(video => video.muted = isMuted);
 
       // Desktop: Pause all videos when sound is enabled
       if (window.innerWidth > 1024 && !isMuted) {
         allVideos.forEach(video => { video.pause(); video.currentTime = 0; });
       }
+    });
+
+    // Volume slider functionality
+    volumeSlider.addEventListener('input', (e) => {
+      const volume = e.target.value;
+      const volumeDecimal = volume / 100;
+
+      allVideos.forEach(video => {
+        video.volume = volumeDecimal;
+        video.muted = volume === 0;
+      });
+
+      // Update mute state based on volume
+      if (volume == 0) {
+        isMuted = true;
+        currentText = 'Sound';
+        shuffle(currentText, buttonText);
+      } else if (isMuted && volume > 0) {
+        isMuted = false;
+        currentText = 'Mute';
+        shuffle(currentText, buttonText);
+      }
+    });
+
+    // Keyboard support for volume slider
+    volumeSlider.addEventListener('keydown', (e) => {
+      const step = 5;
+      let newValue = parseInt(volumeSlider.value);
+
+      switch(e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          newValue = Math.max(0, newValue - step);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          newValue = Math.min(100, newValue + step);
+          break;
+        case 'Home':
+          e.preventDefault();
+          newValue = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          newValue = 100;
+          break;
+        default:
+          return;
+      }
+
+      volumeSlider.value = newValue;
+      volumeSlider.dispatchEvent(new Event('input'));
     });
   }
 });

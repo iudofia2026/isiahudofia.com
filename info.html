@@ -535,43 +535,6 @@ button:focus-visible,
     observer.observe(document.head, { childList: true, subtree: true });
 })();
 
-// Parallax effect for desktop info image
-(function() {
-    const imgWrap = document.querySelector('.info_img_wrap.is-desktop');
-    const img = document.querySelector('.info_img_wrap.is-desktop .info_img');
-
-    if (!imgWrap || !img) return;
-
-    let isActive = false;
-
-    imgWrap.addEventListener('mouseenter', function() {
-        isActive = true;
-    });
-
-    imgWrap.addEventListener('mouseleave', function() {
-        isActive = false;
-        img.style.transform = 'translate(0, 0) scale(1)';
-    });
-
-    imgWrap.addEventListener('mousemove', function(e) {
-        if (!isActive) return;
-
-        const rect = imgWrap.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const moveX = (x - centerX) / centerX;
-        const moveY = (y - centerY) / centerY;
-
-        const maxMove = 15;
-        const translateX = moveX * maxMove;
-        const translateY = moveY * maxMove;
-
-        img.style.transform = `translate(${-translateX}px, ${-translateY}px) scale(1.05)`;
-    });
-})();
 </script>
+<script src="./parallax-info.js"></script>
 <script src="./Info – Isiah Udofia_files/bundle.js" defer=""></script><script src="./shuffle-cleanup.js" defer=""></script></body></html>

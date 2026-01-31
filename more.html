@@ -1454,49 +1454,6 @@ button:focus-visible,
 (function() {
     const faviconUrl = '/assets/favicon.ico';
 
-    function ensureFavicon() {
-        const head = document.head;
-        const existingIcon = head.querySelector('link[rel="icon"]');
-        const existingAppleIcon = head.querySelector('link[rel="apple-touch-icon"]');
-
-        if (!existingIcon) {
-            const iconLink = document.createElement('link');
-            iconLink.rel = 'icon';
-            iconLink.type = 'image/jpeg';
-            iconLink.href = faviconUrl;
-            head.appendChild(iconLink);
-        }
-
-        if (!existingAppleIcon) {
-            const appleIconLink = document.createElement('link');
-            appleIconLink.rel = 'apple-touch-icon';
-            appleIconLink.href = faviconUrl;
-            head.appendChild(appleIconLink);
-        }
-    }
-
-    // Run on load
-    ensureFavicon();
-
-    // Monitor for head changes
-    const observer = new MutationObserver(function(mutations) {
-        let headChanged = false;
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' && mutation.target === document.head) {
-                headChanged = true;
-            }
-        });
-        if (headChanged) {
-            setTimeout(ensureFavicon, 100);
-        }
-    });
-
-    observer.observe(document.head, { childList: true, subtree: true });
-})();
-
-// Gallery Mouse Tracking for Hover Tooltips
-document.addEventListener('DOMContentLoaded', function() {
-  // Tooltip shuffle animation function
   function triggerTooltipShuffle(container) {
     const shuffleElements = container.querySelectorAll('[data-shuffle="text"]');
 
@@ -1852,13 +1809,11 @@ document.addEventListener('DOMContentLoaded', function() {
     updateMobileFocus();
   }); // End of forEach loop for carousels
 
-  // Mute toggle functionality
+  // Mute toggle functionality - initialize after carousels are set up
   const muteToggle = document.getElementById('muteToggle');
   if (muteToggle) {
     let isMuted = true;
     const buttonText = muteToggle.querySelector('.nav_btn_text');
-    const allVideos = document.querySelectorAll('.carousel-video');
-    allVideos.forEach(video => video.muted = true);
 
     // Store current text for hover restoration
     let currentText = 'Sound';
@@ -1886,13 +1841,24 @@ document.addEventListener('DOMContentLoaded', function() {
       isMuted = !isMuted;
       currentText = isMuted ? 'Sound' : 'Mute';
       shuffle(currentText, buttonText);
-      allVideos.forEach(video => video.muted = isMuted);
 
-      // On desktop, pause videos when unmuted
-      if (window.innerWidth > 1024 && !isMuted) {
-        allVideos.forEach(video => { video.pause(); video.currentTime = 0; });
-      }
+      // Get all videos fresh on each click to ensure we get the current DOM state
+      const allVideos = document.querySelectorAll('.carousel-video');
+      allVideos.forEach(video => {
+        video.muted = isMuted;
+        // On desktop, pause videos when unmuted
+        if (window.innerWidth > 1024 && !isMuted) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
     });
+
+    // Initialize all videos as muted on page load
+    setTimeout(() => {
+      const allVideos = document.querySelectorAll('.carousel-video');
+      allVideos.forEach(video => video.muted = true);
+    }, 100);
   }
 });
 </script>

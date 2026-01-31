@@ -505,22 +505,6 @@
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
-      <button class="audio-toggle-btn" id="audioToggle" aria-label="Toggle audio">
-        <div class="audio-icon audio-on">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M15.54 8.46C16.4774 9.39764 17.004 10.6692 17.004 12C17.004 13.3308 16.4774 14.6024 15.54 15.54" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M19.07 4.93C20.9446 6.80566 21.9984 9.34836 21.9984 12C21.9984 14.6516 20.9446 17.1943 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="audio-icon audio-off">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </button>
       <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
     </div>
     <div class="gallery-carousel">
@@ -936,7 +920,6 @@ button:focus-visible,
     width: 100%;
     max-width: 100%;
     padding-top: 1rem;
-    position: relative;
   }
 
   @media (min-width: 769px) {
@@ -964,76 +947,6 @@ button:focus-visible,
 
   .gallery-title-wrap .link_bracket_text {
     font-size: 2rem;
-  }
-
-  /* Audio toggle button styles */
-  .audio-toggle-btn {
-    position: absolute;
-    right: 0;
-    top: 0.5rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #787878;
-    transition: color 0.3s ease, transform 0.2s ease;
-    z-index: 10;
-  }
-
-  .audio-toggle-btn:hover {
-    color: #4B9CD3;
-    transform: scale(1.1);
-  }
-
-  .audio-toggle-btn:active {
-    transform: scale(0.95);
-  }
-
-  .audio-icon {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  .audio-icon svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .audio-toggle-btn.audio-muted .audio-on {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-
-  .audio-toggle-btn.audio-muted .audio-off {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .audio-toggle-btn:not(.audio-muted) .audio-on {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .audio-toggle-btn:not(.audio-muted) .audio-off {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-
-  @media (max-width: 768px) {
-    .audio-toggle-btn {
-      top: 0.25rem;
-      right: 0.25rem;
-    }
-
-    .audio-icon {
-      width: 20px;
-      height: 20px;
-    }
   }
 
   .gallery-title-wrap .nav_link:hover .info_title_text.u-display {
@@ -1181,13 +1094,14 @@ button:focus-visible,
   }
 
   @media screen and (max-width: 767px) {
-    .gallery:first-child {
-      margin-top: 10rem;
-    }
-
     .gallery {
       padding: 1.5rem 0 3rem 0;
       margin-top: 2rem;
+    }
+
+    /* Add padding to body to account for fixed header on mobile */
+    body {
+      padding-top: 4rem;
     }
 
     .gallery .container {
@@ -1798,40 +1712,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Debug: Log that auto-scroll has started
     console.log('Carousel auto-scroll initialized');
   }); // End of forEach loop for carousels
-
-  // Audio toggle functionality
-  const audioToggle = document.getElementById('audioToggle');
-  if (audioToggle) {
-    let isMuted = false;
-
-    audioToggle.addEventListener('click', () => {
-      isMuted = !isMuted;
-
-      // Toggle button appearance
-      audioToggle.classList.toggle('audio-muted', isMuted);
-
-      // Update all video muted states
-      const allVideos = document.querySelectorAll('.carousel-video');
-      allVideos.forEach(video => {
-        video.muted = isMuted;
-      });
-
-      // If unmuting, pause all videos first to prevent autoplay with sound
-      if (!isMuted) {
-        allVideos.forEach(video => {
-          video.pause();
-          video.currentTime = 0;
-        });
-      }
-    });
-
-    // Set initial state to muted
-    audioToggle.classList.add('audio-muted');
-    const allVideos = document.querySelectorAll('.carousel-video');
-    allVideos.forEach(video => {
-      video.muted = true;
-    });
-  }
 });
 </script>
 <script src="./Isiah Udofia – Senior @ Yale University – New Haven, CT_files/bundle.js" defer></script><script src="./shuffle-cleanup.js" defer></script></body></html>

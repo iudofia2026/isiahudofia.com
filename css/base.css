@@ -1,0 +1,157 @@
+/* Shared Base Styles - Extracted from index.html */
+/* This file contains common CSS variables and base styles used across all pages */
+
+/* variables */
+:root {
+	/* grid */
+	--column-count: 10;
+	--grid-main: repeat(var(--column-count), minmax(0, 1fr));
+	--grid-1: repeat(1, minmax(0, 1fr));
+	--grid-2: repeat(2, minmax(0, 1fr));
+	--grid-3: repeat(3, minmax(0, 1fr));
+	--grid-4: repeat(4, minmax(0, 1fr));
+	--grid-5: repeat(5, minmax(0, 1fr));
+	--grid-6: repeat(6, minmax(0, 1fr));
+	--grid-7: repeat(7, minmax(0, 1fr));
+	--grid-8: repeat(8, minmax(0, 1fr));
+	--grid-9: repeat(9, minmax(0, 1fr));
+	--grid-10: repeat(10, minmax(0, 1fr));
+	--grid-11: repeat(11, minmax(0, 1fr));
+	--grid-12: repeat(12, minmax(0, 1fr));
+	--grid-gap-total: calc(var(--grid-gap--main) * (var(--column-count) - 1));
+	--grid-width: calc(min(var(--max-width--main), 100vw) - (var(--padding-horizontal--main) * 2));
+	--column-width: calc((var(--grid-width) - var(--grid-gap-total)) / var(--column-count) + var(--grid-gap--main));
+	--column-width--1: calc(var(--column-width) * 1 - var(--grid-gap--main));
+	--column-width--2: calc(var(--column-width) * 2 - var(--grid-gap--main));
+	--column-width--3: calc(var(--column-width) * 3 - var(--grid-gap--main));
+	--column-width--4: calc(var(--column-width) * 4 - var(--grid-gap--main));
+	--column-width--5: calc(var(--column-width) * 5 - var(--grid-gap--main));
+	--column-width--6: calc(var(--column-width) * 6 - var(--grid-gap--main));
+	--column-width--7: calc(var(--column-width) * 7 - var(--grid-gap--main));
+	--column-width--8: calc(var(--column-width) * 8 - var(--grid-gap--main));
+	--column-width--9: calc(var(--column-width) * 9 - var(--grid-gap--main));
+	--column-width--10: calc(var(--column-width) * 10 - var(--grid-gap--main));
+	--column-width--11: calc(var(--column-width) * 11 - var(--grid-gap--main));
+	--column-width--12: calc(var(--column-width) * 12 - var(--grid-gap--main));
+	--breakout-gutter: minmax(calc(var(--padding-horizontal--main) - var(--grid-gap--main)), 1fr);
+	--breakout-remaining: calc(var(--max-width--main) - (var(--padding-horizontal--main) * 2));
+	--breakout-start: [full-start] var(--breakout-gutter) [content-start];
+	--breakout-end: [content-end] var(--breakout-gutter) [full-end];
+	--grid-breakout-single: var(--breakout-start) minmax(0, var(--breakout-remaining)) var(--breakout-end);
+	--grid-breakout: var(--breakout-start) repeat(var(--column-count), minmax(0, calc((var(--breakout-remaining) - var(--grid-gap-total)) / var(--column-count)))) var(--breakout-end);
+	/* others */
+	--font-weight--inherit: inherit;
+	--font-weight--100: 100;
+	--font-weight--200: 200;
+	--font-weight--300: 300;
+	--font-weight--400: 400;
+	--font-weight--500: 500;
+	--font-weight--600: 600;
+	--font-weight--700: 700;
+	--font-weight--800: 800;
+	--font-weight--900: 900;
+	--text-transform--none: none;
+	--text-transform--uppercase: uppercase;
+	--text-transform--capitalize: capitalize;
+	--text-transform--lowercase: lowercase;
+	--text-transform--inherit: inherit;
+	--max-width--none: none;
+}
+
+/* default styles */
+body {
+	font-weight: var(--text-main--font-weight);
+	text-transform: var(--text-main--text-transform);
+	font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, h5, h6, p, label, figure, blockquote {
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: inherit;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+button {
+	background-color: unset;
+	padding: unset;
+	text-align: inherit;
+	cursor: pointer;
+}
+img::selection {
+	background: transparent;
+}
+a:not([class]) {
+	text-decoration: underline;
+}
+.u-rich-text > *:first-child,
+.u-rich-text .w-richtext > *:first-child {
+	margin-top: 0;
+}
+.u-rich-text > *:last-child,
+.u-rich-text .w-richtext > *:last-child {
+	margin-bottom: 0;
+}
+.w-richtext a {
+	position: relative;
+  z-index: 4;
+}
+video {
+	width: 100%;
+	object-fit: cover;
+}
+video.wf-empty {
+	padding: 0;
+}
+svg {
+	display: block;
+}
+section, header, footer {
+	position: relative;
+}
+@media (prefers-color-scheme: light) {
+	option {
+		color: black;
+	}
+}
+
+/* line clamp */
+.u-line-clamp-1, .u-line-clamp-2, .u-line-clamp-3, .u-line-clamp-4 {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+}
+.u-line-clamp-2 { -webkit-line-clamp: 2; }
+.u-line-clamp-3 { -webkit-line-clamp: 3; }
+.u-line-clamp-4 { -webkit-line-clamp: 4; }
+
+/* focus states */
+[tabindex]:focus-visible,
+a:focus-visible,
+button:focus-visible,
+.w-checkbox-input--inputType-custom.w--redirected-focus,
+.w-form-formradioinput--inputType-custom.w--redirected-focus {
+	outline: 2px solid var(--theme--text);
+	outline-offset: 4px;
+}
+.w-checkbox-input--inputType-custom.w--redirected-focus,
+.w-form-formradioinput--inputType-custom.w--redirected-focus {
+	box-shadow: none;
+}
+
+/* section padding */
+[data-padding-top="none"] { padding-top: var(--padding-vertical--none); }
+[data-padding-bottom="none"] { padding-bottom: var(--padding-vertical--none); }
+
+[data-padding-top="small"] { padding-top: var(--padding-vertical--small); }
+[data-padding-bottom="small"] { padding-bottom: var(--padding-vertical--small); }
+
+[data-padding-top="main"] { padding-top: var(--padding-vertical--main); }
+[data-padding-bottom="main"] { padding-bottom: var(--padding-vertical--main); }
+
+[data-padding-top="large"] { padding-top: var(--padding-vertical--large); }
+[data-padding-bottom="large"] { padding-bottom: var(--padding-vertical--large); }
+
+[data-padding-top="xlarge"] { padding-top: var(--padding-vertical--xlarge); }
+[data-padding-bottom="xlarge"] { padding-bottom: var(--padding-vertical--xlarge); }

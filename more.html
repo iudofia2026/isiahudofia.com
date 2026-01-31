@@ -525,7 +525,7 @@
           <div class="link_bracket_wrap is-left">
             <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
           </div>
-          <p data-shuffle="text" data-shuffle-hover="Sound" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: left;">Mute</p>
+          <p data-shuffle="text" data-shuffle-hover="Mute" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; width: 42px; text-align: left;">Sound</p>
           <div class="link_bracket_wrap is-right">
             <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
           </div>
@@ -1144,10 +1144,10 @@ button:focus-visible,
 
   /* Grid System for Gallery */
   .gallery .container {
-    max-width: 100%;
+    max-width: 1600px;
     width: 100%;
-    margin: 0;
-    padding: 0 1rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
   }
 
   .gallery .grid {
@@ -1171,13 +1171,13 @@ button:focus-visible,
     }
 
     .gallery .container {
-      padding: 0;
+      padding: 0 2rem;
     }
   }
 
   @media (min-width: 1200px) {
     .gallery .container {
-      padding: 0;
+      padding: 0 3rem;
     }
   }
 
@@ -1815,15 +1815,23 @@ document.addEventListener('DOMContentLoaded', function() {
       video.muted = true;
     });
 
+    // Set initial button text to "Sound" (since videos are muted, clicking will enable sound)
+    if (buttonText) {
+      buttonText.textContent = 'Sound';
+    }
+    if (hoverText) {
+      hoverText.setAttribute('data-shuffle-hover', 'Mute');
+    }
+
     muteToggle.addEventListener('click', () => {
       isMuted = !isMuted;
 
-      // Update button text
+      // Update button text - show what will happen when clicked
       if (buttonText) {
-        buttonText.textContent = isMuted ? 'Mute' : 'Sound';
+        buttonText.textContent = isMuted ? 'Sound' : 'Mute';
       }
       if (hoverText) {
-        hoverText.setAttribute('data-shuffle-hover', isMuted ? 'Sound' : 'Mute');
+        hoverText.setAttribute('data-shuffle-hover', isMuted ? 'Mute' : 'Sound');
       }
 
       // Update all video muted states
@@ -1831,7 +1839,7 @@ document.addEventListener('DOMContentLoaded', function() {
         video.muted = isMuted;
       });
 
-      // If unmuting, pause all videos first to prevent autoplay with sound
+      // If unmuting (sound on), pause all videos first to prevent autoplay with sound
       if (!isMuted) {
         allVideos.forEach(video => {
           video.pause();

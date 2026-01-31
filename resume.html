@@ -9,6 +9,33 @@
   .nav_btn_text.u-text-main {
     color: white !important;
   }
+
+  /* Remove top padding from loaders and preloaders */
+  .loader_wrap,
+  .loader_wrap_inner,
+  .loader_text_wrap,
+  .preloader_text_wrap,
+  .loader_bg,
+  .bg_grid_wrap.is-loader,
+  .bg_grid_wrap.persistant {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /* Fix for multi-shuffle elements - hide original text, show only shuffle wrappers */
+  [data-shuffle-load="multi"] {
+    position: relative;
+  }
+
+  /* Hide text nodes directly inside multi-shuffle elements */
+  [data-shuffle-load="multi"] .word {
+    visibility: hidden;
+  }
+
+  /* Show only the line wrappers created by shuffle */
+  [data-shuffle-load="multi"] .line-wrapper {
+    visibility: visible !important;
+  }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Resume – Isiah Udofia</title><meta content="I'm Isiah Udofia, a product-minded engineer at Yale University designing end-to-end user experiences. I integrate video, photo, and animation into my design work." name="description"><meta content="resume – Isiah Udofia" property="og:title"><meta content="I'm Isiah Udofia, a product-minded engineer at Yale University designing end-to-end user experiences. I integrate video, photo, and animation into my design work." property="og:description"><meta content="resume – Isiah Udofia" property="twitter:title"><meta content="I'm Isiah Udofia, a product-minded engineer at Yale University designing end-to-end user experiences. I integrate video, photo, and animation into my design work." property="twitter:description"><meta property="og:type" content="website"><meta content="summary_large_image" name="twitter:card"><meta content="width=device-width, initial-scale=1" name="viewport">
 
@@ -509,8 +536,8 @@ button:focus-visible,
 }
 
 .resume_content {
-  animation: fadeIn 0.3s ease-out forwards;
-  animation-delay: 0.6s;
+  animation: fadeIn 0.4s ease-out forwards;
+  animation-delay: 0.8s;
   opacity: 0;
 }
 
@@ -711,13 +738,15 @@ button:focus-visible,
       const hasWebflow = typeof window.Webflow !== 'undefined';
       const hasShuffle = typeof window.Shuffle !== 'undefined';
       const hasBundle = typeof window.Bundle !== 'undefined' || document.querySelector('[data-shuffle]') !== null;
+      const hasShuffleAnimations = typeof window.ShuffleAnimations !== 'undefined';
 
       // If scripts are ready or we've waited too long, initialize
-      if ((hasWebflow && hasBundle) || elapsed > maxWaitTime) {
+      if ((hasWebflow && hasBundle && hasShuffleAnimations) || elapsed > maxWaitTime) {
         console.log('Initializing resume page with scripts ready:', {
           webflow: hasWebflow,
           shuffle: hasShuffle,
           bundle: hasBundle,
+          shuffleAnimations: hasShuffleAnimations,
           waitTime: elapsed + 'ms'
         });
 
@@ -748,6 +777,15 @@ button:focus-visible,
   } else {
     waitForScriptsAndInit();
   }
+
+  // CRITICAL: Also trigger shuffle on window.load like bundle.js does
+  // This ensures shuffle runs after all scripts are loaded
+  window.addEventListener('load', () => {
+    console.log('📋 Window loaded, triggering shuffle animation');
+    setTimeout(() => {
+      initShuffleAnimation();
+    }, 200);
+  });
 
   // Re-initialize on Barba page transitions - CRITICAL for first load
   if (typeof Barba !== 'undefined') {
@@ -846,7 +884,7 @@ button:focus-visible,
         reinitializeEverything();
       }
     });
-    
+
     // Also run after transition completes as backup
     Barba.hooks.after(() => {
       setTimeout(reinitializeEverything, 10);
@@ -856,7 +894,7 @@ button:focus-visible,
   }
 })();
 </script></div></div><main data-barba-namespace="resume" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="info_left u-column-10 u-vflex-left-between" style="margin: 0 auto; text-align: center; max-width: 1400px;"><div class="info_title" style="display: flex; justify-content: space-between; align-items: center; position: relative; width: 100%; overflow: visible;">
-  <h1 data-shuffle-load="multi" class="info_title_text u-display" style="opacity: 1; flex: 1; text-align: left;">Résumé</h1>
+  <h1 data-shuffle-load="multi" class="info_title_text u-display" style="opacity: 0; flex: 1; text-align: left;">Résumé</h1>
 </div>
 <div class="resume_content" style="max-width: 1200px; margin: 60px auto 40px auto; padding: 0 20px; text-align: left;">
   <div style="display: flex; justify-content: flex-start; margin-bottom: 30px;">

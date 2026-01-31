@@ -502,6 +502,18 @@ button:focus-visible,
   animation: none;
 }
 
+/* Minimal fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.resume_content {
+  animation: fadeIn 0.3s ease-out forwards;
+  animation-delay: 0.6s;
+  opacity: 0;
+}
+
 @keyframes resumeFadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -844,7 +856,7 @@ button:focus-visible,
   }
 })();
 </script></div></div><main data-barba-namespace="resume" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="info_left u-column-10 u-vflex-left-between" style="margin: 0 auto; text-align: center; max-width: 1400px;"><div class="info_title" style="display: flex; justify-content: space-between; align-items: center; position: relative; width: 100%; overflow: visible;">
-  <h1 class="info_title_text u-display" style="opacity: 1; flex: 1; text-align: left;">Résumé</h1>
+  <h1 data-shuffle-load="multi" class="info_title_text u-display" style="opacity: 1; flex: 1; text-align: left;">Résumé</h1>
 </div>
 <div class="resume_content" style="max-width: 1200px; margin: 60px auto 40px auto; padding: 0 20px; text-align: left;">
   <div style="display: flex; justify-content: flex-start; margin-bottom: 30px;">

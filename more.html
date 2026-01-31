@@ -1045,70 +1045,47 @@ button:focus-visible,
   .volume-controls-wrapper {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.2rem;
     flex-shrink: 0;
   }
 
-  /* Volume slider - minimalist and elegant */
+  /* Volume slider - clean bar without thumb */
   .volume-slider {
     -webkit-appearance: none;
     appearance: none;
-    width: 80px;
+    width: 70px;
     height: 2px;
-    background: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.6) 100%, rgba(255, 255, 255, 0.25) 100%);
     border-radius: 1px;
     outline: none;
     cursor: pointer;
-    transition: background 0.2s ease, width 0.3s ease;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
   }
 
   .volume-slider:hover {
-    background: rgba(255, 255, 255, 0.5);
     width: 100px;
   }
 
-  /* Volume slider track - WebKit */
+  /* Completely hide the thumb - WebKit */
   .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 10px;
-    height: 10px;
-    background: #fff;
-    border-radius: 50%;
+    width: 0;
+    height: 0;
+    background: transparent;
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
-  .volume-slider:hover::-webkit-slider-thumb {
-    opacity: 1;
-  }
-
-  .volume-slider:active::-webkit-slider-thumb {
-    transform: scale(1.2);
-  }
-
-  /* Volume slider track - Firefox */
+  /* Completely hide the thumb - Firefox */
   .volume-slider::-moz-range-thumb {
-    width: 10px;
-    height: 10px;
-    background: #fff;
+    width: 0;
+    height: 0;
+    background: transparent;
     border: none;
-    border-radius: 50%;
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  .volume-slider:hover::-moz-range-thumb {
-    opacity: 1;
-  }
-
-  .volume-slider:active::-moz-range-thumb {
-    transform: scale(1.2);
   }
 
   /* Volume slider track - Firefox */
@@ -1118,7 +1095,7 @@ button:focus-visible,
 
   /* Focus state for accessibility */
   .volume-slider:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline: 1px solid rgba(255, 255, 255, 0.3);
     outline-offset: 4px;
   }
 
@@ -1706,6 +1683,35 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
+
+  // Volume slider tooltip functionality
+  const volumeSlider = document.getElementById('volumeSlider');
+  if (volumeSlider && window.innerWidth > 768) {
+    volumeSlider.addEventListener('mouseenter', function(e) {
+      tooltip.innerHTML = `
+        <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1rem; font-weight: 500; margin: 0; font-family: var(--font--primary-family);">drag me!</h2>
+        <h3 data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.875rem; color: #999; margin: 0; font-family: var(--font--primary-family);">[volume]</h3>
+      `;
+      tooltip.style.display = 'block';
+      tooltip.style.left = e.clientX + 'px';
+      tooltip.style.top = e.clientY + 'px';
+
+      // Trigger shuffle animation for the tooltip content
+      triggerTooltipShuffle(tooltip);
+    });
+
+    volumeSlider.addEventListener('mouseleave', function() {
+      cleanupTooltipShuffle(tooltip);
+      tooltip.style.display = 'none';
+    });
+
+    volumeSlider.addEventListener('mousemove', function(e) {
+      if (tooltip.style.display === 'block') {
+        tooltip.style.left = e.clientX + 'px';
+        tooltip.style.top = e.clientY + 'px';
+      }
+    });
+  }
 });
 
 // Carousel Auto-Scroll and Navigation
@@ -1974,6 +1980,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Store current text for hover restoration
     let currentText = 'Sound';
 
+    // Update slider visual fill
+    function updateSliderFill() {
+      const volume = volumeSlider.value;
+      const percentage = (volume / 100) * 100;
+      volumeSlider.style.background = `linear-gradient(to right, rgba(255, 255, 255, 0.6) ${percentage}%, rgba(255, 255, 255, 0.25) ${percentage}%)`;
+    }
+
+    // Initialize slider fill
+    updateSliderFill();
+
     // Simple shuffle function
     const shuffle = (text, el) => {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -2013,6 +2029,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
 
+      updateSliderFill();
       shuffle(currentText, buttonText);
 
       // Desktop: Pause all videos when sound is enabled
@@ -2030,6 +2047,8 @@ document.addEventListener('DOMContentLoaded', function() {
         video.volume = volumeDecimal;
         video.muted = volume === 0;
       });
+
+      updateSliderFill();
 
       // Update mute state based on volume
       if (volume == 0) {

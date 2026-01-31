@@ -4,6 +4,8 @@ assets/videos/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 assets/videos/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
 assets/videos/**/*.png filter=lfs diff=lfs merge=lfs -text
 assets/videos/*/thumbnail*.jpg filter=lfs diff=lfs merge=lfs -text
+assets/videos/events/video2.mp4 filter=lfs diff=lfs merge=lfs -text
+assets/videos/corporate/video1.mp4 filter=lfs diff=lfs merge=lfs -text
 assets/videos/**/*.mp4 !text !filter !merge !diff
 assets/videos/**/*.jpg !text !filter !merge !diff
 assets/videos/**/*.jpeg !text !filter !merge !diff

@@ -30,11 +30,14 @@ This is a single-page application (SPA) built with:
 
 ### Project Pages
 
-- **Home** – Featured projects showcase with hover effects
-- **Academic Index** – Gamified college application platform
-- **LAMC Painting** – Professional painting company website
-- **Info** – About and background
-- **Résumé** – Experience and skills
+- **Home** (`index.html`) – Featured projects showcase with hover effects and shuffle text animations
+- **Academic Index** (`academicindex.html`) – Gamified college application platform with video demos
+- **LAMC Painting** (`lamcpainting.html`) – Professional painting company website
+- **Info** (`info.html`) – About page with background and bio
+- **Resume** (`resume.html`) – Professional experience and skills
+- **Photography** (`photography.html`) – Photography gallery
+- **Thesis** (`thesis.html`) – Academic thesis project
+- **Track & Field** (`track-and-field.html`) – Athletic portfolio
 
 ---
 
@@ -97,13 +100,21 @@ isiahudofia.com/
 
 ## Deployment
 
-Currently deployed via Vercel.
+**Currently deployed via Vercel** – [isiahudofia.com](https://isiahudofia.com)
+
+- **Project:** isiahudofia-com
+- **Framework:** Static site (Node.js 24.x)
+- **Build time:** ~10 seconds
+- **Environment:** Production
 
 ```bash
 # Install Vercel CLI
 npm install -g vercel
 
-# Deploy to Vercel
+# Login to Vercel
+vercel login
+
+# Deploy to production
 vercel --prod
 ```
 

@@ -1761,13 +1761,94 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Starting auto-scroll in direction:', scrollDirection);
       // Clear any existing timers first
       stopAutoScroll();
+
+      // Function to check if we should wait for video to finish
+      function shouldWaitForVideo() {
+        // Only on mobile and if videos exist and are unmuted
+        if (window.innerWidth > 1024) return false;
+
+        const focusedVideo = carousel.querySelector('.carousel-item.is-focused .carousel-video');
+        if (!focusedVideo) return false;
+
+        // Check if any video is unmuted and playing
+        const allVideos = carousel.querySelectorAll('.carousel-video');
+        let anyUnmuted = false;
+        allVideos.forEach(video => {
+          if (!video.muted) {
+            anyUnmuted = true;
+          }
+        });
+
+        return anyUnmuted && focusedVideo && !focusedVideo.paused && focusedVideo.currentTime > 0;
+      }
+
+      // Function to wait for focused video to finish
+      function waitForVideoThenScroll() {
+        const focusedVideo = carousel.querySelector('.carousel-item.is-focused .carousel-video');
+
+        if (!focusedVideo || focusedVideo.paused || focusedVideo.ended || focusedVideo.muted) {
+          // No video playing or video finished, scroll normally
+          scrollCarousel(scrollDirection);
+          // Schedule next scroll
+          autoScrollInterval = setTimeout(() => {
+            if (shouldWaitForVideo()) {
+              waitForVideoThenScroll();
+            } else {
+              scrollCarousel(scrollDirection);
+              // Continue checking
+              autoScrollInterval = setTimeout(() => {
+                if (shouldWaitForVideo()) {
+                  waitForVideoThenScroll();
+                } else {
+                  scrollCarousel(scrollDirection);
+                  // Keep checking cycle going
+                  autoScrollInterval = setTimeout(arguments.callee, 2000);
+                }
+              }, 2000);
+            }
+          }, 2000);
+        } else {
+          // Video is playing, wait for it to end
+          focusedVideo.onended = () => {
+            focusedVideo.onended = null; // Clean up event listener
+            scrollCarousel(scrollDirection);
+            // Continue checking cycle
+            autoScrollInterval = setTimeout(() => {
+              if (shouldWaitForVideo()) {
+                waitForVideoThenScroll();
+              } else {
+                scrollCarousel(scrollDirection);
+                // Keep checking cycle going
+                autoScrollInterval = setTimeout(arguments.callee, 2000);
+              }
+            }, 2000);
+          };
+
+          // Also set a timeout in case video doesn't end (safety net)
+          autoScrollInterval = setTimeout(() => {
+            if (!focusedVideo.ended) {
+              waitForVideoThenScroll();
+            }
+          }, 10000); // 10 second max wait
+        }
+      }
+
       // Use timeout to wait 2 seconds before first scroll, then continue
       autoScrollInterval = setTimeout(() => {
-        scrollCarousel(scrollDirection);
-        // Continue scrolling in the same direction every 2 seconds
-        autoScrollInterval = setInterval(() => {
+        if (shouldWaitForVideo()) {
+          waitForVideoThenScroll();
+        } else {
           scrollCarousel(scrollDirection);
-        }, 2000);
+          // Continue scrolling in the same direction every 2 seconds
+          autoScrollInterval = setInterval(() => {
+            if (shouldWaitForVideo()) {
+              stopAutoScroll();
+              waitForVideoThenScroll();
+            } else {
+              scrollCarousel(scrollDirection);
+            }
+          }, 2000);
+        }
       }, 2000);
     }
 

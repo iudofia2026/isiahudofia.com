@@ -1662,11 +1662,19 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!isMobile) {
         container.addEventListener('mouseenter', () => {
           video.play().catch(e => console.log('Video play failed:', e));
+          // Pause carousel when hovering on video
+          if (carousel._stopAutoScroll) {
+            carousel._stopAutoScroll();
+          }
         });
 
         container.addEventListener('mouseleave', () => {
           video.pause();
           video.currentTime = 0;
+          // Resume carousel when leaving video
+          if (carousel._startAutoScroll) {
+            carousel._startAutoScroll();
+          }
         });
       }
 
@@ -1999,9 +2007,9 @@ document.addEventListener('DOMContentLoaded', function() {
       isMuted = !isMuted;
 
       // Determine new text based on state
-      // When muted is true, show "Mute" (videos are muted, clicking will keep them muted)
-      // When muted is false, show "Sound" (videos have sound, clicking will mute them)
-      const newText = !isMuted ? 'Mute' : 'Sound';
+      // When muted is true, show "Sound" (clicking will enable sound)
+      // When muted is false, show "Mute" (clicking will mute)
+      const newText = isMuted ? 'Sound' : 'Mute';
 
       // Trigger shuffle animation to new text
       if (buttonText) {

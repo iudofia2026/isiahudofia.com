@@ -18,6 +18,20 @@
     color: white !important;
   }
 
+  /* Add padding above photography title on desktop to clear fixed header */
+  @media screen and (min-width: 768px) {
+    .gallery-title-wrap .info_title_text {
+      padding-top: 3rem !important;
+    }
+  }
+
+  /* Add padding above photography title on mobile to clear fixed header */
+  @media screen and (max-width: 767px) {
+    .gallery-title-wrap .info_title_text {
+      padding-top: 2rem !important;
+    }
+  }
+
   /* Fix excessive scrolling issue */
   html {
     height: auto !important;
@@ -1083,29 +1097,28 @@ button:focus-visible,
     }
 
     .gallery .container {
-      padding: 0 2rem;
+      padding: 0;
     }
   }
 
   @media (min-width: 1200px) {
     .gallery .container {
-      padding: 0 3rem;
+      padding: 0;
     }
   }
 
   @media screen and (max-width: 767px) {
+    body {
+      padding-top: 15rem !important;
+    }
+
+    .page_wrap {
+      padding-top: 10rem !important;
+    }
+
     .gallery {
       padding: 1.5rem 0 3rem 0;
       margin-top: 2rem;
-    }
-
-    /* Add padding to body to account for fixed header on mobile */
-    body {
-      padding-top: 4rem;
-    }
-
-    .gallery .container {
-      padding: 0 1rem;
     }
 
     .gallery-header {

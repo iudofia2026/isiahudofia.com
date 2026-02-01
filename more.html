@@ -1153,121 +1153,9 @@ button:focus-visible,
   }
 
   @media (max-width: 768px) {
-    .gallery-subtitle-wrap {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .gallery-subtitle-wrap .gallery-subtitle {
-      font-size: 0.9rem;
-      margin-left: 0;
-      margin-bottom: 0.5rem;
-      opacity: 0.8;
-    }
-
-    .volume-controls-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0.75rem 0;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .volume-slider {
+    /* Hide entire track field gallery section on mobile */
+    .track-field-gallery {
       display: none !important;
-    }
-
-    .mute-toggle {
-      width: 100%;
-      max-width: 200px;
-      padding: 0.75rem 1rem;
-      background: rgba(75, 156, 211, 0.1);
-      border: 1px solid rgba(75, 156, 211, 0.3);
-      border-radius: 6px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .mute-toggle:hover {
-      background: rgba(75, 156, 211, 0.2);
-      border-color: rgba(75, 156, 211, 0.5);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(75, 156, 211, 0.2);
-    }
-
-    .mute-toggle:active {
-      transform: translateY(0);
-    }
-
-    .mute-toggle .link_bracket_wrap {
-      display: none;
-    }
-
-    .mute-toggle .nav_btn_text {
-      width: 100% !important;
-      min-width: auto !important;
-      text-align: center !important;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #4B9CD3 !important;
-      opacity: 1 !important;
-    }
-
-    /* Gallery title button improvements */
-    .gallery-title-wrap .nav_link {
-      padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      margin-bottom: 0.5rem;
-    }
-
-    .gallery-title-wrap .nav_link:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(75, 156, 211, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .gallery-title-wrap .nav_link .link_bracket_wrap {
-      display: none;
-    }
-
-    .gallery-title-wrap .nav_link .info_title_text {
-      width: 100% !important;
-      text-align: center !important;
-      font-size: 1rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #4B9CD3 !important;
-    }
-
-    /* Add subtle pulse animation to mute button */
-    @keyframes subtle-pulse {
-      0%, 100% {
-        box-shadow: 0 0 0 0 rgba(75, 156, 211, 0.4);
-      }
-      50% {
-        box-shadow: 0 0 0 8px rgba(75, 156, 211, 0);
-      }
-    }
-
-    .mute-toggle {
-      animation: subtle-pulse 3s infinite;
-    }
-
-    .mute-toggle:hover {
-      animation: none;
     }
   }
 
@@ -2503,7 +2391,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
               <!-- Left arm - 4x Ivy Medalist (Podium style) -->
               <div style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); text-align: center; width: 220px; z-index: 25;">
-                <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
                   <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.1rem; margin: 0; color: #C9A961; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">4× Ivy Medalist</p>
                   <div style="display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 90px;">
                     <!-- Bronze - LJ -->
@@ -2512,7 +2400,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">3</span>
                       </div>
                       <div style="width: 40px; height: 28px; background: rgba(205, 127, 50, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
                     <!-- Silver - LJ -->
                     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -2520,7 +2407,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">2</span>
                       </div>
                       <div style="width: 40px; height: 36px; background: rgba(192, 192, 192, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
                     <!-- 4th place - LJ -->
                     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -2528,7 +2414,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
                       </div>
                       <div style="width: 40px; height: 24px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
                     <!-- Another 4th - 4x100 -->
                     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -2536,7 +2421,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
                       </div>
                       <div style="width: 40px; height: 24px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">4×100</span>
                     </div>
                   </div>
                 </div>
@@ -2830,22 +2714,18 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #CD7F32, #B87333); color: #000;">3</div>
                     <div class="podium-base" style="height: 20px; background: rgba(205, 127, 50, 0.2);"></div>
-                    <span class="podium-label">LJ</span>
                   </div>
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #C0C0C0, #A8A8A8); color: #000;">2</div>
                     <div class="podium-base" style="height: 28px; background: rgba(192, 192, 192, 0.2);"></div>
-                    <span class="podium-label">LJ</span>
                   </div>
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #4B9CD3, #3a8ab8); color: #000;">4</div>
                     <div class="podium-base" style="height: 18px; background: rgba(75, 156, 211, 0.2);"></div>
-                    <span class="podium-label">LJ</span>
                   </div>
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #4B9CD3, #3a8ab8); color: #000;">4</div>
                     <div class="podium-base" style="height: 18px; background: rgba(75, 156, 211, 0.2);"></div>
-                    <span class="podium-label">4×100</span>
                   </div>
                 </div>
               </div>

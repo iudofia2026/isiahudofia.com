@@ -724,11 +724,11 @@
     </div>
     <div class="stats-grid-container">
       <div class="stats-grid">
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LONG JUMP</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100m" data-shuffle-load="single">100</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="LONG JUMP">LONG JUMP</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="100">100</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single" style="font-size: 2rem; font-weight: 300;">✧</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200m" data-shuffle-load="single">200</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TRIPLE JUMP</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="200">200</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="TRIPLE JUMP">TRIPLE JUMP</div>
       </div>
     </div>
     <nav class="track-field-gallery-nav" style="--max-p: 5; --max-z: 9;">
@@ -1986,38 +1986,43 @@ document.addEventListener('DOMContentLoaded', function() {
   const statsVideos = {
     '100': {
       path: '/assets/videos/track/100m.mov',
-      mark: '10.74',
-      location: 'Location',
-      date: 'Date',
-      meet: 'Meet Name'
+      mark: 'PR 10.74',
+      location: 'Wake Forest University',
+      date: 'April 2024',
+      meet: 'Wake Forest Invitational',
+      note: ''
     },
     '200': {
       path: '/assets/videos/track/200m.mp4',
-      mark: '21.63',
-      location: 'Location',
-      date: 'Date',
-      meet: 'Meet Name'
+      mark: 'PR 21.63',
+      location: 'Boston University',
+      date: 'February 2024',
+      meet: "Valentine's Day Invite",
+      note: 'Video of 22.18 race'
     },
     'LONG JUMP': {
       path: '/assets/videos/track/longjump.mp4',
-      mark: "25' 1\" / 7.66m",
-      location: 'Location',
-      date: 'Date',
-      meet: 'Meet Name'
+      mark: "PR 25' 1\" / 7.66m",
+      location: 'Princeton University',
+      date: 'May 2024',
+      meet: 'Ivy Outdoor Championships',
+      note: ''
     },
     'TRIPLE JUMP': {
       path: '/assets/videos/track/triplejump.mov',
-      mark: "45' 6.5\"",
-      location: 'Location',
-      date: 'Date',
-      meet: 'Meet Name'
+      mark: "PR 45' 6.5\"",
+      location: 'Non-Public Group Championships',
+      date: 'June 2022',
+      meet: 'NJSIAA',
+      note: ''
     },
     'IVY': {
       path: '/assets/videos/track/longjump.mp4',
       mark: 'Ivy Champion',
       location: 'Location',
       date: 'Date',
-      meet: 'Meet Name'
+      meet: 'Meet Name',
+      note: ''
     }
   };
 
@@ -2039,25 +2044,25 @@ document.addEventListener('DOMContentLoaded', function() {
               <!-- Top arm - 100m -->
               <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); text-align: center; width: 60px;">
                 <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.2rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">100</h3>
-                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.65rem; margin: 2px 0 0 0;">10.74</p>
+                <p style="font-size: 0.65rem; margin: 2px 0 0 0;"><span data-shuffle="text" data-shuffle-hover="single" style="color: #666;">PR</span> <span data-shuffle="text" data-shuffle-hover="single" style="color: #999;">10.74</span></p>
               </div>
 
               <!-- Bottom arm - 200m -->
               <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); text-align: center; width: 60px;">
                 <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.2rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">200</h3>
-                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.65rem; margin: 2px 0 0 0;">21.63</p>
+                <p style="font-size: 0.65rem; margin: 2px 0 0 0;"><span data-shuffle="text" data-shuffle-hover="single" style="color: #999;">21.63</span></p>
               </div>
 
               <!-- Left arm - LJ -->
               <div style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); text-align: center; width: 60px;">
                 <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.2rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">LJ</h3>
-                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.65rem; margin: 2px 0 0 0;">25' 1" / 7.66m</p>
+                <p style="font-size: 0.65rem; margin: 2px 0 0 0;"><span data-shuffle="text" data-shuffle-hover="single" style="color: #666;">PR</span> <span data-shuffle="text" data-shuffle-hover="single" style="color: #999;">25' 1" / 7.66m</span></p>
               </div>
 
               <!-- Right arm - TJ -->
               <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); text-align: center; width: 60px;">
                 <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.2rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">TJ</h3>
-                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.65rem; margin: 2px 0 0 0;">45' 6.5"</p>
+                <p style="font-size: 0.65rem; margin: 2px 0 0 0;"><span data-shuffle="text" data-shuffle-hover="single" style="color: #666;">PR</span> <span data-shuffle="text" data-shuffle-hover="single" style="color: #999;">45' 6.5"</span></p>
               </div>
             </div>
           `;
@@ -2075,10 +2080,11 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
               <div style="display: flex; flex-direction: column; justify-content: center; min-width: 100px;">
                 <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1rem; font-weight: 700; margin: 0 0 4px 0; font-family: var(--font--primary-family);">${eventType}</h2>
-                <h3 data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.875rem; color: #999; margin: 0 0 8px 0; font-family: var(--font--primary-family);">${videoData.mark}</h3>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #666; margin: 0 0 2px 0; font-family: var(--font--primary-family);">${videoData.location}</p>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #666; margin: 0 0 2px 0; font-family: var(--font--primary-family);">${videoData.date}</p>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #666; margin: 0; font-family: var(--font--primary-family);">${videoData.meet}</p>
+                <h3 style="font-size: 0.875rem; margin: 0 0 8px 0; font-family: var(--font--primary-family);"><span data-shuffle="text" data-shuffle-hover="single" style="color: #666;">${videoData.mark.includes('PR') ? 'PR' : ''}</span> <span data-shuffle="text" data-shuffle-hover="single" style="color: #999;">${videoData.mark.replace('PR ', '')}</span></h3>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #999; margin: 0 0 2px 0; font-family: var(--font--primary-family);">${videoData.location}</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #999; margin: 0 0 2px 0; font-family: var(--font--primary-family);">${videoData.date}</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #999; margin: ${videoData.note ? '2px' : '0'} 0 0 0; font-family: var(--font--primary-family);">${videoData.meet}</p>
+                ${videoData.note ? `<p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.6rem; color: #888; margin: 0; font-style: italic; font-family: var(--font--primary-family);">${videoData.note}</p>` : ''}
               </div>
             </div>
           `;
@@ -2500,4 +2506,151 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+
+<!-- Fullscreen Video Overlay -->
+<div id="fullscreen-video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.95); z-index: 10000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
+  <div id="fullscreen-video-container" style="position: relative; max-width: 90vw; max-height: 90vh; width: auto; height: auto;">
+    <video id="fullscreen-video" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: contain; border-radius: 0;"></video>
+    <button id="fullscreen-close" style="position: absolute; top: -40px; right: 0; background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 8px 12px; font-family: var(--font--primary-family); font-weight: 300; letter-spacing: 0.1em; transition: color 0.2s ease; text-transform: uppercase;">✕ CLOSE</button>
+    <div id="fullscreen-video-info" style="position: absolute; bottom: -60px; left: 0; right: 0; text-align: center; color: #999; font-family: var(--font--primary-family);">
+      <h2 id="fullscreen-title" style="font-size: 1rem; font-weight: 700; margin: 0 0 4px 0; color: #fff;"></h2>
+      <p id="fullscreen-mark" style="font-size: 0.875rem; margin: 0 0 2px 0;"><span style="color: #666;">PR</span> <span style="color: #999;"></span></p>
+      <p id="fullscreen-location" style="font-size: 0.7rem; margin: 0; color: #999;"></p>
+      <p id="fullscreen-meet" style="font-size: 0.7rem; margin: 0; color: #999;"></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  #fullscreen-close:hover {
+    color: #4B9CD3;
+  }
+
+  #fullscreen-video-overlay.active {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    #fullscreen-video-container {
+      max-width: 95vw;
+      max-height: 70vh;
+    }
+
+    #fullscreen-close {
+      top: -35px;
+      font-size: 1.2rem;
+    }
+
+    #fullscreen-video-info {
+      bottom: -50px;
+    }
+  }
+</style>
+
+<script>
+// Fullscreen Video Player
+document.addEventListener('DOMContentLoaded', function() {
+  const overlay = document.getElementById('fullscreen-video-overlay');
+  const video = document.getElementById('fullscreen-video');
+  const closeBtn = document.getElementById('fullscreen-close');
+  const titleEl = document.getElementById('fullscreen-title');
+  const markEl = document.getElementById('fullscreen-mark');
+  const locationEl = document.getElementById('fullscreen-location');
+  const meetEl = document.getElementById('fullscreen-meet');
+
+  const statsVideos = {
+    '100': {
+      path: '/assets/videos/track/100m.mov',
+      mark: 'PR 10.74',
+      location: 'Wake Forest University',
+      meet: 'Wake Forest Invitational • April 2024'
+    },
+    '200': {
+      path: '/assets/videos/track/200m.mp4',
+      mark: 'PR 21.63',
+      location: 'Boston University',
+      meet: "Valentine's Day Invite • February 2024"
+    },
+    'LONG JUMP': {
+      path: '/assets/videos/track/longjump.mp4',
+      mark: "PR 25' 1\" / 7.66m",
+      location: 'Princeton University',
+      meet: 'Ivy Outdoor Championships • May 2024'
+    },
+    'TRIPLE JUMP': {
+      path: '/assets/videos/track/triplejump.mov',
+      mark: "PR 45' 6.5\"",
+      location: 'NJSIAA Non-Public Group Championships',
+      meet: 'June 2022'
+    }
+  };
+
+  function openFullscreen(videoType) {
+    const videoData = statsVideos[videoType];
+    if (!videoData) return;
+
+    video.src = videoData.path;
+    titleEl.textContent = videoType;
+
+    const markSpan = markEl.querySelector('span:last-child');
+    const prLabel = markEl.querySelector('span:first-child');
+
+    if (videoData.mark.includes('PR')) {
+      prLabel.style.display = 'inline';
+      markSpan.textContent = videoData.mark.replace('PR ', '');
+    } else {
+      prLabel.style.display = 'none';
+      markSpan.textContent = videoData.mark;
+    }
+
+    locationEl.textContent = videoData.location;
+    meetEl.textContent = videoData.meet;
+
+    overlay.style.display = 'flex';
+    // Trigger reflow
+    overlay.offsetHeight;
+    overlay.classList.add('active');
+
+    video.play().catch(err => console.log('Auto-play prevented:', err));
+  }
+
+  function closeFullscreen() {
+    overlay.classList.remove('active');
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      video.pause();
+      video.src = '';
+    }, 300);
+  }
+
+  // Add click handlers to stats grid boxes
+  const statsGridBoxes = document.querySelectorAll('.stats-grid-box[data-video-type]');
+  statsGridBoxes.forEach(box => {
+    box.style.cursor = 'pointer';
+    box.addEventListener('click', function(e) {
+      e.preventDefault();
+      const videoType = this.getAttribute('data-video-type');
+      openFullscreen(videoType);
+    });
+  });
+
+  // Close button
+  closeBtn.addEventListener('click', closeFullscreen);
+
+  // Close on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      closeFullscreen();
+    }
+  });
+
+  // Close on click outside (but not on video or info)
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      closeFullscreen();
+    }
+  });
+});
+</script>
+
 <script src="./Isiah Udofia – Senior @ Yale University – New Haven, CT_files/bundle.js" defer></script><script src="./shuffle-cleanup.js" defer></script></body></html>

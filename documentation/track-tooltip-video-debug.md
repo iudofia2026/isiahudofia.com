@@ -166,10 +166,32 @@ if (videoContainer && videoData.path) {
 7. `017326b2` - Wait for loadeddata event before playing
 8. `7cce9dd9` - **LOCALHOST FIX** - Converted .mov to .mp4 format
 9. `3649ee2f` - **PRODUCTION FIX** - Clone pre-created video elements instead of dynamic creation
+10. `c29f2d87` - Added retry logic and enhanced logging for AbortError
+11. `28ab40da` - **FINAL FIX** - Fixed hover text case sensitivity (Long Jump → LONG JUMP, Triple Jump → TRIPLE JUMP)
 
 ## Production Status (FIXED)
 
-**Root Cause**: Dynamic video creation with `document.createElement('video')` doesn't work in Vercel production environment.
+**Root Cause**: Multiple issues:
+1. Dynamic video creation with `document.createElement('video')` doesn't work in Vercel production
+2. `.mov` format only works in Safari, not Chrome/Firefox
+3. **Hover text case mismatch** - `data-shuffle-hover` attributes were title case but statsVideos keys were all caps
+
+**Final Solution**:
+1. Convert all videos to `.mp4` format (H.264/AAC)
+2. Pre-create video elements in HTML
+3. Clone pre-created elements on hover
+4. **Fix case sensitivity**: `data-shuffle-hover="LONG JUMP"` not `"Long Jump"`
+
+**Critical Fix (Commit 28ab40da)**:
+```html
+<!-- ❌ WRONG - case doesn't match statsVideos keys -->
+<div data-shuffle-hover="Long Jump">LONG JUMP</div>
+<div data-shuffle-hover="Triple Jump">TRIPLE JUMP</div>
+
+<!-- ✅ CORRECT - all caps to match statsVideos keys -->
+<div data-shuffle-hover="LONG JUMP">LONG JUMP</div>
+<div data-shuffle-hover="TRIPLE JUMP">TRIPLE JUMP</div>
+```
 
 **Solution**: Clone pre-created video elements that already exist in the HTML.
 

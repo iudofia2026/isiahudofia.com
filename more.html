@@ -583,15 +583,6 @@
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
-      <div class="volume">
-        <input type="checkbox" class="volume-input" id="videoVolumeToggle" />
-        <div class="volume-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="volume-svg">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          </svg>
-        </div>
-      </div>
       <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
     </div>
     <div class="gallery-carousel">
@@ -760,6 +751,9 @@
           <path fill-rule="evenodd" clip-rule="evenodd" d="M9.86001 0.0668945L9.76698 7.41621L8.76706 7.40356L8.83804 1.79597L0.707107 9.9269L0 9.21979L8.13093 1.08886L2.52334 1.15984L2.51069 0.159924L9.86001 0.0668945Z" fill="currentColor"></path>
         </svg>
       </div>
+    </div>
+    <div class="video-descriptions-mobile" id="videoDescriptionsMobile">
+      <!-- Video descriptions will be dynamically inserted here on mobile -->
     </div>
     <div class="freelance-disclaimer">
       <p class="disclaimer-text">※ = Freelance client</p>
@@ -1692,6 +1686,11 @@ button:focus-visible,
     padding-left: 0;
   }
 
+  /* Hide mobile video descriptions on desktop */
+  .video-descriptions-mobile {
+    display: none;
+  }
+
   .disclaimer-text {
     font-size: 0.75rem;
     color: #787878;
@@ -2274,79 +2273,57 @@ button:focus-visible,
     /* Align video editing title to right on mobile */
     .gallery.video-gallery .gallery-title-wrap {
       display: flex !important;
-      flex-direction: row !important;
-      justify-content: space-between !important;
-      align-items: center !important;
+      flex-direction: column !important;
+      align-items: flex-end !important;
     }
 
     .gallery.video-gallery .gallery-title-wrap .nav_link {
-      flex: 1 !important;
       text-align: right !important;
+      display: block !important;
+      width: 100% !important;
     }
 
     .gallery.video-gallery .gallery-title-wrap .nav_link .info_title_text {
       text-align: right !important;
     }
 
-    /* Volume control styles for mobile */
-    .volume {
-      width: 40px;
-      height: 40px;
-      border-radius: 100%;
-      background-color: rgb(205, 191, 247);
-      overflow: hidden;
-      position: relative;
-      flex-shrink: 0;
-      margin-left: 1rem;
+    .gallery.video-gallery .gallery-title-wrap .gallery-subtitle {
+      text-align: left !important;
+      margin-left: 0.8rem !important;
     }
 
-    .volume-icon {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.5s ease;
-      overflow: hidden;
-      position: relative;
+    /* Mobile video descriptions section */
+    .video-descriptions-mobile {
+      display: block !important;
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
     }
 
-    .volume-input {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      z-index: 999;
+    .video-descriptions-mobile .video-description-item {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .volume-icon:before {
-      content: "";
-      display: flex;
-      width: 0px;
-      height: 0px;
-      border-radius: 100%;
-      transition: all 0.2s ease;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgb(32, 33, 36);
+    .video-descriptions-mobile .video-description-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
     }
 
-    .volume-input:checked + .volume-icon:before {
-      width: calc(100% + 4px);
-      height: calc(100% + 4px);
+    .video-descriptions-mobile .description-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0 0 0.5rem 0;
     }
 
-    .volume-svg {
-      z-index: 2;
-      color: rgb(32, 33, 36);
-      height: 20px;
-      width: 20px;
-    }
-
-    .volume-input:checked + .volume-icon svg {
-      color: rgb(255, 255, 255);
+    .video-descriptions-mobile .description-category {
+      font-size: 0.9rem;
+      color: #4B9CD3;
+      margin: 0;
     }
   }
 </style>
@@ -3604,6 +3581,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
       trackVolumeSlider.value = newValue;
       trackVolumeSlider.dispatchEvent(new Event('input'));
+    });
+  }
+
+  // Mobile tap-to-mute functionality for videos
+  const allVideos = document.querySelectorAll('.carousel-video');
+
+  // Set initial state to muted on mobile
+  if (window.innerWidth <= 768) {
+    allVideos.forEach(video => {
+      video.muted = true;
+      video.volume = 0;
+    });
+
+    // Add tap-to-mute functionality
+    allVideos.forEach(video => {
+      video.addEventListener('click', function() {
+        this.muted = !this.muted;
+        this.volume = this.muted ? 0 : 1;
+      });
     });
   }
 });

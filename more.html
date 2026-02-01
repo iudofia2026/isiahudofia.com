@@ -126,6 +126,8 @@
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200M DASH" data-shuffle-load="single">200M DASH</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TRIPLE JUMP</div>
       </div>
+      <!-- Mobile-only content panel -->
+      <div class="stats-mobile-content" id="statsMobileContent"></div>
     </div>
   </div>
 </section>
@@ -1154,12 +1156,26 @@ button:focus-visible,
     .gallery-subtitle-wrap {
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.5rem;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .gallery-subtitle-wrap .gallery-subtitle {
+      font-size: 0.9rem;
+      margin-left: 0;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
     }
 
     .volume-controls-wrapper {
       width: 100%;
-      justify-content: flex-end;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.75rem 0;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .volume-slider {
@@ -1167,7 +1183,91 @@ button:focus-visible,
     }
 
     .mute-toggle {
-      align-self: flex-end;
+      width: 100%;
+      max-width: 200px;
+      padding: 0.75rem 1rem;
+      background: rgba(75, 156, 211, 0.1);
+      border: 1px solid rgba(75, 156, 211, 0.3);
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mute-toggle:hover {
+      background: rgba(75, 156, 211, 0.2);
+      border-color: rgba(75, 156, 211, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(75, 156, 211, 0.2);
+    }
+
+    .mute-toggle:active {
+      transform: translateY(0);
+    }
+
+    .mute-toggle .link_bracket_wrap {
+      display: none;
+    }
+
+    .mute-toggle .nav_btn_text {
+      width: 100% !important;
+      min-width: auto !important;
+      text-align: center !important;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #4B9CD3 !important;
+      opacity: 1 !important;
+    }
+
+    /* Gallery title button improvements */
+    .gallery-title-wrap .nav_link {
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin-bottom: 0.5rem;
+    }
+
+    .gallery-title-wrap .nav_link:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(75, 156, 211, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .gallery-title-wrap .nav_link .link_bracket_wrap {
+      display: none;
+    }
+
+    .gallery-title-wrap .nav_link .info_title_text {
+      width: 100% !important;
+      text-align: center !important;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #4B9CD3 !important;
+    }
+
+    /* Add subtle pulse animation to mute button */
+    @keyframes subtle-pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(75, 156, 211, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(75, 156, 211, 0);
+      }
+    }
+
+    .mute-toggle {
+      animation: subtle-pulse 3s infinite;
+    }
+
+    .mute-toggle:hover {
+      animation: none;
     }
   }
 
@@ -1767,6 +1867,293 @@ button:focus-visible,
       height: min(30rem, 100%);
       width: min(8rem, 100%);
     }
+
+    /* Mobile Stats Grid Interactive System */
+    .stats-grid-container {
+      position: relative;
+    }
+
+    .stats-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+    }
+
+    .stats-grid-box {
+      flex: 1;
+      min-width: 0;
+      text-align: center;
+      padding: 0.75rem 0.25rem;
+      font-size: 0.85rem;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+
+    .stats-grid-box.is-selected {
+      opacity: 1;
+      transform: scale(1.05);
+      font-weight: 600;
+    }
+
+    .stats-grid-box.is-selected::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 2px;
+      background: #4B9CD3;
+      transition: width 0.3s ease-in-out;
+    }
+
+    /* Mobile stats content panel */
+    .stats-mobile-content {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+    .stats-mobile-content.is-active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stats-mobile-content.is-animating {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    /* Mobile video styles */
+    .stats-mobile-video {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 0;
+      margin-bottom: 1rem;
+      background: #000;
+    }
+
+    .stats-mobile-info {
+      text-align: center;
+    }
+
+    .stats-mobile-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #4B9CD3;
+      margin: 0 0 0.5rem 0;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-mobile-mark {
+      font-size: 1rem;
+      color: #fff;
+      margin: 0.25rem 0;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-mobile-details {
+      font-size: 0.875rem;
+      color: #999;
+      margin: 0.125rem 0;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-mobile-note {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-style: italic;
+      font-family: var(--font--primary-family);
+    }
+
+    /* Special star content styles for mobile */
+    .stats-star-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 0.5rem 0;
+    }
+
+    .stats-star-arm {
+      text-align: center;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0;
+      transition: background 0.2s ease;
+    }
+
+    .stats-star-arm:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .stats-star-center {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      background: #000;
+      border-radius: 0;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+
+    .stats-star-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .stats-star-ncaa {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats-star-ncaa img {
+      width: 80px;
+      height: auto;
+    }
+
+    .stats-star-ncaa p {
+      font-size: 1rem;
+      color: #999;
+      font-weight: 600;
+      margin: 0;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-star-ranking {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats-star-ranking .rank-number {
+      color: #4B9CD3;
+      font-size: 2.5rem;
+      font-weight: 300;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-star-ranking .rank-label {
+      color: #888;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-star-ranking .rank-school {
+      color: #999;
+      font-size: 0.875rem;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-star-podium {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats-star-podium .podium-title {
+      font-size: 0.9rem;
+      color: #C9A961;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-star-podium .podium-stands {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 0.5rem;
+      height: 60px;
+    }
+
+    .stats-star-podium .podium-place {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stats-star-podium .podium-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-star-podium .podium-base {
+      width: 28px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-top: 2px;
+    }
+
+    .stats-star-podium .podium-label {
+      font-size: 0.6rem;
+      color: #888;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 2px;
+      font-family: var(--font--primary-family);
+    }
+
+    .stats-star-academic {
+      background: linear-gradient(135deg, #f8f5e6, #f5f0dc);
+      border: 2px solid #8B7355;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 0;
+    }
+
+    .stats-star-academic img {
+      width: 50px;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .stats-star-academic .academic-year {
+      font-size: 0.875rem;
+      color: #2c1810;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      font-family: 'Georgia', 'Times New Roman', serif;
+    }
+
+    .stats-star-academic .academic-text {
+      font-size: 1rem;
+      color: #1a1a1a;
+      font-weight: 600;
+      margin: 0;
+      font-family: 'Playfair Display', 'Georgia', serif;
+    }
   }
 
   /* Remove bottom padding from track field gallery on desktop */
@@ -2115,38 +2502,44 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
 
               <!-- Left arm - 4x Ivy Medalist (Podium style) -->
-              <div style="position: absolute; left: 24px; top: 50%; transform: translateY(-50%); text-align: center; width: 200px;">
-                <div style="display: flex; align-items: flex-end; justify-content: center; gap: 10px; height: 95px; margin-bottom: 14px;">
-                  <!-- Bronze -->
-                  <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #CD7F32, #B87333); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.3rem; font-weight: 700; font-family: var(--font--primary-family);">3</span>
+              <div style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); text-align: center; width: 220px; z-index: 25;">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.1rem; margin: 0; color: #C9A961; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">4× Ivy Medalist</p>
+                  <div style="display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 90px;">
+                    <!-- Bronze - LJ -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #CD7F32, #B87333); display: flex; align-items: center; justify-content: center;">
+                        <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">3</span>
+                      </div>
+                      <div style="width: 40px; height: 28px; background: rgba(205, 127, 50, 0.2); margin-top: 4px;"></div>
+                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
-                    <div style="width: 42px; height: 30px; background: rgba(205, 127, 50, 0.2); margin-top: 5px;"></div>
-                  </div>
-                  <!-- Silver -->
-                  <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 42px; height: 55px; background: linear-gradient(135deg, #C0C0C0, #A8A8A8); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.3rem; font-weight: 700; font-family: var(--font--primary-family);">2</span>
+                    <!-- Silver - LJ -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <div style="width: 40px; height: 52px; background: linear-gradient(135deg, #C0C0C0, #A8A8A8); display: flex; align-items: center; justify-content: center;">
+                        <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">2</span>
+                      </div>
+                      <div style="width: 40px; height: 36px; background: rgba(192, 192, 192, 0.2); margin-top: 4px;"></div>
+                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
-                    <div style="width: 42px; height: 38px; background: rgba(192, 192, 192, 0.2); margin-top: 5px;"></div>
-                  </div>
-                  <!-- 4th place -->
-                  <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 42px; height: 36px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.3rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
+                    <!-- 4th place - LJ -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <div style="width: 40px; height: 34px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
+                        <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
+                      </div>
+                      <div style="width: 40px; height: 24px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
+                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
-                    <div style="width: 42px; height: 26px; background: rgba(75, 156, 211, 0.2); margin-top: 5px;"></div>
-                  </div>
-                  <!-- Another 4th -->
-                  <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 42px; height: 36px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.3rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
+                    <!-- Another 4th - 4x100 -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <div style="width: 40px; height: 34px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
+                        <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
+                      </div>
+                      <div style="width: 40px; height: 24px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
+                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">4×100</span>
                     </div>
-                    <div style="width: 42px; height: 26px; background: rgba(75, 156, 211, 0.2); margin-top: 5px;"></div>
                   </div>
                 </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.2rem; margin: 0; color: #C9A961; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">4× Ivy Medalist</p>
               </div>
 
               <!-- Right arm - Academic All-Ivy (Diploma plaque style) -->
@@ -2326,6 +2719,162 @@ document.addEventListener('DOMContentLoaded', function() {
           trackTooltip.style.top = e.clientY + 'px';
         }
       });
+    } else {
+      // Mobile: Add click/touch functionality for stats grid
+      const mobileContent = document.getElementById('statsMobileContent');
+      if (mobileContent) {
+        let selectedBox = null;
+
+        // Auto-select middle star on load
+        const middleBox = statsGridBoxes[2]; // The star (✧) is the 3rd element
+        if (middleBox) {
+          selectMobileBox(middleBox);
+        }
+
+        statsGridBoxes.forEach(box => {
+          box.addEventListener('click', function() {
+            selectMobileBox(this);
+          });
+        });
+
+        function selectMobileBox(box) {
+          // Remove previous selection
+          statsGridBoxes.forEach(b => b.classList.remove('is-selected'));
+
+          // Add selection to clicked box
+          box.classList.add('is-selected');
+          selectedBox = box;
+
+          // Get content type
+          const eventType = box.textContent.trim();
+          const videoData = statsVideos[eventType];
+
+          // Animate out current content
+          mobileContent.classList.add('is-animating');
+
+          setTimeout(() => {
+            // Generate new content
+            if (eventType === '✧') {
+              // Special star content for mobile
+              generateMobileStarContent(mobileContent);
+            } else if (videoData) {
+              // Regular video content for mobile
+              generateMobileVideoContent(mobileContent, eventType, videoData);
+            }
+
+            // Animate in new content
+            mobileContent.classList.remove('is-animating');
+            mobileContent.classList.add('is-active');
+          }, 300);
+        }
+
+        function generateMobileVideoContent(container, eventType, videoData) {
+          container.innerHTML = `
+            <video class="stats-mobile-video" autoplay loop muted playsinline>
+              <source src="${videoData.path}" type="video/mp4">
+            </video>
+            <div class="stats-mobile-info">
+              <h3 class="stats-mobile-title">${eventType}</h3>
+              <p class="stats-mobile-mark">${videoData.mark}</p>
+              <p class="stats-mobile-details">${videoData.date} • ${videoData.location}</p>
+              <p class="stats-mobile-details">${videoData.meet}</p>
+              ${videoData.note ? `<p class="stats-mobile-note">${videoData.note}</p>` : ''}
+            </div>
+          `;
+        }
+
+        function generateMobileStarContent(container) {
+          const trackPhotos = [
+            '/assets/photos/track/IMG_0208.JPG',
+            '/assets/photos/track/IMG_0221.JPG',
+            '/assets/photos/track/IMG_0224.JPG',
+            '/assets/photos/track/IMG_1863.JPG',
+            '/assets/photos/track/IMG_4230.jpeg',
+            '/assets/photos/track/NZ9_1242.jpg',
+            '/assets/photos/track/NZ9_1897.JPG',
+            '/assets/photos/track/NZ9_1904.jpg',
+            '/assets/photos/track/TITUSKAO-AllFinalAwards Ceremony-6600.jpeg',
+            '/assets/photos/track/lucas-seasonopener-74.jpeg'
+          ];
+
+          container.innerHTML = `
+            <div class="stats-star-content">
+              <!-- NCAA Regional Qualifier -->
+              <div class="stats-star-arm stats-star-ncaa">
+                <img src="/assets/ncaa-logo.png" alt="NCAA" />
+                <p>Regional Qualifier 2024</p>
+              </div>
+
+              <!-- Photo Slideshow -->
+              <div class="stats-star-center">
+                <img id="mobile-star-photo" class="stats-star-image" src="${trackPhotos[0]}" alt="Track Photo" />
+              </div>
+
+              <!-- 3rd All-Time Yale -->
+              <div class="stats-star-arm stats-star-ranking">
+                <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-bottom: 4px;">
+                  <span class="rank-number">3rd</span>
+                  <span class="rank-label">All-Time</span>
+                </div>
+                <p class="rank-school">
+                  <span style="color: #0f4d81; font-weight: 600; font-style: italic;">Yale</span>
+                  <span style="color: #4B9CD3; margin: 0 4px;">•</span>
+                  <span style="color: #aaa; font-weight: 300;">Long Jump</span>
+                </p>
+              </div>
+
+              <!-- 4x Ivy Medalist -->
+              <div class="stats-star-arm stats-star-podium">
+                <p class="podium-title">4× Ivy Medalist</p>
+                <div class="podium-stands">
+                  <div class="podium-place">
+                    <div class="podium-icon" style="background: linear-gradient(135deg, #CD7F32, #B87333); color: #000;">3</div>
+                    <div class="podium-base" style="height: 20px; background: rgba(205, 127, 50, 0.2);"></div>
+                    <span class="podium-label">LJ</span>
+                  </div>
+                  <div class="podium-place">
+                    <div class="podium-icon" style="background: linear-gradient(135deg, #C0C0C0, #A8A8A8); color: #000;">2</div>
+                    <div class="podium-base" style="height: 28px; background: rgba(192, 192, 192, 0.2);"></div>
+                    <span class="podium-label">LJ</span>
+                  </div>
+                  <div class="podium-place">
+                    <div class="podium-icon" style="background: linear-gradient(135deg, #4B9CD3, #3a8ab8); color: #000;">4</div>
+                    <div class="podium-base" style="height: 18px; background: rgba(75, 156, 211, 0.2);"></div>
+                    <span class="podium-label">LJ</span>
+                  </div>
+                  <div class="podium-place">
+                    <div class="podium-icon" style="background: linear-gradient(135deg, #4B9CD3, #3a8ab8); color: #000;">4</div>
+                    <div class="podium-base" style="height: 18px; background: rgba(75, 156, 211, 0.2);"></div>
+                    <span class="podium-label">4×100</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Academic All-Ivy -->
+              <div class="stats-star-arm stats-star-academic">
+                <img src="/assets/ivy-league-logo.png" alt="Ivy League" />
+                <p class="academic-year">2024</p>
+                <p class="academic-text">Academic</p>
+                <p class="academic-text">All-Ivy</p>
+              </div>
+            </div>
+          `;
+
+          // Start photo slideshow
+          let photoIndex = 0;
+          const photoElement = document.getElementById('mobile-star-photo');
+          if (photoElement) {
+            setInterval(() => {
+              photoIndex = (photoIndex + 1) % trackPhotos.length;
+              photoElement.style.opacity = '0';
+              setTimeout(() => {
+                photoElement.src = trackPhotos[photoIndex];
+                photoElement.style.opacity = '1';
+              }, 300);
+            }, 3000);
+          }
+        }
+      }
     }
   });
 });

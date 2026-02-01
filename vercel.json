@@ -32,6 +32,32 @@
       ]
     },
     {
+      "source": "/assets/videos/(.*).mp4",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "video/mp4"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/videos/(.*).mov",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "video/quicktime"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
       "source": "/(.*).html",
       "headers": [
         {

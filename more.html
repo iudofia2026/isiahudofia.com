@@ -2611,7 +2611,7 @@ document.addEventListener('DOMContentLoaded', function() {
           trackTooltip.innerHTML = `
             <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
               <div style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
-                <video src="${videoData.path}" autoplay loop muted playsinline preload="auto" class="track-tooltip-video" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <video src="${videoData.path}" loop muted playsinline preload="auto" class="track-tooltip-video" style="width: 100%; height: 100%; object-fit: cover;"></video>
               </div>
               <div style="display: flex; flex-direction: column; justify-content: center; min-width: 250px;">
                 <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #ffffff; font-size: 2.5rem; font-weight: 700; margin: 0 0 20px 0; font-family: var(--font--primary-family); letter-spacing: -0.03em; line-height: 1.1;">${eventTitle}</h2>

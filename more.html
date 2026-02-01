@@ -578,12 +578,12 @@
         <div class="link_bracket_wrap is-left">
           <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
         </div>
-        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display" data-original-text="view gallery" style="opacity: 1; display: inline-block; width: 182px; text-align: left;">video editing</p>
+        <p data-shuffle="text" data-shuffle-hover="VIDEO EDITING" data-shuffle-load="single" class="info_title_text u-display" data-original-text="VIDEO EDITING">VIDEO EDITING</p>
         <div class="link_bracket_wrap is-right">
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
-      <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
+      <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle">I edit for fun and as a freelancer: here's a collection of my videos</p>
     </div>
     <div class="gallery-carousel">
       <div class="carousel-arrow carousel-arrow-left">
@@ -2292,6 +2292,12 @@ button:focus-visible,
       margin-left: 0.8rem !important;
     }
 
+    /* Hide figcaption elements from both galleries on mobile */
+    .carousel-item .img-content,
+    .carousel-item .img-content-hover {
+      display: none !important;
+    }
+
     /* Mobile video descriptions section */
     .video-descriptions-mobile {
       display: block !important;
@@ -3603,11 +3609,12 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 
-    // Populate mobile video descriptions - only show current/focused video
+    // Populate mobile video descriptions - only show current/focused video from video gallery only
     const videoDescriptionsMobile = document.getElementById('videoDescriptionsMobile');
     if (videoDescriptionsMobile) {
       const updateVideoDescription = function() {
-        const focusedItem = document.querySelector('.carousel-item.focused');
+        // Only target video gallery carousel items
+        const focusedItem = document.querySelector('.gallery.video-gallery .carousel-item.focused');
         if (focusedItem) {
           const title = focusedItem.querySelector('.title');
           const category = focusedItem.querySelector('.category');
@@ -3618,20 +3625,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p class="description-category">${category.textContent}</p>
               </div>
             `;
+          } else {
+            // Fallback if no description found
+            videoDescriptionsMobile.innerHTML = '';
           }
+        } else {
+          // Fallback if no focused item
+          videoDescriptionsMobile.innerHTML = '';
         }
       };
 
       // Initial update
       updateVideoDescription();
 
-      // Update on carousel scroll/navigation
+      // Update on carousel scroll/navigation - only target video gallery
       const carousel = document.querySelector('.gallery.video-gallery .carousel-track');
       if (carousel) {
         carousel.addEventListener('scroll', updateVideoDescription);
       }
 
-      // Also update when arrows are clicked
+      // Also update when arrows are clicked - only target video gallery
       const arrows = document.querySelectorAll('.gallery.video-gallery .carousel-arrow');
       arrows.forEach(arrow => {
         arrow.addEventListener('click', updateVideoDescription);

@@ -2213,10 +2213,16 @@ button:focus-visible,
       display: block !important;
     }
 
+    .gallery-title-wrap .link_bracket_text {
+      font-size: 2rem !important;
+    }
+
     .gallery-title-wrap .nav_link .info_title_text {
       width: auto !important;
       text-align: left !important;
       font-size: 2rem !important;
+      display: inline !important;
+      white-space: nowrap !important;
       font-weight: inherit !important;
       letter-spacing: inherit !important;
       text-transform: inherit !important;
@@ -2681,6 +2687,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (videoData && videoData.videoId) {
           // Get the pre-created video element
           const preCreatedVideo = document.getElementById(videoData.videoId);
+          console.log('Track tooltip - videoId:', videoData.videoId, 'preCreatedVideo:', preCreatedVideo);
 
           trackTooltip.innerHTML = `
             <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
@@ -2720,18 +2727,20 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           `;
 
-          // Move the pre-created video element into the tooltip
+          // Clone the pre-created video element into the tooltip
           if (preCreatedVideo) {
             const videoContainer = trackTooltip.querySelector('#track-video-container');
             if (videoContainer) {
-              preCreatedVideo.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-              videoContainer.appendChild(preCreatedVideo);
-
-              // Play the video
-              preCreatedVideo.play().catch(err => {
-                console.log('Video play failed:', err);
-              });
+              // Clone the video element (similar to carousel approach)
+              const videoClone = preCreatedVideo.cloneNode(true);
+              videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+              videoContainer.appendChild(videoClone);
+              console.log('Track tooltip - video cloned and appended, src:', videoClone.querySelector('source')?.src || videoClone.src);
+            } else {
+              console.log('Track tooltip - videoContainer not found');
             }
+          } else {
+            console.log('Track tooltip - preCreatedVideo is null/undefined');
           }
 
           trackTooltip.style.display = 'block';
@@ -2752,22 +2761,34 @@ document.addEventListener('DOMContentLoaded', function() {
           trackTooltip.style.left = leftPos + 'px';
           trackTooltip.style.top = e.clientY + 'px';
 
+          // Play the cloned video using requestAnimationFrame to ensure DOM is ready
+          if (preCreatedVideo) {
+            const videoClone = trackTooltip.querySelector('#track-video-container video');
+            if (videoClone) {
+              console.log('Track tooltip - attempting to play videoClone');
+              requestAnimationFrame(() => {
+                videoClone.play().then(() => {
+                  console.log('Track tooltip - video playing successfully');
+                }).catch(err => {
+                  console.log('Video play failed:', err);
+                });
+              });
+            } else {
+              console.log('Track tooltip - videoClone not found in container');
+            }
+          }
+
           // Trigger shuffle animation for the tooltip content
           triggerTooltipShuffle(trackTooltip);
         }
       });
 
       box.addEventListener('mouseleave', function() {
-        // Stop and reset any playing video
-        const playingVideo = trackTooltip.querySelector('.track-tooltip-video');
+        // Stop and reset any playing video (we're using clones, so just pause/remove)
+        const playingVideo = trackTooltip.querySelector('#track-video-container video');
         if (playingVideo) {
           playingVideo.pause();
           playingVideo.currentTime = 0;
-          // Move video back to its hidden container
-          const hiddenContainer = document.querySelector('.track-field-gallery > .container > div[style*="display: none"]');
-          if (hiddenContainer) {
-            hiddenContainer.appendChild(playingVideo);
-          }
         }
 
         // Clear slideshow interval if exists

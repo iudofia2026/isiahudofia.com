@@ -2771,14 +2771,23 @@ document.addEventListener('DOMContentLoaded', function() {
             videoContainer.appendChild(video);
             console.log('Track tooltip - created video with <source>, src:', absoluteUrl, 'type:', mimeType);
 
-            // Force play after a brief delay
-            setTimeout(() => {
+            // Play the video with retry logic for .mov files
+            const attemptPlay = () => {
               video.play().then(() => {
                 console.log('Track tooltip - video playing successfully');
               }).catch(err => {
-                console.log('Track tooltip - video play failed:', err.name, err.message);
+                if (err.name === 'AbortError') {
+                  // Retry after a short delay (common with .mov files)
+                  console.log('Track tooltip - AbortError, retrying play...');
+                  setTimeout(attemptPlay, 100);
+                } else {
+                  console.log('Track tooltip - video play failed:', err.name, err.message);
+                }
               });
-            }, 50);
+            };
+
+            // Start playing after a brief delay
+            setTimeout(attemptPlay, 50);
           } else {
             console.log('Track tooltip - videoContainer not found or no videoData.path');
           }

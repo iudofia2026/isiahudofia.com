@@ -2669,11 +2669,13 @@ document.addEventListener('DOMContentLoaded', function() {
           trackTooltip.style.left = leftPos + 'px';
           trackTooltip.style.top = e.clientY + 'px';
 
-          // Play video - exact same pattern as working carousel videos
-          const video = trackTooltip.querySelector('.track-tooltip-video');
-          if (video) {
-            video.play().catch(e => console.log('Video play failed:', e));
-          }
+          // Play video after DOM is stable
+          setTimeout(() => {
+            const video = trackTooltip.querySelector('.track-tooltip-video');
+            if (video && video.isConnected) {
+              video.play().catch(e => console.log('Video play failed:', e));
+            }
+          }, 10);
 
           // Trigger shuffle animation for the tooltip content
           triggerTooltipShuffle(trackTooltip);

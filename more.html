@@ -2472,7 +2472,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const eventTitle = this.getAttribute('data-shuffle-hover') || eventType;
         const videoData = statsVideos[eventType];
 
-        console.log('Event hover:', eventType, 'Has video data:', !!videoData);
+        console.log('Event hover:', JSON.stringify(eventType), 'Has video data:', !!videoData);
+        console.log('Available video mappings:', Object.keys(videoMapping));
+        console.log('Available statsVideos:', Object.keys(statsVideos));
 
         // Check if this is the star (special cross layout with accolades)
         if (eventType === '✧') {

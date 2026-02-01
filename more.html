@@ -578,7 +578,7 @@
         <div class="link_bracket_wrap is-left">
           <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
         </div>
-        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display" style="opacity: 1; display: inline-block; width: 182px; text-align: left;">video editing</p>
+        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display" data-original-text="view gallery" style="opacity: 1; display: inline-block; width: 182px; text-align: left;">video editing</p>
         <div class="link_bracket_wrap is-right">
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
@@ -2809,39 +2809,40 @@ document.addEventListener('DOMContentLoaded', function() {
           `;
 
           // Use pre-created video element instead of creating dynamically
+          // NOTE: Must query videoContainer AFTER setting innerHTML (line 2773)
           const videoContainer = trackTooltip.querySelector('#track-video-container');
-          if (videoContainer && videoData.videoId) {
-            const preCreatedVideo = document.getElementById(videoData.videoId);
-            if (preCreatedVideo) {
-              console.log('Track tooltip - found pre-created video:', videoData.videoId);
-              // Clone the pre-created video element (this works in production)
-              const videoClone = preCreatedVideo.cloneNode(true);
-              videoClone.muted = true;
-              videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-              videoContainer.appendChild(videoClone);
-              console.log('Track tooltip - cloned and appended video:', videoData.videoId);
+          if (videoContainer && preCreatedVideo) {
+            console.log('Track tooltip - found pre-created video:', videoData.videoId);
+            // Clone the pre-created video element (this works in production)
+            const videoClone = preCreatedVideo.cloneNode(true);
+            videoClone.muted = true;
+            videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+            videoContainer.appendChild(videoClone);
+            console.log('Track tooltip - cloned and appended video:', videoData.videoId);
 
-              // Play the cloned video with retry for AbortError
-              const playVideo = () => {
-                console.log('Track tooltip - attempting play for:', videoData.videoId);
-                videoClone.play().then(() => {
-                  console.log('Track tooltip - video playing successfully:', videoData.videoId);
-                }).catch(err => {
-                  if (err.name === 'AbortError') {
-                    console.log('Track tooltip - AbortError for', videoData.videoId, ', retrying...');
-                    setTimeout(() => playVideo(), 100);
-                  } else {
-                    console.log('Track tooltip - video play failed for', videoData.videoId, ':', err.name, err.message);
-                  }
-                });
-              };
+            // Play the cloned video with retry for AbortError
+            const playVideo = () => {
+              console.log('Track tooltip - attempting play for:', videoData.videoId);
+              videoClone.play().then(() => {
+                console.log('Track tooltip - video playing successfully:', videoData.videoId);
+              }).catch(err => {
+                if (err.name === 'AbortError') {
+                  console.log('Track tooltip - AbortError for', videoData.videoId, ', retrying...');
+                  setTimeout(() => playVideo(), 100);
+                } else {
+                  console.log('Track tooltip - video play failed for', videoData.videoId, ':', err.name, err.message);
+                }
+              });
+            };
 
-              requestAnimationFrame(() => playVideo());
-            } else {
+            requestAnimationFrame(() => playVideo());
+          } else {
+            if (!preCreatedVideo) {
               console.log('Track tooltip - pre-created video NOT found:', videoData.videoId);
             }
-          } else {
-            console.log('Track tooltip - videoContainer not found or no videoId');
+            if (!videoContainer) {
+              console.log('Track tooltip - videoContainer not found');
+            }
           }
 
           trackTooltip.style.display = 'block';
@@ -3601,6 +3602,41 @@ document.addEventListener('DOMContentLoaded', function() {
         this.volume = this.muted ? 0 : 1;
       });
     });
+
+    // Populate mobile video descriptions - only show current/focused video
+    const videoDescriptionsMobile = document.getElementById('videoDescriptionsMobile');
+    if (videoDescriptionsMobile) {
+      const updateVideoDescription = function() {
+        const focusedItem = document.querySelector('.carousel-item.focused');
+        if (focusedItem) {
+          const title = focusedItem.querySelector('.title');
+          const category = focusedItem.querySelector('.category');
+          if (title && category) {
+            videoDescriptionsMobile.innerHTML = `
+              <div class="video-description-item">
+                <h3 class="description-title">${title.textContent}</h3>
+                <p class="description-category">${category.textContent}</p>
+              </div>
+            `;
+          }
+        }
+      };
+
+      // Initial update
+      updateVideoDescription();
+
+      // Update on carousel scroll/navigation
+      const carousel = document.querySelector('.gallery.video-gallery .carousel-track');
+      if (carousel) {
+        carousel.addEventListener('scroll', updateVideoDescription);
+      }
+
+      // Also update when arrows are clicked
+      const arrows = document.querySelectorAll('.gallery.video-gallery .carousel-arrow');
+      arrows.forEach(arrow => {
+        arrow.addEventListener('click', updateVideoDescription);
+      });
+    }
   }
 });
 

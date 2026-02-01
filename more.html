@@ -122,12 +122,28 @@
       <div class="stats-grid">
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LONG JUMP</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100M DASH" data-shuffle-load="single">100M DASH</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Accolades" data-shuffle-load="single" style="font-size: 2rem; font-weight: 300;">✧</div>
+        <div class="stats-grid-box" style="font-size: 2rem; font-weight: 300;">✧</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200M DASH" data-shuffle-load="single">200M DASH</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TRIPLE JUMP</div>
       </div>
       <!-- Mobile-only content panel -->
       <div class="stats-mobile-content" id="statsMobileContent"></div>
+    </div>
+
+    <!-- Pre-created track videos (hidden by default) -->
+    <div id="track-videos" style="display: none;">
+      <video id="longjump-video" class="track-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/longjump.mp4" type="video/mp4">
+      </video>
+      <video id="100m-video" class="track-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/100m.mov" type="video/quicktime">
+      </video>
+      <video id="200m-video" class="track-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/200m.mp4" type="video/mp4">
+      </video>
+      <video id="triplejump-video" class="track-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/triplejump.mov" type="video/quicktime">
+      </video>
     </div>
   </div>
 </section>
@@ -2410,9 +2426,16 @@ document.addEventListener('DOMContentLoaded', function() {
     width: 'fit-content'
   });
   document.body.appendChild(trackTooltip);
+  // Video element mapping - use pre-created videos like carousel
+  const videoMapping = {
+    'LONG JUMP': 'longjump-video',
+    '100M DASH': '100m-video',
+    '200M DASH': '200m-video',
+    'TRIPLE JUMP': 'triplejump-video'
+  };
+
   const statsVideos = {
     '100M DASH': {
-      path: '/assets/videos/track/100m.mov',
       mark: 'PR 10.74',
       location: 'Wake Forest University',
       date: 'April 2024',
@@ -2420,7 +2443,6 @@ document.addEventListener('DOMContentLoaded', function() {
       note: ''
     },
     '200M DASH': {
-      path: '/assets/videos/track/200m.mp4',
       mark: 'PR 21.63',
       location: 'Boston University',
       date: 'February 2024',
@@ -2428,7 +2450,6 @@ document.addEventListener('DOMContentLoaded', function() {
       note: 'Information and video are from 22.15s indoor race at BU'
     },
     'LONG JUMP': {
-      path: '/assets/videos/track/longjump.mp4',
       mark: "PR 25' 1\" / 7.66m",
       location: 'Princeton University',
       date: 'May 2024',
@@ -2436,20 +2457,11 @@ document.addEventListener('DOMContentLoaded', function() {
       note: ''
     },
     'TRIPLE JUMP': {
-      path: '/assets/videos/track/triplejump.mov',
       mark: "PR 45' 6.5\"",
       location: 'Middletown North High School',
       date: 'June 2022',
       meet: 'NJSIAA Non-Public Group Championships',
       note: 'Only competed in triple jump during high school'
-    },
-    'IVY': {
-      path: '/assets/videos/track/longjump.mp4',
-      mark: 'Ivy Champion',
-      location: 'Location',
-      date: 'Date',
-      meet: 'Meet Name',
-      note: ''
     }
   };
 
@@ -2605,78 +2617,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Store interval ID for cleanup
           trackTooltip.dataset.slideshowInterval = slideshowInterval;
-        } else if (videoData && videoData.path) {
-          trackTooltip.innerHTML = `
-            <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
-              <div style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
-                <video class="track-tooltip-video" muted loop playsinline preload="auto" style="width: 100%; height: 100%; object-fit: cover;">
-                  <source src="${videoData.path}" type="${videoData.path.endsWith('.mp4') ? 'video/mp4' : 'video/quicktime'}">
-                </video>
-              </div>
-              <div style="display: flex; flex-direction: column; justify-content: center; min-width: 250px;">
-                <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #ffffff; font-size: 2.5rem; font-weight: 700; margin: 0 0 20px 0; font-family: var(--font--primary-family); letter-spacing: -0.03em; line-height: 1.1;">${eventTitle}</h2>
+        } else if (videoData && videoMapping[eventType]) {
+          // Get pre-created video element and clone it
+          const sourceVideo = document.getElementById(videoMapping[eventType]);
+          if (sourceVideo) {
+            const videoClone = sourceVideo.cloneNode(true);
+            videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
 
-                <div style="margin: 0 0 28px 0;">
-                  <h3 style="font-size: 2rem; margin: 0; font-family: var(--font--primary-family); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;">
-                    <span data-shuffle="text" data-shuffle-hover="single" style="color: #ffffff;">${videoData.mark.replace('PR ', '')}</span>
-                  </h3>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1rem; color: #666; margin: 4px 0 0 0; font-family: var(--font--primary-family); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">${videoData.mark.includes('PR') ? 'Personal Record' : ''}</p>
+            trackTooltip.innerHTML = `
+              <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
+                <div id="video-container" style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
                 </div>
-
-                <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-                  <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
-                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Location</span>
-                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family); font-weight: 400; letter-spacing: 0.01em;">${videoData.location}</span>
+                <div style="display: flex; flex-direction: column; justify-content: center; min-width: 250px;">
+                  <h2 style="color: #ffffff; font-size: 2.5rem; font-weight: 700; margin: 0 0 20px 0; font-family: var(--font--primary-family);">${eventTitle}</h2>
+                  <div style="margin: 0 0 28px 0;">
+                    <h3 style="font-size: 2rem; margin: 0; font-family: var(--font--primary-family); font-weight: 700; color: #ffffff;">${videoData.mark.replace('PR ', '')}</h3>
+                    <p style="font-size: 1rem; color: #666; margin: 4px 0 0 0; font-family: var(--font--primary-family);">${videoData.mark.includes('PR') ? 'Personal Record' : ''}</p>
                   </div>
-
-                  <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
-                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Date</span>
-                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family); font-weight: 400; letter-spacing: 0.01em;">${videoData.date}</span>
+                  <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
+                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Location</span>
+                      <span style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family);">${videoData.location}</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
+                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Date</span>
+                      <span style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family);">${videoData.date}</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
+                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Meet</span>
+                      <span style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family);">${videoData.meet}</span>
+                    </div>
+                    ${videoData.note ? `<div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
+                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Note</span>
+                      <span style="font-size: 0.95rem; color: #b0b0b0; font-family: var(--font--primary-family);">${videoData.note}</span>
+                    </div>` : ''}
                   </div>
-
-                  <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
-                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Meet</span>
-                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family); font-weight: 400; letter-spacing: 0.01em;">${videoData.meet}</span>
-                  </div>
-
-                  ${videoData.note ? `
-                  <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
-                    <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Note</span>
-                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.95rem; color: #b0b0b0; font-family: var(--font--primary-family); font-weight: 300; font-style: italic; letter-spacing: 0.01em;">${videoData.note}</span>
-                  </div>
-                  ` : ''}
                 </div>
               </div>
-            </div>
-          `;
-          trackTooltip.style.display = 'block';
+            `;
 
-          // Position tooltip safely within viewport bounds
-          const tooltipRect = trackTooltip.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
-          const tooltipWidth = tooltipRect.width || 500;
+            // Insert cloned video into container
+            const container = trackTooltip.querySelector('#video-container');
+            container.appendChild(videoClone);
 
-          // Calculate safe horizontal position
-          let leftPos = e.clientX;
-          if (leftPos - tooltipWidth / 2 < 0) {
-            leftPos = tooltipWidth / 2;
-          } else if (leftPos + tooltipWidth / 2 > viewportWidth) {
-            leftPos = viewportWidth - tooltipWidth / 2;
+            trackTooltip.style.display = 'block';
+            trackTooltip.style.left = e.clientX + 'px';
+            trackTooltip.style.top = e.clientY + 'px';
+
+            // Play video like carousel does
+            videoClone.play().catch(e => console.log('Video play failed:', e));
           }
-
-          trackTooltip.style.left = leftPos + 'px';
-          trackTooltip.style.top = e.clientY + 'px';
-
-          // Play video after DOM is stable
-          setTimeout(() => {
-            const video = trackTooltip.querySelector('.track-tooltip-video');
-            if (video && video.isConnected) {
-              video.play().catch(e => console.log('Video play failed:', e));
-            }
-          }, 10);
-
-          // Trigger shuffle animation for the tooltip content
-          triggerTooltipShuffle(trackTooltip);
         }
       });
 

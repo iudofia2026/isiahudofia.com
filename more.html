@@ -2236,6 +2236,10 @@ button:focus-visible,
       padding-bottom: 0.5rem !important;
     }
 
+    .gallery.video-gallery .gallery-subtitle {
+      margin-left: 0 !important;
+    }
+
     .gallery-title-wrap {
       padding-left: 0 !important;
       padding-right: 0 !important;
@@ -2771,23 +2775,30 @@ document.addEventListener('DOMContentLoaded', function() {
             videoContainer.appendChild(video);
             console.log('Track tooltip - created video with <source>, src:', absoluteUrl, 'type:', mimeType);
 
-            // Play the video with retry logic for .mov files
-            const attemptPlay = () => {
+            // Wait for video to be ready before playing (critical for .mov files)
+            video.addEventListener('loadeddata', function onLoadedData() {
+              console.log('Track tooltip - video data loaded, attempting play');
               video.play().then(() => {
                 console.log('Track tooltip - video playing successfully');
               }).catch(err => {
-                if (err.name === 'AbortError') {
-                  // Retry after a short delay (common with .mov files)
-                  console.log('Track tooltip - AbortError, retrying play...');
-                  setTimeout(attemptPlay, 100);
-                } else {
-                  console.log('Track tooltip - video play failed:', err.name, err.message);
-                }
+                console.log('Track tooltip - video play failed after loadeddata:', err.name, err.message);
               });
-            };
+              video.removeEventListener('loadeddata', onLoadedData);
+            }, { once: true });
 
-            // Start playing after a brief delay
-            setTimeout(attemptPlay, 50);
+            // Fallback: try playing after delay if loadeddata doesn't fire
+            setTimeout(() => {
+              if (video.readyState >= 1) { // HAVE_METADATA
+                console.log('Track tooltip - video has metadata, attempting play');
+                video.play().then(() => {
+                  console.log('Track tooltip - video playing successfully');
+                }).catch(err => {
+                  console.log('Track tooltip - video play failed:', err.name, err.message);
+                });
+              } else {
+                console.log('Track tooltip - video not ready yet, readyState:', video.readyState);
+              }
+            }, 500);
           } else {
             console.log('Track tooltip - videoContainer not found or no videoData.path');
           }

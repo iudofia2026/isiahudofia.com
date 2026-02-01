@@ -130,6 +130,21 @@
       <div class="stats-mobile-content" id="statsMobileContent"></div>
     </div>
 
+    <!-- Pre-created video elements for tooltips (similar to carousel) -->
+    <div style="display: none;">
+      <video id="track-video-100m" class="track-tooltip-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/100m.mov" type="video/quicktime">
+      </video>
+      <video id="track-video-200m" class="track-tooltip-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/200m.mp4" type="video/mp4">
+      </video>
+      <video id="track-video-longjump" class="track-tooltip-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/longjump.mp4" type="video/mp4">
+      </video>
+      <video id="track-video-triplejump" class="track-tooltip-video" muted loop playsinline preload="auto">
+        <source src="/assets/videos/track/triplejump.mov" type="video/quicktime">
+      </video>
+    </div>
   </div>
 </section>
 
@@ -2169,6 +2184,61 @@ button:focus-visible,
       padding-top: 1rem !important;
     }
   }
+
+  /* Hide track and field section completely on mobile and reset gallery styling */
+  @media (max-width: 768px) {
+    .gallery.track-field-gallery {
+      display: none !important;
+    }
+
+    /* Reset all gallery styling to match desktop on mobile */
+    .gallery-title-wrap {
+      padding-top: 3rem !important;
+      margin-bottom: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .gallery-title-wrap .nav_link {
+      padding: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      margin-bottom: 0 !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .gallery-title-wrap .nav_link .link_bracket_wrap {
+      display: block !important;
+    }
+
+    .gallery-title-wrap .nav_link .info_title_text {
+      width: auto !important;
+      text-align: left !important;
+      font-size: 2rem !important;
+      font-weight: inherit !important;
+      letter-spacing: inherit !important;
+      text-transform: inherit !important;
+      color: inherit !important;
+    }
+
+    .gallery-subtitle {
+      font-size: 0.875rem;
+      color: #787878;
+      margin-top: 0;
+      padding-bottom: 0 !important;
+    }
+
+    /* Hide volume controls on mobile */
+    .volume-controls-wrapper {
+      display: none !important;
+    }
+
+    .gallery-subtitle-wrap {
+      display: block !important;
+    }
+  }
 </style>
 </div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><!-- YOUR CONTENT GOES HERE --></div></div></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
 <script>
@@ -2420,6 +2490,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const statsVideos = {
     '100M DASH': {
+      videoId: 'track-video-100m',
       path: '/assets/videos/track/100m.mov',
       mark: 'PR 10.74',
       location: 'Wake Forest University',
@@ -2428,6 +2499,7 @@ document.addEventListener('DOMContentLoaded', function() {
       note: ''
     },
     '200M DASH': {
+      videoId: 'track-video-200m',
       path: '/assets/videos/track/200m.mp4',
       mark: 'PR 21.63',
       location: 'Boston University',
@@ -2436,6 +2508,7 @@ document.addEventListener('DOMContentLoaded', function() {
       note: 'Information and video are from 22.15s indoor race at BU'
     },
     'LONG JUMP': {
+      videoId: 'track-video-longjump',
       path: '/assets/videos/track/longjump.mp4',
       mark: "PR 25' 1\" / 7.66m",
       location: 'Princeton University',
@@ -2444,6 +2517,7 @@ document.addEventListener('DOMContentLoaded', function() {
       note: ''
     },
     'TRIPLE JUMP': {
+      videoId: 'track-video-triplejump',
       path: '/assets/videos/track/triplejump.mov',
       mark: "PR 45' 6.5\"",
       location: 'Middletown North High School',
@@ -2604,12 +2678,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Store interval ID for cleanup
           trackTooltip.dataset.slideshowInterval = slideshowInterval;
-        } else if (videoData && videoData.path) {
+        } else if (videoData && videoData.videoId) {
+          // Get the pre-created video element
+          const preCreatedVideo = document.getElementById(videoData.videoId);
+
           trackTooltip.innerHTML = `
             <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
-              <div style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
-                <video src="${videoData.path}" autoplay loop muted playsinline preload="auto" class="track-tooltip-video" style="width: 100%; height: 100%; object-fit: cover;"></video>
-              </div>
+              <div id="track-video-container" style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;"></div>
               <div style="display: flex; flex-direction: column; justify-content: center; min-width: 250px;">
                 <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #ffffff; font-size: 2.5rem; font-weight: 700; margin: 0 0 20px 0; font-family: var(--font--primary-family); letter-spacing: -0.03em; line-height: 1.1;">${eventTitle}</h2>
 
@@ -2644,6 +2719,21 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
             </div>
           `;
+
+          // Move the pre-created video element into the tooltip
+          if (preCreatedVideo) {
+            const videoContainer = trackTooltip.querySelector('#track-video-container');
+            if (videoContainer) {
+              preCreatedVideo.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+              videoContainer.appendChild(preCreatedVideo);
+
+              // Play the video
+              preCreatedVideo.play().catch(err => {
+                console.log('Video play failed:', err);
+              });
+            }
+          }
+
           trackTooltip.style.display = 'block';
 
           // Position tooltip safely within viewport bounds
@@ -2668,6 +2758,18 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       box.addEventListener('mouseleave', function() {
+        // Stop and reset any playing video
+        const playingVideo = trackTooltip.querySelector('.track-tooltip-video');
+        if (playingVideo) {
+          playingVideo.pause();
+          playingVideo.currentTime = 0;
+          // Move video back to its hidden container
+          const hiddenContainer = document.querySelector('.track-field-gallery > .container > div[style*="display: none"]');
+          if (hiddenContainer) {
+            hiddenContainer.appendChild(playingVideo);
+          }
+        }
+
         // Clear slideshow interval if exists
         if (trackTooltip.dataset.slideshowInterval) {
           clearInterval(parseInt(trackTooltip.dataset.slideshowInterval));

@@ -2749,22 +2749,35 @@ document.addEventListener('DOMContentLoaded', function() {
           if (videoContainer && videoData.videoId) {
             const preCreatedVideo = document.getElementById(videoData.videoId);
             if (preCreatedVideo) {
+              console.log('Track tooltip - found pre-created video:', videoData.videoId);
               // Clone the pre-created video element (this works in production)
               const videoClone = preCreatedVideo.cloneNode(true);
               videoClone.muted = true;
               videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
               videoContainer.appendChild(videoClone);
-              console.log('Track tooltip - cloned pre-created video:', videoData.videoId);
+              console.log('Track tooltip - cloned and appended video:', videoData.videoId);
 
-              // Play the cloned video
-              requestAnimationFrame(() => {
+              // Play the cloned video with retry for AbortError
+              const playVideo = () => {
+                console.log('Track tooltip - attempting play for:', videoData.videoId);
                 videoClone.play().then(() => {
-                  console.log('Track tooltip - video playing successfully');
+                  console.log('Track tooltip - video playing successfully:', videoData.videoId);
                 }).catch(err => {
-                  console.log('Track tooltip - video play failed:', err.name, err.message);
+                  if (err.name === 'AbortError') {
+                    console.log('Track tooltip - AbortError for', videoData.videoId, ', retrying...');
+                    setTimeout(() => playVideo(), 100);
+                  } else {
+                    console.log('Track tooltip - video play failed for', videoData.videoId, ':', err.name, err.message);
+                  }
                 });
-              });
+              };
+
+              requestAnimationFrame(() => playVideo());
+            } else {
+              console.log('Track tooltip - pre-created video NOT found:', videoData.videoId);
             }
+          } else {
+            console.log('Track tooltip - videoContainer not found or no videoId');
           }
 
           trackTooltip.style.display = 'block';

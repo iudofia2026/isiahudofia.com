@@ -578,12 +578,26 @@
         <div class="link_bracket_wrap is-left">
           <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
         </div>
-        <p data-shuffle="text" data-shuffle-hover="VIDEO EDITING" data-shuffle-load="single" class="info_title_text u-display" data-original-text="VIDEO EDITING">VIDEO EDITING</p>
+        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display">VIDEO EDITING</p>
         <div class="link_bracket_wrap is-right">
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
-      <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle">I edit for fun and as a freelancer: here's a collection of my videos</p>
+      <div class="gallery-subtitle-wrap">
+        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
+        <div class="volume-controls-wrapper">
+          <input type="range" id="carouselVolumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Carousel Volume" tabindex="0">
+          <button id="carouselMuteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle carousel mute">
+            <div class="link_bracket_wrap is-left">
+              <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+            </div>
+            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">unmute</p>
+            <div class="link_bracket_wrap is-right">
+              <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="gallery-carousel">
       <div class="carousel-arrow carousel-arrow-left">
@@ -2301,22 +2315,22 @@ button:focus-visible,
     /* Mobile video descriptions section */
     .video-descriptions-mobile {
       display: block !important;
-      margin-top: 2rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 8px;
+      margin: 0 !important;
+      padding: 1rem 0 !important;
+      background: transparent !important;
+      border-radius: 0 !important;
     }
 
     .video-descriptions-mobile .video-description-item {
-      margin-bottom: 1.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
     }
 
     .video-descriptions-mobile .video-description-item:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
     }
 
     .video-descriptions-mobile .description-title {
@@ -2620,10 +2634,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
+  // Track pending video play retries to cancel them on new hover
+  let pendingVideoRetry = null;
 
   statsGridBoxes.forEach(box => {
     if (window.innerWidth > 768) {
       box.addEventListener('mouseenter', function(e) {
+        // Clear any pending video retry from previous hover
+        if (pendingVideoRetry) {
+          clearTimeout(pendingVideoRetry);
+          pendingVideoRetry = null;
+        }
+
         const eventType = this.textContent.trim();
         const eventTitle = this.getAttribute('data-shuffle-hover') || eventType;
         const videoData = statsVideos[eventType];
@@ -2826,22 +2848,37 @@ document.addEventListener('DOMContentLoaded', function() {
             videoContainer.appendChild(videoClone);
             console.log('Track tooltip - cloned and appended video:', videoData.videoId);
 
-            // Play the cloned video with retry for AbortError
-            const playVideo = () => {
-              console.log('Track tooltip - attempting play for:', videoData.videoId);
+            // Play the cloned video - wait for loadeddata first (especially for larger videos)
+            videoClone.addEventListener('loadeddata', function onLoadedData() {
+              console.log('Track tooltip - loadeddata fired for:', videoData.videoId, 'readyState:', videoClone.readyState);
               videoClone.play().then(() => {
                 console.log('Track tooltip - video playing successfully:', videoData.videoId);
               }).catch(err => {
                 if (err.name === 'AbortError') {
                   console.log('Track tooltip - AbortError for', videoData.videoId, ', retrying...');
-                  setTimeout(() => playVideo(), 100);
+                  pendingVideoRetry = setTimeout(() => {
+                    if (videoClone.isConnected) {
+                      videoClone.play();
+                    }
+                  }, 200);
                 } else {
                   console.log('Track tooltip - video play failed for', videoData.videoId, ':', err.name, err.message);
                 }
               });
-            };
+              videoClone.removeEventListener('loadeddata', onLoadedData);
+            }, { once: true });
 
-            requestAnimationFrame(() => playVideo());
+            // Fallback: try playing after delay if loadeddata doesn't fire
+            setTimeout(() => {
+              if (videoClone.readyState >= 1 && videoClone.paused) {
+                console.log('Track tooltip - fallback play for:', videoData.videoId);
+                videoClone.play().then(() => {
+                  console.log('Track tooltip - video playing successfully (fallback):', videoData.videoId);
+                }).catch(err => {
+                  console.log('Track tooltip - fallback play failed for', videoData.videoId, ':', err.name);
+                });
+              }
+            }, 500);
           } else {
             if (!preCreatedVideo) {
               console.log('Track tooltip - pre-created video NOT found:', videoData.videoId);
@@ -3589,6 +3626,161 @@ document.addEventListener('DOMContentLoaded', function() {
       trackVolumeSlider.value = newValue;
       trackVolumeSlider.dispatchEvent(new Event('input'));
     });
+  }
+
+  // Carousel video gallery volume controls functionality (independent from track controls)
+  const carouselMuteToggle = document.getElementById('carouselMuteToggle');
+  const carouselVolumeSlider = document.getElementById('carouselVolumeSlider');
+
+  if (carouselMuteToggle && carouselVolumeSlider) {
+    let isCarouselMuted = true;
+    let previousCarouselVolume = 100;
+    const carouselButtonText = carouselMuteToggle.querySelector('.nav_btn_text');
+
+    // Get all carousel videos
+    const getCarouselVideos = () => {
+      return Array.from(document.querySelectorAll('.carousel-video'));
+    };
+
+    // Store current text for hover restoration
+    let currentCarouselText = 'unmute';
+
+    // Update slider visual fill
+    function updateCarouselSliderFill() {
+      const volume = carouselVolumeSlider.value;
+      const percentage = (volume / 100) * 100;
+      carouselVolumeSlider.style.background = `linear-gradient(to right, rgba(255, 255, 255, 0.6) ${percentage}%, rgba(255, 255, 255, 0.25) ${percentage}%)`;
+    }
+
+    // Initialize slider fill
+    updateCarouselSliderFill();
+
+    // Simple shuffle function
+    const shuffle = (text, el) => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let i = 0;
+      const interval = setInterval(() => {
+        el.textContent = text.split('').map((c, j) => j < i ? c : chars[Math.floor(Math.random() * chars.length)]).join('');
+        if (i >= text.length) clearInterval(interval);
+        i += 1/3;
+      }, 30);
+    };
+
+    // Hover effects
+    carouselMuteToggle.addEventListener('mouseenter', () => {
+      shuffle('Switch', carouselButtonText);
+    });
+
+    carouselMuteToggle.addEventListener('mouseleave', () => {
+      shuffle(currentCarouselText, carouselButtonText);
+    });
+
+    // Mute toggle functionality
+    carouselMuteToggle.addEventListener('click', () => {
+      isCarouselMuted = !isCarouselMuted;
+
+      if (isCarouselMuted) {
+        currentCarouselText = 'unmute';
+        previousCarouselVolume = carouselVolumeSlider.value;
+        carouselVolumeSlider.value = 0;
+        getCarouselVideos().forEach(video => {
+          video.muted = true;
+          video.volume = 0;
+        });
+      } else {
+        currentCarouselText = 'mute';
+        carouselVolumeSlider.value = previousCarouselVolume > 0 ? previousCarouselVolume : 100;
+        getCarouselVideos().forEach(video => {
+          video.muted = false;
+          video.volume = carouselVolumeSlider.value / 100;
+        });
+      }
+
+      updateCarouselSliderFill();
+      shuffle(currentCarouselText, carouselButtonText);
+    });
+
+    // Volume slider functionality
+    carouselVolumeSlider.addEventListener('input', (e) => {
+      const volume = e.target.value;
+      const volumeDecimal = volume / 100;
+
+      getCarouselVideos().forEach(video => {
+        video.volume = volumeDecimal;
+        video.muted = volume === 0;
+      });
+
+      updateCarouselSliderFill();
+
+      // Update button text based on volume
+      if (volume == 0) {
+        isCarouselMuted = true;
+        currentCarouselText = 'unmute';
+        shuffle(currentCarouselText, carouselButtonText);
+      } else if (currentCarouselText === 'unmute') {
+        isCarouselMuted = false;
+        currentCarouselText = 'mute';
+        shuffle(currentCarouselText, carouselButtonText);
+      }
+    });
+
+    // Keyboard accessibility for volume slider
+    carouselVolumeSlider.addEventListener('keydown', (e) => {
+      const step = 5;
+      let newValue = parseInt(carouselVolumeSlider.value);
+
+      switch(e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          newValue = Math.max(0, newValue - step);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          newValue = Math.min(100, newValue + step);
+          break;
+        case 'Home':
+          e.preventDefault();
+          newValue = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          newValue = 100;
+          break;
+        default:
+          return;
+      }
+
+      carouselVolumeSlider.value = newValue;
+      carouselVolumeSlider.dispatchEvent(new Event('input'));
+    });
+
+    // Carousel volume slider tooltip functionality
+    if (window.innerWidth > 768) {
+      carouselVolumeSlider.addEventListener('mouseenter', function(e) {
+        tooltip.innerHTML = `
+          <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1rem; font-weight: 500; margin: 0; font-family: var(--font--primary-family);">drag me!</h2>
+          <h3 data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.875rem; color: #999; margin: 0; font-family: var(--font--primary-family);">[video volume]</h3>
+        `;
+        tooltip.style.display = 'block';
+        tooltip.style.left = e.clientX + 'px';
+        tooltip.style.top = e.clientY + 'px';
+
+        // Trigger shuffle animation for the tooltip content
+        triggerTooltipShuffle(tooltip);
+      });
+
+      carouselVolumeSlider.addEventListener('mouseleave', function() {
+        cleanupTooltipShuffle(tooltip);
+        tooltip.style.display = 'none';
+      });
+
+      carouselVolumeSlider.addEventListener('mousemove', function(e) {
+        if (tooltip.style.display === 'block') {
+          tooltip.style.left = e.clientX + 'px';
+          tooltip.style.top = e.clientY + 'px';
+        }
+      });
+    }
   }
 
   // Mobile tap-to-mute functionality for videos

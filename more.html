@@ -729,85 +729,51 @@
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LJ</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TJ</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Heps" data-shuffle-load="single">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="10" cy="7" r="4"/>
-            <path d="M10 11v6"/>
-            <path d="M7 14l3 2 3-2"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="8" r="6"/>
+            <path d="M12 14v6"/>
+            <path d="M9 17l3 2 3-2"/>
           </svg>
         </div>
       </div>
     </div>
-    <div class="gallery-carousel">
-      <div class="carousel-track">
-        <div class="carousel-items">
-          <div class="carousel-item">
-            <figure class="img-container">
-              <img src="/assets/photos/paris/IMG_6544.JPG" loading="lazy" />
-              <figcaption class="img-content">
-                <h2 class="title">100m Sprint</h2>
-                <h3 class="category">[Yale Track]</h3>
-              </figcaption>
-              <span class="img-content-hover">
-                <h2 class="title">100m Sprint</h2>
-                <h3 class="category">[Yale Track]</h3>
-              </span>
-            </figure>
-          </div>
-          <div class="carousel-item">
-            <figure class="img-container">
-              <img src="/assets/photos/paris/IMG_5946.jpeg" loading="lazy" />
-              <figcaption class="img-content">
-                <h2 class="title">200m Dash</h2>
-                <h3 class="category">[Ivy Championships]</h3>
-              </figcaption>
-              <span class="img-content-hover">
-                <h2 class="title">200m Dash</h2>
-                <h3 class="category">[Ivy Championships]</h3>
-              </span>
-            </figure>
-          </div>
-          <div class="carousel-item">
-            <figure class="img-container">
-              <img src="/assets/photos/nyc/IMG_9452.JPG" loading="lazy" />
-              <figcaption class="img-content">
-                <h2 class="title">Long Jump</h2>
-                <h3 class="category">[Heps]</h3>
-              </figcaption>
-              <span class="img-content-hover">
-                <h2 class="title">Long Jump</h2>
-                <h3 class="category">[Heps]</h3>
-              </span>
-            </figure>
-          </div>
-          <div class="carousel-item">
-            <figure class="img-container">
-              <img src="/assets/photos/catalunya/barcelona/IMG_4696.jpeg" loading="lazy" />
-              <figcaption class="img-content">
-                <h2 class="title">4x400m Relay</h2>
-                <h3 class="category">[Penn Relays]</h3>
-              </figcaption>
-              <span class="img-content-hover">
-                <h2 class="title">4x400m Relay</h2>
-                <h3 class="category">[Penn Relays]</h3>
-              </span>
-            </figure>
-          </div>
-          <div class="carousel-item">
-            <figure class="img-container">
-              <img src="/assets/photos/san francisco/lombard st.jpeg" loading="lazy" />
-              <figcaption class="img-content">
-                <h2 class="title">Training Session</h2>
-                <h3 class="category">[Yale Bowl]</h3>
-              </figcaption>
-              <span class="img-content-hover">
-                <h2 class="title">Training Session</h2>
-                <h3 class="category">[Yale Bowl]</h3>
-              </span>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </div>
+    <nav class="track-field-gallery-nav" style="--max-p: 5; --max-z: 9;">
+      <a href="#" style="--i: 0; --img: url('/assets/photos/paris/IMG_6544.JPG')" class="gallery-link">
+        <div class="img"></div>
+        <aside class="hover-zone">
+          <i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i>
+        </aside>
+      </a>
+      <a href="#" style="--i: 1; --img: url('/assets/photos/paris/IMG_5946.jpeg')" class="gallery-link">
+        <div class="img"></div>
+        <aside class="hover-zone">
+          <i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i>
+        </aside>
+      </a>
+      <a href="#" style="--i: 2; --img: url('/assets/photos/nyc/IMG_9452.JPG')" class="gallery-link">
+        <div class="img"></div>
+        <aside class="hover-zone">
+          <i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i>
+        </aside>
+      </a>
+      <a href="#" style="--i: 3; --img: url('/assets/photos/catalunya/barcelona/IMG_4696.jpeg')" class="gallery-link">
+        <div class="img"></div>
+        <aside class="hover-zone">
+          <i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i>
+        </aside>
+      </a>
+      <a href="#" style="--i: 4; --img: url('/assets/photos/san francisco/lombard st.jpeg')" class="gallery-link">
+        <div class="img"></div>
+        <aside class="hover-zone">
+          <i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i>
+        </aside>
+      </a>
+    </nav>
   </div>
 </section>
 
@@ -1707,9 +1673,122 @@ button:focus-visible,
     background-color: rgba(120, 120, 120, 0.4);
   }
 
+  .stats-grid-box svg {
+    width: 20px;
+    height: 20px;
+    stroke: #4B9CD3;
+  }
+
   @media (max-width: 768px) {
     .stats-grid-box {
       min-height: 30px;
+    }
+  }
+
+  /* 3D Hover Gallery Styles */
+  .track-field-gallery-nav {
+    --r: calc(var(--max-z) * (var(--p) - 1) + var(--z));
+    --r-n: calc((var(--r) - 1) / (var(--max-z) * var(--max-p) - 1));
+    height: min(10rem, 100%);
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    perspective: 2000px;
+    transform-style: preserve-3d;
+    margin-top: 2rem;
+    padding: 0 1rem;
+  }
+
+  .track-field-gallery-nav a.gallery-link {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    --p-n: calc(var(--i) / (var(--max-p) - 1));
+    --diff: calc(var(--p-n) - var(--r-n));
+    --u: calc(abs(var(--diff)) / 0.4);
+    --falloff: clamp(calc(0.5 * (1 + cos(min(var(--u), 1) * 180deg))), 0, 1);
+    --tilt: calc(clamp(-1, var(--diff) * 5, 1) * var(--falloff) * 70deg);
+    --ts: calc(70ms * var(--falloff) + 250ms * (1 - var(--falloff)));
+    --fs: calc(.1s * var(--falloff, 0) + .8s * (1 - var(--falloff, 0)));
+    transition: transform var(--ts, 250ms), flex .3s, filter var(--fs);
+    transform: translateZ(calc(var(--falloff) * 10rem)) rotateY(calc(var(--tilt) * cos(0deg))) rotateX(calc(var(--tilt) * sin(0deg)));
+    filter: brightness(max(.5, var(--falloff, 0) * 1.2)) saturate(var(--falloff, 0));
+  }
+
+  .track-field-gallery-nav a.gallery-link:hover,
+  .track-field-gallery-nav a.gallery-link:focus-visible {
+    flex: 4;
+  }
+
+  .track-field-gallery-nav .img {
+    background: var(--img);
+    background-color: rgba(255, 255, 255, 0.05);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    margin: 0 0.1em;
+    border-radius: 4px;
+  }
+
+  .track-field-gallery-nav .hover-zone {
+    position: absolute;
+    top: 0;
+    left: -3px;
+    right: -3px;
+    bottom: 0;
+    display: flex;
+    z-index: 999;
+  }
+
+  .track-field-gallery-nav .hover-zone i {
+    flex: 1;
+    transition: .3s;
+  }
+
+  .track-field-gallery-nav .hover-zone::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    pointer-events: all;
+  }
+
+  .track-field-gallery-nav:has(.hover-zone:hover):not(:has(i:hover)) {
+    --z: calc((var(--max-z) + 1) / 2);
+  }
+
+  .track-field-gallery-nav:has(a.gallery-link:nth-child(1):hover) { --p: 1; }
+  .track-field-gallery-nav:has(a.gallery-link:nth-child(2):hover) { --p: 2; }
+  .track-field-gallery-nav:has(a.gallery-link:nth-child(3):hover) { --p: 3; }
+  .track-field-gallery-nav:has(a.gallery-link:nth-child(4):hover) { --p: 4; }
+  .track-field-gallery-nav:has(a.gallery-link:nth-child(5):hover) { --p: 5; }
+
+  .track-field-gallery-nav:has(.hover-zone:nth-child(1) i:hover) { --z: 1; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(2) i:hover) { --z: 2; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(3) i:hover) { --z: 3; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(4) i:hover) { --z: 4; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(5) i:hover) { --z: 5; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(6) i:hover) { --z: 6; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(7) i:hover) { --z: 7; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(8) i:hover) { --z: 8; }
+  .track-field-gallery-nav:has(.hover-zone:nth-child(9) i:hover) { --z: 9; }
+
+  @media (max-width: 768px) {
+    .track-field-gallery-nav {
+      height: min(30rem, 100%);
+      width: min(8rem, 100%);
     }
   }
 </style>
@@ -1927,7 +2006,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     'LJ': {
       path: '/assets/videos/longjump.mp4',
-      mark: "25' 1\" or 7.66m",
+      mark: "25' 1\" / 7.66m",
       location: 'Location',
       date: 'Date',
       meet: 'Meet Name'

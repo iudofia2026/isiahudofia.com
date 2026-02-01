@@ -2032,6 +2032,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Stats grid video tooltip functionality
   const statsGridBoxes = document.querySelectorAll('.stats-grid-box');
+
+  // Create a separate tooltip for track section stats grid that appears BELOW the mouse
+  const trackTooltip = document.createElement('div');
+  trackTooltip.className = 'stats-video-tooltip';
+  Object.assign(trackTooltip.style, {
+    position: 'fixed',
+    zIndex: '10000',
+    display: 'none',
+    padding: '1rem',
+    background: 'rgba(20, 20, 20, 0.95)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    color: '#fff',
+    pointerEvents: 'none',
+    borderRadius: '0',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+    transform: 'translate(-50%, 15px)', // Position BELOW the mouse instead of above
+    fontFamily: 'var(--font--primary-family)',
+    maxWidth: '1000px',
+    width: 'fit-content'
+  });
+  document.body.appendChild(trackTooltip);
   const statsVideos = {
     '100M DASH': {
       path: '/assets/videos/track/100m.mov',
@@ -2097,21 +2118,21 @@ document.addEventListener('DOMContentLoaded', function() {
             '/assets/photos/track/lucas-seasonopener-74.jpeg'
           ];
 
-          tooltip.innerHTML = `
-            <div style="position: relative; width: 1000px; height: 650px;">
+          trackTooltip.innerHTML = `
+            <div style="position: relative; width: 1000px; height: 500px;">
               <!-- Center photo slideshow -->
               <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 281px; background: #000; border-radius: 0; overflow: hidden; z-index: 10; box-shadow: 0 8px 40px rgba(0,0,0,0.7);">
                 <img id="star-photo-slideshow" src="${trackPhotos[0]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
               </div>
 
               <!-- Top arm - NCAA Regional Qualifier with logo -->
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%;">
+              <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%; z-index: 20;">
                 <img src="/assets/ncaa-logo.png" alt="NCAA" style="width: 180px; height: auto; display: block; margin: 0 auto 12px auto;" />
                 <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.4rem; margin: 0; color: #999; font-weight: 600; font-family: var(--font--primary-family); line-height: 1.3; letter-spacing: 0.02em;">Regional Qualifier 2024</p>
               </div>
 
               <!-- Bottom arm - 3rd All-Time Yale (Ranking with underline style) -->
-              <div style="position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); text-align: center; width: 200px;">
+              <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 200px;">
                 <div style="display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 10px;">
                   <span data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 3.5rem; font-weight: 300; font-family: var(--font--primary-family);">3rd</span>
                   <span data-shuffle="text" data-shuffle-hover="single" style="color: #666; font-size: 1.2rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font--primary-family);">All-Time</span>
@@ -2179,15 +2200,29 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
             </div>
           `;
-          tooltip.style.display = 'block';
-          tooltip.style.left = e.clientX + 'px';
-          tooltip.style.top = e.clientY + 'px';
+          trackTooltip.style.display = 'block';
+
+          // Position tooltip safely within viewport bounds
+          const tooltipRect = trackTooltip.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const tooltipWidth = tooltipRect.width || 500; // fallback width
+
+          // Calculate safe horizontal position
+          let leftPos = e.clientX;
+          if (leftPos - tooltipWidth / 2 < 0) {
+            leftPos = tooltipWidth / 2; // Too far left
+          } else if (leftPos + tooltipWidth / 2 > viewportWidth) {
+            leftPos = viewportWidth - tooltipWidth / 2; // Too far right
+          }
+
+          trackTooltip.style.left = leftPos + 'px';
+          trackTooltip.style.top = e.clientY + 'px';
 
           // Trigger shuffle animation for the tooltip content
-          triggerTooltipShuffle(tooltip);
+          triggerTooltipShuffle(trackTooltip);
 
           // Preload all images first for smooth slideshow
-          const slideshowImg = tooltip.querySelector('#star-photo-slideshow');
+          const slideshowImg = trackTooltip.querySelector('#star-photo-slideshow');
           let photoIndex = 0;
           let loadedCount = 0;
           const preloadImages = trackPhotos.map(src => {
@@ -2204,9 +2239,9 @@ document.addEventListener('DOMContentLoaded', function() {
           }, 300);
 
           // Store interval ID for cleanup
-          tooltip.dataset.slideshowInterval = slideshowInterval;
+          trackTooltip.dataset.slideshowInterval = slideshowInterval;
         } else if (videoData && videoData.path) {
-          tooltip.innerHTML = `
+          trackTooltip.innerHTML = `
             <div style="display: flex; gap: 20px; align-items: flex-start;">
               <div style="width: 480px; height: 270px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
                 <video src="${videoData.path}" autoplay loop muted playsinline class="track-tooltip-video" style="width: 100%; height: 100%; object-fit: cover;"></video>
@@ -2221,38 +2256,69 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
             </div>
           `;
-          tooltip.style.display = 'block';
-          tooltip.style.left = e.clientX + 'px';
-          tooltip.style.top = e.clientY + 'px';
+          trackTooltip.style.display = 'block';
 
-          // Set video volume based on track volume slider
-          const video = tooltip.querySelector('.track-tooltip-video');
+          // Position tooltip safely within viewport bounds
+          const tooltipRect = trackTooltip.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const tooltipWidth = tooltipRect.width || 500;
+
+          // Calculate safe horizontal position
+          let leftPos = e.clientX;
+          if (leftPos - tooltipWidth / 2 < 0) {
+            leftPos = tooltipWidth / 2;
+          } else if (leftPos + tooltipWidth / 2 > viewportWidth) {
+            leftPos = viewportWidth - tooltipWidth / 2;
+          }
+
+          trackTooltip.style.left = leftPos + 'px';
+          trackTooltip.style.top = e.clientY + 'px';
+
+          // Set video volume based on track volume slider and ensure it plays
+          const video = trackTooltip.querySelector('.track-tooltip-video');
           const trackVolumeSlider = document.getElementById('trackVolumeSlider');
-          if (video && trackVolumeSlider) {
-            const volume = trackVolumeSlider.value / 100;
-            video.volume = volume;
-            video.muted = volume === 0;
+          if (video) {
+            if (trackVolumeSlider) {
+              const volume = trackVolumeSlider.value / 100;
+              video.volume = volume;
+              video.muted = volume === 0;
+            }
+            // Ensure video plays
+            video.play().catch(e => console.log('Video autoplay prevented:', e));
           }
 
           // Trigger shuffle animation for the tooltip content
-          triggerTooltipShuffle(tooltip);
+          triggerTooltipShuffle(trackTooltip);
         }
       });
 
       box.addEventListener('mouseleave', function() {
         // Clear slideshow interval if exists
-        if (tooltip.dataset.slideshowInterval) {
-          clearInterval(parseInt(tooltip.dataset.slideshowInterval));
-          delete tooltip.dataset.slideshowInterval;
+        if (trackTooltip.dataset.slideshowInterval) {
+          clearInterval(parseInt(trackTooltip.dataset.slideshowInterval));
+          delete trackTooltip.dataset.slideshowInterval;
         }
-        cleanupTooltipShuffle(tooltip);
-        tooltip.style.display = 'none';
+        cleanupTooltipShuffle(trackTooltip);
+        trackTooltip.style.display = 'none';
       });
 
       box.addEventListener('mousemove', function(e) {
-        if (tooltip.style.display === 'block') {
-          tooltip.style.left = e.clientX + 'px';
-          tooltip.style.top = e.clientY + 'px';
+        if (trackTooltip.style.display === 'block') {
+          // Position tooltip safely within viewport bounds
+          const tooltipRect = trackTooltip.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const tooltipWidth = tooltipRect.width || 500;
+
+          // Calculate safe horizontal position
+          let leftPos = e.clientX;
+          if (leftPos - tooltipWidth / 2 < 0) {
+            leftPos = tooltipWidth / 2;
+          } else if (leftPos + tooltipWidth / 2 > viewportWidth) {
+            leftPos = viewportWidth - tooltipWidth / 2;
+          }
+
+          trackTooltip.style.left = leftPos + 'px';
+          trackTooltip.style.top = e.clientY + 'px';
         }
       });
     }

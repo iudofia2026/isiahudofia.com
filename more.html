@@ -2618,8 +2618,10 @@ document.addEventListener('DOMContentLoaded', function() {
           // Store interval ID for cleanup
           trackTooltip.dataset.slideshowInterval = slideshowInterval;
         } else if (videoData && videoMapping[eventType]) {
+          console.log('Found video mapping for:', eventType, '-> video ID:', videoMapping[eventType]);
           // Get pre-created video element and clone it
           const sourceVideo = document.getElementById(videoMapping[eventType]);
+          console.log('Source video element found:', !!sourceVideo, sourceVideo);
           if (sourceVideo) {
             const videoClone = sourceVideo.cloneNode(true);
             videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';

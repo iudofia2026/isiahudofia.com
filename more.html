@@ -2225,7 +2225,7 @@ button:focus-visible,
       white-space: nowrap !important;
       font-weight: inherit !important;
       letter-spacing: inherit !important;
-      text-transform: inherit !important;
+      text-transform: uppercase !important;
       color: inherit !important;
     }
 
@@ -2233,7 +2233,7 @@ button:focus-visible,
       font-size: 0.875rem;
       color: #787878;
       margin-top: 0;
-      padding-bottom: 0 !important;
+      padding-bottom: 0.5rem !important;
     }
 
     /* Hide volume controls on mobile */
@@ -2730,13 +2730,12 @@ document.addEventListener('DOMContentLoaded', function() {
           // Create a fresh video element directly with src (no cloning)
           const videoContainer = trackTooltip.querySelector('#track-video-container');
           if (videoContainer && videoData.path) {
-            // Get the file extension for MIME type
-            const ext = videoData.path.split('.').pop().toLowerCase();
-            const mimeType = ext === 'mov' ? 'video/quicktime' : 'video/mp4';
+            // Convert relative path to absolute URL
+            const absoluteUrl = window.location.origin + videoData.path;
 
             // Create a fresh video element
             const video = document.createElement('video');
-            video.src = videoData.path;
+            video.src = absoluteUrl;
             video.muted = true;
             video.loop = true;
             video.playsInline = true;
@@ -2746,7 +2745,7 @@ document.addEventListener('DOMContentLoaded', function() {
             video.className = 'track-tooltip-video';
 
             videoContainer.appendChild(video);
-            console.log('Track tooltip - created fresh video element with src:', videoData.path);
+            console.log('Track tooltip - created fresh video element with src:', absoluteUrl);
 
             // Force play after a brief delay
             setTimeout(() => {

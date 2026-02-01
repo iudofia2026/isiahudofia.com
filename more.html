@@ -2460,6 +2460,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const eventTitle = this.getAttribute('data-shuffle-hover') || eventType;
         const videoData = statsVideos[eventType];
 
+        console.log('Event hover:', eventType, 'Has video data:', !!videoData);
+
         // Check if this is the star (special cross layout with accolades)
         if (eventType === '✧') {
           const trackPhotos = [
@@ -2512,7 +2514,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">3</span>
                       </div>
                       <div style="width: 40px; height: 28px; background: rgba(205, 127, 50, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
                     <!-- Silver - LJ -->
                     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -2520,7 +2521,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">2</span>
                       </div>
                       <div style="width: 40px; height: 36px; background: rgba(192, 192, 192, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
                     <!-- 4th place - LJ -->
                     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -2528,7 +2528,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
                       </div>
                       <div style="width: 40px; height: 24px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">LJ</span>
                     </div>
                     <!-- Another 4th - 4x100 -->
                     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -2536,7 +2535,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
                       </div>
                       <div style="width: 40px; height: 24px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
-                      <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; color: #888; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 3px; font-family: var(--font--primary-family);">4×100</span>
                     </div>
                   </div>
                 </div>
@@ -2837,7 +2835,6 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #4B9CD3, #3a8ab8); color: #000;">4</div>
                     <div class="podium-base" style="height: 18px; background: rgba(75, 156, 211, 0.2);"></div>
-                    <span class="podium-label">4×100</span>
                   </div>
                 </div>
               </div>
@@ -3396,6 +3393,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// Localhost-only navigation visibility
+(function() {
+  function hideMoreLinksIfNotLocalhost() {
+    const isLocalhost = window.location.hostname === 'localhost' ||
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname === '::1';
+
+    if (!isLocalhost) {
+      const desktopMoreLink = document.getElementById('localhost-only-nav');
+      const mobileMoreLink = document.getElementById('localhost-only-nav-mobile');
+
+      if (desktopMoreLink) {
+        desktopMoreLink.style.display = 'none';
+      }
+      if (mobileMoreLink) {
+        mobileMoreLink.style.display = 'none';
+      }
+    }
+  }
+
+  // Run immediately
+  hideMoreLinksIfNotLocalhost();
+
+  // Also run after page loads
+  window.addEventListener('load', hideMoreLinksIfNotLocalhost);
+})();
 </script>
 
 <script src="./Isiah Udofia – Senior @ Yale University – New Haven, CT_files/bundle.js" defer></script><script src="./shuffle-cleanup.js" defer></script></body></html>

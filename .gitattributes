@@ -3,3 +3,5 @@ assets/videos/**/*.mp4 !text !filter !merge !diff
 assets/videos/**/*.jpg !text !filter !merge !diff
 assets/videos/**/*.jpeg !text !filter !merge !diff
 assets/videos/**/*.png !text !filter !merge !diff
+assets/videos/track/*.mov filter=lfs diff=lfs merge=lfs -text
+assets/videos/track/*.mp4 filter=lfs diff=lfs merge=lfs -text

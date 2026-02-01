@@ -726,15 +726,9 @@
       <div class="stats-grid">
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100m" data-shuffle-load="single">100</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200m" data-shuffle-load="single">200</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LJ</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single" style="font-size: 2rem; font-weight: 300;">✧</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TJ</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Heps" data-shuffle-load="single">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <circle cx="12" cy="8" r="6"/>
-            <path d="M12 14v6"/>
-            <path d="M9 17l3 2 3-2"/>
-          </svg>
-        </div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Heps" data-shuffle-load="single">IVY</div>
       </div>
     </div>
     <nav class="track-field-gallery-nav" style="--max-p: 5; --max-z: 9;">
@@ -2030,10 +2024,50 @@ document.addEventListener('DOMContentLoaded', function() {
   statsGridBoxes.forEach(box => {
     if (window.innerWidth > 768) {
       box.addEventListener('mouseenter', function(e) {
-        const eventType = this.textContent;
+        const eventType = this.textContent.trim();
         const videoData = statsVideos[eventType];
 
-        if (videoData && videoData.path) {
+        // Check if this is the star (special cross layout)
+        if (eventType === '✧') {
+          tooltip.innerHTML = `
+            <div style="position: relative; width: 500px; height: 300px;">
+              <!-- Center video -->
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; height: 157px; background: #000; border-radius: 4px; overflow: hidden; z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                <video src="/assets/videos/longjump.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+              </div>
+
+              <!-- Top arm - 100m -->
+              <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); text-align: center;">
+                <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.5rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">100</h3>
+                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.75rem; margin: 2px 0 0 0;">10.74</p>
+              </div>
+
+              <!-- Bottom arm - 200m -->
+              <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); text-align: center;">
+                <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.5rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">200</h3>
+                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.75rem; margin: 2px 0 0 0;">21.63</p>
+              </div>
+
+              <!-- Left arm - LJ -->
+              <div style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); text-align: center;">
+                <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.5rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">LJ</h3>
+                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.75rem; margin: 2px 0 0 0;">25' 1" / 7.66m</p>
+              </div>
+
+              <!-- Right arm - TJ -->
+              <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); text-align: center;">
+                <h3 data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.5rem; font-weight: 700; margin: 0; font-family: var(--font--primary-family);">TJ</h3>
+                <p data-shuffle="text" data-shuffle-hover="single" style="color: #999; font-size: 0.75rem; margin: 2px 0 0 0;">45' 6.5"</p>
+              </div>
+            </div>
+          `;
+          tooltip.style.display = 'block';
+          tooltip.style.left = e.clientX + 'px';
+          tooltip.style.top = e.clientY + 'px';
+
+          // Trigger shuffle animation for the tooltip content
+          triggerTooltipShuffle(tooltip);
+        } else if (videoData && videoData.path) {
           tooltip.innerHTML = `
             <div style="display: flex; gap: 12px; align-items: flex-start;">
               <div style="width: 320px; height: 180px; background: #000; border-radius: 4px; overflow: hidden; flex-shrink: 0;">

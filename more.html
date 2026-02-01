@@ -48,6 +48,12 @@
 <link rel="preload" href="./Info – Isiah Udofia_files/bundle.js" as="script">
 <link rel="preload" href="./Info – Isiah Udofia_files/isiahudofia.webflow.shared.e111be220.css" as="style">
 
+<!-- Preload track videos for instant playback -->
+<link rel="preload" href="/assets/videos/track/200m.mp4" as="video">
+<link rel="preload" href="/assets/videos/track/100m.mov" as="video">
+<link rel="preload" href="/assets/videos/track/longjump.mp4" as="video">
+<link rel="preload" href="/assets/videos/track/triplejump.mov" as="video">
+
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
@@ -2034,11 +2040,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Check if this is the star (special cross layout with accolades)
         if (eventType === '✧') {
+          const trackPhotos = [
+            '/assets/photos/track/114_1842.jpeg',
+            '/assets/photos/track/IMG_0208.JPG',
+            '/assets/photos/track/IMG_0221.JPG',
+            '/assets/photos/track/IMG_0224.JPG',
+            '/assets/photos/track/IMG_1863.JPG',
+            '/assets/photos/track/IMG_2897.jpeg',
+            '/assets/photos/track/IMG_4230.jpeg',
+            '/assets/photos/track/NZ9_1242.jpg',
+            '/assets/photos/track/NZ9_1897.JPG',
+            '/assets/photos/track/NZ9_1899.jpg',
+            '/assets/photos/track/NZ9_1904.jpg',
+            '/assets/photos/track/TITUSKAO-AllFinalAwards Ceremony-6600.jpeg',
+            '/assets/photos/track/lucas-seasonopener-74.jpeg'
+          ];
+
           tooltip.innerHTML = `
             <div style="position: relative; width: 550px; height: 350px;">
-              <!-- Center video -->
+              <!-- Center photo slideshow -->
               <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 240px; height: 135px; background: #000; border-radius: 0; overflow: hidden; z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-                <video src="/assets/videos/track/longjump.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <img id="star-photo-slideshow" src="${trackPhotos[0]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
               </div>
 
               <!-- Top arm - NCAA Regional Qualifier (Bold badge style) -->
@@ -2058,16 +2080,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; margin: 0; color: #999; font-weight: 500; border-top: 1px solid #4B9CD3; padding-top: 4px; font-family: var(--font--primary-family);">Yale Long Jump</p>
               </div>
 
-              <!-- Left arm - 3x Ivy Medalist (Stacked medal style) -->
+              <!-- Left arm - 4x Ivy Medalist (Stacked medal style) -->
               <div style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); text-align: center; width: 100px;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #C9A961; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">3×</span>
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #C9A961; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">4×</span>
                   <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; margin: 0; color: #999; font-weight: 500; line-height: 1.2; font-family: var(--font--primary-family);">Ivy League Medalist</p>
                 </div>
                 <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid #333;">
                   <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 0; color: #666; font-family: var(--font--primary-family);">🥈 2024 Out</p>
                   <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 2px 0 0 0; color: #666; font-family: var(--font--primary-family);">🥉 2025 In</p>
                   <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 2px 0 0 0; color: #666; font-family: var(--font--primary-family);">4th 2024 In</p>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 2px 0 0 0; color: #666; font-family: var(--font--primary-family);">4th 4×1 24 Out</p>
                 </div>
               </div>
 
@@ -2087,6 +2110,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Trigger shuffle animation for the tooltip content
           triggerTooltipShuffle(tooltip);
+
+          // Start photo slideshow
+          const slideshowImg = tooltip.querySelector('#star-photo-slideshow');
+          let photoIndex = 0;
+          const slideshowInterval = setInterval(() => {
+            photoIndex = (photoIndex + 1) % trackPhotos.length;
+            slideshowImg.src = trackPhotos[photoIndex];
+          }, 300);
+
+          // Store interval ID for cleanup
+          tooltip.dataset.slideshowInterval = slideshowInterval;
         } else if (videoData && videoData.path) {
           tooltip.innerHTML = `
             <div style="display: flex; gap: 12px; align-items: flex-start;">
@@ -2113,6 +2147,11 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       box.addEventListener('mouseleave', function() {
+        // Clear slideshow interval if exists
+        if (tooltip.dataset.slideshowInterval) {
+          clearInterval(parseInt(tooltip.dataset.slideshowInterval));
+          delete tooltip.dataset.slideshowInterval;
+        }
         cleanupTooltipShuffle(tooltip);
         tooltip.style.display = 'none';
       });

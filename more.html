@@ -728,7 +728,13 @@
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200m" data-shuffle-load="single">200</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LJ</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TJ</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Heps" data-shuffle-load="single">IVY</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Heps" data-shuffle-load="single">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="7" r="4"/>
+            <path d="M10 11v6"/>
+            <path d="M7 14l3 2 3-2"/>
+          </svg>
+        </div>
       </div>
     </div>
     <div class="gallery-carousel">
@@ -1690,6 +1696,11 @@ button:focus-visible,
     font-size: 1.5rem;
     color: #4B9CD3;
     text-transform: inherit;
+    cursor: pointer;
+  }
+
+  .stats-grid-box[data-shuffle-load="single"] {
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, background-color 0.2s ease;
   }
 
   .stats-grid-box:hover {

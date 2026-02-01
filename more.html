@@ -130,21 +130,6 @@
       <div class="stats-mobile-content" id="statsMobileContent"></div>
     </div>
 
-    <!-- Pre-created track videos (hidden by default) -->
-    <div id="track-videos" style="display: none;">
-      <video id="longjump-video" class="track-video" muted loop playsinline preload="auto">
-        <source src="/assets/videos/track/longjump.mp4" type="video/mp4">
-      </video>
-      <video id="100m-video" class="track-video" muted loop playsinline preload="auto">
-        <source src="/assets/videos/track/100m.mov" type="video/quicktime">
-      </video>
-      <video id="200m-video" class="track-video" muted loop playsinline preload="auto">
-        <source src="/assets/videos/track/200m.mp4" type="video/mp4">
-      </video>
-      <video id="triplejump-video" class="track-video" muted loop playsinline preload="auto">
-        <source src="/assets/videos/track/triplejump.mov" type="video/quicktime">
-      </video>
-    </div>
   </div>
 </section>
 
@@ -2176,6 +2161,12 @@ button:focus-visible,
   @media (min-width: 769px) {
     .gallery.track-field-gallery {
       padding-bottom: 0 !important;
+      padding-top: 4rem !important;
+    }
+
+    /* Reduce padding on photography gallery title wrap (desktop only) */
+    .gallery.photography-gallery .gallery-title-wrap {
+      padding-top: 1rem !important;
     }
   }
 </style>
@@ -2426,16 +2417,10 @@ document.addEventListener('DOMContentLoaded', function() {
     width: 'fit-content'
   });
   document.body.appendChild(trackTooltip);
-  // Video element mapping - use pre-created videos like carousel
-  const videoMapping = {
-    'LONG JUMP': 'longjump-video',
-    '100M DASH': '100m-video',
-    '200M DASH': '200m-video',
-    'TRIPLE JUMP': 'triplejump-video'
-  };
 
   const statsVideos = {
     '100M DASH': {
+      path: '/assets/videos/track/100m.mov',
       mark: 'PR 10.74',
       location: 'Wake Forest University',
       date: 'April 2024',
@@ -2443,6 +2428,7 @@ document.addEventListener('DOMContentLoaded', function() {
       note: ''
     },
     '200M DASH': {
+      path: '/assets/videos/track/200m.mp4',
       mark: 'PR 21.63',
       location: 'Boston University',
       date: 'February 2024',
@@ -2450,6 +2436,7 @@ document.addEventListener('DOMContentLoaded', function() {
       note: 'Information and video are from 22.15s indoor race at BU'
     },
     'LONG JUMP': {
+      path: '/assets/videos/track/longjump.mp4',
       mark: "PR 25' 1\" / 7.66m",
       location: 'Princeton University',
       date: 'May 2024',
@@ -2457,40 +2444,22 @@ document.addEventListener('DOMContentLoaded', function() {
       note: ''
     },
     'TRIPLE JUMP': {
+      path: '/assets/videos/track/triplejump.mov',
       mark: "PR 45' 6.5\"",
       location: 'Middletown North High School',
       date: 'June 2022',
       meet: 'NJSIAA Non-Public Group Championships',
-      note: 'Only competed in triple jump during high school'
+      note: 'Video of last ever triple jump competition'
     }
   };
 
-  // Add debounce and cleanup tracking
-  let currentVideo = null;
-  let hoverTimeout = null;
 
   statsGridBoxes.forEach(box => {
     if (window.innerWidth > 768) {
       box.addEventListener('mouseenter', function(e) {
-        // Clear any pending hide timeout
-        if (hoverTimeout) {
-          clearTimeout(hoverTimeout);
-          hoverTimeout = null;
-        }
-
-        // Stop and cleanup any currently playing video
-        if (currentVideo && currentVideo.isConnected) {
-          currentVideo.pause();
-          currentVideo.currentTime = 0;
-        }
-        currentVideo = null;
         const eventType = this.textContent.trim();
         const eventTitle = this.getAttribute('data-shuffle-hover') || eventType;
         const videoData = statsVideos[eventType];
-
-        console.log('Event hover:', JSON.stringify(eventType), 'Has video data:', !!videoData);
-        console.log('Available video mappings:', Object.keys(videoMapping));
-        console.log('Available statsVideos:', Object.keys(statsVideos));
 
         // Check if this is the star (special cross layout with accolades)
         if (eventType === '✧') {
@@ -2635,89 +2604,77 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Store interval ID for cleanup
           trackTooltip.dataset.slideshowInterval = slideshowInterval;
-        } else if (videoData && videoMapping[eventType]) {
-          console.log('Found video mapping for:', eventType, '-> video ID:', videoMapping[eventType]);
-          // Get pre-created video element and clone it
-          const sourceVideo = document.getElementById(videoMapping[eventType]);
-          console.log('Source video element found:', !!sourceVideo, sourceVideo);
-          if (sourceVideo) {
-            const videoClone = sourceVideo.cloneNode(true);
-            videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+        } else if (videoData && videoData.path) {
+          trackTooltip.innerHTML = `
+            <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
+              <div style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
+                <video src="${videoData.path}" autoplay loop muted playsinline preload="auto" class="track-tooltip-video" style="width: 100%; height: 100%; object-fit: cover;"></video>
+              </div>
+              <div style="display: flex; flex-direction: column; justify-content: center; min-width: 250px;">
+                <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #ffffff; font-size: 2.5rem; font-weight: 700; margin: 0 0 20px 0; font-family: var(--font--primary-family); letter-spacing: -0.03em; line-height: 1.1;">${eventTitle}</h2>
 
-            trackTooltip.innerHTML = `
-              <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
-                <div id="video-container" style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
+                <div style="margin: 0 0 28px 0;">
+                  <h3 style="font-size: 2rem; margin: 0; font-family: var(--font--primary-family); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;">
+                    <span data-shuffle="text" data-shuffle-hover="single" style="color: #ffffff;">${videoData.mark.replace('PR ', '')}</span>
+                  </h3>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1rem; color: #666; margin: 4px 0 0 0; font-family: var(--font--primary-family); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">${videoData.mark.includes('PR') ? 'Personal Record' : ''}</p>
                 </div>
-                <div style="display: flex; flex-direction: column; justify-content: center; min-width: 250px;">
-                  <h2 style="color: #ffffff; font-size: 2.5rem; font-weight: 700; margin: 0 0 20px 0; font-family: var(--font--primary-family);">${eventTitle}</h2>
-                  <div style="margin: 0 0 28px 0;">
-                    <h3 style="font-size: 2rem; margin: 0; font-family: var(--font--primary-family); font-weight: 700; color: #ffffff;">${videoData.mark.replace('PR ', '')}</h3>
-                    <p style="font-size: 1rem; color: #666; margin: 4px 0 0 0; font-family: var(--font--primary-family);">${videoData.mark.includes('PR') ? 'Personal Record' : ''}</p>
+
+                <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                  <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Location</span>
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family); font-weight: 400; letter-spacing: 0.01em;">${videoData.location}</span>
                   </div>
-                  <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-                    <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
-                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Location</span>
-                      <span style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family);">${videoData.location}</span>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
-                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Date</span>
-                      <span style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family);">${videoData.date}</span>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
-                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Meet</span>
-                      <span style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family);">${videoData.meet}</span>
-                    </div>
-                    ${videoData.note ? `<div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px;">
-                      <span style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family);">Note</span>
-                      <span style="font-size: 0.95rem; color: #b0b0b0; font-family: var(--font--primary-family);">${videoData.note}</span>
-                    </div>` : ''}
+
+                  <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Date</span>
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family); font-weight: 400; letter-spacing: 0.01em;">${videoData.date}</span>
                   </div>
+
+                  <div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Meet</span>
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.05rem; color: #e0e0e0; font-family: var(--font--primary-family); font-weight: 400; letter-spacing: 0.01em;">${videoData.meet}</span>
+                  </div>
+
+                  ${videoData.note ? `<div style="display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: center;">
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.75rem; color: #4a4a4a; font-family: var(--font--primary-family); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;">Note</span>
+                    <span data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.95rem; color: #b0b0b0; font-family: var(--font--primary-family); font-weight: 400; letter-spacing: 0.01em; font-style: italic;">${videoData.note}</span>
+                  </div>` : ''}
                 </div>
               </div>
-            `;
+            </div>
+          `;
+          trackTooltip.style.display = 'block';
 
-            // Insert cloned video into container
-            const container = trackTooltip.querySelector('#video-container');
-            container.appendChild(videoClone);
+          // Position tooltip safely within viewport bounds
+          const tooltipRect = trackTooltip.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const tooltipWidth = tooltipRect.width || 500;
 
-            trackTooltip.style.display = 'block';
-            trackTooltip.style.left = e.clientX + 'px';
-            trackTooltip.style.top = e.clientY + 'px';
-
-            // Track this video for cleanup
-            currentVideo = videoClone;
-
-            // Use requestAnimationFrame to ensure DOM stability before playing video
-            requestAnimationFrame(() => {
-              // Double check the video is still connected to DOM and is still current
-              if (videoClone.isConnected && currentVideo === videoClone) {
-                videoClone.play().catch(e => console.log('Video play failed:', e));
-              } else {
-                console.log('Video element was disconnected or replaced before playback');
-              }
-            });
+          // Calculate safe horizontal position
+          let leftPos = e.clientX;
+          if (leftPos - tooltipWidth / 2 < 0) {
+            leftPos = tooltipWidth / 2;
+          } else if (leftPos + tooltipWidth / 2 > viewportWidth) {
+            leftPos = viewportWidth - tooltipWidth / 2;
           }
+
+          trackTooltip.style.left = leftPos + 'px';
+          trackTooltip.style.top = e.clientY + 'px';
+
+          // Trigger shuffle animation for the tooltip content
+          triggerTooltipShuffle(trackTooltip);
         }
       });
 
       box.addEventListener('mouseleave', function() {
-        // Use timeout to debounce rapid hover events
-        hoverTimeout = setTimeout(() => {
-          // Stop current video cleanly
-          if (currentVideo && currentVideo.isConnected) {
-            currentVideo.pause();
-            currentVideo.currentTime = 0;
-          }
-          currentVideo = null;
-
-          // Clear slideshow interval if exists
-          if (trackTooltip.dataset.slideshowInterval) {
-            clearInterval(parseInt(trackTooltip.dataset.slideshowInterval));
-            delete trackTooltip.dataset.slideshowInterval;
-          }
-          cleanupTooltipShuffle(trackTooltip);
-          trackTooltip.style.display = 'none';
-        }, 100); // 100ms debounce delay
+        // Clear slideshow interval if exists
+        if (trackTooltip.dataset.slideshowInterval) {
+          clearInterval(parseInt(trackTooltip.dataset.slideshowInterval));
+          delete trackTooltip.dataset.slideshowInterval;
+        }
+        cleanupTooltipShuffle(trackTooltip);
+        trackTooltip.style.display = 'none';
       });
 
       box.addEventListener('mousemove', function(e) {
@@ -2769,13 +2726,6 @@ document.addEventListener('DOMContentLoaded', function() {
           const eventType = box.textContent.trim();
           const videoData = statsVideos[eventType];
 
-          // Cleanup any existing video
-          if (mobileContent.currentVideo && mobileContent.currentVideo.isConnected) {
-            mobileContent.currentVideo.pause();
-            mobileContent.currentVideo.currentTime = 0;
-          }
-          mobileContent.currentVideo = null;
-
           // Animate out current content
           mobileContent.classList.add('is-animating');
 
@@ -2796,38 +2746,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function generateMobileVideoContent(container, eventType, videoData) {
-          // Use the same video cloning approach as desktop
-          if (videoMapping[eventType]) {
-            const sourceVideo = document.getElementById(videoMapping[eventType]);
-            if (sourceVideo) {
-              const videoClone = sourceVideo.cloneNode(true);
-              videoClone.className = 'stats-mobile-video';
-
-              container.innerHTML = `
-                <div id="mobile-video-container"></div>
-                <div class="stats-mobile-info">
-                  <h3 class="stats-mobile-title">${eventType}</h3>
-                  <p class="stats-mobile-mark">${videoData.mark}</p>
-                  <p class="stats-mobile-details">${videoData.date} • ${videoData.location}</p>
-                  <p class="stats-mobile-details">${videoData.meet}</p>
-                  ${videoData.note ? `<p class="stats-mobile-note">${videoData.note}</p>` : ''}
-                </div>
-              `;
-
-              // Insert cloned video and play with DOM stability check
-              const mobileContainer = container.querySelector('#mobile-video-container');
-              mobileContainer.appendChild(videoClone);
-
-              // Store reference for cleanup (mobile doesn't need the same debounce as desktop hover)
-              container.currentVideo = videoClone;
-
-              requestAnimationFrame(() => {
-                if (videoClone.isConnected) {
-                  videoClone.play().catch(e => console.log('Mobile video play failed:', e));
-                }
-              });
-            }
-          }
+          container.innerHTML = `
+            <video class="stats-mobile-video" autoplay loop muted playsinline>
+              <source src="${videoData.path}" type="video/mp4">
+            </video>
+            <div class="stats-mobile-info">
+              <h3 class="stats-mobile-title">${eventType}</h3>
+              <p class="stats-mobile-mark">${videoData.mark}</p>
+              <p class="stats-mobile-details">${videoData.date} • ${videoData.location}</p>
+              <p class="stats-mobile-details">${videoData.meet}</p>
+              ${videoData.note ? `<p class="stats-mobile-note">${videoData.note}</p>` : ''}
+            </div>
+          `;
         }
 
         function generateMobileStarContent(container) {

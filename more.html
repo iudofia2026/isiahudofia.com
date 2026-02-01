@@ -2611,7 +2611,9 @@ document.addEventListener('DOMContentLoaded', function() {
           trackTooltip.innerHTML = `
             <div style="display: flex; gap: 40px; align-items: center; padding: 20px;">
               <div style="width: 640px; height: 360px; background: #000; border-radius: 0; overflow: hidden; flex-shrink: 0;">
-                <video src="${videoData.path}" loop muted playsinline preload="auto" class="track-tooltip-video" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <video class="track-tooltip-video" muted loop playsinline preload="auto" style="width: 100%; height: 100%; object-fit: cover;">
+                  <source src="${videoData.path}" type="${videoData.path.endsWith('.mp4') ? 'video/mp4' : 'video/quicktime'}">
+                </video>
               </div>
               <div style="display: flex; flex-direction: column; justify-content: center; min-width: 250px;">
                 <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #ffffff; font-size: 2.5rem; font-weight: 700; margin: 0 0 20px 0; font-family: var(--font--primary-family); letter-spacing: -0.03em; line-height: 1.1;">${eventTitle}</h2>
@@ -2667,22 +2669,16 @@ document.addEventListener('DOMContentLoaded', function() {
           trackTooltip.style.left = leftPos + 'px';
           trackTooltip.style.top = e.clientY + 'px';
 
-          // Set video volume based on track volume slider and ensure it plays
+          // Play video using same pattern as working carousel videos
           const video = trackTooltip.querySelector('.track-tooltip-video');
-          const trackVolumeSlider = document.getElementById('trackVolumeSlider');
           if (video) {
-            // Ensure video starts muted for autoplay
-            video.muted = true;
-
             // Set volume based on slider
+            const trackVolumeSlider = document.getElementById('trackVolumeSlider');
             if (trackVolumeSlider) {
               video.volume = trackVolumeSlider.value / 100;
             }
-
-            // Small delay to ensure DOM is ready, then play
-            setTimeout(() => {
-              video.play().catch(e => console.log('Video autoplay prevented:', e));
-            }, 50);
+            // Play immediately like carousel videos do
+            video.play().catch(e => console.log('Video play failed:', e));
           }
 
           // Trigger shuffle animation for the tooltip content

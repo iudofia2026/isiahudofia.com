@@ -133,7 +133,7 @@
     <!-- Pre-created video elements for tooltips (similar to carousel) -->
     <div style="display: none;">
       <video id="track-video-100m" class="track-tooltip-video" muted loop playsinline preload="auto">
-        <source src="/assets/videos/track/100m.mov" type="video/quicktime">
+        <source src="/assets/videos/track/100m.mp4" type="video/mp4">
       </video>
       <video id="track-video-200m" class="track-tooltip-video" muted loop playsinline preload="auto">
         <source src="/assets/videos/track/200m.mp4" type="video/mp4">
@@ -142,7 +142,7 @@
         <source src="/assets/videos/track/longjump.mp4" type="video/mp4">
       </video>
       <video id="track-video-triplejump" class="track-tooltip-video" muted loop playsinline preload="auto">
-        <source src="/assets/videos/track/triplejump.mov" type="video/quicktime">
+        <source src="/assets/videos/track/triplejump.mp4" type="video/mp4">
       </video>
     </div>
   </div>
@@ -578,26 +578,12 @@
         <div class="link_bracket_wrap is-left">
           <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
         </div>
-        <p data-shuffle="text" data-shuffle-hover="freelance portfolio" data-shuffle-load="single" class="info_title_text u-display" style="opacity: 1; display: inline-block; width: 182px; text-align: left;">video editing</p>
+        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display" style="opacity: 1; display: inline-block; width: 182px; text-align: left;">video editing</p>
         <div class="link_bracket_wrap is-right">
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
-      <div class="gallery-subtitle-wrap">
-        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
-        <div class="volume-controls-wrapper">
-          <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Volume" tabindex="0">
-          <button id="muteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle mute">
-            <div class="link_bracket_wrap is-left">
-              <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
-            </div>
-            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">unmute</p>
-            <div class="link_bracket_wrap is-right">
-              <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
-            </div>
-          </button>
-        </div>
-      </div>
+      <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
     </div>
     <div class="gallery-carousel">
       <div class="carousel-arrow carousel-arrow-left">
@@ -2240,6 +2226,16 @@ button:focus-visible,
       margin-left: 0 !important;
     }
 
+    .gallery-subtitle-wrap {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+    }
+
+    .gallery.video-gallery .gallery-subtitle-wrap {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+    }
+
     .gallery-title-wrap {
       padding-left: 0 !important;
       padding-right: 0 !important;
@@ -2518,7 +2514,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const statsVideos = {
     '100M DASH': {
       videoId: 'track-video-100m',
-      path: '/assets/videos/track/100m.mov',
+      path: '/assets/videos/track/100m.mp4',
       mark: 'PR 10.74',
       location: 'Wake Forest University',
       date: 'April 2024',
@@ -2545,7 +2541,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     'TRIPLE JUMP': {
       videoId: 'track-video-triplejump',
-      path: '/assets/videos/track/triplejump.mov',
+      path: '/assets/videos/track/triplejump.mp4',
       mark: "PR 45' 6.5\"",
       location: 'Middletown North High School',
       date: 'June 2022',
@@ -2748,59 +2744,27 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           `;
 
-          // Create video element with <source> tag (like carousel)
+          // Use pre-created video element instead of creating dynamically
           const videoContainer = trackTooltip.querySelector('#track-video-container');
-          if (videoContainer && videoData.path) {
-            // Convert relative path to absolute URL
-            const absoluteUrl = window.location.origin + videoData.path;
-            const ext = videoData.path.split('.').pop().toLowerCase();
-            const mimeType = ext === 'mov' ? 'video/quicktime' : 'video/mp4';
+          if (videoContainer && videoData.videoId) {
+            const preCreatedVideo = document.getElementById(videoData.videoId);
+            if (preCreatedVideo) {
+              // Clone the pre-created video element (this works in production)
+              const videoClone = preCreatedVideo.cloneNode(true);
+              videoClone.muted = true;
+              videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+              videoContainer.appendChild(videoClone);
+              console.log('Track tooltip - cloned pre-created video:', videoData.videoId);
 
-            // Create video element with source tag (like carousel)
-            const video = document.createElement('video');
-            video.muted = true;
-            video.loop = true;
-            video.playsInline = true;
-            video.autoplay = true;
-            video.preload = 'auto';
-            video.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-            video.className = 'track-tooltip-video';
-
-            // Create and append source element
-            const source = document.createElement('source');
-            source.src = absoluteUrl;
-            source.type = mimeType;
-            video.appendChild(source);
-
-            videoContainer.appendChild(video);
-            console.log('Track tooltip - created video with <source>, src:', absoluteUrl, 'type:', mimeType);
-
-            // Wait for video to be ready before playing (critical for .mov files)
-            video.addEventListener('loadeddata', function onLoadedData() {
-              console.log('Track tooltip - video data loaded, attempting play');
-              video.play().then(() => {
-                console.log('Track tooltip - video playing successfully');
-              }).catch(err => {
-                console.log('Track tooltip - video play failed after loadeddata:', err.name, err.message);
-              });
-              video.removeEventListener('loadeddata', onLoadedData);
-            }, { once: true });
-
-            // Fallback: try playing after delay if loadeddata doesn't fire
-            setTimeout(() => {
-              if (video.readyState >= 1) { // HAVE_METADATA
-                console.log('Track tooltip - video has metadata, attempting play');
-                video.play().then(() => {
+              // Play the cloned video
+              requestAnimationFrame(() => {
+                videoClone.play().then(() => {
                   console.log('Track tooltip - video playing successfully');
                 }).catch(err => {
                   console.log('Track tooltip - video play failed:', err.name, err.message);
                 });
-              } else {
-                console.log('Track tooltip - video not ready yet, readyState:', video.readyState);
-              }
-            }, 500);
-          } else {
-            console.log('Track tooltip - videoContainer not found or no videoData.path');
+              });
+            }
           }
 
           trackTooltip.style.display = 'block';

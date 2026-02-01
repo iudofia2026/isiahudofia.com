@@ -8,7 +8,7 @@ Track & field video tooltips were not displaying in production (Vercel) but work
 
 ### 1. NotSupportedError: "The element has no supported sources"
 
-**Issue**: Setting `video.src` directly doesn't work well for `.mov` files across all browsers.
+**Issue**: Setting `video.src` directly doesn't work well for video files across all browsers.
 
 **Fix**: Use `<source>` tags with explicit MIME types:
 ```javascript
@@ -18,14 +18,14 @@ video.src = '/assets/videos/track/100m.mov';
 // ✅ Correct - works across browsers
 const video = document.createElement('video');
 const source = document.createElement('source');
-source.src = 'https://www.isiahudofia.com/assets/videos/track/100m.mov';
-source.type = 'video/quicktime'; // for .mov files
+source.src = 'https://www.isiahudofia.com/assets/videos/track/100m.mp4';
+source.type = 'video/mp4';
 video.appendChild(source);
 ```
 
 ### 2. Relative vs Absolute URLs
 
-**Issue**: JavaScript `video.src` with relative paths (`/assets/...`) doesn't resolve correctly.
+**Issue**: JavaScript `video.src` with relative paths (`/assets/...`) doesn't resolve correctly in production.
 
 **Fix**: Always use absolute URLs:
 ```javascript
@@ -34,7 +34,7 @@ video.src = '/assets/videos/track/100m.mov';
 
 // ✅ Correct - absolute URL
 const absoluteUrl = window.location.origin + videoData.path;
-// Results in: https://www.isiahudofia.com/assets/videos/track/100m.mov
+// Results in: https://www.isiahudofia.com/assets/videos/track/100m.mp4
 ```
 
 ### 3. Cloning Video Elements
@@ -54,17 +54,39 @@ const video = document.createElement('video');
 
 **Issue**: Calling `play()` before video is fully inserted into DOM causes failures.
 
-**Fix**: Use `setTimeout` delay:
+**Fix**: Wait for `loadeddata` event:
 ```javascript
-videoContainer.appendChild(video);
-
-// Small delay ensures DOM is ready
-setTimeout(() => {
+// Wait for video to be ready before playing
+video.addEventListener('loadeddata', function onLoadedData() {
   video.play();
-}, 50);
+  video.removeEventListener('loadeddata', onLoadedData);
+}, { once: true });
+
+// Fallback: try playing after delay
+setTimeout(() => {
+  if (video.readyState >= 1) {
+    video.play();
+  }
+}, 500);
 ```
 
-## Final Working Solution
+### 5. .mov Format Incompatibility (CRITICAL)
+
+**Issue**: `.mov` files from iPhone use codecs that only work in Safari. Chrome/Firefox cannot play them.
+
+**Symptoms**:
+- `readyState: 0` (video never loads)
+- `NotSupportedError` in Chrome/Firefox
+- Works in Safari, fails everywhere else
+
+**Fix**: Convert all videos to `.mp4` format with H.264/AAC:
+```bash
+ffmpeg -i 100m.mov -c:v libx264 -c:a aac -movflags faststart 100m.mp4
+```
+
+**Why this matters**: `.mp4` with H.264/AAC works universally across ALL modern browsers.
+
+## Final Working Solution (Localhost)
 
 ```javascript
 // Create video element with <source> tag (like carousel)
@@ -93,10 +115,18 @@ if (videoContainer && videoData.path) {
 
   videoContainer.appendChild(video);
 
-  // Force play after a brief delay
-  setTimeout(() => {
+  // Wait for video to be ready before playing (critical for .mov files)
+  video.addEventListener('loadeddata', function onLoadedData() {
     video.play();
-  }, 50);
+    video.removeEventListener('loadeddata', onLoadedData);
+  }, { once: true });
+
+  // Fallback: try playing after delay if loadeddata doesn't fire
+  setTimeout(() => {
+    if (video.readyState >= 1) {
+      video.play();
+    }
+  }, 500);
 }
 ```
 
@@ -105,21 +135,25 @@ if (videoContainer && videoData.path) {
 1. **Always use `<source>` tags** for video elements in JavaScript
 2. **Use absolute URLs** - never rely on relative paths in JS
 3. **Don't clone video elements** - create fresh ones
-4. **Add small delay before play()** to ensure DOM is ready
-5. **Match working patterns** - the carousel videos already work, copy that approach
+4. **Wait for loadeddata event** before attempting to play
+5. **Convert .mov to .mp4** - .mov only works in Safari
+6. **Match working patterns** - the carousel videos already work, copy that approach
 
 ## Debugging Tips
 
 1. Check browser console for `NotSupportedError` - indicates MIME type issue
 2. Check for `AbortError` - indicates timing/cloning issue
-3. Verify video URLs return HTTP 200: `curl -I "https://yourdomain.com/assets/videos/track/100m.mov"`
-4. Test in both localhost and production - issues can be environment-specific
+3. Check `readyState: 0` - video not loading (codec/format issue)
+4. Verify video URLs return HTTP 200: `curl -I "https://yourdomain.com/assets/videos/track/100m.mp4"`
+5. Test in multiple browsers - Chrome, Firefox, Safari
+6. Test in both localhost and production - issues can be environment-specific
 
 ## Files Modified
 
-- `more.html` - Track tooltip video creation logic (lines ~2747-2784)
-- Pre-created video elements added (lines 133-147)
-- Video data mapping with `videoId` references (lines ~2492-2528)
+- `more.html` - Track tooltip video creation logic (lines ~2747-2804)
+- Pre-created video elements (lines 133-147) - all now use `.mp4`
+- Video data mapping with `videoId` references (lines ~2518-2555)
+- Video files: Converted `.mov` to `.mp4` for universal compatibility
 
 ## Commit History
 
@@ -127,13 +161,71 @@ if (videoContainer && videoData.path) {
 2. `8e949d12` - Added debug logging, tried clone approach
 3. `1bef23ef` - Tried fresh video elements with relative paths
 4. `d9799196` - Fixed to use absolute URLs
-5. `4a6c853e` - **FINAL FIX** - Added `<source>` tags with proper MIME types
+5. `4a6c853e` - Added `<source>` tags with proper MIME types
+6. `13feb2eb` - Added retry logic for AbortError
+7. `017326b2` - Wait for loadeddata event before playing
+8. `7cce9dd9` - **LOCALHOST FIX** - Converted .mov to .mp4 format
+9. `3649ee2f` - **PRODUCTION FIX** - Clone pre-created video elements instead of dynamic creation
+
+## Production Status (FIXED)
+
+**Root Cause**: Dynamic video creation with `document.createElement('video')` doesn't work in Vercel production environment.
+
+**Solution**: Clone pre-created video elements that already exist in the HTML.
+
+**Why This Works**:
+- Pre-created video elements are in the HTML when the page loads
+- They exist in the DOM before any JavaScript runs
+- Cloning them preserves the element and its sources
+- This matches the carousel approach exactly
+
+**Final Working Code (Production + Localhost)**:
+```javascript
+// Use pre-created video element instead of creating dynamically
+const videoContainer = trackTooltip.querySelector('#track-video-container');
+if (videoContainer && videoData.videoId) {
+  const preCreatedVideo = document.getElementById(videoData.videoId);
+  if (preCreatedVideo) {
+    // Clone the pre-created video element (this works in production)
+    const videoClone = preCreatedVideo.cloneNode(true);
+    videoClone.muted = true;
+    videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+    videoContainer.appendChild(videoClone);
+
+    // Play the cloned video
+    requestAnimationFrame(() => {
+      videoClone.play();
+    });
+  }
+}
+```
+
+**Pre-created HTML elements (required)**:
+```html
+<div style="display: none;">
+  <video id="track-video-100m" class="track-tooltip-video" muted loop playsinline preload="auto">
+    <source src="/assets/videos/track/100m.mp4" type="video/mp4">
+  </video>
+  <video id="track-video-200m" class="track-tooltip-video" muted loop playsinline preload="auto">
+    <source src="/assets/videos/track/200m.mp4" type="video/mp4">
+  </video>
+  <video id="track-video-longjump" class="track-tooltip-video" muted loop playsinline preload="auto">
+    <source src="/assets/videos/track/longjump.mp4" type="video/mp4">
+  </video>
+  <video id="track-video-triplejump" class="track-tooltip-video" muted loop playsinline preload="auto">
+    <source src="/assets/videos/track/triplejump.mp4" type="video/mp4">
+  </video>
+</div>
+```
+
+**Commit That Fixed Production**: `3649ee2f`
 
 ## Working Reference
 
 The video gallery carousel (lines ~609-727) was used as the working reference. It successfully:
 - Uses `<source>` tags with explicit MIME types
-- Handles both `.mp4` and `.mov` files
-- Works in both localhost and production
+- Pre-creates video elements in HTML (not dynamically)
+- Works in both localhost AND production
+- Handles multiple video files seamlessly
 
-Always match the carousel's approach for new video implementations.
+**KEY LESSON**: Always pre-create video elements in HTML for production compatibility. Dynamic creation with `document.createElement('video')` fails in Vercel production but cloning pre-created elements works.

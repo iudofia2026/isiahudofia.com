@@ -120,11 +120,11 @@
     </div>
     <div class="stats-grid-container">
       <div class="stats-grid">
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LONG JUMP</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="LONG JUMP" data-shuffle-load="single">LONG JUMP</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100M DASH" data-shuffle-load="single">100M DASH</div>
         <div class="stats-grid-box" style="font-size: 2rem; font-weight: 300;">✧</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200M DASH" data-shuffle-load="single">200M DASH</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TRIPLE JUMP</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="TRIPLE JUMP" data-shuffle-load="single">TRIPLE JUMP</div>
       </div>
       <!-- Mobile-only content panel -->
       <div class="stats-mobile-content" id="statsMobileContent"></div>
@@ -583,6 +583,15 @@
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
+      <div class="volume">
+        <input type="checkbox" class="volume-input" id="videoVolumeToggle" />
+        <div class="volume-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="volume-svg">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </div>
+      </div>
       <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
     </div>
     <div class="gallery-carousel">
@@ -2260,6 +2269,84 @@ button:focus-visible,
     .gallery.video-gallery .gallery-subtitle-wrap {
       padding-left: 0 !important;
       margin-left: 0 !important;
+    }
+
+    /* Align video editing title to right on mobile */
+    .gallery.video-gallery .gallery-title-wrap {
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+    }
+
+    .gallery.video-gallery .gallery-title-wrap .nav_link {
+      flex: 1 !important;
+      text-align: right !important;
+    }
+
+    .gallery.video-gallery .gallery-title-wrap .nav_link .info_title_text {
+      text-align: right !important;
+    }
+
+    /* Volume control styles for mobile */
+    .volume {
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+      background-color: rgb(205, 191, 247);
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+
+    .volume-icon {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .volume-input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .volume-icon:before {
+      content: "";
+      display: flex;
+      width: 0px;
+      height: 0px;
+      border-radius: 100%;
+      transition: all 0.2s ease;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(32, 33, 36);
+    }
+
+    .volume-input:checked + .volume-icon:before {
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+    }
+
+    .volume-svg {
+      z-index: 2;
+      color: rgb(32, 33, 36);
+      height: 20px;
+      width: 20px;
+    }
+
+    .volume-input:checked + .volume-icon svg {
+      color: rgb(255, 255, 255);
     }
   }
 </style>

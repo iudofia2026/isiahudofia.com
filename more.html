@@ -1812,49 +1812,6 @@ button:focus-visible,
       padding-bottom: 0 !important;
     }
   }
-
-  /* Star spinning animation - performant with nonlinear easing */
-  @keyframes star-spin {
-    0% {
-      transform: rotate(0deg);
-      animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  .stats-grid-box {
-    overflow: hidden;
-  }
-
-  .stats-grid-box:nth-child(3) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .stats-grid-box:nth-child(3) > * {
-    animation: star-spin 0.8s ease-in-out 5s infinite;
-    animation-fill-mode: forwards;
-    display: inline-block;
-  }
-
-  /* Add slight scale pulse for extra visual interest */
-  @keyframes star-pulse {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
-
-  .stats-grid-box:nth-child(3):hover > * {
-    animation: none;
-    transform: scale(1.1) rotate(0deg);
-    transition: transform 0.3s ease;
-  }
 </style>
 </div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><!-- YOUR CONTENT GOES HERE --></div></div></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
 <script>
@@ -2169,7 +2126,7 @@ document.addEventListener('DOMContentLoaded', function() {
           ];
 
           trackTooltip.innerHTML = `
-            <div style="position: relative; width: 1000px; height: 500px;">
+            <div style="position: relative; width: 1000px; height: 520px;">
               <!-- Center photo slideshow -->
               <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 281px; background: #000; border-radius: 0; overflow: hidden; z-index: 10; box-shadow: 0 8px 40px rgba(0,0,0,0.7);">
                 <img id="star-photo-slideshow" src="${trackPhotos[0]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
@@ -2178,16 +2135,20 @@ document.addEventListener('DOMContentLoaded', function() {
               <!-- Top arm - NCAA Regional Qualifier with logo -->
               <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%; z-index: 20;">
                 <img src="/assets/ncaa-logo.png" alt="NCAA" style="width: 180px; height: auto; display: block; margin: 0 auto 12px auto;" />
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.4rem; margin: 0; color: #999; font-weight: 600; font-family: var(--font--primary-family); line-height: 1.3; letter-spacing: 0.02em;">Regional Qualifier 2024</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.4rem; margin: 0 0 8px 0; color: #999; font-weight: 600; font-family: var(--font--primary-family); line-height: 1.3; letter-spacing: 0.02em;">Regional Qualifier 2024</p>
               </div>
 
               <!-- Bottom arm - 3rd All-Time Yale (Ranking with underline style) -->
-              <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 200px;">
+              <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 220px;">
                 <div style="display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 10px;">
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 3.5rem; font-weight: 300; font-family: var(--font--primary-family);">3rd</span>
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #666; font-size: 1.2rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font--primary-family);">All-Time</span>
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 3.5rem; font-weight: 300; font-family: var(--font--primary-family); letter-spacing: 0.02em;">3rd</span>
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #888; font-size: 1.1rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font--primary-family);">All-Time</span>
                 </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.2rem; margin: 0; color: #999; font-weight: 500; border-top: 1px solid #4B9CD3; padding-top: 10px; font-family: var(--font--primary-family);">Yale Long Jump</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.1rem; margin: 0; color: #999; font-weight: 400; border-top: 1px solid #4B9CD3; padding-top: 10px; font-family: var(--font--primary-family); letter-spacing: 0.03em;">
+                  <span style="color: #0f4d81; font-weight: 600; font-style: italic; letter-spacing: 0.04em;">Yale</span>
+                  <span style="color: #4B9CD3; margin: 0 6px;">•</span>
+                  <span style="color: #aaa; font-weight: 300; letter-spacing: 0.02em;">Long Jump</span>
+                </p>
               </div>
 
               <!-- Left arm - 4x Ivy Medalist (Podium style) -->

@@ -1805,6 +1805,56 @@ button:focus-visible,
       width: min(8rem, 100%);
     }
   }
+
+  /* Remove bottom padding from track field gallery on desktop */
+  @media (min-width: 769px) {
+    .gallery.track-field-gallery {
+      padding-bottom: 0 !important;
+    }
+  }
+
+  /* Star spinning animation - performant with nonlinear easing */
+  @keyframes star-spin {
+    0% {
+      transform: rotate(0deg);
+      animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .stats-grid-box {
+    overflow: hidden;
+  }
+
+  .stats-grid-box:nth-child(3) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stats-grid-box:nth-child(3) > * {
+    animation: star-spin 0.8s ease-in-out 5s infinite;
+    animation-fill-mode: forwards;
+    display: inline-block;
+  }
+
+  /* Add slight scale pulse for extra visual interest */
+  @keyframes star-pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  .stats-grid-box:nth-child(3):hover > * {
+    animation: none;
+    transform: scale(1.1) rotate(0deg);
+    transition: transform 0.3s ease;
+  }
 </style>
 </div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><!-- YOUR CONTENT GOES HERE --></div></div></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
 <script>

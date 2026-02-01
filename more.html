@@ -724,28 +724,14 @@
     </div>
     <div class="stats-grid-container">
       <div class="stats-grid">
-        <div class="stats-grid-box">100</div>
-        <div class="stats-grid-box">200</div>
-        <div class="stats-grid-box">LJ</div>
-        <div class="stats-grid-box">TJ</div>
-        <div class="stats-grid-box">IVY</div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
-        <div class="stats-grid-box"></div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100m" data-shuffle-load="single">100</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200m" data-shuffle-load="single">200</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LJ</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TJ</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Heps" data-shuffle-load="single">IVY</div>
       </div>
     </div>
     <div class="gallery-carousel">
-      <div class="carousel-arrow carousel-arrow-left">
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 10" fill="none">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M9.86001 0.0668945L9.76698 7.41621L8.76706 7.40356L8.83804 1.79597L0.707107 9.9269L0 9.21979L8.13093 1.08886L2.52334 1.15984L2.51069 0.159924L9.86001 0.0668945Z" fill="currentColor" transform="rotate(180 5 5)"></path>
-        </svg>
-      </div>
       <div class="carousel-track">
         <div class="carousel-items">
           <div class="carousel-item">
@@ -814,11 +800,6 @@
             </figure>
           </div>
         </div>
-      </div>
-      <div class="carousel-arrow carousel-arrow-right">
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 10" fill="none">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M9.86001 0.0668945L9.76698 7.41621L8.76706 7.40356L8.83804 1.79597L0.707107 9.9269L0 9.21979L8.13093 1.08886L2.52334 1.15984L2.51069 0.159924L9.86001 0.0668945Z" fill="currentColor"></path>
-        </svg>
       </div>
     </div>
   </div>
@@ -1689,39 +1670,30 @@ button:focus-visible,
 
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: auto;
     gap: 0;
     width: 100%;
     padding-bottom: 1rem;
   }
 
   .stats-grid-box {
-    aspect-ratio: 1.5;
-    border: 1px solid #4B9CD3;
+    aspect-ratio: 3;
+    border: none;
+    background-color: rgba(120, 120, 120, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease;
     min-width: 0;
-  }
-
-  /* Top row: remove borders, make translucent grey, and shorter */
-  .stats-grid-box:nth-child(-n+7) {
-    aspect-ratio: 3;
-    border: none;
-    background-color: rgba(120, 120, 120, 0.3);
-    font-weight: 700;
-    font-size: 0.75rem;
-    color: #fff;
-  }
-
-  .stats-grid-box:nth-child(-n+7):hover {
-    background-color: rgba(120, 120, 120, 0.4);
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: #4B9CD3;
+    text-transform: inherit;
   }
 
   .stats-grid-box:hover {
-    background-color: rgba(75, 156, 211, 0.1);
+    background-color: rgba(120, 120, 120, 0.4);
   }
 
   @media (max-width: 768px) {
@@ -1924,6 +1896,90 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // Stats grid video tooltip functionality
+  const statsGridBoxes = document.querySelectorAll('.stats-grid-box');
+  const statsVideos = {
+    '100': {
+      path: '/assets/videos/100m.mp4',
+      mark: '10.74',
+      location: 'Location',
+      date: 'Date',
+      meet: 'Meet Name'
+    },
+    '200': {
+      path: '/assets/videos/200m.mp4',
+      mark: '21.63',
+      location: 'Location',
+      date: 'Date',
+      meet: 'Meet Name'
+    },
+    'LJ': {
+      path: '/assets/videos/longjump.mp4',
+      mark: "25' 1\" or 7.66m",
+      location: 'Location',
+      date: 'Date',
+      meet: 'Meet Name'
+    },
+    'TJ': {
+      path: '/assets/videos/triplejump.mp4',
+      mark: "45' 6.5\"",
+      location: 'Location',
+      date: 'Date',
+      meet: 'Meet Name'
+    },
+    'IVY': {
+      path: '/assets/videos/ivychampionships.mp4',
+      mark: 'Ivy Champion',
+      location: 'Location',
+      date: 'Date',
+      meet: 'Meet Name'
+    }
+  };
+
+  statsGridBoxes.forEach(box => {
+    if (window.innerWidth > 768) {
+      box.addEventListener('mouseenter', function(e) {
+        const eventType = this.textContent;
+        const videoData = statsVideos[eventType];
+
+        if (videoData && videoData.path) {
+          tooltip.innerHTML = `
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="width: 320px; height: 180px; background: #000; border-radius: 4px; overflow: hidden; flex-shrink: 0;">
+                <video src="${videoData.path}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+              </div>
+              <div style="display: flex; flex-direction: column; justify-content: center; min-width: 100px;">
+                <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1rem; font-weight: 700; margin: 0 0 4px 0; font-family: var(--font--primary-family);">${eventType}</h2>
+                <h3 data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.875rem; color: #999; margin: 0 0 8px 0; font-family: var(--font--primary-family);">${videoData.mark}</h3>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #666; margin: 0 0 2px 0; font-family: var(--font--primary-family);">${videoData.location}</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #666; margin: 0 0 2px 0; font-family: var(--font--primary-family);">${videoData.date}</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; color: #666; margin: 0; font-family: var(--font--primary-family);">${videoData.meet}</p>
+              </div>
+            </div>
+          `;
+          tooltip.style.display = 'block';
+          tooltip.style.left = e.clientX + 'px';
+          tooltip.style.top = e.clientY + 'px';
+
+          // Trigger shuffle animation for the tooltip content
+          triggerTooltipShuffle(tooltip);
+        }
+      });
+
+      box.addEventListener('mouseleave', function() {
+        cleanupTooltipShuffle(tooltip);
+        tooltip.style.display = 'none';
+      });
+
+      box.addEventListener('mousemove', function(e) {
+        if (tooltip.style.display === 'block') {
+          tooltip.style.left = e.clientX + 'px';
+          tooltip.style.top = e.clientY + 'px';
+        }
+      });
+    }
+  });
 });
 
 // Carousel Auto-Scroll and Navigation

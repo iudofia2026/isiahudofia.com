@@ -2054,70 +2054,85 @@ document.addEventListener('DOMContentLoaded', function() {
           ];
 
           tooltip.innerHTML = `
-            <div style="position: relative; width: 800px; height: 520px;">
+            <div style="position: relative; width: 1000px; height: 650px;">
               <!-- Center photo slideshow -->
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 225px; background: #000; border-radius: 0; overflow: hidden; z-index: 10; box-shadow: 0 6px 30px rgba(0,0,0,0.6);">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 281px; background: #000; border-radius: 0; overflow: hidden; z-index: 10; box-shadow: 0 8px 40px rgba(0,0,0,0.7);">
                 <img id="star-photo-slideshow" src="${trackPhotos[0]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
               </div>
 
-              <!-- Top arm - NCAA Regional Qualifier (Bold badge style) -->
-              <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 160px;">
-                <div style="background: #4B9CD3; padding: 18px 16px; border-radius: 2px; margin-bottom: 8px;">
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">NCAA</span>
+              <!-- Top arm - NCAA Regional Qualifier with logo -->
+              <div style="position: absolute; top: 24px; left: 50%; transform: translateX(-50%); text-align: center; width: 220px;">
+                <div style="margin-bottom: 12px;">
+                  <img src="/assets/ncaa-logo.svg" alt="NCAA" style="width: 140px; height: auto; display: block; margin: 0 auto;" />
                 </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1rem; margin: 0; color: #999; font-weight: 500; font-family: var(--font--primary-family);">Regional Qualifier</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.2rem; margin: 0; color: #999; font-weight: 500; font-family: var(--font--primary-family);">Regional Qualifier 2024</p>
               </div>
 
               <!-- Bottom arm - 3rd All-Time Yale (Ranking with underline style) -->
-              <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center; width: 160px;">
-                <div style="display: flex; align-items: baseline; justify-content: center; gap: 10px; margin-bottom: 8px;">
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 2.8rem; font-weight: 300; font-family: var(--font--primary-family);">3rd</span>
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #666; font-size: 1rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font--primary-family);">All-Time</span>
+              <div style="position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); text-align: center; width: 200px;">
+                <div style="display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 10px;">
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 3.5rem; font-weight: 300; font-family: var(--font--primary-family);">3rd</span>
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #666; font-size: 1.2rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font--primary-family);">All-Time</span>
                 </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1rem; margin: 0; color: #999; font-weight: 500; border-top: 1px solid #4B9CD3; padding-top: 8px; font-family: var(--font--primary-family);">Yale Long Jump</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.2rem; margin: 0; color: #999; font-weight: 500; border-top: 1px solid #4B9CD3; padding-top: 10px; font-family: var(--font--primary-family);">Yale Long Jump</p>
               </div>
 
               <!-- Left arm - 4x Ivy Medalist (Podium style) -->
-              <div style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); text-align: center; width: 150px;">
-                <div style="display: flex; align-items: flex-end; justify-content: center; gap: 6px; height: 60px; margin-bottom: 10px;">
+              <div style="position: absolute; left: 24px; top: 50%; transform: translateY(-50%); text-align: center; width: 180px;">
+                <div style="display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 75px; margin-bottom: 12px;">
                   <!-- Bronze -->
                   <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #CD7F32, #B87333); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 0.9rem; font-weight: 700; font-family: var(--font--primary-family);">3</span>
+                    <div style="width: 35px; height: 35px; background: linear-gradient(135deg, #CD7F32, #B87333); display: flex; align-items: center; justify-content: center;">
+                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.1rem; font-weight: 700; font-family: var(--font--primary-family);">3</span>
                     </div>
-                    <div style="width: 28px; height: 19px; background: rgba(205, 127, 50, 0.2); margin-top: 4px;"></div>
+                    <div style="width: 35px; height: 24px; background: rgba(205, 127, 50, 0.2); margin-top: 5px;"></div>
                   </div>
                   <!-- Silver -->
                   <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 28px; height: 36px; background: linear-gradient(135deg, #C0C0C0, #A8A8A8); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 0.9rem; font-weight: 700; font-family: var(--font--primary-family);">2</span>
+                    <div style="width: 35px; height: 45px; background: linear-gradient(135deg, #C0C0C0, #A8A8A8); display: flex; align-items: center; justify-content: center;">
+                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.1rem; font-weight: 700; font-family: var(--font--primary-family);">2</span>
                     </div>
-                    <div style="width: 28px; height: 26px; background: rgba(192, 192, 192, 0.2); margin-top: 4px;"></div>
+                    <div style="width: 35px; height: 32px; background: rgba(192, 192, 192, 0.2); margin-top: 5px;"></div>
                   </div>
                   <!-- 4th place -->
                   <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 28px; height: 23px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 0.9rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
+                    <div style="width: 35px; height: 29px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
+                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.1rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
                     </div>
-                    <div style="width: 28px; height: 17px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
+                    <div style="width: 35px; height: 21px; background: rgba(75, 156, 211, 0.2); margin-top: 5px;"></div>
                   </div>
                   <!-- Another 4th -->
                   <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div style="width: 28px; height: 23px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
-                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 0.9rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
+                    <div style="width: 35px; height: 29px; background: linear-gradient(135deg, #4B9CD3, #3a8ab8); display: flex; align-items: center; justify-content: center;">
+                      <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 1.1rem; font-weight: 700; font-family: var(--font--primary-family);">4</span>
                     </div>
-                    <div style="width: 28px; height: 17px; background: rgba(75, 156, 211, 0.2); margin-top: 4px;"></div>
+                    <div style="width: 35px; height: 21px; background: rgba(75, 156, 211, 0.2); margin-top: 5px;"></div>
                   </div>
                 </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.9rem; margin: 0; color: #C9A961; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">4× Ivy Medalist</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.1rem; margin: 0; color: #C9A961; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">4× Ivy Medalist</p>
               </div>
 
-              <!-- Right arm - Academic All-Ivy (Certificate style) -->
-              <div style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); text-align: center; width: 150px;">
-                <div style="border: 1px solid #4B9CD3; padding: 18px 16px; background: rgba(75, 156, 211, 0.1);">
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.95rem; margin: 0; color: #4B9CD3; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">2024</p>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.1rem; margin: 8px 0 0 0; color: #fff; font-weight: 600; font-family: var(--font--primary-family);">Academic</p>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.1rem; margin: 5px 0 0 0; color: #fff; font-weight: 600; font-family: var(--font--primary-family);">All-Ivy</p>
+              <!-- Right arm - Academic All-Ivy (Diploma plaque style) -->
+              <div style="position: absolute; right: 24px; top: 50%; transform: translateY(-50%); text-align: center; width: 200px;">
+                <div style="background: linear-gradient(135deg, #f8f5e6, #f5f0dc); border: 3px double #8B7355; padding: 20px 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.15), inset 0 0 20px rgba(139, 115, 85, 0.1); position: relative;">
+                  <!-- Decorative corner elements -->
+                  <div style="position: absolute; top: 6px; left: 6px; width: 20px; height: 20px; border-top: 2px solid #8B7355; border-left: 2px solid #8B7355;"></div>
+                  <div style="position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-top: 2px solid #8B7355; border-right: 2px solid #8B7355;"></div>
+                  <div style="position: absolute; bottom: 6px; left: 6px; width: 20px; height: 20px; border-bottom: 2px solid #8B7355; border-left: 2px solid #8B7355;"></div>
+                  <div style="position: absolute; bottom: 6px; right: 6px; width: 20px; height: 20px; border-bottom: 2px solid #8B7355; border-right: 2px solid #8B7355;"></div>
+
+                  <!-- Ivy League Logo -->
+                  <img src="/assets/ivy-league-logo.png" alt="Ivy League" style="width: 60px; height: auto; display: block; margin: 0 auto 10px auto;" />
+
+                  <!-- Year -->
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1rem; margin: 0 0 10px 0; color: #2c1810; font-weight: 700; font-family: 'Georgia', 'Times New Roman', serif;">2024</p>
+
+                  <!-- Main text with vintage newspaper font -->
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.3rem; margin: 8px 0 0 0; color: #1a1a1a; font-weight: 600; font-family: 'Playfair Display', 'Georgia', serif; letter-spacing: 0.02em;">Academic</p>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.3rem; margin: 4px 0 8px 0; color: #1a1a1a; font-weight: 600; font-family: 'Playfair Display', 'Georgia', serif; letter-spacing: 0.02em;">All-Ivy</p>
+
+                  <!-- Decorative line -->
+                  <div style="width: 60%; height: 1px; background: linear-gradient(to right, transparent, #8B7355, transparent); margin: 8px auto 0;"></div>
                 </div>
               </div>
             </div>
@@ -2129,9 +2144,18 @@ document.addEventListener('DOMContentLoaded', function() {
           // Trigger shuffle animation for the tooltip content
           triggerTooltipShuffle(tooltip);
 
-          // Start photo slideshow
+          // Preload all images first for smooth slideshow
           const slideshowImg = tooltip.querySelector('#star-photo-slideshow');
           let photoIndex = 0;
+          let loadedCount = 0;
+          const preloadImages = trackPhotos.map(src => {
+            const img = new Image();
+            img.src = src;
+            img.onload = () => { loadedCount++; };
+            return img;
+          });
+
+          // Start slideshow after brief delay to allow initial preload
           const slideshowInterval = setInterval(() => {
             photoIndex = (photoIndex + 1) % trackPhotos.length;
             slideshowImg.src = trackPhotos[photoIndex];

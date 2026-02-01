@@ -2669,15 +2669,9 @@ document.addEventListener('DOMContentLoaded', function() {
           trackTooltip.style.left = leftPos + 'px';
           trackTooltip.style.top = e.clientY + 'px';
 
-          // Play video using same pattern as working carousel videos
+          // Play video - exact same pattern as working carousel videos
           const video = trackTooltip.querySelector('.track-tooltip-video');
           if (video) {
-            // Set volume based on slider
-            const trackVolumeSlider = document.getElementById('trackVolumeSlider');
-            if (trackVolumeSlider) {
-              video.volume = trackVolumeSlider.value / 100;
-            }
-            // Play immediately like carousel videos do
             video.play().catch(e => console.log('Video play failed:', e));
           }
 

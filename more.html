@@ -724,11 +724,11 @@
     </div>
     <div class="stats-grid-container">
       <div class="stats-grid">
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="LONG JUMP">LONG JUMP</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="100">100</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LONG JUMP</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100m" data-shuffle-load="single">100</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single" style="font-size: 2rem; font-weight: 300;">✧</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="200">200</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="fullscreen" data-shuffle-load="single" data-video-type="TRIPLE JUMP">TRIPLE JUMP</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200m" data-shuffle-load="single">200</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TRIPLE JUMP</div>
       </div>
     </div>
     <nav class="track-field-gallery-nav" style="--max-p: 5; --max-z: 9;">
@@ -2035,48 +2035,48 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check if this is the star (special cross layout with accolades)
         if (eventType === '✧') {
           tooltip.innerHTML = `
-            <div style="position: relative; width: 450px; height: 280px;">
+            <div style="position: relative; width: 550px; height: 350px;">
               <!-- Center video -->
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 180px; height: 101px; background: #000; border-radius: 0; overflow: hidden; z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 240px; height: 135px; background: #000; border-radius: 0; overflow: hidden; z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
                 <video src="/assets/videos/track/longjump.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
               </div>
 
               <!-- Top arm - NCAA Regional Qualifier (Bold badge style) -->
-              <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); text-align: center; width: 80px;">
-                <div style="background: #4B9CD3; padding: 6px 4px; border-radius: 2px; margin-bottom: 2px;">
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">NCAA</span>
+              <div style="position: absolute; top: 12px; left: 50%; transform: translateX(-50%); text-align: center; width: 110px;">
+                <div style="background: #4B9CD3; padding: 10px 8px; border-radius: 2px; margin-bottom: 4px;">
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #000; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">NCAA</span>
                 </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.55rem; margin: 0; color: #999; font-weight: 500; font-family: var(--font--primary-family);">Regional Qualifier</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; margin: 0; color: #999; font-weight: 500; font-family: var(--font--primary-family);">Regional Qualifier</p>
               </div>
 
               <!-- Bottom arm - 3rd All-Time Yale (Ranking with underline style) -->
-              <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); text-align: center; width: 85px;">
-                <div style="display: flex; align-items: baseline; justify-content: center; gap: 4px; margin-bottom: 2px;">
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.4rem; font-weight: 300; font-family: var(--font--primary-family);">3rd</span>
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #666; font-size: 0.5rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font--primary-family);">All-Time</span>
+              <div style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); text-align: center; width: 110px;">
+                <div style="display: flex; align-items: baseline; justify-content: center; gap: 6px; margin-bottom: 4px;">
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #4B9CD3; font-size: 1.8rem; font-weight: 300; font-family: var(--font--primary-family);">3rd</span>
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #666; font-size: 0.65rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font--primary-family);">All-Time</span>
                 </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 0; color: #999; font-weight: 500; border-top: 1px solid #4B9CD3; padding-top: 2px; font-family: var(--font--primary-family);">Yale Long Jump</p>
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; margin: 0; color: #999; font-weight: 500; border-top: 1px solid #4B9CD3; padding-top: 4px; font-family: var(--font--primary-family);">Yale Long Jump</p>
               </div>
 
               <!-- Left arm - 3x Ivy Medalist (Stacked medal style) -->
-              <div style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); text-align: center; width: 70px;">
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
-                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #C9A961; font-size: 0.9rem; font-weight: 700; font-family: var(--font--primary-family);">3×</span>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 0; color: #999; font-weight: 500; line-height: 1.2; font-family: var(--font--primary-family);">Ivy League Medalist</p>
+              <div style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); text-align: center; width: 100px;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                  <span data-shuffle="text" data-shuffle-hover="single" style="color: #C9A961; font-size: 1.2rem; font-weight: 700; font-family: var(--font--primary-family);">3×</span>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.65rem; margin: 0; color: #999; font-weight: 500; line-height: 1.2; font-family: var(--font--primary-family);">Ivy League Medalist</p>
                 </div>
-                <div style="margin-top: 3px; padding-top: 3px; border-top: 1px solid #333;">
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.4rem; margin: 0; color: #666; font-family: var(--font--primary-family);">🥈 2024 Out</p>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.4rem; margin: 1px 0 0 0; color: #666; font-family: var(--font--primary-family);">🥉 2025 In</p>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.4rem; margin: 1px 0 0 0; color: #666; font-family: var(--font--primary-family);">4th 2024 In</p>
+                <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid #333;">
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 0; color: #666; font-family: var(--font--primary-family);">🥈 2024 Out</p>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 2px 0 0 0; color: #666; font-family: var(--font--primary-family);">🥉 2025 In</p>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 2px 0 0 0; color: #666; font-family: var(--font--primary-family);">4th 2024 In</p>
                 </div>
               </div>
 
               <!-- Right arm - Academic All-Ivy (Certificate style) -->
-              <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); text-align: center; width: 70px;">
-                <div style="border: 1px solid #4B9CD3; padding: 6px 4px; background: rgba(75, 156, 211, 0.1);">
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.45rem; margin: 0; color: #4B9CD3; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">2024</p>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 3px 0 0 0; color: #fff; font-weight: 600; font-family: var(--font--primary-family);">Academic</p>
-                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.5rem; margin: 2px 0 0 0; color: #fff; font-weight: 600; font-family: var(--font--primary-family);">All-Ivy</p>
+              <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); text-align: center; width: 100px;">
+                <div style="border: 1px solid #4B9CD3; padding: 10px 8px; background: rgba(75, 156, 211, 0.1);">
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.6rem; margin: 0; color: #4B9CD3; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font--primary-family);">2024</p>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; margin: 5px 0 0 0; color: #fff; font-weight: 600; font-family: var(--font--primary-family);">Academic</p>
+                  <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.7rem; margin: 3px 0 0 0; color: #fff; font-weight: 600; font-family: var(--font--primary-family);">All-Ivy</p>
                 </div>
               </div>
             </div>
@@ -2519,152 +2519,6 @@ document.addEventListener('DOMContentLoaded', function() {
       volumeSlider.dispatchEvent(new Event('input'));
     });
   }
-});
-</script>
-
-<!-- Fullscreen Video Overlay -->
-<div id="fullscreen-video-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.95); z-index: 10000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
-  <div id="fullscreen-video-container" style="position: relative; max-width: 90vw; max-height: 90vh; width: auto; height: auto;">
-    <video id="fullscreen-video" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: contain; border-radius: 0;"></video>
-    <button id="fullscreen-close" style="position: absolute; top: -40px; right: 0; background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 8px 12px; font-family: var(--font--primary-family); font-weight: 300; letter-spacing: 0.1em; transition: color 0.2s ease; text-transform: uppercase;">✕ CLOSE</button>
-    <div id="fullscreen-video-info" style="position: absolute; bottom: -60px; left: 0; right: 0; text-align: center; color: #999; font-family: var(--font--primary-family);">
-      <h2 id="fullscreen-title" style="font-size: 1rem; font-weight: 700; margin: 0 0 4px 0; color: #fff;"></h2>
-      <p id="fullscreen-mark" style="font-size: 0.875rem; margin: 0 0 2px 0;"><span style="color: #666;">PR</span> <span style="color: #999;"></span></p>
-      <p id="fullscreen-location" style="font-size: 0.7rem; margin: 0; color: #999;"></p>
-      <p id="fullscreen-meet" style="font-size: 0.7rem; margin: 0; color: #999;"></p>
-    </div>
-  </div>
-</div>
-
-<style>
-  #fullscreen-close:hover {
-    color: #4B9CD3;
-  }
-
-  #fullscreen-video-overlay.active {
-    opacity: 1;
-  }
-
-  @media (max-width: 768px) {
-    #fullscreen-video-container {
-      max-width: 95vw;
-      max-height: 70vh;
-    }
-
-    #fullscreen-close {
-      top: -35px;
-      font-size: 1.2rem;
-    }
-
-    #fullscreen-video-info {
-      bottom: -50px;
-    }
-  }
-</style>
-
-<script>
-// Fullscreen Video Player
-document.addEventListener('DOMContentLoaded', function() {
-  const overlay = document.getElementById('fullscreen-video-overlay');
-  const video = document.getElementById('fullscreen-video');
-  const closeBtn = document.getElementById('fullscreen-close');
-  const titleEl = document.getElementById('fullscreen-title');
-  const markEl = document.getElementById('fullscreen-mark');
-  const locationEl = document.getElementById('fullscreen-location');
-  const meetEl = document.getElementById('fullscreen-meet');
-
-  const statsVideos = {
-    '100': {
-      path: '/assets/videos/track/100m.mov',
-      mark: 'PR 10.74',
-      location: 'Wake Forest University',
-      meet: 'Wake Forest Invitational • April 2024'
-    },
-    '200': {
-      path: '/assets/videos/track/200m.mp4',
-      mark: 'PR 21.63',
-      location: 'Boston University',
-      meet: "Valentine's Day Invite • February 2024"
-    },
-    'LONG JUMP': {
-      path: '/assets/videos/track/longjump.mp4',
-      mark: "PR 25' 1\" / 7.66m",
-      location: 'Princeton University',
-      meet: 'Ivy Outdoor Championships • May 2024'
-    },
-    'TRIPLE JUMP': {
-      path: '/assets/videos/track/triplejump.mov',
-      mark: "PR 45' 6.5\"",
-      location: 'NJSIAA Non-Public Group Championships',
-      meet: 'June 2022'
-    }
-  };
-
-  function openFullscreen(videoType) {
-    const videoData = statsVideos[videoType];
-    if (!videoData) return;
-
-    video.src = videoData.path;
-    titleEl.textContent = videoType;
-
-    const markSpan = markEl.querySelector('span:last-child');
-    const prLabel = markEl.querySelector('span:first-child');
-
-    if (videoData.mark.includes('PR')) {
-      prLabel.style.display = 'inline';
-      markSpan.textContent = videoData.mark.replace('PR ', '');
-    } else {
-      prLabel.style.display = 'none';
-      markSpan.textContent = videoData.mark;
-    }
-
-    locationEl.textContent = videoData.location;
-    meetEl.textContent = videoData.meet;
-
-    overlay.style.display = 'flex';
-    // Trigger reflow
-    overlay.offsetHeight;
-    overlay.classList.add('active');
-
-    video.play().catch(err => console.log('Auto-play prevented:', err));
-  }
-
-  function closeFullscreen() {
-    overlay.classList.remove('active');
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      video.pause();
-      video.src = '';
-    }, 300);
-  }
-
-  // Add click handlers to stats grid boxes
-  const statsGridBoxes = document.querySelectorAll('.stats-grid-box[data-video-type]');
-  statsGridBoxes.forEach(box => {
-    box.style.cursor = 'pointer';
-    box.addEventListener('click', function(e) {
-      e.preventDefault();
-      const videoType = this.getAttribute('data-video-type');
-      openFullscreen(videoType);
-    });
-  });
-
-  // Close button
-  closeBtn.addEventListener('click', closeFullscreen);
-
-  // Close on escape key
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && overlay.classList.contains('active')) {
-      closeFullscreen();
-    }
-  });
-
-  // Close on click outside (but not on video or info)
-  overlay.addEventListener('click', function(e) {
-    if (e.target === overlay) {
-      closeFullscreen();
-    }
-  });
 });
 </script>
 

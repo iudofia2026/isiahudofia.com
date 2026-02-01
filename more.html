@@ -731,9 +731,9 @@
     <div class="stats-grid-container">
       <div class="stats-grid">
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single">LONG JUMP</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100m" data-shuffle-load="single">100</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100 meter dash" data-shuffle-load="single">100M DASH</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Long Jump" data-shuffle-load="single" style="font-size: 2rem; font-weight: 300;">✧</div>
-        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200m" data-shuffle-load="single">200</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200 meter dash" data-shuffle-load="single">200M DASH</div>
         <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="Triple Jump" data-shuffle-load="single">TRIPLE JUMP</div>
       </div>
     </div>
@@ -1990,7 +1990,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Stats grid video tooltip functionality
   const statsGridBoxes = document.querySelectorAll('.stats-grid-box');
   const statsVideos = {
-    '100': {
+    '100M DASH': {
       path: '/assets/videos/track/100m.mov',
       mark: 'PR 10.74',
       location: 'Wake Forest University',
@@ -1998,7 +1998,7 @@ document.addEventListener('DOMContentLoaded', function() {
       meet: 'Wake Forest Invitational',
       note: ''
     },
-    '200': {
+    '200M DASH': {
       path: '/assets/videos/track/200m.mp4',
       mark: 'PR 21.63',
       location: 'Boston University',
@@ -2036,6 +2036,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.innerWidth > 768) {
       box.addEventListener('mouseenter', function(e) {
         const eventType = this.textContent.trim();
+        const eventTitle = this.getAttribute('data-shuffle-hover') || eventType;
         const videoData = statsVideos[eventType];
 
         // Check if this is the star (special cross layout with accolades)
@@ -2061,11 +2062,9 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
 
               <!-- Top arm - NCAA Regional Qualifier with logo -->
-              <div style="position: absolute; top: 24px; left: 50%; transform: translateX(-50%); text-align: center; width: 220px;">
-                <div style="margin-bottom: 12px;">
-                  <img src="/assets/ncaa-logo.svg" alt="NCAA" style="width: 140px; height: auto; display: block; margin: 0 auto;" />
-                </div>
-                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.2rem; margin: 0; color: #999; font-weight: 500; font-family: var(--font--primary-family);">Regional Qualifier 2024</p>
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%;">
+                <img src="/assets/ncaa-logo.png" alt="NCAA" style="width: 180px; height: auto; display: block; margin: 0 auto 12px auto;" />
+                <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1.4rem; margin: 0; color: #999; font-weight: 600; font-family: var(--font--primary-family); line-height: 1.3; letter-spacing: 0.02em;">Regional Qualifier 2024</p>
               </div>
 
               <!-- Bottom arm - 3rd All-Time Yale (Ranking with underline style) -->
@@ -2122,7 +2121,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div style="position: absolute; bottom: 6px; right: 6px; width: 20px; height: 20px; border-bottom: 2px solid #8B7355; border-right: 2px solid #8B7355;"></div>
 
                   <!-- Ivy League Logo -->
-                  <img src="/assets/ivy-league-logo.png" alt="Ivy League" style="width: 60px; height: auto; display: block; margin: 0 auto 10px auto;" />
+                  <img src="/assets/ivy-league-logo.png" alt="Ivy League" style="width: 85px; height: auto; display: block; margin: 0 auto -2px auto;" />
 
                   <!-- Year -->
                   <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 1rem; margin: 0 0 10px 0; color: #2c1810; font-weight: 700; font-family: 'Georgia', 'Times New Roman', serif;">2024</p>
@@ -2170,7 +2169,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <video src="${videoData.path}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
               </div>
               <div style="display: flex; flex-direction: column; justify-content: center; min-width: 140px;">
-                <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1.5rem; font-weight: 700; margin: 0 0 8px 0; font-family: var(--font--primary-family);">${eventType}</h2>
+                <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1.5rem; font-weight: 700; margin: 0 0 8px 0; font-family: var(--font--primary-family);">${eventTitle}</h2>
                 <h3 style="font-size: 1.2rem; margin: 0 0 12px 0; font-family: var(--font--primary-family);"><span data-shuffle="text" data-shuffle-hover="single" style="color: #666;">${videoData.mark.includes('PR') ? 'PR' : ''}</span> <span data-shuffle="text" data-shuffle-hover="single" style="color: #999;">${videoData.mark.replace('PR ', '')}</span></h3>
                 <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.9rem; color: #999; margin: 0 0 4px 0; font-family: var(--font--primary-family);">${videoData.location}</p>
                 <p data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.9rem; color: #999; margin: 0 0 4px 0; font-family: var(--font--primary-family);">${videoData.date}</p>

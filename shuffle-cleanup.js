@@ -41,6 +41,9 @@
     window.Barba.hooks.enter(() => {
       // Small delay to ensure DOM is ready
       setTimeout(() => {
+        // Initialize original text for new page
+        initializeOriginalText();
+
         // Reset any incomplete shuffle animations
         document.querySelectorAll('[data-shuffle-load]').forEach(element => {
           const originalText = element.getAttribute('data-original-text');
@@ -52,18 +55,36 @@
     });
   }
 
+  // Initialize original text attributes for all shuffle elements
+  function initializeOriginalText() {
+    document.querySelectorAll('[data-shuffle-hover]').forEach(element => {
+      if (!element.getAttribute('data-original-text')) {
+        const hoverText = element.getAttribute('data-shuffle-hover');
+        if (hoverText) {
+          element.setAttribute('data-original-text', hoverText);
+        }
+      }
+    });
+  }
+
   // Clean up immediately in case any intervals are already stale
   // This runs on page load to clean up any leftover state
   setTimeout(() => {
+    // First, initialize original text attributes
+    initializeOriginalText();
     document.querySelectorAll('[data-shuffle-load]').forEach(element => {
       // If the text looks corrupted (contains random chars), reset it
       const text = element.textContent.trim();
-      const originalText = element.getAttribute('data-original-text');
+      const originalText = element.getAttribute('data-original-text') || element.getAttribute('data-shuffle-hover');
 
       // Check if text contains obvious shuffle artifacts
-      const hasShuffleArtifacts = /[^a-zA-Z0-9\s\&\@\.\,\-\(\)]/.test(text);
+      const hasShuffleArtifacts = /[^a-zA-Z0-9\s\&\@\.\,\-\(\)éü]/.test(text);
 
-      if (hasShuffleArtifacts && originalText) {
+      // Special case: if this is supposed to be "More" but isn't, fix it
+      const isMoreLink = element.getAttribute('data-shuffle-hover') === 'More';
+      const wrongMoreText = isMoreLink && text !== 'More' && text.length <= 6;
+
+      if ((hasShuffleArtifacts || wrongMoreText) && originalText) {
         console.log('Resetting corrupted text:', element.textContent, '->', originalText);
         element.textContent = originalText;
       }

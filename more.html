@@ -2465,9 +2465,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
+  // Add debounce and cleanup tracking
+  let currentVideo = null;
+  let hoverTimeout = null;
+
   statsGridBoxes.forEach(box => {
     if (window.innerWidth > 768) {
       box.addEventListener('mouseenter', function(e) {
+        // Clear any pending hide timeout
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = null;
+        }
+
+        // Stop and cleanup any currently playing video
+        if (currentVideo && currentVideo.isConnected) {
+          currentVideo.pause();
+          currentVideo.currentTime = 0;
+        }
+        currentVideo = null;
         const eventType = this.textContent.trim();
         const eventTitle = this.getAttribute('data-shuffle-hover') || eventType;
         const videoData = statsVideos[eventType];
@@ -2668,20 +2684,40 @@ document.addEventListener('DOMContentLoaded', function() {
             trackTooltip.style.left = e.clientX + 'px';
             trackTooltip.style.top = e.clientY + 'px';
 
-            // Play video like carousel does
-            videoClone.play().catch(e => console.log('Video play failed:', e));
+            // Track this video for cleanup
+            currentVideo = videoClone;
+
+            // Use requestAnimationFrame to ensure DOM stability before playing video
+            requestAnimationFrame(() => {
+              // Double check the video is still connected to DOM and is still current
+              if (videoClone.isConnected && currentVideo === videoClone) {
+                videoClone.play().catch(e => console.log('Video play failed:', e));
+              } else {
+                console.log('Video element was disconnected or replaced before playback');
+              }
+            });
           }
         }
       });
 
       box.addEventListener('mouseleave', function() {
-        // Clear slideshow interval if exists
-        if (trackTooltip.dataset.slideshowInterval) {
-          clearInterval(parseInt(trackTooltip.dataset.slideshowInterval));
-          delete trackTooltip.dataset.slideshowInterval;
-        }
-        cleanupTooltipShuffle(trackTooltip);
-        trackTooltip.style.display = 'none';
+        // Use timeout to debounce rapid hover events
+        hoverTimeout = setTimeout(() => {
+          // Stop current video cleanly
+          if (currentVideo && currentVideo.isConnected) {
+            currentVideo.pause();
+            currentVideo.currentTime = 0;
+          }
+          currentVideo = null;
+
+          // Clear slideshow interval if exists
+          if (trackTooltip.dataset.slideshowInterval) {
+            clearInterval(parseInt(trackTooltip.dataset.slideshowInterval));
+            delete trackTooltip.dataset.slideshowInterval;
+          }
+          cleanupTooltipShuffle(trackTooltip);
+          trackTooltip.style.display = 'none';
+        }, 100); // 100ms debounce delay
       });
 
       box.addEventListener('mousemove', function(e) {
@@ -2733,6 +2769,13 @@ document.addEventListener('DOMContentLoaded', function() {
           const eventType = box.textContent.trim();
           const videoData = statsVideos[eventType];
 
+          // Cleanup any existing video
+          if (mobileContent.currentVideo && mobileContent.currentVideo.isConnected) {
+            mobileContent.currentVideo.pause();
+            mobileContent.currentVideo.currentTime = 0;
+          }
+          mobileContent.currentVideo = null;
+
           // Animate out current content
           mobileContent.classList.add('is-animating');
 
@@ -2753,18 +2796,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function generateMobileVideoContent(container, eventType, videoData) {
-          container.innerHTML = `
-            <video class="stats-mobile-video" autoplay loop muted playsinline>
-              <source src="${videoData.path}" type="video/mp4">
-            </video>
-            <div class="stats-mobile-info">
-              <h3 class="stats-mobile-title">${eventType}</h3>
-              <p class="stats-mobile-mark">${videoData.mark}</p>
-              <p class="stats-mobile-details">${videoData.date} • ${videoData.location}</p>
-              <p class="stats-mobile-details">${videoData.meet}</p>
-              ${videoData.note ? `<p class="stats-mobile-note">${videoData.note}</p>` : ''}
-            </div>
-          `;
+          // Use the same video cloning approach as desktop
+          if (videoMapping[eventType]) {
+            const sourceVideo = document.getElementById(videoMapping[eventType]);
+            if (sourceVideo) {
+              const videoClone = sourceVideo.cloneNode(true);
+              videoClone.className = 'stats-mobile-video';
+
+              container.innerHTML = `
+                <div id="mobile-video-container"></div>
+                <div class="stats-mobile-info">
+                  <h3 class="stats-mobile-title">${eventType}</h3>
+                  <p class="stats-mobile-mark">${videoData.mark}</p>
+                  <p class="stats-mobile-details">${videoData.date} • ${videoData.location}</p>
+                  <p class="stats-mobile-details">${videoData.meet}</p>
+                  ${videoData.note ? `<p class="stats-mobile-note">${videoData.note}</p>` : ''}
+                </div>
+              `;
+
+              // Insert cloned video and play with DOM stability check
+              const mobileContainer = container.querySelector('#mobile-video-container');
+              mobileContainer.appendChild(videoClone);
+
+              // Store reference for cleanup (mobile doesn't need the same debounce as desktop hover)
+              container.currentVideo = videoClone;
+
+              requestAnimationFrame(() => {
+                if (videoClone.isConnected) {
+                  videoClone.play().catch(e => console.log('Mobile video play failed:', e));
+                }
+              });
+            }
+          }
         }
 
         function generateMobileStarContent(container) {
@@ -2814,17 +2877,14 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #CD7F32, #B87333); color: #000;">3</div>
                     <div class="podium-base" style="height: 20px; background: rgba(205, 127, 50, 0.2);"></div>
-                    <span class="podium-label">LJ</span>
                   </div>
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #C0C0C0, #A8A8A8); color: #000;">2</div>
                     <div class="podium-base" style="height: 28px; background: rgba(192, 192, 192, 0.2);"></div>
-                    <span class="podium-label">LJ</span>
                   </div>
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #4B9CD3, #3a8ab8); color: #000;">4</div>
                     <div class="podium-base" style="height: 18px; background: rgba(75, 156, 211, 0.2);"></div>
-                    <span class="podium-label">LJ</span>
                   </div>
                   <div class="podium-place">
                     <div class="podium-icon" style="background: linear-gradient(135deg, #4B9CD3, #3a8ab8); color: #000;">4</div>

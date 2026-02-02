@@ -2461,7 +2461,7 @@ button:focus-visible,
     }
   }
 </style>
-</div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
+</div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div></div></div></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
 <script>
 // Favicon preservation during page transitions
 (function() {
@@ -4069,6 +4069,18 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   ];
 
+  // Shuffle video data array for random order
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Randomize video order
+  shuffleArray(videoData);
+
   // ===========================================
   // END CONFIGURATION - No need to edit below
   // ===========================================
@@ -4280,98 +4292,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-
-  // Touch support for mobile carousel scrolling
-  let touchStartX = 0;
-  let currentTranslateX = 0;
-  let isDragging = false;
-  let touchStartTime = 0;
-
-  continuousCarousel.addEventListener('touchstart', (e) => {
-    // Only allow drag if not currently frozen by tap and on mobile
-    if (window.innerWidth <= 768 && !continuousTrack.classList.contains('tap-frozen')) {
-      touchStartX = e.touches[0].clientX;
-      touchStartTime = Date.now();
-
-      // Get current transform value
-      const currentTransform = window.getComputedStyle(continuousTrack).transform;
-      if (currentTransform !== 'none') {
-        const matrix = currentTransform.match(/matrix.*\((.+)\)/);
-        if (matrix) {
-          currentTranslateX = parseFloat(matrix[1].split(', ')[4]) || 0;
-        } else {
-          currentTranslateX = 0;
-        }
-      } else {
-        currentTranslateX = 0;
-      }
-
-      continuousTrack.style.animationPlayState = 'paused';
-      isDragging = true;
-    }
-  }, { passive: true });
-
-  continuousCarousel.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-
-    const touchX = e.touches[0].clientX;
-    const diff = touchX - touchStartX;
-
-    // Apply the drag offset to current position for manual scrolling
-    const newTranslateX = currentTranslateX + diff;
-    continuousTrack.style.transform = `translateX(${newTranslateX}px)`;
-  }, { passive: true });
-
-  continuousCarousel.addEventListener('touchend', (e) => {
-    if (!isDragging) return;
-
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchEndX - touchStartX;
-    const timeDiff = Date.now() - touchStartTime;
-    const threshold = 10; // Lower threshold for easier dragging
-    const velocity = Math.abs(diff) / timeDiff; // pixels per ms
-
-    // Check if it was a significant drag or just a tap
-    if (Math.abs(diff) > threshold || velocity > 0.5) {
-      // It was a drag - continue animation from new position
-      const finalTranslateX = currentTranslateX + diff;
-      continuousTrack.style.transition = 'none';
-      continuousTrack.style.transform = `translateX(${finalTranslateX}px)`;
-
-      // Calculate new animation starting position
-      const carouselWidth = continuousCarousel.offsetWidth;
-      const trackWidth = continuousTrack.scrollWidth;
-
-      // Create seamless infinite scroll from new position
-      setTimeout(() => {
-        continuousTrack.style.animation = 'none';
-
-        // Reset position if we've scrolled too far
-        if (finalTranslateX < -trackWidth / 2) {
-          continuousTrack.style.transform = `translateX(${finalTranslateX + trackWidth / 2}px)`;
-        } else if (finalTranslateX > 0) {
-          continuousTrack.style.transform = `translateX(${finalTranslateX - trackWidth / 2}px)`;
-        }
-
-        // Resume animation after a brief pause
-        setTimeout(() => {
-          continuousTrack.style.animation = `scroll ${120 / videoData.length}s linear infinite`;
-          continuousTrack.style.animationPlayState = 'running';
-        }, 100);
-      }, 50);
-    } else {
-      // It was a tap, reset to original position and let click handler deal with it
-      continuousTrack.style.transform = 'translateX(-50%)';
-
-      // Only resume if not frozen by tap
-      if (!continuousTrack.classList.contains('tap-frozen')) {
-        continuousTrack.style.animationPlayState = 'running';
-      }
-    }
-
-    // Reset drag state
-    isDragging = false;
-  }, { passive: true });
 
   // Click/tap handler for video items
   videoItems.forEach(item => {

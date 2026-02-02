@@ -2332,26 +2332,34 @@ button:focus-visible,
       margin-left: 0 !important;
     }
 
-    /* Align video editing title to right on mobile */
+    /* Align video editing title to left on mobile with inline brackets */
     .gallery.video-gallery .gallery-title-wrap {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: flex-end !important;
+      display: block !important;
+      align-items: flex-start !important;
     }
 
     .gallery.video-gallery .gallery-title-wrap .nav_link {
-      text-align: right !important;
-      display: block !important;
-      width: 100% !important;
+      text-align: left !important;
+      display: inline-flex !important;
+      width: auto !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+    }
+
+    .gallery.video-gallery .gallery-title-wrap .nav_link .link_bracket_wrap {
+      display: inline-block !important;
     }
 
     .gallery.video-gallery .gallery-title-wrap .nav_link .info_title_text {
-      text-align: right !important;
+      text-align: left !important;
+      display: inline-block !important;
+      width: auto !important;
     }
 
     .gallery.video-gallery .gallery-title-wrap .gallery-subtitle {
       text-align: left !important;
-      margin-left: 0.8rem !important;
+      margin-left: 0 !important;
+      margin-top: 0.5rem !important;
     }
 
     /* Hide figcaption elements from both galleries on mobile */

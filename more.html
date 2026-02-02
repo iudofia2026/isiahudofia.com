@@ -2461,7 +2461,7 @@ button:focus-visible,
     }
   }
 </style>
-</div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"><div class="info_wrap u-container u-vflex-stretch-between"><div class="info_main u-grid-tablet"><div class="bg_grid_wrap is-desktop"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><div class="bg_grid_wrap is-mobile"><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div><div class="bg_column"></div></div><!-- YOUR CONTENT GOES HERE --></div></div></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
+</div></div><main data-barba-namespace="more" data-barba="container" class="barba-container page_main"></main><script src="./Info – Isiah Udofia_files/webflow.schunk.ff560088e0bd9e74.js" type="text/javascript"></script><script src="./Info – Isiah Udofia_files/webflow.751e0867.6551f58fa950fc60.js" type="text/javascript"></script>
 <script>
 // Favicon preservation during page transitions
 (function() {
@@ -2957,11 +2957,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Create fresh video element with the source path
             const videoElement = document.createElement('video');
-            videoElement.muted = true;
+
+            // Get current mute state from track controls
+            const trackMuteToggle = document.getElementById('trackMuteToggle');
+            const trackVolumeSlider = document.getElementById('trackVolumeSlider');
+            let isTrackMuted = true;
+            let trackVolume = 0;
+
+            if (trackMuteToggle && trackVolumeSlider) {
+              const buttonText = trackMuteToggle.querySelector('.nav_btn_text');
+              isTrackMuted = buttonText?.textContent?.trim() === 'unmute';
+              trackVolume = isTrackMuted ? 0 : trackVolumeSlider.value / 100;
+            }
+
+            videoElement.muted = isTrackMuted;
+            videoElement.volume = trackVolume;
             videoElement.loop = true;
             videoElement.playsInline = true;
             videoElement.preload = 'auto';
             videoElement.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+            videoElement.className = 'track-tooltip-video'; // Add class for volume control targeting
 
             // Set the source directly on the video element (more reliable than source child)
             videoElement.src = videoData.path;
@@ -4286,22 +4301,60 @@ document.addEventListener('DOMContentLoaded', function() {
     touchScrollX = 0;
   }, { passive: true });
 
-  // Click handler for video items (optional - expand to full video)
+  // Click/tap handler for video items
   videoItems.forEach(item => {
-    item.addEventListener('click', function() {
+    item.addEventListener('click', function(e) {
       const videoUrl = this.dataset.video;
       const title = this.dataset.title;
-
-      // You can implement a modal or navigate to video page here
-      console.log('Playing video:', title, videoUrl);
-
-      // For now, just toggle play/pause on click
       const video = this.querySelector('video');
-      if (video.paused) {
-        video.muted = false; // Unmute on click
-        video.play();
+
+      // Check if this is mobile
+      const isMobile = window.innerWidth <= 768;
+
+      if (isMobile) {
+        // Mobile behavior: freeze carousel and unmute video
+        const isFrozen = continuousTrack.classList.contains('tap-frozen');
+
+        if (!isFrozen) {
+          // First tap: freeze carousel and unmute video
+          continuousTrack.classList.add('tap-frozen');
+          continuousTrack.style.animationPlayState = 'paused';
+
+          // Unmute and play video
+          video.muted = false;
+          video.play().catch(err => console.log('Video play failed:', err));
+
+          // Pause all other videos in carousel
+          videoItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              const otherVideo = otherItem.querySelector('video');
+              if (otherVideo && !otherVideo.paused) {
+                otherVideo.pause();
+                otherVideo.currentTime = 0;
+              }
+            }
+          });
+        } else {
+          // Second tap: unfreeze carousel and mute video
+          continuousTrack.classList.remove('tap-frozen');
+          continuousTrack.style.animationPlayState = 'running';
+
+          // Mute and pause video
+          video.muted = true;
+          video.pause();
+          video.currentTime = 0;
+        }
       } else {
-        video.pause();
+        // Desktop behavior: expand to full video or navigate
+        console.log('Playing video:', title, videoUrl);
+
+        // For now, just toggle play/pause on click
+        if (video.paused) {
+          video.muted = false; // Unmute on click
+          video.play();
+        } else {
+          video.pause();
+        }
       }
     });
   });

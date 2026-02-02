@@ -854,6 +854,18 @@ button:focus-visible,
     /* Remove top padding from video editing gallery title on desktop */
     .gallery.video-gallery .gallery-title-wrap {
       padding-top: 0 !important;
+      text-align: right !important;
+    }
+
+    /* Right align video editing title on desktop */
+    .gallery.video-gallery .gallery-title-wrap .nav_link {
+      text-align: right !important;
+      display: inline-flex !important;
+      justify-content: flex-end !important;
+    }
+
+    .gallery.video-gallery .gallery-title-wrap .nav_link .info_title_text {
+      text-align: right !important;
     }
   }
 
@@ -872,7 +884,17 @@ button:focus-visible,
     padding-bottom: 1rem;
     font-family: inherit;
     line-height: 1.4;
+  }
+
+  /* Video gallery subtitle: right aligned with slight indentation */
+  .gallery.video-gallery .gallery-subtitle {
     text-align: right;
+    margin-right: 1rem;
+  }
+
+  /* Photography gallery subtitle: left aligned */
+  .gallery.photography-gallery .gallery-subtitle {
+    text-align: left;
   }
 
   /* Gallery subtitle wrapper for mute toggle */
@@ -2169,18 +2191,19 @@ button:focus-visible,
       margin-left: 0 !important;
     }
 
-    /* Align video editing title to left on mobile with inline brackets */
+    /* Align video editing title to right on mobile with inline brackets */
     .gallery.video-gallery .gallery-title-wrap {
       display: block !important;
-      align-items: flex-start !important;
+      align-items: flex-end !important;
+      text-align: right !important;
     }
 
     .gallery.video-gallery .gallery-title-wrap .nav_link {
-      text-align: left !important;
+      text-align: right !important;
       display: inline-flex !important;
       width: auto !important;
       align-items: center !important;
-      justify-content: flex-start !important;
+      justify-content: flex-end !important;
     }
 
     .gallery.video-gallery .gallery-title-wrap .nav_link .link_bracket_wrap {
@@ -2188,7 +2211,7 @@ button:focus-visible,
     }
 
     .gallery.video-gallery .gallery-title-wrap .nav_link .info_title_text {
-      text-align: left !important;
+      text-align: right !important;
       display: inline-block !important;
       width: auto !important;
     }
@@ -2196,6 +2219,7 @@ button:focus-visible,
     .gallery.video-gallery .gallery-title-wrap .gallery-subtitle {
       text-align: right !important;
       margin-left: 0 !important;
+      margin-right: 1rem !important;
       margin-top: 0.5rem !important;
     }
 

@@ -103,7 +103,7 @@
         </div>
       </a>
       <div class="gallery-subtitle-wrap">
-        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">sprints, jumps and relays</p>
+        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">a few highlights from my time representing yale university & montclair kimberley academy</p>
         <div class="volume-controls-wrapper">
           <input type="range" id="trackVolumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Track Volume" tabindex="0">
           <button id="trackMuteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle track mute">
@@ -578,26 +578,12 @@
         <div class="link_bracket_wrap is-left">
           <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
         </div>
-        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display">VIDEO EDITING</p>
+        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display">video editing</p>
         <div class="link_bracket_wrap is-right">
           <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
         </div>
       </a>
-      <div class="gallery-subtitle-wrap">
-        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle" style="opacity: 1;">I edit for fun and as a freelancer: here's a collection of my videos</p>
-        <div class="volume-controls-wrapper">
-          <input type="range" id="carouselVolumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Carousel Volume" tabindex="0">
-          <button id="carouselMuteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle carousel mute">
-            <div class="link_bracket_wrap is-left">
-              <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
-            </div>
-            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main" style="opacity: 1; display: inline-block; min-width: 42px; text-align: center !important;">unmute</p>
-            <div class="link_bracket_wrap is-right">
-              <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
-            </div>
-          </button>
-        </div>
-      </div>
+      <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle">I edit for fun and as a freelancer: here's a collection of my videos</p>
     </div>
     <div class="gallery-carousel">
       <div class="carousel-arrow carousel-arrow-left">
@@ -1518,14 +1504,14 @@ button:focus-visible,
     }
   }
 
-  /* Carousel Styles */
+  /* Carousel Styles - Photography gallery (default horizontal carousel) */
   .gallery-carousel {
     position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     overflow: hidden;
-    padding: 0 30px; /* Space for arrows */
+    padding: 0 30px;
   }
 
   .carousel-arrow {
@@ -1576,8 +1562,13 @@ button:focus-visible,
     gap: 1rem;
   }
 
+  /* Photography carousel item sizing */
+  .gallery.photography-gallery .carousel-item {
+    flex: 0 0 calc(20% - 0.8rem); /* Show 5 items at a time */
+    min-width: 0;
+  }
+
   .carousel-item {
-    flex: 0 0 calc(20% - 0.8rem); /* Show 5 items at a time (100% / 5 = 20%) */
     min-width: 0;
   }
 
@@ -1594,9 +1585,46 @@ button:focus-visible,
     height: 350px;
   }
 
+  /* Video gallery grid layout on desktop - OVERRIDE above styles */
+  .gallery.video-gallery .gallery-carousel {
+    overflow: visible;
+    padding: 0;
+  }
+
+  .gallery.video-gallery .carousel-track {
+    overflow: visible;
+  }
+
+  .gallery.video-gallery .carousel-items {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    transition: none;
+  }
+
+  .gallery.video-gallery .carousel-item {
+    flex: none; /* Override flex for grid */
+  }
+
+  /* Hide video gallery arrows on desktop */
+  .gallery.video-gallery .carousel-arrow {
+    display: none;
+  }
+
+  /* Photography gallery keeps arrows */
+  .gallery.photography-gallery .carousel-arrow {
+    display: flex;
+  }
+
   @media screen and (max-width: 1024px) {
-    .carousel-item {
-      flex: 0 0 calc(33.333% - 0.67rem); /* Show 3 items on tablet */
+    /* Video gallery becomes 3-column grid on tablet */
+    .gallery.video-gallery .carousel-items {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Photography gallery - keep horizontal carousel */
+    .gallery.photography-gallery .carousel-item {
+      flex: 0 0 calc(33.333% - 0.67rem);
     }
 
     .gallery-carousel {
@@ -1610,10 +1638,30 @@ button:focus-visible,
   }
 
   @media screen and (max-width: 768px) {
-    .carousel-item {
-      flex: 0 0 calc(33.333% - 0.67rem); /* Show 3 items on mobile but center one */
+    /* Video gallery becomes horizontal carousel on mobile */
+    .gallery.video-gallery .carousel-items {
+      display: flex;
+      grid-template-columns: none;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .gallery.video-gallery .carousel-track {
+      overflow: hidden;
+    }
+
+    .gallery.video-gallery .carousel-arrow {
+      display: flex;
+    }
+
+    .gallery.video-gallery .carousel-item {
+      flex: 0 0 calc(33.333% - 0.67rem);
+    }
+
+    /* Photography gallery - keep horizontal carousel */
+    .gallery.photography-gallery .carousel-item {
+      flex: 0 0 calc(33.333% - 0.67rem);
       transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
-      margin-bottom: 1rem; /* Add bottom spacing for captions */
+      margin-bottom: 1rem;
     }
 
     .carousel-item.focused {
@@ -2316,9 +2364,13 @@ button:focus-visible,
     .video-descriptions-mobile {
       display: block !important;
       margin: 0 !important;
-      padding: 1rem 0 !important;
+      padding: 0 !important;
       background: transparent !important;
       border-radius: 0 !important;
+      text-align: center !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
     }
 
     .video-descriptions-mobile .video-description-item {
@@ -2344,6 +2396,20 @@ button:focus-visible,
       font-size: 0.9rem;
       color: #4B9CD3;
       margin: 0;
+    }
+
+    /* Make video containers square on mobile for better display */
+    .gallery.video-gallery .img-container {
+      aspect-ratio: 1 / 1 !important;
+      height: auto !important;
+      min-height: 300px !important;
+    }
+
+    .gallery.video-gallery .carousel-video,
+    .gallery.video-gallery .video-thumbnail {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
     }
   }
 </style>
@@ -2836,52 +2902,61 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           `;
 
-          // Use pre-created video element instead of creating dynamically
-          // NOTE: Must query videoContainer AFTER setting innerHTML (line 2773)
+          // Create fresh video element from source path (more reliable than cloning)
           const videoContainer = trackTooltip.querySelector('#track-video-container');
-          if (videoContainer && preCreatedVideo) {
-            console.log('Track tooltip - found pre-created video:', videoData.videoId);
-            // Clone the pre-created video element (this works in production)
-            const videoClone = preCreatedVideo.cloneNode(true);
-            videoClone.muted = true;
-            videoClone.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-            videoContainer.appendChild(videoClone);
-            console.log('Track tooltip - cloned and appended video:', videoData.videoId);
+          if (videoContainer && videoData.path) {
+            console.log('Track tooltip - creating video for:', videoData.videoId, 'path:', videoData.path);
 
-            // Play the cloned video - wait for loadeddata first (especially for larger videos)
-            videoClone.addEventListener('loadeddata', function onLoadedData() {
-              console.log('Track tooltip - loadeddata fired for:', videoData.videoId, 'readyState:', videoClone.readyState);
-              videoClone.play().then(() => {
+            // Create fresh video element with the source path
+            const videoElement = document.createElement('video');
+            videoElement.muted = true;
+            videoElement.loop = true;
+            videoElement.playsInline = true;
+            videoElement.preload = 'auto';
+            videoElement.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+
+            // Set the source directly on the video element (more reliable than source child)
+            videoElement.src = videoData.path;
+
+            videoContainer.appendChild(videoElement);
+            console.log('Track tooltip - video element created and appended:', videoData.videoId);
+
+            // Try multiple events for better compatibility
+            let hasPlayed = false;
+
+            const attemptPlay = () => {
+              if (hasPlayed) return;
+              hasPlayed = true;
+
+              console.log('Track tooltip - attempting play for:', videoData.videoId, 'readyState:', videoElement.readyState, 'networkState:', videoElement.networkState);
+              videoElement.play().then(() => {
                 console.log('Track tooltip - video playing successfully:', videoData.videoId);
               }).catch(err => {
-                if (err.name === 'AbortError') {
-                  console.log('Track tooltip - AbortError for', videoData.videoId, ', retrying...');
-                  pendingVideoRetry = setTimeout(() => {
-                    if (videoClone.isConnected) {
-                      videoClone.play();
-                    }
-                  }, 200);
-                } else {
-                  console.log('Track tooltip - video play failed for', videoData.videoId, ':', err.name, err.message);
+                console.log('Track tooltip - play failed for', videoData.videoId, ':', err.name, err.message);
+                if (err.name === 'NotSupportedError') {
+                  console.log('Track tooltip - video format not supported:', videoData.videoId, 'src:', videoData.path);
                 }
               });
-              videoClone.removeEventListener('loadeddata', onLoadedData);
-            }, { once: true });
+            };
 
-            // Fallback: try playing after delay if loadeddata doesn't fire
+            // Try canplay event first (fires when enough data is available)
+            videoElement.addEventListener('canplay', attemptPlay, { once: true });
+
+            // Fallback to loadeddata
+            videoElement.addEventListener('loadeddata', attemptPlay, { once: true });
+
+            // Final fallback after delay (in case events don't fire)
             setTimeout(() => {
-              if (videoClone.readyState >= 1 && videoClone.paused) {
-                console.log('Track tooltip - fallback play for:', videoData.videoId);
-                videoClone.play().then(() => {
-                  console.log('Track tooltip - video playing successfully (fallback):', videoData.videoId);
-                }).catch(err => {
-                  console.log('Track tooltip - fallback play failed for', videoData.videoId, ':', err.name);
-                });
+              if (!hasPlayed && videoElement.readyState >= 1) {
+                console.log('Track tooltip - fallback timeout play for:', videoData.videoId, 'readyState:', videoElement.readyState);
+                attemptPlay();
+              } else if (!hasPlayed) {
+                console.log('Track tooltip - fallback timeout but video not ready:', videoData.videoId, 'readyState:', videoElement.readyState, 'networkState:', videoElement.networkState, 'error:', videoElement.error?.message);
               }
-            }, 500);
+            }, 1000);
           } else {
-            if (!preCreatedVideo) {
-              console.log('Track tooltip - pre-created video NOT found:', videoData.videoId);
+            if (!videoData.path) {
+              console.log('Track tooltip - video path not found for:', videoData.videoId);
             }
             if (!videoContainer) {
               console.log('Track tooltip - videoContainer not found');

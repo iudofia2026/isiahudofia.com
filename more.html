@@ -148,6 +148,50 @@
   </div>
 </section>
 
+<section class="gallery video-gallery">
+  <div class="container">
+    <div class="gallery-title-wrap">
+      <a href="#" class="nav_link" data-shuffle="button">
+        <div class="link_bracket_wrap is-left">
+          <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+        </div>
+        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display">video editing</p>
+        <div class="link_bracket_wrap is-right">
+          <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+        </div>
+      </a>
+      <div class="gallery-subtitle-wrap">
+        <div class="volume-controls-wrapper">
+          <button id="videoCarouselMuteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle video carousel mute">
+            <div class="link_bracket_wrap is-left">
+              <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+            </div>
+            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main">unmute</p>
+            <div class="link_bracket_wrap is-right">
+              <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+            </div>
+          </button>
+          <input type="range" id="videoCarouselVolumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Video Carousel Volume" tabindex="0">
+        </div>
+        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle">I edit for fun and as a freelancer: here's a collection of my videos</p>
+      </div>
+    </div>
+
+    <!-- Continuous Scroll Video Carousel -->
+    <div class="continuous-video-carousel" id="continuousVideoCarousel">
+      <div class="continuous-carousel-track" id="continuousTrack">
+        <!-- Video items will be dynamically inserted here -->
+      </div>
+    </div>
+    <div class="video-descriptions-mobile" id="videoDescriptionsMobile">
+      <!-- Video descriptions will be dynamically inserted here on mobile -->
+    </div>
+    <div class="freelance-disclaimer">
+      <p class="disclaimer-text">※ = Freelance client</p>
+    </div>
+  </div>
+</section>
+
 <section class="gallery photography-gallery">
   <div class="container">
     <div class="gallery-title-wrap">
@@ -567,50 +611,6 @@
           <path fill-rule="evenodd" clip-rule="evenodd" d="M9.86001 0.0668945L9.76698 7.41621L8.76706 7.40356L8.83804 1.79597L0.707107 9.9269L0 9.21979L8.13093 1.08886L2.52334 1.15984L2.51069 0.159924L9.86001 0.0668945Z" fill="currentColor"></path>
         </svg>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="gallery video-gallery">
-  <div class="container">
-    <div class="gallery-title-wrap">
-      <a href="#" class="nav_link" data-shuffle="button">
-        <div class="link_bracket_wrap is-left">
-          <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
-        </div>
-        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display">video editing</p>
-        <div class="link_bracket_wrap is-right">
-          <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
-        </div>
-      </a>
-      <div class="gallery-subtitle-wrap">
-        <div class="volume-controls-wrapper">
-          <button id="videoCarouselMuteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle video carousel mute">
-            <div class="link_bracket_wrap is-left">
-              <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
-            </div>
-            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main">unmute</p>
-            <div class="link_bracket_wrap is-right">
-              <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
-            </div>
-          </button>
-          <input type="range" id="videoCarouselVolumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Video Carousel Volume" tabindex="0">
-        </div>
-        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle">I edit for fun and as a freelancer: here's a collection of my videos</p>
-      </div>
-    </div>
-
-    <!-- Continuous Scroll Video Carousel -->
-    <div class="continuous-video-carousel" id="continuousVideoCarousel">
-      <div class="continuous-carousel-track" id="continuousTrack">
-        <!-- Video items will be dynamically inserted here -->
-      </div>
-    </div>
-    <div class="video-descriptions-mobile" id="videoDescriptionsMobile">
-      <!-- Video descriptions will be dynamically inserted here on mobile -->
-    </div>
-    <div class="freelance-disclaimer">
-      <p class="disclaimer-text">※ = Freelance client</p>
     </div>
   </div>
 </section>
@@ -1299,6 +1299,11 @@ button:focus-visible,
       margin-top: 0;
     }
 
+    /* Video gallery: add top padding and reduce bottom padding by half */
+    .gallery.video-gallery {
+      padding: 2.5rem 0 1.25rem 0;
+    }
+
     .gallery .container {
       padding: 0.5rem 2rem 0 2rem;
     }
@@ -1331,7 +1336,7 @@ button:focus-visible,
 
     /* Remove bottom padding from photography gallery on mobile */
     .gallery.photography-gallery {
-      padding: 1.5rem 0 0 0 !important;
+      padding: 0 0 0 0 !important;
     }
 
     .gallery {
@@ -2263,6 +2268,21 @@ button:focus-visible,
   @media (max-width: 768px) {
     .gallery.track-field-gallery {
       display: none !important;
+    }
+
+    /* Mobile: Remove top padding from photography gallery title wrap */
+    .gallery.photography-gallery .gallery-title-wrap {
+      padding-top: 0 !important;
+    }
+
+    /* Mobile: Add more top padding to video gallery title wrap */
+    .gallery.video-gallery .gallery-title-wrap {
+      padding-top: 3.5rem !important;
+    }
+
+    /* Mobile: Remove bottom padding from video gallery section */
+    .gallery.video-gallery {
+      padding-bottom: 0 !important;
     }
 
     /* Reset all gallery styling to match desktop on mobile */

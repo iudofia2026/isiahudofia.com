@@ -584,8 +584,26 @@
         </div>
       </a>
       <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle">I edit for fun and as a freelancer: here's a collection of my videos</p>
+      <div class="volume-controls-wrapper">
+        <input type="range" id="videoCarouselVolumeSlider" class="volume-slider" min="0" max="100" value="100" aria-label="Video Carousel Volume" tabindex="0">
+        <button id="videoCarouselMuteToggle" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle video carousel mute">
+          <div class="link_bracket_wrap is-left">
+            <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+          </div>
+          <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main">unmute</p>
+          <div class="link_bracket_wrap is-right">
+            <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+          </div>
+        </button>
+      </div>
     </div>
-    <!-- Desktop video gallery carousel removed - will be replaced with new concept -->
+
+    <!-- Continuous Scroll Video Carousel -->
+    <div class="continuous-video-carousel" id="continuousVideoCarousel">
+      <div class="continuous-carousel-track" id="continuousTrack">
+        <!-- Video items will be dynamically inserted here -->
+      </div>
+    </div>
     <div class="video-descriptions-mobile" id="videoDescriptionsMobile">
       <!-- Video descriptions will be dynamically inserted here on mobile -->
     </div>
@@ -1608,6 +1626,176 @@ button:focus-visible,
   /* Hide mobile video descriptions on desktop */
   .video-descriptions-mobile {
     display: none;
+  }
+
+  /* Continuous Scroll Video Carousel Styles */
+  .continuous-video-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem 0;
+    background: transparent;
+  }
+
+  .continuous-carousel-track {
+    display: flex;
+    gap: 1rem;
+    width: fit-content;
+    animation: scroll-left 40s linear infinite;
+    will-change: transform;
+    align-items: center;
+  }
+
+  .continuous-carousel-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .continuous-video-item {
+    position: relative;
+    flex-shrink: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background: #000;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Default landscape (16:9) */
+  .continuous-video-item.aspect-landscape {
+    width: 320px;
+    height: 180px;
+  }
+
+  /* Vertical (9:16) */
+  .continuous-video-item.aspect-vertical {
+    width: 135px;
+    height: 240px;
+  }
+
+  /* Square (1:1) */
+  .continuous-video-item.aspect-square {
+    width: 180px;
+    height: 180px;
+  }
+
+  .continuous-video-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(75, 156, 211, 0.3);
+    z-index: 10;
+  }
+
+  .continuous-video-item video,
+  .continuous-video-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .continuous-video-item .video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1rem;
+  }
+
+  .continuous-video-item:hover .video-overlay {
+    opacity: 1;
+  }
+
+  .continuous-video-item .video-title {
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0;
+    font-family: var(--font--primary-family);
+    line-height: 1.2;
+  }
+
+  .continuous-video-item .video-category {
+    color: #4B9CD3;
+    font-size: 0.75rem;
+    margin: 0.25rem 0 0;
+    font-family: var(--font--primary-family);
+    line-height: 1.2;
+  }
+
+  /* Performance optimization: use GPU acceleration */
+  .continuous-carousel-track,
+  .continuous-video-item {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .continuous-video-carousel {
+      padding: 0.5rem 0;
+    }
+
+    .continuous-carousel-track {
+      gap: 0.75rem;
+    }
+
+    /* Mobile: smaller sizes */
+    .continuous-video-item.aspect-landscape {
+      width: 280px;
+      height: 158px;
+    }
+
+    .continuous-video-item.aspect-vertical {
+      width: 120px;
+      height: 213px;
+    }
+
+    .continuous-video-item.aspect-square {
+      width: 160px;
+      height: 160px;
+    }
+
+    .continuous-video-item .video-overlay {
+      opacity: 1;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+    }
+
+    .continuous-video-item .video-title {
+      font-size: 0.75rem;
+    }
+
+    .continuous-video-item .video-category {
+      font-size: 0.65rem;
+    }
+  }
+
+  /* Slower animation for better readability */
+  @media (prefers-reduced-motion: no-preference) {
+    .continuous-carousel-track {
+      animation-duration: 60s;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .continuous-carousel-track {
+      animation: none;
+    }
+
+    .continuous-carousel-track:hover {
+      animation: scroll-left 120s linear infinite;
+    }
   }
 
   .disclaimer-text {
@@ -3787,6 +3975,443 @@ document.addEventListener('DOMContentLoaded', function() {
         arrow.addEventListener('click', updateVideoDescription);
       });
     }
+  }
+});
+
+// Continuous Scroll Video Carousel Initialization
+document.addEventListener('DOMContentLoaded', function() {
+  const continuousCarousel = document.getElementById('continuousVideoCarousel');
+  const continuousTrack = document.getElementById('continuousTrack');
+
+  if (!continuousCarousel || !continuousTrack) return;
+
+  // ===========================================
+  // VIDEO CAROUSEL CONFIGURATION
+  // ===========================================
+  // Add your videos here. The carousel will automatically
+  // create an infinite loop with these videos.
+  //
+  // Required fields:
+  // - thumbnail: path to thumbnail image (shown before hover)
+  // - video: path to video file (mp4 recommended)
+  // - title: display title
+  // - category: category label with brackets (add ※ for freelance work)
+  // - aspectRatio: 'landscape' (16:9), 'vertical' (9:16), or 'square' (1:1)
+  //
+  // Thumbnail recommendations:
+  // - Landscape (16:9): 320x180px
+  // - Vertical (9:16): 135x240px
+  // - Square (1:1): 180x180px
+  // ===========================================
+
+  const videoData = [
+    // LANDSCAPE VIDEOS (16:9)
+    {
+      thumbnail: '/assets/videos/thumbnails/academic-index.svg',
+      video: '/assets/videos/academic-index-demo.mp4',
+      title: 'Academic Index Demo',
+      category: '[Web Development]',
+      aspectRatio: 'landscape',
+      freelance: false
+    },
+    {
+      thumbnail: '/assets/videos/thumbnails/lamc-homepage.svg',
+      video: '/assets/videos/lamc-homepage-demo.mp4',
+      title: 'LMAC Homepage',
+      category: '[Freelance] ※',
+      aspectRatio: 'landscape',
+      freelance: true
+    },
+    {
+      thumbnail: '/assets/videos/thumbnails/lamc-consultation.svg',
+      video: '/assets/videos/lamc-consultation-demo.mp4',
+      title: 'LMAC Consultation',
+      category: '[Freelance] ※',
+      aspectRatio: 'landscape',
+      freelance: true
+    },
+    {
+      thumbnail: '/assets/videos/thumbnails/academic-leaderboard.svg',
+      video: '/assets/videos/academic-index-leaderboard-demo.mp4',
+      title: 'Leaderboard Demo',
+      category: '[Web Development]',
+      aspectRatio: 'landscape',
+      freelance: false
+    },
+
+    // VERTICAL VIDEOS (9:16) - TikTok/Reels style
+    {
+      thumbnail: '/assets/videos/thumbnails/vertical-sample1.svg',
+      video: '/assets/videos/academic-index-ui-tour.mp4',
+      title: 'UI Tour',
+      category: '[Social Media]',
+      aspectRatio: 'vertical',
+      freelance: false
+    },
+    {
+      thumbnail: '/assets/videos/thumbnails/vertical-sample2.svg',
+      video: '/assets/videos/academic-index-score-demo.mp4',
+      title: 'Score Feature',
+      category: '[Tutorial]',
+      aspectRatio: 'vertical',
+      freelance: false
+    },
+
+    // SQUARE VIDEOS (1:1) - Instagram style
+    {
+      thumbnail: '/assets/videos/thumbnails/square-sample1.svg',
+      video: '/assets/videos/academic-index-ui-tour-2.mp4',
+      title: 'UI Animation',
+      category: '[Instagram]',
+      aspectRatio: 'square',
+      freelance: false
+    },
+
+    // Add more videos below by copying the above structure
+    // {
+    //   thumbnail: '/assets/videos/thumbnails/your-vertical-video.jpg',
+    //   video: '/assets/videos/your-vertical-video.mp4',
+    //   title: 'Your Vertical Video',
+    //   category: '[Social Media] ※',
+    //   aspectRatio: 'vertical', // Use 'vertical' for 9:16
+    //   freelance: true
+    // },
+    // {
+    //   thumbnail: '/assets/videos/thumbnails/your-square-video.jpg',
+    //   video: '/assets/videos/your-square-video.mp4',
+    //   title: 'Your Square Video',
+    //   category: '[Instagram]',
+    //   aspectRatio: 'square', // Use 'square' for 1:1
+    //   freelance: false
+    // },
+  ];
+
+  // ===========================================
+  // END CONFIGURATION - No need to edit below
+  // ===========================================
+
+  // Function to create video item HTML
+  function createVideoItem(data) {
+    const item = document.createElement('div');
+    const aspectRatio = data.aspectRatio || 'landscape'; // Default to landscape
+    item.className = `continuous-video-item aspect-${aspectRatio}`;
+    item.dataset.video = data.video;
+    item.dataset.title = data.title;
+    item.dataset.category = data.category;
+
+    // Create video element with thumbnail poster
+    const video = document.createElement('video');
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'none'; // Lazy load for performance
+    video.poster = data.thumbnail;
+    video.className = 'carousel-video';
+
+    // Create overlay with title
+    const overlay = document.createElement('div');
+    overlay.className = 'video-overlay';
+    overlay.innerHTML = `
+      <h3 class="video-title">${data.title}</h3>
+      <p class="video-category">${data.category}</p>
+    `;
+
+    item.appendChild(video);
+    item.appendChild(overlay);
+
+    // Play video on hover (desktop)
+    item.addEventListener('mouseenter', function() {
+      if (video.readyState < 2) { // Haven't loaded enough data
+        video.load();
+      }
+      video.play().catch(e => console.log('Video play failed:', e));
+    });
+
+    item.addEventListener('mouseleave', function() {
+      video.pause();
+      video.currentTime = 0;
+    });
+
+    return item;
+  }
+
+  // Create seamless infinite scroll by duplicating the video set
+  // We need enough copies to fill the screen plus extra for smooth looping
+  function calculateCopiesNeeded() {
+    const itemWidth = 320; // Width of each video item
+    const gap = 16; // 1rem gap
+    const totalItemWidth = itemWidth + gap;
+    const screenWidth = window.innerWidth;
+    const itemsVisible = Math.ceil(screenWidth / totalItemWidth);
+    const baseItems = videoData.length;
+
+    // We need at least 3 complete sets to ensure smooth infinite scrolling
+    // This ensures that as the first set scrolls out, a fresh set is coming in
+    return Math.max(3, Math.ceil(itemsVisible / baseItems) + 1);
+  }
+
+  let copiesNeeded = calculateCopiesNeeded();
+
+  // Create and append video items
+  function initializeCarousel() {
+    continuousTrack.innerHTML = ''; // Clear existing
+
+    for (let i = 0; i < copiesNeeded; i++) {
+      videoData.forEach(data => {
+        const item = createVideoItem(data);
+        continuousTrack.appendChild(item);
+      });
+    }
+
+    // Update video items reference after initialization
+    return continuousTrack.querySelectorAll('.continuous-video-item');
+  }
+
+  let videoItems = initializeCarousel();
+
+  // Recalculate on resize
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      const newCopiesNeeded = calculateCopiesNeeded();
+      if (newCopiesNeeded !== copiesNeeded) {
+        copiesNeeded = newCopiesNeeded;
+        videoItems = initializeCarousel();
+
+        // Re-attach intersection observer
+        videoItems.forEach(item => {
+          videoObserver.observe(item);
+        });
+      }
+    }, 250);
+  });
+
+  // Intersection Observer for lazy loading and performance
+  const videoObserverOptions = {
+    root: continuousCarousel,
+    rootMargin: '50%',
+    threshold: 0
+  };
+
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const video = entry.target.querySelector('video');
+      if (entry.isIntersecting) {
+        // Video is coming into view, preload it
+        if (video.readyState === 0) {
+          video.load();
+        }
+      } else {
+        // Video is out of view, unload to save memory
+        if (video.readyState >= 1) {
+          video.pause();
+          video.removeAttribute('src'); // Remove source to free memory
+          video.load(); // Reset video element
+        }
+      }
+    });
+  }, videoObserverOptions);
+
+  // Observe all video items
+  videoItems.forEach(item => {
+    videoObserver.observe(item);
+  });
+
+  // Pause animation when user is interacting
+  let isInteracting = false;
+
+  continuousCarousel.addEventListener('mouseenter', () => {
+    isInteracting = true;
+  });
+
+  continuousCarousel.addEventListener('mouseleave', () => {
+    isInteracting = false;
+  });
+
+  // Touch support for mobile
+  let touchStartX = 0;
+  let touchScrollX = 0;
+
+  continuousCarousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    continuousTrack.style.animationPlayState = 'paused';
+  }, { passive: true });
+
+  continuousCarousel.addEventListener('touchmove', (e) => {
+    const touchX = e.touches[0].clientX;
+    const diff = touchX - touchStartX;
+    touchScrollX = diff;
+  }, { passive: true });
+
+  continuousCarousel.addEventListener('touchend', () => {
+    continuousTrack.style.animationPlayState = 'running';
+    touchScrollX = 0;
+  }, { passive: true });
+
+  // Click handler for video items (optional - expand to full video)
+  videoItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const videoUrl = this.dataset.video;
+      const title = this.dataset.title;
+
+      // You can implement a modal or navigate to video page here
+      console.log('Playing video:', title, videoUrl);
+
+      // For now, just toggle play/pause on click
+      const video = this.querySelector('video');
+      if (video.paused) {
+        video.muted = false; // Unmute on click
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
+  });
+
+  // Performance: Reduce animation frame rate on low-end devices
+  function isLowEndDevice() {
+    return navigator.hardwareConcurrency <= 2 ||
+           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
+  if (isLowEndDevice()) {
+    continuousTrack.style.animationDuration = '120s'; // Slower animation
+  }
+
+  console.log('Continuous video carousel initialized with', videoItems.length, 'items');
+
+  // Video Carousel Volume Controls
+  const videoCarouselMuteToggle = document.getElementById('videoCarouselMuteToggle');
+  const videoCarouselVolumeSlider = document.getElementById('videoCarouselVolumeSlider');
+
+  if (videoCarouselMuteToggle && videoCarouselVolumeSlider) {
+    let isCarouselMuted = true;
+    let previousCarouselVolume = 100;
+    const carouselButtonText = videoCarouselMuteToggle.querySelector('.nav_btn_text');
+
+    // Get all carousel videos
+    const getCarouselVideos = () => {
+      return Array.from(continuousTrack.querySelectorAll('.continuous-video-item video'));
+    };
+
+    // Store current text for hover restoration
+    let currentCarouselText = 'unmute';
+
+    // Update slider visual fill
+    function updateCarouselSliderFill() {
+      const volume = videoCarouselVolumeSlider.value;
+      const percentage = (volume / 100) * 100;
+      videoCarouselVolumeSlider.style.background = `linear-gradient(to right, rgba(255, 255, 255, 0.6) ${percentage}%, rgba(255, 255, 255, 0.25) ${percentage}%)`;
+    }
+
+    // Initialize slider fill
+    updateCarouselSliderFill();
+
+    // Simple shuffle function
+    const shuffle = (text, el) => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let i = 0;
+      const interval = setInterval(() => {
+        el.textContent = text.split('').map((c, j) => j < i ? c : chars[Math.floor(Math.random() * chars.length)]).join('');
+        if (i >= text.length) clearInterval(interval);
+        i += 1/3;
+      }, 30);
+    };
+
+    // Hover effects
+    videoCarouselMuteToggle.addEventListener('mouseenter', () => {
+      shuffle('Switch', carouselButtonText);
+    });
+
+    videoCarouselMuteToggle.addEventListener('mouseleave', () => {
+      shuffle(currentCarouselText, carouselButtonText);
+    });
+
+    // Mute toggle functionality
+    videoCarouselMuteToggle.addEventListener('click', () => {
+      isCarouselMuted = !isCarouselMuted;
+
+      if (isCarouselMuted) {
+        currentCarouselText = 'unmute';
+        previousCarouselVolume = videoCarouselVolumeSlider.value;
+        videoCarouselVolumeSlider.value = 0;
+        getCarouselVideos().forEach(video => {
+          video.muted = true;
+          video.volume = 0;
+        });
+      } else {
+        currentCarouselText = 'mute';
+        videoCarouselVolumeSlider.value = previousCarouselVolume > 0 ? previousCarouselVolume : 100;
+        getCarouselVideos().forEach(video => {
+          video.muted = false;
+          video.volume = videoCarouselVolumeSlider.value / 100;
+        });
+      }
+
+      updateCarouselSliderFill();
+      shuffle(currentCarouselText, carouselButtonText);
+    });
+
+    // Volume slider functionality
+    videoCarouselVolumeSlider.addEventListener('input', (e) => {
+      const volume = e.target.value;
+      const volumeDecimal = volume / 100;
+
+      getCarouselVideos().forEach(video => {
+        video.volume = volumeDecimal;
+        video.muted = volume === 0;
+      });
+
+      updateCarouselSliderFill();
+
+      // Update button text based on volume
+      if (volume == 0) {
+        isCarouselMuted = true;
+        currentCarouselText = 'unmute';
+        shuffle(currentCarouselText, carouselButtonText);
+      } else if (currentCarouselText === 'unmute') {
+        isCarouselMuted = false;
+        currentCarouselText = 'mute';
+        shuffle(currentCarouselText, carouselButtonText);
+      }
+    });
+
+    // Keyboard accessibility for volume slider
+    videoCarouselVolumeSlider.addEventListener('keydown', (e) => {
+      const step = 5;
+      let newValue = parseInt(videoCarouselVolumeSlider.value);
+
+      switch(e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          newValue = Math.max(0, newValue - step);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          newValue = Math.min(100, newValue + step);
+          break;
+        case 'Home':
+          e.preventDefault();
+          newValue = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          newValue = 100;
+          break;
+        default:
+          return;
+      }
+
+      videoCarouselVolumeSlider.value = newValue;
+      videoCarouselVolumeSlider.dispatchEvent(new Event('input'));
+    });
+
+    // Set initial state to muted
+    getCarouselVideos().forEach(video => {
+      video.muted = true;
+      video.volume = 1;
+    });
   }
 });
 

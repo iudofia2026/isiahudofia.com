@@ -4284,21 +4284,61 @@ document.addEventListener('DOMContentLoaded', function() {
   // Touch support for mobile
   let touchStartX = 0;
   let touchScrollX = 0;
+  let isDragging = false;
 
   continuousCarousel.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-    continuousTrack.style.animationPlayState = 'paused';
+    // Only allow drag if not currently frozen by tap
+    if (!continuousTrack.classList.contains('tap-frozen')) {
+      touchStartX = e.touches[0].clientX;
+      continuousTrack.style.animationPlayState = 'paused';
+      isDragging = true;
+    }
   }, { passive: true });
 
   continuousCarousel.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+
     const touchX = e.touches[0].clientX;
     const diff = touchX - touchStartX;
+
+    // Only track horizontal movement
     touchScrollX = diff;
+
+    // Apply drag transform for immediate feedback
+    continuousTrack.style.transform = `translateX(calc(-50% + ${touchScrollX}px))`;
   }, { passive: true });
 
-  continuousCarousel.addEventListener('touchend', () => {
-    continuousTrack.style.animationPlayState = 'running';
+  continuousCarousel.addEventListener('touchend', (e) => {
+    if (!isDragging) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchEndX - touchStartX;
+    const threshold = 50; // Minimum drag distance to trigger action
+
+    // Check if it was a significant drag or just a tap
+    if (Math.abs(diff) > threshold) {
+      // It was a drag, smoothly resume animation
+      continuousTrack.style.transition = 'transform 0.3s ease-out';
+      continuousTrack.style.transform = 'translateX(-50%)';
+
+      // Reset after animation
+      setTimeout(() => {
+        continuousTrack.style.transition = '';
+        continuousTrack.style.animationPlayState = 'running';
+      }, 300);
+    } else {
+      // It was a tap, let the click handler deal with it
+      continuousTrack.style.transform = 'translateX(-50%)';
+
+      // Only resume if not frozen by tap
+      if (!continuousTrack.classList.contains('tap-frozen')) {
+        continuousTrack.style.animationPlayState = 'running';
+      }
+    }
+
+    // Reset drag state
     touchScrollX = 0;
+    isDragging = false;
   }, { passive: true });
 
   // Click/tap handler for video items

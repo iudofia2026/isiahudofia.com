@@ -1635,8 +1635,9 @@ button:focus-visible,
     position: relative;
     width: 100%;
     overflow: hidden;
-    padding: 0;
+    padding: 1rem 0; /* Add vertical padding for spacing */
     background: transparent;
+    /* No max-height - let it accommodate the tallest video format */
   }
 
   .continuous-carousel-track {
@@ -1645,7 +1646,8 @@ button:focus-visible,
     width: fit-content;
     animation: scroll-left 40s linear infinite;
     will-change: transform;
-    align-items: center;
+    align-items: center; /* This should center videos vertically */
+    min-height: 150px; /* Ensure track is tall enough for vertical videos */
   }
 
   .continuous-carousel-track:hover {
@@ -1669,24 +1671,7 @@ button:focus-visible,
     background: #000;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  /* Default landscape (16:9) */
-  .continuous-video-item.aspect-landscape {
-    width: 320px;
-    height: 180px;
-  }
-
-  /* Vertical (9:16) */
-  .continuous-video-item.aspect-vertical {
-    width: 135px;
-    height: 240px;
-  }
-
-  /* Square (1:1) */
-  .continuous-video-item.aspect-square {
-    width: 180px;
-    height: 180px;
+    /* Dimensions will be set dynamically based on actual video aspect ratio */
   }
 
   .continuous-video-item:hover {
@@ -1750,22 +1735,6 @@ button:focus-visible,
 
     .continuous-carousel-track {
       gap: 0.75rem;
-    }
-
-    /* Mobile: smaller sizes */
-    .continuous-video-item.aspect-landscape {
-      width: 280px;
-      height: 158px;
-    }
-
-    .continuous-video-item.aspect-vertical {
-      width: 120px;
-      height: 213px;
-    }
-
-    .continuous-video-item.aspect-square {
-      width: 160px;
-      height: 160px;
     }
 
     .continuous-video-item .video-overlay {
@@ -4006,85 +3975,63 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===========================================
 
   const videoData = [
-    // LANDSCAPE VIDEOS (16:9)
+    // Videos will be sized according to their actual aspect ratios
     {
-      thumbnail: '/assets/videos/thumbnails/academic-index.svg',
-      video: '/assets/videos/academic-index-demo.mp4',
-      title: 'Academic Index Demo',
-      category: '[Web Development]',
-      aspectRatio: 'landscape',
+      thumbnail: '/assets/videos/editing/corporate/thumbnail1.jpg',
+      video: '/assets/videos/editing/corporate/video1.mp4',
+      title: 'Corporate Video',
+      category: '[Corporate]',
       freelance: false
     },
     {
-      thumbnail: '/assets/videos/thumbnails/lamc-homepage.svg',
-      video: '/assets/videos/lamc-homepage-demo.mp4',
-      title: 'LMAC Homepage',
-      category: '[Freelance] ※',
-      aspectRatio: 'landscape',
-      freelance: true
-    },
-    {
-      thumbnail: '/assets/videos/thumbnails/lamc-consultation.svg',
-      video: '/assets/videos/lamc-consultation-demo.mp4',
-      title: 'LMAC Consultation',
-      category: '[Freelance] ※',
-      aspectRatio: 'landscape',
-      freelance: true
-    },
-    {
-      thumbnail: '/assets/videos/thumbnails/academic-leaderboard.svg',
-      video: '/assets/videos/academic-index-leaderboard-demo.mp4',
-      title: 'Leaderboard Demo',
-      category: '[Web Development]',
-      aspectRatio: 'landscape',
+      thumbnail: '/assets/videos/editing/events/thumbnail2.jpg',
+      video: '/assets/videos/editing/events/video2.mp4',
+      title: 'Events Coverage',
+      category: '[Events]',
       freelance: false
     },
-
-    // VERTICAL VIDEOS (9:16) - TikTok/Reels style
     {
-      thumbnail: '/assets/videos/thumbnails/vertical-sample1.svg',
-      video: '/assets/videos/academic-index-ui-tour.mp4',
-      title: 'UI Tour',
+      thumbnail: '/assets/videos/editing/documentary/thumbnail4.jpg',
+      video: '/assets/videos/editing/documentary/video4.mp4',
+      title: 'Documentary Piece',
+      category: '[Documentary]',
+      freelance: false
+    },
+    {
+      thumbnail: '/assets/videos/editing/music/thumbnail5.jpg',
+      video: '/assets/videos/editing/music/video5.mp4',
+      title: 'Music Video',
+      category: '[Music]',
+      freelance: false
+    },
+    {
+      thumbnail: '/assets/videos/editing/training/thumbnail6.jpg',
+      video: '/assets/videos/editing/training/video6.mp4',
+      title: 'Training Material',
+      category: '[Training]',
+      freelance: false
+    },
+    {
+      thumbnail: '/assets/videos/editing/commercial/thumbnail7.jpg',
+      video: '/assets/videos/editing/commercial/video7.mp4',
+      title: 'Commercial Ad',
+      category: '[Commercial]',
+      freelance: false
+    },
+    {
+      thumbnail: '/assets/videos/editing/social/thumbnail3.jpg',
+      video: '/assets/videos/editing/social/video3.mp4',
+      title: 'Social Content',
       category: '[Social Media]',
-      aspectRatio: 'vertical',
       freelance: false
     },
     {
-      thumbnail: '/assets/videos/thumbnails/vertical-sample2.svg',
-      video: '/assets/videos/academic-index-score-demo.mp4',
-      title: 'Score Feature',
-      category: '[Tutorial]',
-      aspectRatio: 'vertical',
+      thumbnail: '/assets/videos/editing/lifestyle/thumbnail8.jpg',
+      video: '/assets/videos/editing/lifestyle/video8.mp4',
+      title: 'Lifestyle Video',
+      category: '[Lifestyle]',
       freelance: false
     },
-
-    // SQUARE VIDEOS (1:1) - Instagram style
-    {
-      thumbnail: '/assets/videos/thumbnails/square-sample1.svg',
-      video: '/assets/videos/academic-index-ui-tour-2.mp4',
-      title: 'UI Animation',
-      category: '[Instagram]',
-      aspectRatio: 'square',
-      freelance: false
-    },
-
-    // Add more videos below by copying the above structure
-    // {
-    //   thumbnail: '/assets/videos/thumbnails/your-vertical-video.jpg',
-    //   video: '/assets/videos/your-vertical-video.mp4',
-    //   title: 'Your Vertical Video',
-    //   category: '[Social Media] ※',
-    //   aspectRatio: 'vertical', // Use 'vertical' for 9:16
-    //   freelance: true
-    // },
-    // {
-    //   thumbnail: '/assets/videos/thumbnails/your-square-video.jpg',
-    //   video: '/assets/videos/your-square-video.mp4',
-    //   title: 'Your Square Video',
-    //   category: '[Instagram]',
-    //   aspectRatio: 'square', // Use 'square' for 1:1
-    //   freelance: false
-    // },
   ];
 
   // ===========================================
@@ -4094,8 +4041,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Function to create video item HTML
   function createVideoItem(data) {
     const item = document.createElement('div');
-    const aspectRatio = data.aspectRatio || 'landscape'; // Default to landscape
-    item.className = `continuous-video-item aspect-${aspectRatio}`;
+    // Set base class - aspect ratio will be determined by video element
+    item.className = 'continuous-video-item';
     item.dataset.video = data.video;
     item.dataset.title = data.title;
     item.dataset.category = data.category;
@@ -4105,23 +4052,69 @@ document.addEventListener('DOMContentLoaded', function() {
     video.muted = true;
     video.loop = true;
     video.playsInline = true;
-    video.preload = 'none'; // Lazy load for performance
+    video.preload = 'metadata'; // Load metadata to get dimensions
     video.poster = data.thumbnail;
+    video.src = data.video; // Set the video source
     video.className = 'carousel-video';
+
+    // Set max width and let height be determined by aspect ratio
+    video.style.maxWidth = '320px';
+    video.style.width = '100%';
+    video.style.height = 'auto';
+    video.style.display = 'block';
 
     item.appendChild(video);
 
-    // Play video on hover (desktop)
-    item.addEventListener('mouseenter', function() {
-      if (video.readyState < 2) { // Haven't loaded enough data
-        video.load();
+    // Load video metadata to detect actual dimensions
+    video.addEventListener('loadedmetadata', function() {
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
+      const aspectRatio = videoWidth / videoHeight;
+
+      // Define constraints - taller on desktop
+      const isDesktop = window.innerWidth > 768;
+      const maxHeight = isDesktop ? 320 : 210; // Taller on desktop (320px vs 210px)
+      const maxWidth = isDesktop ? 400 : 280;   // Wider on desktop (400px vs 280px)
+
+      // Calculate dimensions based on actual video aspect ratio
+      let itemWidth, itemHeight;
+
+      if (aspectRatio >= 1) {
+        // Landscape or square (width >= height)
+        itemWidth = maxWidth;
+        itemHeight = Math.round(maxWidth / aspectRatio);
+
+        // If height exceeds max, scale down
+        if (itemHeight > maxHeight) {
+          itemHeight = maxHeight;
+          itemWidth = Math.round(maxHeight * aspectRatio);
+        }
+      } else {
+        // Vertical (height > width)
+        itemHeight = maxHeight;
+        itemWidth = Math.round(maxHeight * aspectRatio);
       }
-      video.play().catch(e => console.log('Video play failed:', e));
+
+      // Set the calculated dimensions
+      item.style.width = itemWidth + 'px';
+      item.style.height = itemHeight + 'px';
+      item.dataset.aspectRatio = aspectRatio.toFixed(2);
+      item.dataset.originalWidth = videoWidth;
+      item.dataset.originalHeight = videoHeight;
+
+      // Force video to fill container with proper aspect ratio
+      video.style.width = '100%';
+      video.style.height = '100%';
+      video.style.objectFit = 'cover';
     });
 
-    item.addEventListener('mouseleave', function() {
-      video.pause();
-      video.currentTime = 0;
+    // Fallback if metadata doesn't load in time
+    video.addEventListener('loadstart', function() {
+      if (video.readyState >= 1) {
+        // Trigger the loadedmetadata logic manually if needed
+        const event = new Event('loadedmetadata');
+        video.dispatchEvent(event);
+      }
     });
 
     return item;
@@ -4130,7 +4123,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Create seamless infinite scroll by duplicating the video set
   // We need enough copies to fill the screen plus extra for smooth looping
   function calculateCopiesNeeded() {
-    const itemWidth = 320; // Width of each video item
+    const itemWidth = 280; // Updated width for medium landscape videos (most common)
     const gap = 16; // 1rem gap
     const totalItemWidth = itemWidth + gap;
     const screenWidth = window.innerWidth;
@@ -4205,20 +4198,51 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, videoObserverOptions);
 
-  // Observe all video items
+  // Observe all video items and add carousel pause on hover
   videoItems.forEach(item => {
     videoObserver.observe(item);
-  });
 
-  // Pause animation when user is interacting
-  let isInteracting = false;
+    // Get the video element for this item
+    const video = item.querySelector('video');
 
-  continuousCarousel.addEventListener('mouseenter', () => {
-    isInteracting = true;
-  });
+    // Pause carousel animation and play video when hovering on individual video items
+    item.addEventListener('mouseenter', () => {
+      continuousTrack.style.animationPlayState = 'paused';
 
-  continuousCarousel.addEventListener('mouseleave', () => {
-    isInteracting = false;
+      // Ensure video plays on hover with enhanced loading
+      if (video) {
+        console.log('Hovering on video:', video.src);
+
+        // Load video if not ready
+        if (video.readyState < 2) {
+          video.load();
+        }
+
+        // Wait for video to be ready, then play
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            console.log('Video playing successfully');
+          }).catch(e => {
+            console.log('Video play failed:', e);
+            // If autoplay fails, try loading and playing again
+            video.load().then(() => {
+              video.play();
+            }).catch(e2 => console.log('Retry failed:', e2));
+          });
+        }
+      }
+    });
+
+    item.addEventListener('mouseleave', () => {
+      continuousTrack.style.animationPlayState = 'running';
+
+      // Pause and reset video when leaving
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
   });
 
   // Touch support for mobile

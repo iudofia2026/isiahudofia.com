@@ -2285,6 +2285,11 @@ button:focus-visible,
       padding-bottom: 0 !important;
     }
 
+    /* Mobile: Hide freelance disclaimer */
+    .disclaimer-text {
+      display: none !important;
+    }
+
     /* Reset all gallery styling to match desktop on mobile */
     .gallery-title-wrap {
       padding-top: 3rem !important;
@@ -4011,13 +4016,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const videoData = [
     // Videos will be sized according to their actual aspect ratios
-    {
-      thumbnail: '/assets/videos/editing/corporate/thumbnail1.jpg',
-      video: '/assets/videos/editing/corporate/video1.mp4',
-      title: 'Callie Reiff ※',
-      category: '[Producer]',
-      freelance: false
-    },
     {
       thumbnail: '/assets/videos/editing/events/thumbnail2.jpg',
       video: '/assets/videos/editing/events/video2.mp4',

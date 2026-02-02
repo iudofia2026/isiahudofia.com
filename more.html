@@ -1644,7 +1644,7 @@ button:focus-visible,
     display: flex;
     gap: 1rem;
     width: fit-content;
-    animation: scroll-left 40s linear infinite;
+    animation: scroll-left 60s linear infinite;
     will-change: transform;
     align-items: center; /* This should center videos vertically */
     min-height: 150px; /* Ensure track is tall enough for vertical videos */
@@ -3979,57 +3979,57 @@ document.addEventListener('DOMContentLoaded', function() {
     {
       thumbnail: '/assets/videos/editing/corporate/thumbnail1.jpg',
       video: '/assets/videos/editing/corporate/video1.mp4',
-      title: 'Corporate Video',
-      category: '[Corporate]',
+      title: 'Callie Reiff ※',
+      category: '[Producer]',
       freelance: false
     },
     {
       thumbnail: '/assets/videos/editing/events/thumbnail2.jpg',
       video: '/assets/videos/editing/events/video2.mp4',
-      title: 'Events Coverage',
-      category: '[Events]',
+      title: 'Cam Rao ※',
+      category: '[Artist]',
       freelance: false
     },
     {
       thumbnail: '/assets/videos/editing/documentary/thumbnail4.jpg',
       video: '/assets/videos/editing/documentary/video4.mp4',
-      title: 'Documentary Piece',
-      category: '[Documentary]',
+      title: 'People You May Know ※',
+      category: '[Nightclub Promo]',
       freelance: false
     },
     {
       thumbnail: '/assets/videos/editing/music/thumbnail5.jpg',
       video: '/assets/videos/editing/music/video5.mp4',
-      title: 'Music Video',
-      category: '[Music]',
+      title: 'Xaivian Lee',
+      category: '[NCAA]',
       freelance: false
     },
     {
       thumbnail: '/assets/videos/editing/training/thumbnail6.jpg',
       video: '/assets/videos/editing/training/video6.mp4',
-      title: 'Training Material',
-      category: '[Training]',
+      title: 'Sinners',
+      category: '[Movie]',
       freelance: false
     },
     {
       thumbnail: '/assets/videos/editing/commercial/thumbnail7.jpg',
       video: '/assets/videos/editing/commercial/video7.mp4',
-      title: 'Commercial Ad',
-      category: '[Commercial]',
+      title: 'Zima Blue',
+      category: '[Netflix]',
       freelance: false
     },
     {
       thumbnail: '/assets/videos/editing/social/thumbnail3.jpg',
       video: '/assets/videos/editing/social/video3.mp4',
-      title: 'Social Content',
-      category: '[Social Media]',
+      title: 'Laurel Road Studios ※',
+      category: '[Promo Content]',
       freelance: false
     },
     {
       thumbnail: '/assets/videos/editing/lifestyle/thumbnail8.jpg',
       video: '/assets/videos/editing/lifestyle/video8.mp4',
-      title: 'Lifestyle Video',
-      category: '[Lifestyle]',
+      title: 'Studio Rose ※',
+      category: '[Perfume Content]',
       freelance: false
     },
   ];
@@ -4123,7 +4123,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Create seamless infinite scroll by duplicating the video set
   // We need enough copies to fill the screen plus extra for smooth looping
   function calculateCopiesNeeded() {
-    const itemWidth = 280; // Updated width for medium landscape videos (most common)
+    const isDesktop = window.innerWidth > 768;
+    const itemWidth = isDesktop ? 400 : 280; // Desktop is wider
     const gap = 16; // 1rem gap
     const totalItemWidth = itemWidth + gap;
     const screenWidth = window.innerWidth;

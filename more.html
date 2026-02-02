@@ -2744,7 +2744,7 @@ document.addEventListener('DOMContentLoaded', function() {
       location: 'Middletown North High School',
       date: 'June 2022',
       meet: 'NJSIAA Non-Public Group Championships',
-      note: 'Video of last ever triple jump competition'
+      note: 'Only did triple jump during high school - this is my last ever jump'
     }
   };
 
@@ -4281,15 +4281,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Touch support for mobile
+  // Touch support for mobile carousel scrolling
   let touchStartX = 0;
-  let touchScrollX = 0;
+  let currentTranslateX = 0;
   let isDragging = false;
+  let touchStartTime = 0;
 
   continuousCarousel.addEventListener('touchstart', (e) => {
-    // Only allow drag if not currently frozen by tap
-    if (!continuousTrack.classList.contains('tap-frozen')) {
+    // Only allow drag if not currently frozen by tap and on mobile
+    if (window.innerWidth <= 768 && !continuousTrack.classList.contains('tap-frozen')) {
       touchStartX = e.touches[0].clientX;
+      touchStartTime = Date.now();
+
+      // Get current transform value
+      const currentTransform = window.getComputedStyle(continuousTrack).transform;
+      if (currentTransform !== 'none') {
+        const matrix = currentTransform.match(/matrix.*\((.+)\)/);
+        if (matrix) {
+          currentTranslateX = parseFloat(matrix[1].split(', ')[4]) || 0;
+        } else {
+          currentTranslateX = 0;
+        }
+      } else {
+        currentTranslateX = 0;
+      }
+
       continuousTrack.style.animationPlayState = 'paused';
       isDragging = true;
     }
@@ -4301,11 +4317,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const touchX = e.touches[0].clientX;
     const diff = touchX - touchStartX;
 
-    // Only track horizontal movement
-    touchScrollX = diff;
-
-    // Apply drag transform for immediate feedback
-    continuousTrack.style.transform = `translateX(calc(-50% + ${touchScrollX}px))`;
+    // Apply the drag offset to current position for manual scrolling
+    const newTranslateX = currentTranslateX + diff;
+    continuousTrack.style.transform = `translateX(${newTranslateX}px)`;
   }, { passive: true });
 
   continuousCarousel.addEventListener('touchend', (e) => {
@@ -4313,21 +4327,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchEndX - touchStartX;
-    const threshold = 50; // Minimum drag distance to trigger action
+    const timeDiff = Date.now() - touchStartTime;
+    const threshold = 10; // Lower threshold for easier dragging
+    const velocity = Math.abs(diff) / timeDiff; // pixels per ms
 
     // Check if it was a significant drag or just a tap
-    if (Math.abs(diff) > threshold) {
-      // It was a drag, smoothly resume animation
-      continuousTrack.style.transition = 'transform 0.3s ease-out';
-      continuousTrack.style.transform = 'translateX(-50%)';
+    if (Math.abs(diff) > threshold || velocity > 0.5) {
+      // It was a drag - continue animation from new position
+      const finalTranslateX = currentTranslateX + diff;
+      continuousTrack.style.transition = 'none';
+      continuousTrack.style.transform = `translateX(${finalTranslateX}px)`;
 
-      // Reset after animation
+      // Calculate new animation starting position
+      const carouselWidth = continuousCarousel.offsetWidth;
+      const trackWidth = continuousTrack.scrollWidth;
+
+      // Create seamless infinite scroll from new position
       setTimeout(() => {
-        continuousTrack.style.transition = '';
-        continuousTrack.style.animationPlayState = 'running';
-      }, 300);
+        continuousTrack.style.animation = 'none';
+
+        // Reset position if we've scrolled too far
+        if (finalTranslateX < -trackWidth / 2) {
+          continuousTrack.style.transform = `translateX(${finalTranslateX + trackWidth / 2}px)`;
+        } else if (finalTranslateX > 0) {
+          continuousTrack.style.transform = `translateX(${finalTranslateX - trackWidth / 2}px)`;
+        }
+
+        // Resume animation after a brief pause
+        setTimeout(() => {
+          continuousTrack.style.animation = `scroll ${120 / videoData.length}s linear infinite`;
+          continuousTrack.style.animationPlayState = 'running';
+        }, 100);
+      }, 50);
     } else {
-      // It was a tap, let the click handler deal with it
+      // It was a tap, reset to original position and let click handler deal with it
       continuousTrack.style.transform = 'translateX(-50%)';
 
       // Only resume if not frozen by tap
@@ -4337,7 +4370,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Reset drag state
-    touchScrollX = 0;
     isDragging = false;
   }, { passive: true });
 

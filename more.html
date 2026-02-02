@@ -4110,16 +4110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     video.poster = data.thumbnail;
     video.className = 'carousel-video';
 
-    // Create overlay with title
-    const overlay = document.createElement('div');
-    overlay.className = 'video-overlay';
-    overlay.innerHTML = `
-      <h3 class="video-title">${data.title}</h3>
-      <p class="video-category">${data.category}</p>
-    `;
-
     item.appendChild(video);
-    item.appendChild(overlay);
 
     // Play video on hover (desktop)
     item.addEventListener('mouseenter', function() {
@@ -4414,6 +4405,87 @@ document.addEventListener('DOMContentLoaded', function() {
       video.muted = true;
       video.volume = 1;
     });
+  }
+
+  // Tooltip functionality for continuous carousel videos
+  if (window.innerWidth > 768) {
+    // Reuse the existing global tooltip
+    const globalTooltip = document.querySelector('.global-tooltip');
+
+    if (globalTooltip) {
+      const continuousVideoItems = document.querySelectorAll('.continuous-video-item');
+
+      continuousVideoItems.forEach(item => {
+        item.addEventListener('mouseenter', function(e) {
+          const title = this.dataset.title || '';
+          const category = this.dataset.category || '';
+
+          globalTooltip.innerHTML = `
+            <h2 data-shuffle="text" data-shuffle-hover="single" style="color: #fff; font-size: 1rem; font-weight: 500; margin: 0; font-family: var(--font--primary-family);">${title}</h2>
+            <h3 data-shuffle="text" data-shuffle-hover="single" style="font-size: 0.875rem; color: #999; margin: 0; font-family: var(--font--primary-family);">${category}</h3>
+          `;
+          globalTooltip.style.display = 'block';
+          globalTooltip.style.left = e.clientX + 'px';
+          globalTooltip.style.top = e.clientY + 'px';
+
+          // Trigger shuffle animation for the tooltip content
+          const shuffleElements = globalTooltip.querySelectorAll('[data-shuffle="text"]');
+          shuffleElements.forEach(element => {
+            const originalText = element.textContent;
+            const chars = '!<>-_\\/[]{}—=+*^?#________';
+
+            element.setAttribute('data-original-text', originalText);
+
+            let step = 0;
+            const steps = 8;
+            const interval = setInterval(() => {
+              if (step >= steps) {
+                element.textContent = originalText;
+                clearInterval(interval);
+                return;
+              }
+
+              let shuffled = '';
+              for (let i = 0; i < originalText.length; i++) {
+                const char = originalText[i];
+                if (char === ' ') {
+                  shuffled += ' ';
+                } else if (Math.random() < 0.3 + (step * 0.1)) {
+                  shuffled += char;
+                } else {
+                  shuffled += chars[Math.floor(Math.random() * chars.length)];
+                }
+              }
+
+              element.textContent = shuffled;
+              step++;
+            }, 50);
+
+            element.shuffleInterval = interval;
+          });
+        });
+
+        item.addEventListener('mouseleave', function() {
+          // Cleanup shuffle animations
+          const shuffleElements = globalTooltip.querySelectorAll('[data-shuffle="text"]');
+          shuffleElements.forEach(element => {
+            if (element.shuffleInterval) {
+              clearInterval(element.shuffleInterval);
+              delete element.shuffleInterval;
+            }
+          });
+
+          globalTooltip.style.display = 'none';
+        });
+
+        item.addEventListener('mousemove', function(e) {
+          if (globalTooltip.style.display === 'block') {
+            globalTooltip.style.left = e.clientX + 'px';
+            globalTooltip.style.top = e.clientY + 'px';
+          }
+        });
+      });
+    }
   }
 });
 

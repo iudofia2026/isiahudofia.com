@@ -148,6 +148,63 @@
   </div>
 </section>
 
+<!-- Mobile-only track section (appears above video gallery on mobile) -->
+<section class="track-mobile-gallery">
+  <div class="container">
+    <div class="gallery-title-wrap">
+      <a href="#" class="nav_link" data-shuffle="button">
+        <div class="link_bracket_wrap is-left">
+          <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+        </div>
+        <p data-shuffle="text" data-shuffle-hover="view gallery" data-shuffle-load="single" class="info_title_text u-display">track and field</p>
+        <div class="link_bracket_wrap is-right">
+          <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+        </div>
+      </a>
+      <div class="gallery-subtitle-wrap">
+        <p data-shuffle="text" data-shuffle-load="single" class="gallery-subtitle">a few highlights from my time representing yale university & montclair kimberley academy</p>
+        <div class="volume-controls-wrapper">
+          <input type="range" id="trackVolumeSliderMobile" class="volume-slider" min="0" max="100" value="100" aria-label="Track Volume" tabindex="0">
+          <button id="trackMuteToggleMobile" class="mute-toggle nav_link" data-shuffle="button" aria-label="Toggle track mute">
+            <div class="link_bracket_wrap is-left">
+              <p data-bracket="1" class="link_bracket_text u-text-main u-text-color-green is-left">[</p>
+            </div>
+            <p data-shuffle="text" data-shuffle-hover="Switch" data-shuffle-load="single" class="nav_btn_text u-text-main">unmute</p>
+            <div class="link_bracket_wrap is-right">
+              <p data-bracket="2" class="link_bracket_text u-text-main u-text-color-green is-right">]</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile track video layout: 1x5 buttons left, empty container right -->
+    <div class="track-mobile-layout">
+      <div class="track-mobile-buttons">
+        <button class="track-mobile-btn" data-track="longjump">LONG JUMP</button>
+        <button class="track-mobile-btn" data-track="100m">100M DASH</button>
+        <button class="track-mobile-btn" data-track="200m">200M DASH</button>
+        <button class="track-mobile-btn" data-track="triplejump">TRIPLE JUMP</button>
+        <button class="track-mobile-btn" data-track="extra">EXTRA</button>
+      </div>
+      <div class="track-mobile-video-container" id="trackMobileVideoContainer">
+        <!-- Video content will be loaded here -->
+      </div>
+    </div>
+
+    <div class="stats-grid-container">
+      <div class="stats-grid">
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="LONG JUMP" data-shuffle-load="single">LONG JUMP</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="100M DASH" data-shuffle-load="single">100M DASH</div>
+        <div class="stats-grid-box" style="font-size: 2rem; font-weight: 300;">✧</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="200M DASH" data-shuffle-load="single">200M DASH</div>
+        <div class="stats-grid-box" data-shuffle="text" data-shuffle-hover="TRIPLE JUMP" data-shuffle-load="single">TRIPLE JUMP</div>
+      </div>
+      <div class="stats-mobile-content" id="statsMobileContent"></div>
+    </div>
+  </div>
+</section>
+
 <section class="gallery video-gallery">
   <div class="container">
     <div class="gallery-title-wrap">
@@ -1035,6 +1092,41 @@ button:focus-visible,
   }
 
   @media (max-width: 768px) {
+    /* Remove padding from video gallery title on mobile */
+    .gallery.video-gallery .gallery-title-wrap {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Remove padding from video gallery section on mobile */
+    .gallery.video-gallery {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Remove padding from video gallery container on mobile */
+    .gallery.video-gallery .container {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Show mobile-only track section above video gallery */
+    .track-mobile-gallery {
+      display: block !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .track-mobile-gallery .gallery-title-wrap {
+      margin-bottom: 0;
+      margin-top: 0 !important;
+      padding-top: 2rem !important;
+    }
+
+    .track-mobile-gallery .stats-grid-container {
+      margin-top: 1rem;
+    }
+
     .gallery-subtitle-wrap {
       flex-direction: column;
       align-items: flex-start;
@@ -1047,6 +1139,83 @@ button:focus-visible,
       margin-left: 0;
       margin-bottom: 0.5rem;
       opacity: 0.8;
+    }
+
+    /* Track field gallery subtitle indentation on mobile */
+    .track-field-gallery .gallery-subtitle {
+      margin-left: 0.8rem !important;
+    }
+
+    /* Photography gallery subtitle indentation on mobile */
+    .photography-gallery .gallery-subtitle {
+      margin-left: 0.8rem !important;
+    }
+
+    /* Mobile track gallery subtitle indentation */
+    .track-mobile-gallery .gallery-subtitle {
+      margin-left: 0.8rem !important;
+    }
+
+    /* Hide stats grid container on mobile only */
+    .track-field-gallery .stats-grid-container,
+    .track-mobile-gallery .stats-grid-container {
+      display: none !important;
+    }
+
+    /* Mobile track video layout */
+    .track-mobile-layout {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .track-mobile-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 0 0 80px;
+    }
+
+    .track-mobile-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #4B9CD3;
+      padding: 0.75rem 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 0;
+      text-align: center;
+    }
+
+    .track-mobile-btn:hover,
+    .track-mobile-btn.active {
+      background: rgba(75, 156, 211, 0.2);
+      border-color: rgba(75, 156, 211, 0.5);
+      transform: scale(1.02);
+    }
+
+    .track-mobile-video-container {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-mobile-video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .volume-controls-wrapper {
@@ -1632,6 +1801,11 @@ button:focus-visible,
 
   /* Hide mobile video descriptions on desktop */
   .video-descriptions-mobile {
+    display: none;
+  }
+
+  /* Hide mobile track section on desktop */
+  .track-mobile-gallery {
     display: none;
   }
 

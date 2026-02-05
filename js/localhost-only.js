@@ -55,7 +55,9 @@
    */
   function toggleLocalhostOnlyElements() {
     if (!isLocalhost()) {
-      // Production: Hide localhost-only elements
+      // Production: Remove localhost class and hide localhost-only elements
+      document.body.classList.remove('localhost');
+
       elementsToHide.forEach(function(elementId) {
         const element = document.getElementById(elementId);
         if (element) {
@@ -70,7 +72,9 @@
         element.style.display = 'none';
       });
     } else {
-      // Localhost: Show localhost-only elements (override any inline display: none)
+      // Localhost: Add localhost class to body and show localhost-only elements
+      document.body.classList.add('localhost');
+
       elementsToHide.forEach(function(elementId) {
         const element = document.getElementById(elementId);
         if (element) {

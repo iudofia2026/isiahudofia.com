@@ -1110,11 +1110,16 @@ button:focus-visible,
       margin: 0 !important;
     }
 
-    /* Show mobile-only track section above video gallery */
+    /* Show mobile-only track section above video gallery ONLY on localhost */
     .track-mobile-gallery {
-      display: block !important;
+      display: none !important; /* Hidden by default in production */
       padding: 0 !important;
       margin: 0 !important;
+    }
+
+    /* Only show on localhost - will be overridden by JavaScript for localhost */
+    body.localhost .track-mobile-gallery {
+      display: block !important;
     }
 
     .track-mobile-gallery .gallery-title-wrap {

@@ -50,12 +50,12 @@
   }
 
   /**
-   * Hide elements that should only be visible on localhost
-   * This function runs immediately and on page load to ensure elements are hidden
+   * Hide/Show elements based on localhost environment
+   * This function runs immediately and on page load to ensure elements have correct visibility
    */
-  function hideLocalhostOnlyElements() {
-    // Only hide elements if NOT on localhost
+  function toggleLocalhostOnlyElements() {
     if (!isLocalhost()) {
+      // Production: Hide localhost-only elements
       elementsToHide.forEach(function(elementId) {
         const element = document.getElementById(elementId);
         if (element) {
@@ -70,7 +70,22 @@
         element.style.display = 'none';
       });
     } else {
-      console.log('Running on localhost - all elements visible');
+      // Localhost: Show localhost-only elements (override any inline display: none)
+      elementsToHide.forEach(function(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.style.display = 'block';
+          console.log('Localhost-only element shown:', elementId);
+        }
+      });
+
+      // Also show any elements with class "localhost-only"
+      const localClassElements = document.querySelectorAll('.localhost-only');
+      localClassElements.forEach(function(element) {
+        element.style.display = 'block';
+      });
+
+      console.log('Running on localhost - all localhost-only elements visible');
     }
   }
 
@@ -80,15 +95,15 @@
    */
   function init() {
     // Run immediately
-    hideLocalhostOnlyElements();
+    toggleLocalhostOnlyElements();
 
     // Run after page load
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', hideLocalhostOnlyElements);
+      document.addEventListener('DOMContentLoaded', toggleLocalhostOnlyElements);
     }
 
     // Also run on window load as fallback
-    window.addEventListener('load', hideLocalhostOnlyElements);
+    window.addEventListener('load', toggleLocalhostOnlyElements);
   }
 
   // Auto-initialize
@@ -97,7 +112,7 @@
   // Optional: Expose functions globally for manual control
   window.LocalhostOnly = {
     isLocalhost: isLocalhost,
-    hideElements: hideLocalhostOnlyElements,
+    toggleElements: toggleLocalhostOnlyElements,
     init: init
   };
 
